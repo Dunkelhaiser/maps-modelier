@@ -104,6 +104,16 @@ export const Map = ({ imageUrl }: Props) => {
         setMapState((prev) => ({ ...prev, isDragging: false }));
     };
 
+    const handleWheel = (e: React.WheelEvent) => {
+        e.preventDefault();
+        const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+
+        setMapState((prev) => ({
+            ...prev,
+            scale: Math.max(0.1, Math.min(10, prev.scale * scaleFactor)),
+        }));
+    };
+
     return (
         <canvas
             ref={canvasRef}
@@ -112,6 +122,7 @@ export const Map = ({ imageUrl }: Props) => {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
+            onWheel={handleWheel}
         />
     );
 };
