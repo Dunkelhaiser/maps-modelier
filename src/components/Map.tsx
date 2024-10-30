@@ -106,6 +106,7 @@ export const Map = ({ imageUrl }: Props) => {
 
     const handleZoom = (e: React.WheelEvent) => {
         e.preventDefault();
+        const MAX_ZOOM = 10;
 
         const canvas = canvasRef.current;
         const { image } = mapState;
@@ -120,7 +121,7 @@ export const Map = ({ imageUrl }: Props) => {
 
         const minScale = Math.max(canvas.width / image.width, canvas.height / image.height);
 
-        const clampedScale = Math.max(minScale, newScale);
+        const clampedScale = Math.min(MAX_ZOOM, Math.max(minScale, newScale));
 
         const scaleRatio = clampedScale / mapState.scale;
 
