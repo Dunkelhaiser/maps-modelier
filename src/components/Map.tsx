@@ -8,11 +8,17 @@ interface MapState {
     isDragging: boolean;
     lastMouseX: number;
     lastMouseY: number;
+    provinceIds: Map<string, string>;
+    selectedProvinceId: string | null;
 }
 
 interface Props {
     imageUrl: string | null;
 }
+
+const hashColor = (r: number, g: number, b: number): string => {
+    return `${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+};
 
 export const MapCanvas = ({ imageUrl }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -24,6 +30,8 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         isDragging: false,
         lastMouseX: 0,
         lastMouseY: 0,
+        provinceIds: new Map(),
+        selectedProvinceId: null,
     });
 
     useEffect(() => {
@@ -32,7 +40,31 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         const image = new Image();
         image.src = imageUrl;
         image.onload = () => {
-            setMapState((prev) => ({ ...prev, image }));
+            const canvas = document.createElement("canvas");
+            canvas.width = image.width;
+            canvas.height = image.height;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
+
+            ctx.drawImage(image, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+            const provinceIds = new Map<string, string>();
+            for (let i = 0; i < imageData.length; i += 4) {
+                const r = imageData[i];
+                const g = imageData[i + 1];
+                const b = imageData[i + 2];
+                const colorHash = hashColor(r, g, b);
+                const pixelIndex = i / 4;
+                const x = pixelIndex % canvas.width;
+                const y = Math.floor(pixelIndex / canvas.width);
+                const provinceId = `province-${colorHash}-${x}-${y}`;
+                provinceIds.set(colorHash, provinceId);
+            }
+
+            canvas.remove();
+
+            setMapState((prev) => ({ ...prev, image, provinceIds }));
         };
     }, [imageUrl]);
 
@@ -147,6 +179,32 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         }));
     };
 
+    const handleProvinceClick = (e: React.MouseEvent) => {
+        if (mapState.isDragging) return;
+
+        const canvas = canvasRef.current;
+        const { image, provinceIds } = mapState;
+        if (!canvas || !image) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const imageData = canvas.getContext("2d")?.getImageData(x, y, 1, 1).data;
+        if (!imageData) return;
+
+        const [r, g, b] = imageData;
+
+        const colorHash = hashColor(r, g, b);
+        const provinceId = provinceIds.get(colorHash);
+
+        if (provinceId) {
+            setMapState((prev) => ({ ...prev, selectedProvinceId: provinceId }));
+            // eslint-disable-next-line no-console
+            console.log(provinceId);
+        }
+    };
+
     return (
         <canvas
             ref={canvasRef}
@@ -156,6 +214,7 @@ export const MapCanvas = ({ imageUrl }: Props) => {
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
             onWheel={handleZoom}
+            onClick={handleProvinceClick}
         />
     );
 };
