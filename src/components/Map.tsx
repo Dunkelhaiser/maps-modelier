@@ -105,7 +105,6 @@ export const MapCanvas = ({ imageUrl }: Props) => {
     };
 
     const handleZoom = (e: React.WheelEvent) => {
-        e.preventDefault();
         const MAX_ZOOM = 10;
 
         const canvas = canvasRef.current;
