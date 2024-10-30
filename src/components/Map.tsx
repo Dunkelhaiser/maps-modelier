@@ -14,7 +14,7 @@ interface Props {
     imageUrl: string | null;
 }
 
-export const Map = ({ imageUrl }: Props) => {
+export const MapCanvas = ({ imageUrl }: Props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [mapState, setMapState] = useState<MapState>({
         image: null,

@@ -1,4 +1,4 @@
-import { Map } from "@components/Map";
+import { MapCanvas } from "@components/Map";
 import { MapUpload } from "@components/MapUpload";
 import { useState } from "react";
 
@@ -7,7 +7,7 @@ const App = () => {
 
     return (
         <main className="grid h-screen w-screen place-items-center">
-            {!imageUrl ? <MapUpload onImageUpload={setImageUrl} /> : <Map imageUrl={imageUrl} />}
+            {!imageUrl ? <MapUpload onImageUpload={setImageUrl} /> : <MapCanvas imageUrl={imageUrl} />}
         </main>
     );
 };
