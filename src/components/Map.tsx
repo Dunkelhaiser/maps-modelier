@@ -106,11 +106,44 @@ export const Map = ({ imageUrl }: Props) => {
 
     const handleWheel = (e: React.WheelEvent) => {
         e.preventDefault();
+
+        const canvas = canvasRef.current;
+        const { image } = mapState;
+        if (!canvas || !image) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
         const scaleFactor = e.deltaY > 0 ? 0.9 : 1.1;
+        const newScale = mapState.scale * scaleFactor;
+
+        const minScale = Math.max(canvas.width / image.width, canvas.height / image.height);
+
+        const clampedScale = Math.max(minScale, newScale);
+
+        const scaleRatio = clampedScale / mapState.scale;
+
+        const newOffsetX = mouseX - scaleRatio * (mouseX - mapState.offsetX);
+        const newOffsetY = mouseY - scaleRatio * (mouseY - mapState.offsetY);
+
+        const scaledImageWidth = image.width * clampedScale;
+        const scaledImageHeight = image.height * clampedScale;
+
+        const maxOffsetX = Math.max(0, (canvas.width - scaledImageWidth) / 2);
+        const maxOffsetY = Math.max(0, (canvas.height - scaledImageHeight) / 2);
+
+        const minOffsetX = Math.min(0, canvas.width - scaledImageWidth);
+        const minOffsetY = Math.min(0, canvas.height - scaledImageHeight);
+
+        const clampedOffsetX = Math.min(maxOffsetX, Math.max(minOffsetX, newOffsetX));
+        const clampedOffsetY = Math.min(maxOffsetY, Math.max(minOffsetY, newOffsetY));
 
         setMapState((prev) => ({
             ...prev,
-            scale: Math.max(0.1, Math.min(10, prev.scale * scaleFactor)),
+            scale: clampedScale,
+            offsetX: clampedOffsetX,
+            offsetY: clampedOffsetY,
         }));
     };
 
