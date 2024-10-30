@@ -66,7 +66,7 @@ export const Map = ({ imageUrl }: Props) => {
         }));
     };
 
-    const handleMouseMove = (e: React.MouseEvent) => {
+    const handleMapDrag = (e: React.MouseEvent) => {
         if (!mapState.isDragging) return;
 
         const canvas = canvasRef.current;
@@ -104,7 +104,7 @@ export const Map = ({ imageUrl }: Props) => {
         setMapState((prev) => ({ ...prev, isDragging: false }));
     };
 
-    const handleWheel = (e: React.WheelEvent) => {
+    const handleZoom = (e: React.WheelEvent) => {
         e.preventDefault();
 
         const canvas = canvasRef.current;
@@ -152,10 +152,10 @@ export const Map = ({ imageUrl }: Props) => {
             ref={canvasRef}
             className="size-full"
             onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
+            onMouseMove={handleMapDrag}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            onWheel={handleWheel}
+            onWheel={handleZoom}
         />
     );
 };
