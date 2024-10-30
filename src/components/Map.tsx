@@ -57,5 +57,42 @@ export const Map = ({ imageUrl }: Props) => {
         ctx.restore();
     }, [mapState]);
 
-    return <canvas ref={canvasRef} className="size-full" />;
+    const handleMouseDown = (e: React.MouseEvent) => {
+        setMapState((prev) => ({
+            ...prev,
+            isDragging: true,
+            lastMouseX: e.clientX,
+            lastMouseY: e.clientY,
+        }));
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!mapState.isDragging) return;
+
+        const dx = e.clientX - mapState.lastMouseX;
+        const dy = e.clientY - mapState.lastMouseY;
+
+        setMapState((prev) => ({
+            ...prev,
+            offsetX: prev.offsetX + dx,
+            offsetY: prev.offsetY + dy,
+            lastMouseX: e.clientX,
+            lastMouseY: e.clientY,
+        }));
+    };
+
+    const handleMouseUp = () => {
+        setMapState((prev) => ({ ...prev, isDragging: false }));
+    };
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="size-full"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+        />
+    );
 };
