@@ -8,12 +8,10 @@ import { PlusCircle, Map as MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { db } from "@/db/db";
 import { maps } from "@/db/schema";
+import { useMapStore } from "@/store/store";
 
-interface Props {
-    onMapSelect: (map: Map, imageUrl: string) => void;
-}
-
-const MapSelection = ({ onMapSelect }: Props) => {
+const MapSelection = () => {
+    const setActiveMap = useMapStore((state) => state.setActiveMap);
     const [existingMaps, setExistingMaps] = useState<Map[]>([]);
     const [newMapName, setNewMapName] = useState("");
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
@@ -47,7 +45,7 @@ const MapSelection = ({ onMapSelect }: Props) => {
             const newMap = await db.insert(maps).values({ name: newMapName.trim() }).returning();
 
             if (newMap.length > 0) {
-                onMapSelect(newMap[0], selectedFile);
+                setActiveMap({ ...newMap[0], imageUrl: selectedFile });
                 setIsNewMapDialogOpen(false);
                 setNewMapName("");
                 setSelectedFile(null);
@@ -61,7 +59,7 @@ const MapSelection = ({ onMapSelect }: Props) => {
 
     const handleExistingMapImageUpload = () => {
         if (selectedFile && selectedMapForUpload) {
-            onMapSelect(selectedMapForUpload, selectedFile);
+            setActiveMap({ ...selectedMapForUpload, imageUrl: selectedFile });
             setSelectedMapForUpload(null);
             setSelectedFile(null);
         }
