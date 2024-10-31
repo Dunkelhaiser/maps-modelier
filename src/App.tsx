@@ -1,12 +1,11 @@
 import { MapCanvas } from "@components/Map";
 import MapSelection from "@components/MapSelection";
+import { ActiveMap } from "@utils/types";
 import { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
 import { sql } from "./db/db";
 import { maps } from "./db/schema";
 import { sqlSchema } from "./db/schema.sql";
-
-type ActiveMap = InferSelectModel<typeof maps> & { imageUrl: string };
 
 const App = () => {
     const [activeMap, setActiveMap] = useState<ActiveMap | null>(null);

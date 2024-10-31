@@ -3,13 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/C
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
-import { InferSelectModel } from "drizzle-orm";
+import { Map } from "@utils/types";
 import { PlusCircle, FolderOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { db } from "@/db/db";
 import { maps } from "@/db/schema";
-
-type Map = InferSelectModel<typeof maps>;
 
 interface Props {
     onMapSelect: (map: Map, imageUrl: string) => void;
