@@ -1,23 +1,31 @@
 import { MapCanvas } from "@components/Map";
-import { MapUpload } from "@components/MapUpload";
+import MapSelection from "@components/MapSelection";
+import { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
 import { sql } from "./db/db";
+import { maps } from "./db/schema";
 import { sqlSchema } from "./db/schema.sql";
 
+type ActiveMap = InferSelectModel<typeof maps> & { imageUrl: string };
+
 const App = () => {
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const [activeMap, setActiveMap] = useState<ActiveMap | null>(null);
 
     useEffect(() => {
-        const query = async () => {
+        const initDb = async () => {
             await sql.exec(sqlSchema);
         };
 
-        query();
+        initDb();
     }, []);
+
+    const handleMapSelect = (map: InferSelectModel<typeof maps>, imageUrl: string) => {
+        setActiveMap({ ...map, imageUrl });
+    };
 
     return (
         <main className="grid h-screen w-screen place-items-center">
-            {!imageUrl ? <MapUpload onImageUpload={setImageUrl} /> : <MapCanvas imageUrl={imageUrl} />}
+            {!activeMap ? <MapSelection onMapSelect={handleMapSelect} /> : <MapCanvas imageUrl={activeMap.imageUrl} />}
         </main>
     );
 };
