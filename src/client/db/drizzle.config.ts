@@ -3,8 +3,8 @@ import type { Config } from "drizzle-kit";
 export default {
     dialect: "postgresql",
     driver: "pglite",
-    schema: "src/db/schema.ts",
-    out: "src/db/migrations",
+    schema: "src/client/db/schema.ts",
+    out: "src/client/db/migrations",
     dbCredentials: {
         url: "idb://pgdata",
     },

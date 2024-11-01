@@ -24,7 +24,6 @@
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
-        "incremental": true,
         "allowUnreachableCode": false,
         "strictBindCallApply": true,
         "removeComments": true,
@@ -32,11 +31,12 @@
         "resolveJsonModule": true,
         "sourceMap": true,
         "paths": {
-            "@ui/*": ["./src/components/ui/*"],
-            "@components/*": ["./src/components/*"],
-            "@utils/*": ["./src/utils/*"],
-            "@/*": ["./src/*"]
+            "@ui/*": ["./src/client/components/ui/*"],
+            "@components/*": ["./src/client/components/*"],
+            "@utils/*": ["./src/client/utils/*"],
+            "@/*": ["./src/client/*"]
         }
     },
-    "include": ["src"]
+    "include": ["src"],
+    "exclude": ["src/electron"]
 }

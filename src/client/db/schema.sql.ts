@@ -9,6 +9,7 @@ export const sqlSchema = `
     CREATE TABLE IF NOT EXISTS "maps" (
         "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
         "name" text NOT NULL,
+	    "imgPath" text,
         "createdAt" timestamp DEFAULT now() NOT NULL,
         "updatedAt" timestamp DEFAULT now() NOT NULL
     );

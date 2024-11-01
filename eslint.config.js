@@ -11,7 +11,8 @@ import tailwind from "eslint-plugin-tailwindcss";
 
 export default tseslint.config(
     {
-        ignores: ["dist"],
+        files: ["**/*.{ts,tsx}"],
+        ignores: ["dist", "release"],
     },
     {
         extends: [

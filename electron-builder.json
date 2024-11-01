@@ -1,0 +1,21 @@
+{
+    "appId": "com.dunkelhaiser.maps-modelier",
+    "files": ["dist/client", "dist/electron", "src/assets"],
+    "icon": "./dist/client/desktopIcon.png",
+    "extraResources": ["dist/electron/preload.cjs"],
+    "mac": {
+        "target": "dmg"
+    },
+    "linux": {
+        "target": "AppImage",
+        "category": "Utility"
+    },
+    "win": {
+        "target": ["msi", "portable"],
+        "icon": "./dist/client/desktopIcon.png"
+    },
+    "directories": {
+        "buildResources": "resources",
+        "output": "release"
+    }
+}
