@@ -1,12 +1,22 @@
 import path from "path";
 import config from "dotenv";
 import { app, BrowserWindow } from "electron";
+import { setupHandlers } from "./lib/setupHandlers.js";
 
 config.config();
 
 app.on("ready", () => {
     const mainWindow = new BrowserWindow({
         show: false,
+        webPreferences: {
+            preload: path.join(
+                app.getAppPath(),
+                process.env.NODE_ENV === "development" ? "." : "..",
+                "/dist/electron/preload.cjs"
+            ),
+            sandbox: false,
+            contextIsolation: true,
+        },
     });
 
     mainWindow.maximize();
@@ -18,4 +28,6 @@ app.on("ready", () => {
         mainWindow.setMenu(null);
         mainWindow.loadFile(path.join(app.getAppPath(), "/dist/client/index.html"));
     }
+
+    setupHandlers();
 });
