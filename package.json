@@ -20,9 +20,9 @@
         "format": "prettier -uw --cache --ignore-path .gitignore .",
         "preview": "vite preview",
         "prepare": "husky",
-        "db:generate": "drizzle-kit generate --config=\"./src/db/drizzle.config.ts\"",
-        "db:migrate": "node --import=tsx ./src/db/migrate.ts",
-        "db:drop": "drizzle-kit drop --config=\"./src/db/drizzle.config.ts\""
+        "db:generate": "drizzle-kit generate --config=\"./src/client/db/drizzle.config.ts\"",
+        "db:migrate": "node --import=tsx ./src/client/db/migrate.ts",
+        "db:drop": "drizzle-kit drop --config=\"./src/client/db/drizzle.config.ts\""
     },
     "lint-staged": {
         "./src/**/*": "prettier -uw --cache",
