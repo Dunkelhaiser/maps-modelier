@@ -5,6 +5,7 @@ import FileUpload from "@ui/FileUpload";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { Map } from "@utils/types";
+import { eq } from "drizzle-orm";
 import { PlusCircle, Map as MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { db } from "@/db/db";
@@ -46,6 +47,10 @@ const MapSelection = () => {
             const newMap = await db.insert(maps).values({ name: newMapName.trim() }).returning();
 
             if (newMap.length > 0) {
+                const imgPath = await window.electronAPI.saveMapImage(selectedFile, newMap[0].id);
+
+                await db.update(maps).set({ imgPath }).where(eq(maps.id, newMap[0].id));
+
                 setActiveMap({ ...newMap[0], imageUrl: selectedFile });
                 setIsNewMapDialogOpen(false);
                 setNewMapName("");
@@ -54,12 +59,27 @@ const MapSelection = () => {
         }
     };
 
-    const handleExistingMapSelect = (map: Map) => {
-        setSelectedMapForUpload(map);
+    const handleExistingMapSelect = async (map: Map) => {
+        if (map.imgPath) {
+            try {
+                const imageUrl = await window.electronAPI.loadMapImage(map.imgPath);
+                setActiveMap({ ...map, imageUrl });
+            } catch (error) {
+                // eslint-disable-next-line no-alert
+                alert(`Failed to load map image: ${JSON.stringify(error)}`);
+                setSelectedMapForUpload(map);
+            }
+        } else {
+            setSelectedMapForUpload(map);
+        }
     };
 
-    const handleExistingMapImageUpload = () => {
+    const handleExistingMapImageUpload = async () => {
         if (selectedFile && selectedMapForUpload) {
+            const imgPath = await window.electronAPI.saveMapImage(selectedFile, selectedMapForUpload.id);
+
+            await db.update(maps).set({ imgPath }).where(eq(maps.id, selectedMapForUpload.id));
+
             setActiveMap({ ...selectedMapForUpload, imageUrl: selectedFile });
             setSelectedMapForUpload(null);
             setSelectedFile(null);
