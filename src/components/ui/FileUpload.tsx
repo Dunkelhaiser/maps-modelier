@@ -1,9 +1,11 @@
 import { Input, InputProps } from "@ui/Input";
 import { cn } from "@utils/utils";
 import { CloudUpload } from "lucide-react";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 
 const FileUpload = forwardRef<HTMLInputElement, InputProps>(({ ...props }, ref) => {
+    const [image, setImage] = useState<string | null>(null);
+
     return (
         <label
             htmlFor={props.id}
@@ -25,7 +27,16 @@ const FileUpload = forwardRef<HTMLInputElement, InputProps>(({ ...props }, ref) 
                 accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                 className="absolute inset-0 h-full opacity-0 hover:cursor-pointer"
                 ref={ref}
+                onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                        const reader = new FileReader();
+                        reader.onload = () => setImage(reader.result as string);
+                        reader.readAsDataURL(e.target.files[0]);
+                    } else setImage(null);
+                    props.onChange?.(e);
+                }}
             />
+            {image && <img src={image} alt="Preview" className="absolute inset-0 size-full bg-white object-cover" />}
         </label>
     );
 });

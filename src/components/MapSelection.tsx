@@ -1,6 +1,7 @@
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/Card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
+import FileUpload from "@ui/FileUpload";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { Map } from "@utils/types";
@@ -95,7 +96,7 @@ const MapSelection = () => {
                             </div>
                             <div>
                                 <Label htmlFor="map-file">Province Map Image</Label>
-                                <Input id="map-file" type="file" accept="image/*" onChange={handleFileInput} />
+                                <FileUpload id="map-file" type="file" accept="image/*" onChange={handleFileInput} />
                             </div>
                             <Button onClick={handleNewMapSubmit} disabled={!selectedFile || !newMapName.trim()}>
                                 Create Map
@@ -115,7 +116,7 @@ const MapSelection = () => {
                         <div className="grid gap-4 py-4">
                             <div>
                                 <Label htmlFor="existing-map-file">Province Map Image</Label>
-                                <Input id="existing-map-file" type="file" accept="image/*" onChange={handleFileInput} />
+                                <FileUpload id="map-file" type="file" accept="image/*" onChange={handleFileInput} />
                             </div>
                             <Button onClick={handleExistingMapImageUpload} disabled={!selectedFile}>
                                 Load Map
