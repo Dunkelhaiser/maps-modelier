@@ -15,6 +15,13 @@
             "when": 1730385904558,
             "tag": "0001_fuzzy_molten_man",
             "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "7",
+            "when": 1730458571523,
+            "tag": "0002_faithful_charles_xavier",
+            "breakpoints": true
         }
     ]
 }

@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/C
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
+import { getChecksum, verifyImageChecksum } from "@utils/getChecksum";
 import { Map } from "@utils/types";
 import { PlusCircle, Map as MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ const MapSelection = () => {
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
     const [isNewMapDialogOpen, setIsNewMapDialogOpen] = useState(false);
     const [selectedMapForUpload, setSelectedMapForUpload] = useState<Map | null>(null);
+    const [hashError, setHashError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getMaps = async () => {
@@ -34,6 +37,7 @@ const MapSelection = () => {
             reader.onload = (event) => {
                 if (event.target?.result) {
                     setSelectedFile(event.target.result as string);
+                    setHashError(null);
                 }
             };
             reader.readAsDataURL(file);
@@ -42,26 +46,55 @@ const MapSelection = () => {
 
     const handleNewMapSubmit = async () => {
         if (selectedFile && newMapName.trim()) {
-            const newMap = await db.insert(maps).values({ name: newMapName.trim() }).returning();
+            setIsLoading(true);
+            try {
+                const imageChecksum = await getChecksum(selectedFile);
 
-            if (newMap.length > 0) {
-                setActiveMap({ ...newMap[0], imageUrl: selectedFile });
-                setIsNewMapDialogOpen(false);
-                setNewMapName("");
-                setSelectedFile(null);
+                const newMap = await db
+                    .insert(maps)
+                    .values({ name: newMapName.trim(), checksum: imageChecksum })
+                    .returning();
+
+                if (newMap.length > 0) {
+                    setActiveMap({ ...newMap[0], imageUrl: selectedFile });
+                    setIsNewMapDialogOpen(false);
+                    setNewMapName("");
+                    setSelectedFile(null);
+                }
+            } catch (err) {
+                setHashError(`Error creating new map: ${JSON.stringify(err)}`);
+            } finally {
+                setIsLoading(false);
             }
         }
     };
 
     const handleExistingMapSelect = (map: Map) => {
         setSelectedMapForUpload(map);
+        setHashError(null);
     };
 
-    const handleExistingMapImageUpload = () => {
+    const handleExistingMapImageUpload = async () => {
         if (selectedFile && selectedMapForUpload) {
-            setActiveMap({ ...selectedMapForUpload, imageUrl: selectedFile });
-            setSelectedMapForUpload(null);
-            setSelectedFile(null);
+            setIsLoading(true);
+            try {
+                const isValid = await verifyImageChecksum(selectedFile, selectedMapForUpload.checksum);
+
+                if (isValid) {
+                    setActiveMap({ ...selectedMapForUpload, imageUrl: selectedFile });
+                    setSelectedMapForUpload(null);
+                    setSelectedFile(null);
+                    setHashError(null);
+                } else {
+                    setHashError(
+                        "The uploaded image does not match the original map image. Please upload the correct image."
+                    );
+                }
+            } catch {
+                setHashError("An error occurred while verifying the image. Please try again.");
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -97,8 +130,11 @@ const MapSelection = () => {
                                 <Label htmlFor="map-file">Province Map Image</Label>
                                 <Input id="map-file" type="file" accept="image/*" onChange={handleFileInput} />
                             </div>
-                            <Button onClick={handleNewMapSubmit} disabled={!selectedFile || !newMapName.trim()}>
-                                Create Map
+                            <Button
+                                onClick={handleNewMapSubmit}
+                                disabled={!selectedFile || !newMapName.trim() || isLoading}
+                            >
+                                {isLoading ? "Creating..." : "Create Map"}
                             </Button>
                         </div>
                     </DialogContent>
@@ -106,19 +142,29 @@ const MapSelection = () => {
 
                 <Dialog
                     open={selectedMapForUpload !== null}
-                    onOpenChange={(open) => !open && setSelectedMapForUpload(null)}
+                    onOpenChange={(open) => {
+                        if (!open) {
+                            setSelectedMapForUpload(null);
+                            setHashError(null);
+                        }
+                    }}
                 >
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Upload Map Image for {selectedMapForUpload?.name}</DialogTitle>
                         </DialogHeader>
                         <div className="grid gap-4 py-4">
+                            {hashError && (
+                                <div className="bg-red-500">
+                                    <p>{hashError}</p>
+                                </div>
+                            )}
                             <div>
                                 <Label htmlFor="existing-map-file">Province Map Image</Label>
                                 <Input id="existing-map-file" type="file" accept="image/*" onChange={handleFileInput} />
                             </div>
-                            <Button onClick={handleExistingMapImageUpload} disabled={!selectedFile}>
-                                Load Map
+                            <Button onClick={handleExistingMapImageUpload} disabled={!selectedFile || isLoading}>
+                                {isLoading ? "Verifying..." : "Load Map"}
                             </Button>
                         </div>
                     </DialogContent>

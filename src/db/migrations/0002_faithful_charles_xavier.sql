@@ -1,0 +1,1 @@
+ALTER TABLE "maps" ADD COLUMN "checksum" text NOT NULL;
