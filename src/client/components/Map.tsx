@@ -34,20 +34,45 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         selectedProvinceId: null,
     });
 
+    const calculateInitialScale = (canvas: HTMLCanvasElement, image: HTMLImageElement) => {
+        const widthRatio = canvas.width / image.width;
+        const heightRatio = canvas.height / image.height;
+        return Math.max(widthRatio, heightRatio);
+    };
+
+    const calculateInitialOffset = (canvas: HTMLCanvasElement, image: HTMLImageElement, scale: number) => {
+        const scaledImageWidth = image.width * scale;
+        const scaledImageHeight = image.height * scale;
+
+        const offsetX = (canvas.width - scaledImageWidth) / 2;
+        const offsetY = (canvas.height - scaledImageHeight) / 2;
+
+        return { offsetX, offsetY };
+    };
+
     useEffect(() => {
         if (!imageUrl) return;
 
         const image = new Image();
         image.src = imageUrl;
         image.onload = () => {
-            const canvas = document.createElement("canvas");
-            canvas.width = image.width;
-            canvas.height = image.height;
-            const ctx = canvas.getContext("2d");
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            const initialScale = calculateInitialScale(canvas, image);
+            const { offsetX, offsetY } = calculateInitialOffset(canvas, image, initialScale);
+
+            const tempCanvas = document.createElement("canvas");
+            tempCanvas.width = image.width;
+            tempCanvas.height = image.height;
+            const ctx = tempCanvas.getContext("2d");
             if (!ctx) return;
 
             ctx.drawImage(image, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            const imageData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
 
             const provinceIds = new Map<string, string>();
             for (let i = 0; i < imageData.length; i += 4) {
@@ -56,15 +81,22 @@ export const MapCanvas = ({ imageUrl }: Props) => {
                 const b = imageData[i + 2];
                 const colorHash = hashColor(r, g, b);
                 const pixelIndex = i / 4;
-                const x = pixelIndex % canvas.width;
-                const y = Math.floor(pixelIndex / canvas.width);
+                const x = pixelIndex % tempCanvas.width;
+                const y = Math.floor(pixelIndex / tempCanvas.width);
                 const provinceId = `province-${colorHash}-${x}-${y}`;
                 provinceIds.set(colorHash, provinceId);
             }
 
-            canvas.remove();
+            tempCanvas.remove();
 
-            setMapState((prev) => ({ ...prev, image, provinceIds }));
+            setMapState((prev) => ({
+                ...prev,
+                image,
+                scale: initialScale,
+                offsetX,
+                offsetY,
+                provinceIds,
+            }));
         };
     }, [imageUrl]);
 
@@ -114,11 +146,10 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         const scaledImageWidth = image.width * mapState.scale;
         const scaledImageHeight = image.height * mapState.scale;
 
-        const maxOffsetX = Math.max(0, (canvas.width - scaledImageWidth) / 2);
-        const maxOffsetY = Math.max(0, (canvas.height - scaledImageHeight) / 2);
-
         const minOffsetX = Math.min(0, canvas.width - scaledImageWidth);
         const minOffsetY = Math.min(0, canvas.height - scaledImageHeight);
+        const maxOffsetX = Math.max(0, canvas.width - scaledImageWidth);
+        const maxOffsetY = Math.max(0, canvas.height - scaledImageHeight);
 
         const clampedOffsetX = Math.min(maxOffsetX, Math.max(minOffsetX, newOffsetX));
         const clampedOffsetY = Math.min(maxOffsetY, Math.max(minOffsetY, newOffsetY));
@@ -162,11 +193,10 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         const scaledImageWidth = image.width * clampedScale;
         const scaledImageHeight = image.height * clampedScale;
 
-        const maxOffsetX = Math.max(0, (canvas.width - scaledImageWidth) / 2);
-        const maxOffsetY = Math.max(0, (canvas.height - scaledImageHeight) / 2);
-
         const minOffsetX = Math.min(0, canvas.width - scaledImageWidth);
         const minOffsetY = Math.min(0, canvas.height - scaledImageHeight);
+        const maxOffsetX = Math.max(0, canvas.width - scaledImageWidth);
+        const maxOffsetY = Math.max(0, canvas.height - scaledImageHeight);
 
         const clampedOffsetX = Math.min(maxOffsetX, Math.max(minOffsetX, newOffsetX));
         const clampedOffsetY = Math.min(maxOffsetY, Math.max(minOffsetY, newOffsetY));
