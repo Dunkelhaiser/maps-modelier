@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@electric-sql/pglite':
-        specifier: ^0.2.12
-        version: 0.2.12
-      '@electric-sql/pglite-react':
-        specifier: ^0.2.12
-        version: 0.2.12(@electric-sql/pglite@0.2.12)(react@18.3.1)
       '@radix-ui/react-dialog':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -258,12 +252,6 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
-
-  '@electric-sql/pglite-react@0.2.12':
-    resolution: {integrity: sha512-j489fJeCZ1jw6S88L9hPoBxEkqaOhd/U1bi/AomXa2tDv/E36eNK2ZCTYVrb1TAoaAZgYf92dBv+m4VrDb8RDA==}
-    peerDependencies:
-      '@electric-sql/pglite': ^0.2.12
-      react: ^18.0.0
 
   '@electric-sql/pglite@0.2.12':
     resolution: {integrity: sha512-J/X42ujcoFEbOkgRyoNqZB5qcqrnJRWVlwpH3fKYoJkTz49N91uAK/rDSSG/85WRas9nC9mdV4FnMTxnQWE/rw==}
@@ -4467,12 +4455,8 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@electric-sql/pglite-react@0.2.12(@electric-sql/pglite@0.2.12)(react@18.3.1)':
-    dependencies:
-      '@electric-sql/pglite': 0.2.12
-      react: 18.3.1
-
-  '@electric-sql/pglite@0.2.12': {}
+  '@electric-sql/pglite@0.2.12':
+    optional: true
 
   '@electron/asar@3.2.15':
     dependencies:

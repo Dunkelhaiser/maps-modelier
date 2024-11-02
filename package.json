@@ -30,8 +30,6 @@
         "./src/**/*.{ts,tsx}": "eslint --fix --report-unused-disable-directives --max-warnings 0"
     },
     "dependencies": {
-        "@electric-sql/pglite": "^0.2.12",
-        "@electric-sql/pglite-react": "^0.2.12",
         "@radix-ui/react-dialog": "^1.1.2",
         "@radix-ui/react-icons": "^1.3.0",
         "@radix-ui/react-label": "^2.1.0",
