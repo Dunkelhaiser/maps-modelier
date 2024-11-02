@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
 export const maps = sqliteTable("maps", {
     id: text("id")
@@ -16,8 +16,17 @@ export const maps = sqliteTable("maps", {
         .default(sql`(unixepoch())`),
 });
 
-export const provinces = sqliteTable("provinces", {
-    id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    color: text("color").unique().notNull(),
-    type: text("type").notNull(),
-});
+export const provinces = sqliteTable(
+    "provinces",
+    {
+        id: integer("id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        color: text("color").notNull(),
+        type: text("type").notNull().default("land"),
+    },
+    (table) => ({
+        pk: unique("provinces_pk").on(table.mapId, table.id),
+    })
+);

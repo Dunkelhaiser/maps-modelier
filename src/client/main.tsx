@@ -8,7 +8,7 @@ interface ElectronAPI {
     saveMapImage: (imageData: string, mapId: string) => Promise<string>;
     loadMapImage: (imagePath: string) => Promise<string>;
     getMaps: () => Promise<Map[]>;
-    createMap: (name: string) => Promise<Map | null>;
+    createMap: (name: string, imageData: string) => Promise<Map | null>;
     updateMapName: (id: string, name: string) => Promise<Map | null>;
 }
 

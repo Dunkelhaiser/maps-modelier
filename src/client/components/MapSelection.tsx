@@ -40,7 +40,7 @@ const MapSelection = () => {
 
     const handleNewMapSubmit = async () => {
         if (selectedFile && newMapName.trim()) {
-            const newMap = await window.electronAPI.createMap(newMapName.trim());
+            const newMap = await window.electronAPI.createMap(newMapName.trim(), selectedFile);
             if (newMap) {
                 await window.electronAPI.saveMapImage(selectedFile, newMap.id);
                 setActiveMap({ ...newMap, imageUrl: selectedFile });
