@@ -1,4 +1,6 @@
+import { Province } from "@utils/types";
 import { useState, useRef, useEffect } from "react";
+import { useMapStore } from "@/store/store";
 
 interface MapState {
     image: HTMLImageElement | null;
@@ -8,20 +10,21 @@ interface MapState {
     isDragging: boolean;
     lastMouseX: number;
     lastMouseY: number;
-    provinceIds: Map<string, string>;
-    selectedProvinceId: string | null;
+    selectedProvinceId: number | null;
 }
 
 interface Props {
     imageUrl: string | null;
 }
 
-const hashColor = (r: number, g: number, b: number): string => {
-    return `${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+const rgbToHex = (r: number, g: number, b: number) => {
+    return `#${[r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("")}`;
 };
 
 export const MapCanvas = ({ imageUrl }: Props) => {
+    const activeMap = useMapStore((state) => state.activeMap);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [provinces, setProvinces] = useState<Province[]>([]);
     const [mapState, setMapState] = useState<MapState>({
         image: null,
         scale: 1,
@@ -30,9 +33,17 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         isDragging: false,
         lastMouseX: 0,
         lastMouseY: 0,
-        provinceIds: new Map(),
         selectedProvinceId: null,
     });
+
+    useEffect(() => {
+        const getProvinces = async () => {
+            if (!activeMap) return;
+            const provincesArr = await window.electronAPI.getAllProvinces(activeMap.id);
+            setProvinces(provincesArr);
+        };
+        getProvinces();
+    }, [activeMap]);
 
     const calculateInitialScale = (canvas: HTMLCanvasElement, image: HTMLImageElement) => {
         const widthRatio = canvas.width / image.width;
@@ -65,37 +76,12 @@ export const MapCanvas = ({ imageUrl }: Props) => {
             const initialScale = calculateInitialScale(canvas, image);
             const { offsetX, offsetY } = calculateInitialOffset(canvas, image, initialScale);
 
-            const tempCanvas = document.createElement("canvas");
-            tempCanvas.width = image.width;
-            tempCanvas.height = image.height;
-            const ctx = tempCanvas.getContext("2d");
-            if (!ctx) return;
-
-            ctx.drawImage(image, 0, 0);
-            const imageData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height).data;
-
-            const provinceIds = new Map<string, string>();
-            for (let i = 0; i < imageData.length; i += 4) {
-                const r = imageData[i];
-                const g = imageData[i + 1];
-                const b = imageData[i + 2];
-                const colorHash = hashColor(r, g, b);
-                const pixelIndex = i / 4;
-                const x = pixelIndex % tempCanvas.width;
-                const y = Math.floor(pixelIndex / tempCanvas.width);
-                const provinceId = `province-${colorHash}-${x}-${y}`;
-                provinceIds.set(colorHash, provinceId);
-            }
-
-            tempCanvas.remove();
-
             setMapState((prev) => ({
                 ...prev,
                 image,
                 scale: initialScale,
                 offsetX,
                 offsetY,
-                provinceIds,
             }));
         };
     }, [imageUrl]);
@@ -209,11 +195,11 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         }));
     };
 
-    const handleProvinceClick = (e: React.MouseEvent) => {
+    const handleProvinceClick = async (e: React.MouseEvent) => {
         if (mapState.isDragging) return;
 
         const canvas = canvasRef.current;
-        const { image, provinceIds } = mapState;
+        const { image } = mapState;
         if (!canvas || !image) return;
 
         const rect = canvas.getBoundingClientRect();
@@ -225,13 +211,14 @@ export const MapCanvas = ({ imageUrl }: Props) => {
 
         const [r, g, b] = imageData;
 
-        const colorHash = hashColor(r, g, b);
-        const provinceId = provinceIds.get(colorHash);
+        const colorHash = rgbToHex(r, g, b);
+        if (!activeMap) return;
+        const province = await window.electronAPI.getProvinceByColor(activeMap.id, colorHash);
 
-        if (provinceId) {
-            setMapState((prev) => ({ ...prev, selectedProvinceId: provinceId }));
+        if (province) {
+            setMapState((prev) => ({ ...prev, selectedProvinceId: province.id }));
             // eslint-disable-next-line no-console
-            console.log(provinceId);
+            console.log(province.id);
         }
     };
 
