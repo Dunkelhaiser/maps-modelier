@@ -7,9 +7,11 @@ CREATE TABLE `maps` (
 );
 --> statement-breakpoint
 CREATE TABLE `provinces` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`id` integer NOT NULL,
+	`map_id` text NOT NULL,
 	`color` text NOT NULL,
-	`type` text NOT NULL
+	`type` text DEFAULT 'land' NOT NULL,
+	FOREIGN KEY (`map_id`) REFERENCES `maps`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `provinces_color_unique` ON `provinces` (`color`);
+CREATE UNIQUE INDEX `provinces_pk` ON `provinces` (`map_id`,`id`);

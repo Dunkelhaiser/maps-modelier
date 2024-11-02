@@ -1,7 +1,7 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "4ce9d04c-7b3f-4dc9-aa6f-866c9b826e9d",
+    "id": "23af6b00-5424-42eb-8698-07fa4316125a",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "tables": {
         "maps": {
@@ -57,9 +57,16 @@
                 "id": {
                     "name": "id",
                     "type": "integer",
-                    "primaryKey": true,
+                    "primaryKey": false,
                     "notNull": true,
-                    "autoincrement": true
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
                 },
                 "color": {
                     "name": "color",
@@ -73,17 +80,28 @@
                     "type": "text",
                     "primaryKey": false,
                     "notNull": true,
-                    "autoincrement": false
+                    "autoincrement": false,
+                    "default": "'land'"
                 }
             },
             "indexes": {
-                "provinces_color_unique": {
-                    "name": "provinces_color_unique",
-                    "columns": ["color"],
+                "provinces_pk": {
+                    "name": "provinces_pk",
+                    "columns": ["map_id", "id"],
                     "isUnique": true
                 }
             },
-            "foreignKeys": {},
+            "foreignKeys": {
+                "provinces_map_id_maps_id_fk": {
+                    "name": "provinces_map_id_maps_id_fk",
+                    "tableFrom": "provinces",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
             "compositePrimaryKeys": {},
             "uniqueConstraints": {},
             "checkConstraints": {}
