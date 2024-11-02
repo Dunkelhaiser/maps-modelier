@@ -1,11 +1,12 @@
 import path from "path";
 import config from "dotenv";
 import { app, BrowserWindow } from "electron";
+import { executeMigrations } from "./db/db.js";
 import { setupHandlers } from "./lib/setupHandlers.js";
 
 config.config();
 
-app.on("ready", () => {
+app.on("ready", async () => {
     const mainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
@@ -29,5 +30,6 @@ app.on("ready", () => {
         mainWindow.loadFile(path.join(app.getAppPath(), "/dist/client/index.html"));
     }
 
+    await executeMigrations();
     setupHandlers();
 });

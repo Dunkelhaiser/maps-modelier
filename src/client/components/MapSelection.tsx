@@ -5,11 +5,8 @@ import FileUpload from "@ui/FileUpload";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { Map } from "@utils/types";
-import { eq } from "drizzle-orm";
 import { PlusCircle, Map as MapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { db } from "@/db/db";
-import { maps } from "@/db/schema";
 import { useMapStore } from "@/store/store";
 
 const MapSelection = () => {
@@ -22,10 +19,9 @@ const MapSelection = () => {
 
     useEffect(() => {
         const getMaps = async () => {
-            const result = await db.select().from(maps).orderBy(maps.name);
-            setExistingMaps(result);
+            const maps = await window.electronAPI.getMaps();
+            setExistingMaps(maps);
         };
-
         getMaps();
     }, []);
 
@@ -44,14 +40,10 @@ const MapSelection = () => {
 
     const handleNewMapSubmit = async () => {
         if (selectedFile && newMapName.trim()) {
-            const newMap = await db.insert(maps).values({ name: newMapName.trim() }).returning();
-
-            if (newMap.length > 0) {
-                const imgPath = await window.electronAPI.saveMapImage(selectedFile, newMap[0].id);
-
-                await db.update(maps).set({ imgPath }).where(eq(maps.id, newMap[0].id));
-
-                setActiveMap({ ...newMap[0], imageUrl: selectedFile });
+            const newMap = await window.electronAPI.createMap(newMapName.trim());
+            if (newMap) {
+                await window.electronAPI.saveMapImage(selectedFile, newMap.id);
+                setActiveMap({ ...newMap, imageUrl: selectedFile });
                 setIsNewMapDialogOpen(false);
                 setNewMapName("");
                 setSelectedFile(null);
@@ -76,10 +68,7 @@ const MapSelection = () => {
 
     const handleExistingMapImageUpload = async () => {
         if (selectedFile && selectedMapForUpload) {
-            const imgPath = await window.electronAPI.saveMapImage(selectedFile, selectedMapForUpload.id);
-
-            await db.update(maps).set({ imgPath }).where(eq(maps.id, selectedMapForUpload.id));
-
+            await window.electronAPI.saveMapImage(selectedFile, selectedMapForUpload.id);
             setActiveMap({ ...selectedMapForUpload, imageUrl: selectedFile });
             setSelectedMapForUpload(null);
             setSelectedFile(null);

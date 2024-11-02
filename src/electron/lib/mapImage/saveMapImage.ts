@@ -1,6 +1,9 @@
 import fs from "fs/promises";
 import path from "path";
+import { eq } from "drizzle-orm";
 import { app } from "electron";
+import { db } from "../../db/db.js";
+import { maps } from "../../db/schema.js";
 
 export const saveMapImage = async (_: Electron.IpcMainInvokeEvent, imageData: string, mapId: string) => {
     const userDataPath = app.getPath("userData");
@@ -12,11 +15,13 @@ export const saveMapImage = async (_: Electron.IpcMainInvokeEvent, imageData: st
     const [, extension] = matches;
 
     const fileName = `${mapId}.${extension}`;
-    const filePath = path.join(mapsDir, fileName);
+    const imgPath = path.join(mapsDir, fileName);
 
     const base64Data = imageData.replace(/^data:image\/[a-zA-Z]+;base64,/, "");
     const buffer = Buffer.from(base64Data, "base64");
-    await fs.writeFile(filePath, buffer);
+    await fs.writeFile(imgPath, buffer);
 
-    return filePath;
+    await db.update(maps).set({ imgPath }).where(eq(maps.id, mapId)).returning();
+
+    return imgPath;
 };
