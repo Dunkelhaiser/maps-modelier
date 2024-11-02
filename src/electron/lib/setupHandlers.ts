@@ -1,6 +1,6 @@
 import { ipcMain } from "electron";
-import { loadMapImage } from "./loadMapImage.js";
-import { saveMapImage } from "./saveMapImage.js";
+import { loadMapImage } from "./mapImage/loadMapImage.js";
+import { saveMapImage } from "./mapImage/saveMapImage.js";
 
 export const setupHandlers = () => {
     ipcMain.handle("saveMapImage", saveMapImage);
