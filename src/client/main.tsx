@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import type { Map } from "@utils/types.ts";
+import type { Map, Province } from "@utils/types.ts";
 import "./index.css";
 
 interface ElectronAPI {
@@ -10,6 +10,9 @@ interface ElectronAPI {
     getMaps: () => Promise<Map[]>;
     createMap: (name: string, imageData: string) => Promise<Map | null>;
     updateMapName: (id: string, name: string) => Promise<Map | null>;
+    getAllProvinces: (mapId: string) => Promise<Province[]>;
+    getProvinceByColor: (mapId: string, color: string) => Promise<Province | null>;
+    getProvinceById: (mapId: string, id: string) => Promise<Province | null>;
 }
 
 declare global {
