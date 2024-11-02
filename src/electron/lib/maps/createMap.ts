@@ -1,6 +1,6 @@
 import { db } from "../../db/db.js";
 import { maps } from "../../db/schema.js";
-import { processProvinces } from "./processProvinces.js";
+import { processProvinces } from "../provinces/processProvinces.js";
 
 export const createMap = async (_: Electron.IpcMainInvokeEvent, name: string, imageData: string) => {
     const newMap = await db.transaction(async (tx) => {
