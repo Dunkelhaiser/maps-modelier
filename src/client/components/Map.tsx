@@ -96,6 +96,7 @@ export const MapCanvas = ({ imageUrl }: Props) => {
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetHeight;
 
+        ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.save();
