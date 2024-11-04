@@ -70,7 +70,7 @@ export default tseslint.config(
             "no-useless-computed-key": "error",
             "no-useless-rename": "error",
             "no-constant-binary-expression": "error",
-            "no-promise-executor-return": "error",
+            "no-promise-executor-return": ["error", { allowVoid: true }],
             "no-template-curly-in-string": "error",
             "no-unreachable-loop": "error",
             "no-caller": "error",
