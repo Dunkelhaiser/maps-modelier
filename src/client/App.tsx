@@ -13,7 +13,6 @@ const App = () => {
             if (!activeMap) return;
             const provincesArr = await window.electronAPI.getAllProvinces(activeMap.id);
             setProvinces(provincesArr);
-            // setProvinces([provincesArr[2]]);
         };
         getProvinces();
     }, [activeMap]);
