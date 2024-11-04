@@ -8,10 +8,8 @@ export const extractProvinceShapes = async (imagePath: string, provinces: Provin
 
     await new Promise((resolve) => void (image.onload = resolve));
 
-    const canvas = document.createElement("canvas");
-    canvas.width = image.width;
-    canvas.height = image.height;
-    const ctx = canvas.getContext("2d");
+    const canvas = new OffscreenCanvas(image.width, image.height);
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) throw new Error("Canvas context not available");
 
     ctx.imageSmoothingEnabled = false;
