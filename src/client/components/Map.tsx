@@ -1,10 +1,11 @@
 import { Container, Stage } from "@pixi/react";
+import { extractProvinceShapes } from "@utils/extractProvinceShapes";
 import { ActiveMap, Province as ProvinceType } from "@utils/types";
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { useEffect, useState } from "react";
-import { extractProvinceShapes, Province } from "./Province";
+import { Province } from "./Province";
 
 interface MapRendererProps {
     provinces: ProvinceType[];
