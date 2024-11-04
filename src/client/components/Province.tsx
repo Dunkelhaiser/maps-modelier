@@ -29,7 +29,12 @@ export const Province = ({ id, shape, type, isSelected, onClick, onHover }: Prov
     const shapes = Array.isArray(shape) ? shape : [shape];
 
     return (
-        <Container interactive pointerdown={() => onClick(id)} pointerover={() => onHover(id)}>
+        <Container
+            interactive
+            pointerdown={() => onClick(id)}
+            pointerover={() => onHover(id)}
+            zIndex={isSelected ? 1 : 0}
+        >
             {shapes.map((regionShape) => (
                 <Graphics
                     key={`${id}-region-${regionShape.points.toString()}`}

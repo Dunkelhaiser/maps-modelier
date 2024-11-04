@@ -1,4 +1,4 @@
-import { Stage } from "@pixi/react";
+import { Container, Stage } from "@pixi/react";
 import { ActiveMap, Province as ProvinceType } from "@utils/types";
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
@@ -36,19 +36,21 @@ const MapCanvas = ({ provinces, activeMap }: MapRendererProps) => {
 
     return (
         <Stage width={800} height={600} options={{ backgroundColor: 0x2d2d2d }}>
-            {Object.keys(provinceShapes).length > 0 &&
-                provinces.map((province) => (
-                    <Province
-                        key={province.id}
-                        id={province.id}
-                        shape={provinceShapes[province.id]}
-                        color={province.color}
-                        type={province.type}
-                        isSelected={selectedProvince === province.id}
-                        onClick={handleProvinceClick}
-                        onHover={handleProvinceHover}
-                    />
-                ))}
+            <Container sortableChildren>
+                {Object.keys(provinceShapes).length > 0 &&
+                    provinces.map((province) => (
+                        <Province
+                            key={province.id}
+                            id={province.id}
+                            shape={provinceShapes[province.id]}
+                            color={province.color}
+                            type={province.type}
+                            isSelected={selectedProvince === province.id}
+                            onClick={handleProvinceClick}
+                            onHover={handleProvinceHover}
+                        />
+                    ))}
+            </Container>
         </Stage>
     );
 };
