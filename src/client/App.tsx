@@ -6,20 +6,27 @@ import { useMapStore } from "./store/store";
 
 const App = () => {
     const activeMap = useMapStore((state) => state.activeMap);
-    const [provinces, setProvinces] = useState<Province[]>([]);
+    const [landProvinces, setLandProvinces] = useState<Province[]>([]);
+    const [waterProvinces, setWaterProvinces] = useState<Province[]>([]);
 
     useEffect(() => {
         const getProvinces = async () => {
             if (!activeMap) return;
-            const provincesArr = await window.electronAPI.getAllProvinces(activeMap.id);
-            setProvinces(provincesArr);
+            const landProvincesArr = await window.electronAPI.getAllProvinces(activeMap.id, "land");
+            setLandProvinces(landProvincesArr);
+            const waterProvincesArr = await window.electronAPI.getAllProvinces(activeMap.id, "water");
+            setWaterProvinces(waterProvincesArr);
         };
         getProvinces();
     }, [activeMap]);
 
     return (
         <main className="grid h-screen w-screen place-items-center">
-            {!activeMap ? <MapSelection /> : <MapCanvas provinces={provinces} activeMap={activeMap} />}
+            {!activeMap ? (
+                <MapSelection />
+            ) : (
+                <MapCanvas landProvinces={landProvinces} waterProvinces={waterProvinces} activeMap={activeMap} />
+            )}
         </main>
     );
 };

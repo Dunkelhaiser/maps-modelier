@@ -8,13 +8,15 @@ import { useEffect, useState } from "react";
 import { Province } from "./Province";
 
 interface MapRendererProps {
-    provinces: ProvinceType[];
+    landProvinces: ProvinceType[];
+    waterProvinces: ProvinceType[];
     activeMap: ActiveMap;
 }
 
-const MapCanvas = ({ provinces, activeMap }: MapRendererProps) => {
-    const [provinceShapes, setProvinceShapes] = useState<Record<string, PIXI.Polygon | PIXI.Polygon[]>>({});
+const MapCanvas = ({ landProvinces, waterProvinces, activeMap }: MapRendererProps) => {
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
+    const [landProvincesShapes, setLandProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
+    const [waterProvincesShapes, setWaterProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
 
     const handleProvinceClick = (id: number) => {
         setSelectedProvince(id);
@@ -29,21 +31,38 @@ const MapCanvas = ({ provinces, activeMap }: MapRendererProps) => {
 
     useEffect(() => {
         const loadShapes = async () => {
-            const shapes = await extractProvinceShapes(activeMap.imageUrl, provinces);
-            setProvinceShapes(shapes);
+            const landShapes = await extractProvinceShapes(activeMap.imageUrl, landProvinces);
+            setLandProvincesShapes(landShapes);
+            const waterShapes = await extractProvinceShapes(activeMap.imageUrl, waterProvinces);
+            setWaterProvincesShapes(waterShapes);
         };
         loadShapes();
-    }, [activeMap.imageUrl, provinces]);
+    }, [activeMap.imageUrl, landProvinces, waterProvinces]);
 
     return (
         <Stage width={800} height={600} options={{ backgroundColor: 0x2d2d2d }}>
             <Container sortableChildren>
-                {Object.keys(provinceShapes).length > 0 &&
-                    provinces.map((province) => (
+                {Object.keys(waterProvincesShapes).length > 0 &&
+                    waterProvinces.map((province) => (
                         <Province
                             key={province.id}
                             id={province.id}
-                            shape={provinceShapes[province.id]}
+                            shape={waterProvincesShapes[province.id]}
+                            color={province.color}
+                            type={province.type}
+                            isSelected={selectedProvince === province.id}
+                            onClick={handleProvinceClick}
+                            onHover={handleProvinceHover}
+                        />
+                    ))}
+            </Container>
+            <Container sortableChildren>
+                {Object.keys(landProvincesShapes).length > 0 &&
+                    landProvinces.map((province) => (
+                        <Province
+                            key={province.id}
+                            id={province.id}
+                            shape={landProvincesShapes[province.id]}
                             color={province.color}
                             type={province.type}
                             isSelected={selectedProvince === province.id}

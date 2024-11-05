@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getMaps: () => ipcRenderer.invoke("getMaps"),
     createMap: (name: string, imageData: string) => ipcRenderer.invoke("createMap", name, imageData),
     updateMapName: (id: string, name: string) => ipcRenderer.invoke("updateMapName", id, name),
-    getAllProvinces: (mapId: string) => ipcRenderer.invoke("getAllProvinces", mapId),
+    getAllProvinces: (mapId: string, type: "land" | "water") => ipcRenderer.invoke("getAllProvinces", mapId, type),
     getProvinceByColor: (mapId: string, color: string) => ipcRenderer.invoke("getProvinceByColor", mapId, color),
     getProvinceById: (mapId: string, id: string) => ipcRenderer.invoke("getProvinceById", mapId, id),
 });
