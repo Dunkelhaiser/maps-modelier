@@ -31,10 +31,13 @@ const MapCanvas = ({ landProvinces, waterProvinces, activeMap }: MapRendererProp
 
     useEffect(() => {
         const loadShapes = async () => {
-            const landShapes = await extractProvinceShapes(activeMap.imageUrl, landProvinces);
-            setLandProvincesShapes(landShapes);
-            const waterShapes = await extractProvinceShapes(activeMap.imageUrl, waterProvinces);
-            setWaterProvincesShapes(waterShapes);
+            Promise.all([
+                extractProvinceShapes(activeMap.imageUrl, landProvinces),
+                extractProvinceShapes(activeMap.imageUrl, waterProvinces),
+            ]).then(([landShapes, waterShapes]) => {
+                setLandProvincesShapes(landShapes);
+                setWaterProvincesShapes(waterShapes);
+            });
         };
         loadShapes();
     }, [activeMap.imageUrl, landProvinces, waterProvinces]);

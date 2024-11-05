@@ -12,10 +12,13 @@ const App = () => {
     useEffect(() => {
         const getProvinces = async () => {
             if (!activeMap) return;
-            const landProvincesArr = await window.electronAPI.getAllProvinces(activeMap.id, "land");
-            setLandProvinces(landProvincesArr);
-            const waterProvincesArr = await window.electronAPI.getAllProvinces(activeMap.id, "water");
-            setWaterProvinces(waterProvincesArr);
+            Promise.all([
+                window.electronAPI.getAllProvinces(activeMap.id, "land"),
+                window.electronAPI.getAllProvinces(activeMap.id, "water"),
+            ]).then(([landProvincesArr, waterProvincesArr]) => {
+                setLandProvinces(landProvincesArr);
+                setWaterProvinces(waterProvincesArr);
+            });
         };
         getProvinces();
     }, [activeMap]);
