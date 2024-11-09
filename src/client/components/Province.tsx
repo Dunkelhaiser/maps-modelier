@@ -4,15 +4,17 @@ import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { useCallback } from "react";
+import { useMapStore } from "@/store/store";
 
-interface ProvinceProps extends ProvinceType {
-    isSelected: boolean;
+interface ProvinceProps extends Omit<ProvinceType, "color"> {
     shape: PIXI.Polygon | PIXI.Polygon[];
-    onClick: (id: number) => void;
-    onHover: (id: number) => void;
 }
 
-export const Province = ({ id, shape, type, isSelected, onClick, onHover }: ProvinceProps) => {
+export const Province = ({ id, shape, type }: ProvinceProps) => {
+    const setSelectedProvince = useMapStore((state) => state.setSelectedProvince);
+    const selectedProvince = useMapStore((state) => state.selectedProvince);
+    const isSelected = selectedProvince === id;
+
     const drawRegion = useCallback(
         (g: PIXI.Graphics, regionShape: PIXI.Polygon) => {
             g.clear();
@@ -33,8 +35,9 @@ export const Province = ({ id, shape, type, isSelected, onClick, onHover }: Prov
     return (
         <Container
             interactive
-            pointerdown={() => onClick(id)}
-            pointerover={() => onHover(id)}
+            pointerdown={() => setSelectedProvince(id)}
+            // eslint-disable-next-line no-console
+            pointerover={() => console.log(`Hovered over province ${id}`)}
             zIndex={isSelected ? 1 : 0}
         >
             {shapes.map((regionShape) => (

@@ -8,39 +8,41 @@ import { useEffect, useState } from "react";
 import { Province } from "./Province";
 
 interface MapRendererProps {
-    landProvinces: ProvinceType[];
-    waterProvinces: ProvinceType[];
     activeMap: ActiveMap;
 }
 
-const MapCanvas = ({ landProvinces, waterProvinces, activeMap }: MapRendererProps) => {
-    const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
+const MapCanvas = ({ activeMap }: MapRendererProps) => {
+    const [landProvinces, setLandProvinces] = useState<ProvinceType[]>([]);
+    const [waterProvinces, setWaterProvinces] = useState<ProvinceType[]>([]);
     const [landProvincesShapes, setLandProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
     const [waterProvincesShapes, setWaterProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
 
-    const handleProvinceClick = (id: number) => {
-        setSelectedProvince(id);
-        // eslint-disable-next-line no-console
-        console.log(`Clicked on province ${id}`);
-    };
-
-    const handleProvinceHover = (id: number) => {
-        // eslint-disable-next-line no-console
-        console.log(`Hovered over province ${id}`);
-    };
-
     useEffect(() => {
         const loadShapes = async () => {
-            Promise.all([
-                extractProvinceShapes(activeMap.imageUrl, landProvinces),
-                extractProvinceShapes(activeMap.imageUrl, waterProvinces),
-            ]).then(([landShapes, waterShapes]) => {
-                setLandProvincesShapes(landShapes);
-                setWaterProvincesShapes(waterShapes);
-            });
+            const startTime = performance.now();
+
+            const [landProvincesArr, waterProvincesArr] = await Promise.all([
+                window.electronAPI.getAllProvinces(activeMap.id, "land"),
+                window.electronAPI.getAllProvinces(activeMap.id, "water"),
+            ]);
+
+            setLandProvinces(landProvincesArr);
+            setWaterProvinces(waterProvincesArr);
+
+            const [landShapes, waterShapes] = await Promise.all([
+                extractProvinceShapes(activeMap.imageUrl, landProvincesArr),
+                extractProvinceShapes(activeMap.imageUrl, waterProvincesArr),
+            ]);
+
+            setLandProvincesShapes(landShapes);
+            setWaterProvincesShapes(waterShapes);
+
+            const endTime = performance.now();
+            // eslint-disable-next-line no-console
+            console.log(`Shapes loaded in ${endTime - startTime}ms`);
         };
         loadShapes();
-    }, [activeMap.imageUrl, landProvinces, waterProvinces]);
+    }, [activeMap.id, activeMap.imageUrl]);
 
     return (
         <Stage width={800} height={600} options={{ backgroundColor: 0x2d2d2d }}>
@@ -51,11 +53,7 @@ const MapCanvas = ({ landProvinces, waterProvinces, activeMap }: MapRendererProp
                             key={province.id}
                             id={province.id}
                             shape={waterProvincesShapes[province.id]}
-                            color={province.color}
                             type={province.type}
-                            isSelected={selectedProvince === province.id}
-                            onClick={handleProvinceClick}
-                            onHover={handleProvinceHover}
                         />
                     ))}
             </Container>
@@ -66,11 +64,7 @@ const MapCanvas = ({ landProvinces, waterProvinces, activeMap }: MapRendererProp
                             key={province.id}
                             id={province.id}
                             shape={landProvincesShapes[province.id]}
-                            color={province.color}
                             type={province.type}
-                            isSelected={selectedProvince === province.id}
-                            onClick={handleProvinceClick}
-                            onHover={handleProvinceHover}
                         />
                     ))}
             </Container>
