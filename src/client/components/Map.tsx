@@ -5,7 +5,7 @@ import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Province } from "./Province";
+import { ProvincesContainer } from "./ProvincesContainer";
 import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface MapRendererProps {
@@ -175,7 +175,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <Container sortableChildren>
                 {Object.keys(waterProvincesShapes).length > 0 &&
                     waterProvinces.map((province) => (
-                        <Province
+                        <ProvincesContainer
                             key={province.id}
                             id={province.id}
                             shape={waterProvincesShapes[province.id]}
@@ -189,7 +189,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <Container sortableChildren>
                 {Object.keys(landProvincesShapes).length > 0 &&
                     landProvinces.map((province) => (
-                        <Province
+                        <ProvincesContainer
                             key={province.id}
                             id={province.id}
                             shape={landProvincesShapes[province.id]}
