@@ -31,6 +31,7 @@
     },
     "dependencies": {
         "@napi-rs/canvas": "^0.1.59",
+        "@napi-rs/canvas-win32-x64-msvc": "^0.1.60",
         "@pixi/events": "^7.4.2",
         "@pixi/react": "^7.1.2",
         "@pixi/unsafe-eval": "^7.4.2",

@@ -11,6 +11,9 @@ importers:
       '@napi-rs/canvas':
         specifier: ^0.1.59
         version: 0.1.59
+      '@napi-rs/canvas-win32-x64-msvc':
+        specifier: ^0.1.60
+        version: 0.1.60
       '@pixi/events':
         specifier: ^7.4.2
         version: 7.4.2(@pixi/core@7.4.2)(@pixi/display@7.4.2(@pixi/core@7.4.2))
@@ -1006,6 +1009,12 @@ packages:
 
   '@napi-rs/canvas-win32-x64-msvc@0.1.59':
     resolution: {integrity: sha512-bYMiZJsKPkU7HEoYI5E0alOSV1EkaigY4VEgGHPK9W/qGMmNFsxdbURQqa5h3zbhZTK5QRSdYYqowcTEYVIlug==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@napi-rs/canvas-win32-x64-msvc@0.1.60':
+    resolution: {integrity: sha512-b7VjNQ3V/7G6VQqB8KvG9A06ENFZhxFMe4areUduipFwuJ0w35PGgOmYZHd0+iY9Nh7niECjgPRNDcrzpDlWXg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
@@ -5319,6 +5328,8 @@ snapshots:
 
   '@napi-rs/canvas-win32-x64-msvc@0.1.59':
     optional: true
+
+  '@napi-rs/canvas-win32-x64-msvc@0.1.60': {}
 
   '@napi-rs/canvas@0.1.59':
     optionalDependencies:
