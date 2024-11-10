@@ -18,121 +18,137 @@ export const extractProvinceShapes = async (imagePath: string, provinces: Provin
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const { width, height, data } = imageData;
-    const provinceOutlines: Record<string, PIXI.Polygon | PIXI.Polygon[]> = {};
-
     const pixelCount = width * height;
+
     const visited = new Uint8Array(pixelCount);
     const queue = new Int32Array(pixelCount * 2);
-    const directions = new Int32Array([-1, 0, 1, 0, 0, -1, 0, 1]);
+    const provinceOutlines: Record<string, PIXI.Polygon | PIXI.Polygon[]> = {};
 
-    // lookup table for hex to RGB
-    const colorCache = new Map<string, { r: number; g: number; b: number }>();
+    const colorLookup = new Uint32Array(256 * 256 * 256);
+    const provinceColorMap = new Map<number, number>();
 
-    const getColorComponents = (colorHex: string) => {
-        const cached = colorCache.get(colorHex);
-        if (cached) return cached;
-
-        const targetColor = parseInt(colorHex.replace("#", ""), 16);
-        const components = {
-            r: (targetColor >> 16) & 255,
-            g: (targetColor >> 8) & 255,
-            b: targetColor & 255,
-        };
-        colorCache.set(colorHex, components);
-        return components;
-    };
-
-    const createProvincePixelChecker = (targetR: number, targetG: number, targetB: number) => {
-        return (x: number, y: number): boolean => {
-            if (x < 0 || y < 0 || x >= width || y >= height) return false;
-            const index = (y * width + x) * 4;
-            return data[index] === targetR && data[index + 1] === targetG && data[index + 2] === targetB;
-        };
-    };
+    provinces.forEach((province) => {
+        const color = parseInt(province.color.replace("#", ""), 16);
+        const r = (color >> 16) & 255;
+        const g = (color >> 8) & 255;
+        const b = color & 255;
+        const key = (r << 16) | (g << 8) | b;
+        colorLookup[key] = 1;
+        provinceColorMap.set(key, province.id);
+    });
 
     const edgeSet = new Set<string>();
     const edgeBuffer: string[] = [];
 
-    provinces.forEach((province) => {
-        const { r: targetR, g: targetG, b: targetB } = getColorComponents(province.color);
-        const isProvincePixel = createProvincePixelChecker(targetR, targetG, targetB);
+    const provinceData = new Map<number, { pixels: number[]; count: number }>();
 
-        const provincePixels = new Int32Array(pixelCount * 2);
-        let provincePixelCount = 0;
+    const rowWidth4 = width * 4;
+    for (let y = 0, rowOffset = 0; y < height; y++, rowOffset += rowWidth4) {
+        for (let x = 0, pixelOffset = rowOffset; x < width; x++, pixelOffset += 4) {
+            const r = data[pixelOffset];
+            const g = data[pixelOffset + 1];
+            const b = data[pixelOffset + 2];
+            const colorKey = (r << 16) | (g << 8) | b;
 
-        const rowWidth4 = width * 4;
-        // Find province pixels
-        for (let y = 0, rowOffset = 0; y < height; y++, rowOffset += rowWidth4) {
-            for (let x = 0, pixelOffset = rowOffset; x < width; x++, pixelOffset += 4) {
-                if (
-                    data[pixelOffset] === targetR &&
-                    data[pixelOffset + 1] === targetG &&
-                    data[pixelOffset + 2] === targetB
-                ) {
-                    const index = provincePixelCount * 2;
-                    provincePixels[index] = x;
-                    provincePixels[index + 1] = y;
-                    provincePixelCount++;
+            if (colorLookup[colorKey]) {
+                const provinceId = provinceColorMap.get(colorKey)!;
+                let provinceInfo = provinceData.get(provinceId);
+
+                if (!provinceInfo) {
+                    provinceInfo = { pixels: [], count: 0 };
+                    provinceData.set(provinceId, provinceInfo);
                 }
+
+                provinceInfo.pixels.push(x, y);
+                provinceInfo.count++;
+            }
+        }
+    }
+
+    const floodFill = (
+        startX: number,
+        startY: number,
+        isProvincePixel: (x: number, y: number) => boolean
+    ): Int32Array => {
+        const region = new Int32Array(pixelCount * 2);
+        let regionSize = 0;
+        let queueStart = 0;
+        let queueEnd = 2;
+
+        queue[0] = startX;
+        queue[1] = startY;
+
+        while (queueStart < queueEnd) {
+            const x = queue[queueStart];
+            const y = queue[queueStart + 1];
+            queueStart += 2;
+
+            const pixelIndex = y * width + x;
+            if (visited[pixelIndex]) continue;
+
+            visited[pixelIndex] = 1;
+            region[regionSize * 2] = x;
+            region[regionSize * 2 + 1] = y;
+            regionSize++;
+
+            const x1 = x - 1,
+                x2 = x + 1,
+                y1 = y - 1,
+                y2 = y + 1;
+
+            if (isProvincePixel(x1, y) && !visited[y * width + x1]) {
+                queue[queueEnd] = x1;
+                queue[queueEnd + 1] = y;
+                queueEnd += 2;
+            }
+            if (isProvincePixel(x2, y) && !visited[y * width + x2]) {
+                queue[queueEnd] = x2;
+                queue[queueEnd + 1] = y;
+                queueEnd += 2;
+            }
+            if (isProvincePixel(x, y1) && !visited[y1 * width + x]) {
+                queue[queueEnd] = x;
+                queue[queueEnd + 1] = y1;
+                queueEnd += 2;
+            }
+            if (isProvincePixel(x, y2) && !visited[y2 * width + x]) {
+                queue[queueEnd] = x;
+                queue[queueEnd + 1] = y2;
+                queueEnd += 2;
             }
         }
 
-        // Handle empty or single-pixel provinces
-        if (provincePixelCount === 0) {
-            provinceOutlines[province.id] = new PIXI.Polygon([0, 0, 0, 1, 1, 1, 1, 0]);
-            return;
+        return region.slice(0, regionSize * 2);
+    };
+
+    for (const [provinceId, { pixels, count }] of provinceData) {
+        if (count === 0) {
+            provinceOutlines[provinceId] = new PIXI.Polygon([0, 0, 0, 1, 1, 1, 1, 0]);
+            continue;
         }
+
+        const targetColor = parseInt(provinces.find((p) => p.id === provinceId)!.color.replace("#", ""), 16);
+        const targetR = (targetColor >> 16) & 255;
+        const targetG = (targetColor >> 8) & 255;
+        const targetB = targetColor & 255;
+
+        const isProvincePixel = (x: number, y: number): boolean => {
+            if (x < 0 || y < 0 || x >= width || y >= height) return false;
+            const index = (y * width + x) * 4;
+            return data[index] === targetR && data[index + 1] === targetG && data[index + 2] === targetB;
+        };
 
         const regions: Int32Array[] = [];
         visited.fill(0);
 
-        // Optimized flood fill using pre-allocated arrays
-        const floodFill = (startX: number, startY: number): Int32Array => {
-            const region = new Int32Array(pixelCount * 2);
-            let regionSize = 0;
-            let queueStart = 0;
-            let queueEnd = 2;
-
-            queue[0] = startX;
-            queue[1] = startY;
-
-            while (queueStart < queueEnd) {
-                const x = queue[queueStart];
-                const y = queue[queueStart + 1];
-                queueStart += 2;
-
-                const pixelIndex = y * width + x;
-                if (visited[pixelIndex]) continue;
-
-                visited[pixelIndex] = 1;
-                region[regionSize * 2] = x;
-                region[regionSize * 2 + 1] = y;
-                regionSize++;
-
-                for (let i = 0; i < 8; i += 2) {
-                    const newX = x + directions[i];
-                    const newY = y + directions[i + 1];
-                    const newIndex = newY * width + newX;
-
-                    if (isProvincePixel(newX, newY) && !visited[newIndex]) {
-                        queue[queueEnd] = newX;
-                        queue[queueEnd + 1] = newY;
-                        queueEnd += 2;
-                    }
-                }
-            }
-
-            return region.slice(0, regionSize * 2);
-        };
-
         // Find all disconnected regions
-        for (let i = 0; i < provincePixelCount * 2; i += 2) {
-            const x = provincePixels[i];
-            const y = provincePixels[i + 1];
+        for (let i = 0; i < pixels.length; i += 2) {
+            const x = pixels[i];
+            const y = pixels[i + 1];
             const pixelIndex = y * width + x;
 
             if (!visited[pixelIndex]) {
-                const region = floodFill(x, y);
+                const region = floodFill(x, y, isProvincePixel);
                 if (region.length > 0) {
                     regions.push(region);
                 }
@@ -141,36 +157,39 @@ export const extractProvinceShapes = async (imagePath: string, provinces: Provin
 
         const regionPolygons: PIXI.Polygon[] = [];
 
-        regions.forEach((regionPixels) => {
+        for (const regionPixels of regions) {
             edgeSet.clear();
             edgeBuffer.length = 0;
 
-            const addEdge = (x1: number, y1: number, x2: number, y2: number) => {
-                const minX = Math.min(x1, x2);
-                const minY = Math.min(y1, y2);
-                const maxX = Math.max(x1, x2);
-                const maxY = Math.max(y1, y2);
-                edgeSet.add(`${minX},${minY},${maxX},${maxY}`);
-            };
-
-            // Find edges for each pixel
             for (let i = 0; i < regionPixels.length; i += 2) {
                 const x = regionPixels[i];
                 const y = regionPixels[i + 1];
 
-                if (!isProvincePixel(x + 1, y)) addEdge(x + 1, y, x + 1, y + 1);
-                if (!isProvincePixel(x - 1, y)) addEdge(x, y, x, y + 1);
-                if (!isProvincePixel(x, y + 1)) addEdge(x, y + 1, x + 1, y + 1);
-                if (!isProvincePixel(x, y - 1)) addEdge(x, y, x + 1, y);
+                if (!isProvincePixel(x + 1, y)) {
+                    const edge = `${x + 1},${y},${x + 1},${y + 1}`;
+                    edgeSet.add(edge);
+                }
+                if (!isProvincePixel(x - 1, y)) {
+                    const edge = `${x},${y},${x},${y + 1}`;
+                    edgeSet.add(edge);
+                }
+                if (!isProvincePixel(x, y + 1)) {
+                    const edge = `${x},${y + 1},${x + 1},${y + 1}`;
+                    edgeSet.add(edge);
+                }
+                if (!isProvincePixel(x, y - 1)) {
+                    const edge = `${x},${y},${x + 1},${y}`;
+                    edgeSet.add(edge);
+                }
             }
 
             if (edgeSet.size === 0) {
                 const [x, y] = regionPixels;
                 regionPolygons.push(new PIXI.Polygon([x, y, x + 1, y, x + 1, y + 1, x, y + 1]));
-                return;
+                continue;
             }
 
-            // Convert edges to a continuous path
+            // Convert edges to path
             const edges = Array.from(edgeSet).map((edge) => {
                 const [x1, y1, x2, y2] = edge.split(",").map(Number);
                 return [
@@ -179,7 +198,6 @@ export const extractProvinceShapes = async (imagePath: string, provinces: Provin
                 ] as [number, number][];
             });
 
-            // Sort edges into a continuous path
             const pathPoints: [number, number][] = [];
             pathPoints.push(edges[0][0], edges[0][1]);
 
@@ -188,33 +206,35 @@ export const extractProvinceShapes = async (imagePath: string, provinces: Provin
 
             while (remainingEdges.length > 0) {
                 const lastPoint = pathPoints[pathPoints.length - 1];
-                let found = false;
+                let foundIndex = -1;
 
                 for (let i = 0; i < remainingEdges.length; i++) {
                     const edge = remainingEdges[i];
-                    const matchStart =
-                        Math.abs(edge[0][0] - lastPoint[0]) < epsilon && Math.abs(edge[0][1] - lastPoint[1]) < epsilon;
-                    const matchEnd =
-                        Math.abs(edge[1][0] - lastPoint[0]) < epsilon && Math.abs(edge[1][1] - lastPoint[1]) < epsilon;
+                    const [start, end] = edge;
 
-                    if (matchStart || matchEnd) {
-                        pathPoints.push(matchStart ? edge[1] : edge[0]);
-                        remainingEdges.splice(i, 1);
-                        found = true;
+                    if (Math.abs(start[0] - lastPoint[0]) < epsilon && Math.abs(start[1] - lastPoint[1]) < epsilon) {
+                        pathPoints.push(end);
+                        foundIndex = i;
+                        break;
+                    }
+                    if (Math.abs(end[0] - lastPoint[0]) < epsilon && Math.abs(end[1] - lastPoint[1]) < epsilon) {
+                        pathPoints.push(start);
+                        foundIndex = i;
                         break;
                     }
                 }
 
-                if (!found) break;
+                if (foundIndex === -1) break;
+                remainingEdges.splice(foundIndex, 1);
             }
 
             if (pathPoints.length >= 3) {
                 regionPolygons.push(new PIXI.Polygon(pathPoints.flat()));
             }
-        });
+        }
 
-        provinceOutlines[province.id] = regionPolygons.length === 1 ? regionPolygons[0] : regionPolygons;
-    });
+        provinceOutlines[provinceId] = regionPolygons.length === 1 ? regionPolygons[0] : regionPolygons;
+    }
 
     return provinceOutlines;
 };
