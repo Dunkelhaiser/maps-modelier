@@ -17,6 +17,10 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const [waterProvinces, setWaterProvinces] = useState<ProvinceType[]>([]);
     const [landProvincesShapes, setLandProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
     const [waterProvincesShapes, setWaterProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
+    const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
+    const [scale, setScale] = useState<number>(1);
+
+    const { width = 0, height = 0 } = useWindowSize();
 
     useEffect(() => {
         const loadShapes = async () => {
@@ -45,31 +49,53 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         loadShapes();
     }, [activeMap.id, activeMap.imageUrl]);
 
-    const { width, height } = useWindowSize();
+    useEffect(() => {
+        const img = new Image();
+        img.src = activeMap.imageUrl;
+        img.onload = () => setMapDimensions({ width: img.width, height: img.height });
+    }, [activeMap.imageUrl]);
+
+    useEffect(() => {
+        if (!mapDimensions) return;
+
+        const scaleX = width / mapDimensions.width;
+        const scaleY = height / mapDimensions.height;
+
+        const newScale = Math.min(scaleX, scaleY);
+        setScale(newScale);
+    }, [width, height, mapDimensions]);
+
+    if (!mapDimensions) return null;
 
     return (
         <Stage width={width} height={height} options={{ backgroundColor: 0x2d2d2d }}>
-            <Container sortableChildren>
-                {Object.keys(waterProvincesShapes).length > 0 &&
-                    waterProvinces.map((province) => (
-                        <Province
-                            key={province.id}
-                            id={province.id}
-                            shape={waterProvincesShapes[province.id]}
-                            type={province.type}
-                        />
-                    ))}
-            </Container>
-            <Container sortableChildren>
-                {Object.keys(landProvincesShapes).length > 0 &&
-                    landProvinces.map((province) => (
-                        <Province
-                            key={province.id}
-                            id={province.id}
-                            shape={landProvincesShapes[province.id]}
-                            type={province.type}
-                        />
-                    ))}
+            <Container
+                scale={scale}
+                x={(width - mapDimensions.width * scale) / 2}
+                y={(height - mapDimensions.height * scale) / 2}
+            >
+                <Container sortableChildren>
+                    {Object.keys(waterProvincesShapes).length > 0 &&
+                        waterProvinces.map((province) => (
+                            <Province
+                                key={province.id}
+                                id={province.id}
+                                shape={waterProvincesShapes[province.id]}
+                                type={province.type}
+                            />
+                        ))}
+                </Container>
+                <Container sortableChildren>
+                    {Object.keys(landProvincesShapes).length > 0 &&
+                        landProvinces.map((province) => (
+                            <Province
+                                key={province.id}
+                                id={province.id}
+                                shape={landProvincesShapes[province.id]}
+                                type={province.type}
+                            />
+                        ))}
+                </Container>
             </Container>
         </Stage>
     );
