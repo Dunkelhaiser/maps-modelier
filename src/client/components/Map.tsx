@@ -6,6 +6,7 @@ import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { useEffect, useState } from "react";
 import { Province } from "./Province";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface MapRendererProps {
     activeMap: ActiveMap;
@@ -44,8 +45,10 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         loadShapes();
     }, [activeMap.id, activeMap.imageUrl]);
 
+    const { width, height } = useWindowSize();
+
     return (
-        <Stage width={800} height={600} options={{ backgroundColor: 0x2d2d2d }}>
+        <Stage width={width} height={height} options={{ backgroundColor: 0x2d2d2d }}>
             <Container sortableChildren>
                 {Object.keys(waterProvincesShapes).length > 0 &&
                     waterProvinces.map((province) => (
