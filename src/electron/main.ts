@@ -10,6 +10,7 @@ app.on("ready", async () => {
     const mainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
+            nodeIntegrationInWorker: true,
             preload: path.join(
                 app.getAppPath(),
                 process.env.NODE_ENV === "development" ? "." : "..",

@@ -1,5 +1,11 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
+type ProvinceType = {
+    id: number;
+    color: string;
+    type: string;
+};
+
 contextBridge.exposeInMainWorld("electronAPI", {
     saveMapImage: (imageData: string, mapId: string) => ipcRenderer.invoke("saveMapImage", imageData, mapId),
     loadMapImage: (imagePath: string) => ipcRenderer.invoke("loadMapImage", imagePath),
@@ -9,4 +15,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getAllProvinces: (mapId: string, type: "land" | "water") => ipcRenderer.invoke("getAllProvinces", mapId, type),
     getProvinceByColor: (mapId: string, color: string) => ipcRenderer.invoke("getProvinceByColor", mapId, color),
     getProvinceById: (mapId: string, id: string) => ipcRenderer.invoke("getProvinceById", mapId, id),
+    extractProvinceShapes: (imagePath: string, provinces: ProvinceType[]) =>
+        ipcRenderer.invoke("extractProvinceShapes", imagePath, provinces),
 });
