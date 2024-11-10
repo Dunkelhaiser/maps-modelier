@@ -34,7 +34,7 @@ export const Province = ({ id, shape, type }: ProvinceProps) => {
 
     return (
         <Container
-            interactive
+            eventMode="static"
             pointerdown={() => setSelectedProvince(id)}
             // eslint-disable-next-line no-console
             pointerover={() => console.log(`Hovered over province ${id}`)}
