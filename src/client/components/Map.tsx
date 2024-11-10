@@ -17,6 +17,10 @@ interface Position {
     y: number;
 }
 
+const MIN_SCALE_MULTIPLIER = 1;
+const MAX_SCALE_MULTIPLIER = 4;
+const ZOOM_SPEED = 0.1;
+
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const [landProvinces, setLandProvinces] = useState<ProvinceType[]>([]);
     const [waterProvinces, setWaterProvinces] = useState<ProvinceType[]>([]);
@@ -25,6 +29,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
+    const [scaleMultiplier, setScaleMultiplier] = useState(1);
     const dragStartRef = useRef<Position>({ x: 0, y: 0 });
 
     const { width = 0, height = 0 } = useWindowSize();
@@ -62,23 +67,49 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         img.onload = () => setMapDimensions({ width: img.width, height: img.height });
     }, [activeMap.imageUrl]);
 
-    const getScale = useCallback(() => {
+    const getBaseScale = useCallback(() => {
         if (!mapDimensions) return 1;
         const scaleX = width / mapDimensions.width;
         const scaleY = height / mapDimensions.height;
         return Math.max(scaleX, scaleY);
     }, [width, height, mapDimensions]);
 
+    const getCurrentScale = useCallback(() => {
+        return getBaseScale() * scaleMultiplier;
+    }, [getBaseScale, scaleMultiplier]);
+
+    const constrainPosition = useCallback(
+        (pos: Position, scale: number) => {
+            if (!mapDimensions) return pos;
+
+            const scaledWidth = mapDimensions.width * scale;
+            const scaledHeight = mapDimensions.height * scale;
+
+            const minX = Math.min(width - scaledWidth, 0);
+            const minY = Math.min(height - scaledHeight, 0);
+            const maxX = Math.max(0, width - scaledWidth);
+            const maxY = Math.max(0, height - scaledHeight);
+
+            return {
+                x: Math.min(maxX, Math.max(minX, pos.x)),
+                y: Math.min(maxY, Math.max(minY, pos.y)),
+            };
+        },
+        [mapDimensions, width, height]
+    );
+
     useEffect(() => {
         if (!mapDimensions) return;
 
-        const scale = getScale();
+        const scale = getCurrentScale();
 
         const x = (width - mapDimensions.width * scale) / 2;
         const y = (height - mapDimensions.height * scale) / 2;
 
-        setPosition({ x, y });
-    }, [width, height, mapDimensions, getScale]);
+        const constrainedPosition = constrainPosition({ x, y }, scale);
+
+        setPosition(constrainedPosition);
+    }, [width, height, mapDimensions, getCurrentScale, constrainPosition]);
 
     const handleDragStart = (event: PIXI.FederatedPointerEvent) => {
         setIsDragging(true);
@@ -88,26 +119,47 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const handleDragMove = (event: PIXI.FederatedPointerEvent) => {
         if (!isDragging || !mapDimensions) return;
 
-        const scale = getScale();
-        const scaledWidth = mapDimensions.width * scale;
-        const scaledHeight = mapDimensions.height * scale;
+        const newPosition = {
+            x: event.globalX - dragStartRef.current.x,
+            y: event.globalY - dragStartRef.current.y,
+        };
 
-        const newX = event.globalX - dragStartRef.current.x;
-        const newY = event.globalY - dragStartRef.current.y;
-
-        const minX = width - scaledWidth;
-        const minY = height - scaledHeight;
-        const maxX = 0;
-        const maxY = 0;
-
-        const constrainedX = Math.min(maxX, Math.max(minX, newX));
-        const constrainedY = Math.min(maxY, Math.max(minY, newY));
-
-        setPosition({ x: constrainedX, y: constrainedY });
+        const constrainedPosition = constrainPosition(newPosition, getCurrentScale());
+        setPosition(constrainedPosition);
     };
 
     const handleDragEnd = () => {
         setIsDragging(false);
+    };
+
+    const handleWheel = (event: PIXI.FederatedWheelEvent) => {
+        if (!mapDimensions) return;
+
+        // Calculate zoom center (mouse position)
+        const mouseX = event.globalX;
+        const mouseY = event.globalY;
+
+        const relativeX = mouseX - position.x;
+        const relativeY = mouseY - position.y;
+
+        const zoomDelta = -Math.sign(event.deltaY) * ZOOM_SPEED;
+        const newScaleMultiplier = Math.max(
+            MIN_SCALE_MULTIPLIER,
+            Math.min(MAX_SCALE_MULTIPLIER, scaleMultiplier + zoomDelta)
+        );
+
+        if (newScaleMultiplier === scaleMultiplier) return;
+
+        const scaleFactor = newScaleMultiplier / scaleMultiplier;
+
+        const newPosition = {
+            x: mouseX - relativeX * scaleFactor,
+            y: mouseY - relativeY * scaleFactor,
+        };
+
+        setScaleMultiplier(newScaleMultiplier);
+        const constrainedPosition = constrainPosition(newPosition, getBaseScale() * newScaleMultiplier);
+        setPosition(constrainedPosition);
     };
 
     if (!mapDimensions) return null;
@@ -116,7 +168,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         <Stage width={width} height={height} options={{ backgroundColor: 0x2d2d2d }}>
             <Container
                 eventMode="static"
-                scale={getScale()}
+                scale={getCurrentScale()}
                 x={position.x}
                 y={position.y}
                 pointerdown={handleDragStart}
@@ -124,6 +176,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
                 pointerup={handleDragEnd}
                 pointerupoutside={handleDragEnd}
                 cursor={isDragging ? "grabbing" : "grab"}
+                onwheel={handleWheel}
             >
                 <Container sortableChildren>
                     {Object.keys(waterProvincesShapes).length > 0 &&
