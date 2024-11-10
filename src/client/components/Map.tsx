@@ -4,7 +4,7 @@ import { ActiveMap, Province as ProvinceType } from "@utils/types";
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Province } from "./Province";
 import { useWindowSize } from "@/hooks/useWindowSize";
 
@@ -111,95 +111,129 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         setPosition(constrainedPosition);
     }, [width, height, mapDimensions, getCurrentScale, constrainPosition]);
 
-    const handleDragStart = (event: PIXI.FederatedPointerEvent) => {
-        setIsDragging(true);
-        dragStartRef.current = { x: event.globalX - position.x, y: event.globalY - position.y };
-    };
+    const handleDragStart = useCallback(
+        (event: PIXI.FederatedPointerEvent) => {
+            setIsDragging(true);
+            dragStartRef.current = { x: event.globalX - position.x, y: event.globalY - position.y };
+        },
+        [position.x, position.y]
+    );
 
-    const handleDragMove = (event: PIXI.FederatedPointerEvent) => {
-        if (!isDragging || !mapDimensions) return;
+    const handleDragMove = useCallback(
+        (event: PIXI.FederatedPointerEvent) => {
+            if (!isDragging || !mapDimensions) return;
 
-        const newPosition = {
-            x: event.globalX - dragStartRef.current.x,
-            y: event.globalY - dragStartRef.current.y,
-        };
+            const newPosition = {
+                x: event.globalX - dragStartRef.current.x,
+                y: event.globalY - dragStartRef.current.y,
+            };
 
-        const constrainedPosition = constrainPosition(newPosition, getCurrentScale());
-        setPosition(constrainedPosition);
-    };
+            const constrainedPosition = constrainPosition(newPosition, getCurrentScale());
+            setPosition(constrainedPosition);
+        },
+        [constrainPosition, getCurrentScale, isDragging, mapDimensions]
+    );
 
-    const handleDragEnd = () => {
+    const handleDragEnd = useCallback(() => {
         setIsDragging(false);
-    };
+    }, []);
 
-    const handleWheel = (event: PIXI.FederatedWheelEvent) => {
-        if (!mapDimensions) return;
+    const handleWheel = useCallback(
+        (event: PIXI.FederatedWheelEvent) => {
+            if (!mapDimensions) return;
 
-        // Calculate zoom center (mouse position)
-        const mouseX = event.globalX;
-        const mouseY = event.globalY;
+            const mouseX = event.globalX;
+            const mouseY = event.globalY;
 
-        const relativeX = mouseX - position.x;
-        const relativeY = mouseY - position.y;
+            const relativeX = mouseX - position.x;
+            const relativeY = mouseY - position.y;
 
-        const zoomDelta = -Math.sign(event.deltaY) * ZOOM_SPEED;
-        const newScaleMultiplier = Math.max(
-            MIN_SCALE_MULTIPLIER,
-            Math.min(MAX_SCALE_MULTIPLIER, scaleMultiplier + zoomDelta)
+            const zoomDelta = -Math.sign(event.deltaY) * ZOOM_SPEED;
+            const newScaleMultiplier = Math.max(
+                MIN_SCALE_MULTIPLIER,
+                Math.min(MAX_SCALE_MULTIPLIER, scaleMultiplier + zoomDelta)
+            );
+
+            if (newScaleMultiplier === scaleMultiplier) return;
+
+            const scaleFactor = newScaleMultiplier / scaleMultiplier;
+
+            const newPosition = {
+                x: mouseX - relativeX * scaleFactor,
+                y: mouseY - relativeY * scaleFactor,
+            };
+
+            setScaleMultiplier(newScaleMultiplier);
+            const constrainedPosition = constrainPosition(newPosition, getBaseScale() * newScaleMultiplier);
+            setPosition(constrainedPosition);
+        },
+        [constrainPosition, getBaseScale, mapDimensions, position.x, position.y, scaleMultiplier]
+    );
+
+    const renderProvinces = useMemo(() => {
+        const waterProvincesContainer = (
+            <Container sortableChildren>
+                {Object.keys(waterProvincesShapes).length > 0 &&
+                    waterProvinces.map((province) => (
+                        <Province
+                            key={province.id}
+                            id={province.id}
+                            shape={waterProvincesShapes[province.id]}
+                            type={province.type}
+                        />
+                    ))}
+            </Container>
         );
 
-        if (newScaleMultiplier === scaleMultiplier) return;
+        const landProvincesContainer = (
+            <Container sortableChildren>
+                {Object.keys(landProvincesShapes).length > 0 &&
+                    landProvinces.map((province) => (
+                        <Province
+                            key={province.id}
+                            id={province.id}
+                            shape={landProvincesShapes[province.id]}
+                            type={province.type}
+                        />
+                    ))}
+            </Container>
+        );
 
-        const scaleFactor = newScaleMultiplier / scaleMultiplier;
+        return { waterProvincesContainer, landProvincesContainer };
+    }, [waterProvinces, landProvinces, waterProvincesShapes, landProvincesShapes]);
 
-        const newPosition = {
-            x: mouseX - relativeX * scaleFactor,
-            y: mouseY - relativeY * scaleFactor,
-        };
-
-        setScaleMultiplier(newScaleMultiplier);
-        const constrainedPosition = constrainPosition(newPosition, getBaseScale() * newScaleMultiplier);
-        setPosition(constrainedPosition);
-    };
+    const transformContainerProps = useMemo(
+        () => ({
+            scale: getCurrentScale(),
+            x: position.x,
+            y: position.y,
+            eventMode: "static" as const,
+            pointerdown: handleDragStart,
+            pointermove: handleDragMove,
+            pointerup: handleDragEnd,
+            pointerupoutside: handleDragEnd,
+            onwheel: handleWheel,
+            cursor: isDragging ? "grabbing" : "grab",
+        }),
+        [
+            getCurrentScale,
+            position.x,
+            position.y,
+            handleDragStart,
+            handleDragMove,
+            handleDragEnd,
+            handleWheel,
+            isDragging,
+        ]
+    );
 
     if (!mapDimensions) return null;
 
     return (
         <Stage width={width} height={height} options={{ backgroundColor: 0x2d2d2d }}>
-            <Container
-                eventMode="static"
-                scale={getCurrentScale()}
-                x={position.x}
-                y={position.y}
-                pointerdown={handleDragStart}
-                pointermove={handleDragMove}
-                pointerup={handleDragEnd}
-                pointerupoutside={handleDragEnd}
-                cursor={isDragging ? "grabbing" : "grab"}
-                onwheel={handleWheel}
-            >
-                <Container sortableChildren>
-                    {Object.keys(waterProvincesShapes).length > 0 &&
-                        waterProvinces.map((province) => (
-                            <Province
-                                key={province.id}
-                                id={province.id}
-                                shape={waterProvincesShapes[province.id]}
-                                type={province.type}
-                            />
-                        ))}
-                </Container>
-                <Container sortableChildren>
-                    {Object.keys(landProvincesShapes).length > 0 &&
-                        landProvinces.map((province) => (
-                            <Province
-                                key={province.id}
-                                id={province.id}
-                                shape={landProvincesShapes[province.id]}
-                                type={province.type}
-                            />
-                        ))}
-                </Container>
+            <Container {...transformContainerProps}>
+                {renderProvinces.waterProvincesContainer}
+                {renderProvinces.landProvincesContainer}
             </Container>
         </Stage>
     );
