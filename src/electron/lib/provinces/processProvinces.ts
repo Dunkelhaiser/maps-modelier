@@ -1,8 +1,9 @@
 /* eslint-disable no-bitwise */
 import { ImageData, createCanvas, loadImage } from "@napi-rs/canvas";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { provinces } from "../../db/schema.js";
+import { extractProvinceShapes } from "./extractProvinceShapes.js";
 
 const rgbToHex = (r: number, g: number, b: number) => {
     return `#${[r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("")}`;
@@ -54,15 +55,22 @@ export const processProvinces = async (_: Electron.IpcMainInvokeEvent, imageData
         }
     });
 
-    const mapProvinces = await db
-        .select({
-            id: provinces.id,
-            color: provinces.color,
-            type: provinces.type,
-        })
-        .from(provinces)
-        .where(eq(provinces.mapId, mapId))
-        .orderBy(provinces.id);
+    const mapProvinces = await db.select().from(provinces).where(eq(provinces.mapId, mapId)).orderBy(provinces.id);
+
+    const provinceShapes = await extractProvinceShapes(_, imageData, mapProvinces);
+
+    await db.transaction(async (tx) => {
+        for (const province of mapProvinces) {
+            const shape = provinceShapes[province.id];
+
+            const shapes = Array.isArray(shape) ? shape : [shape];
+
+            await tx
+                .update(provinces)
+                .set({ shape: shapes.map((polygon) => polygon.points) })
+                .where(and(eq(provinces.id, province.id), eq(provinces.mapId, mapId)));
+        }
+    });
 
     return mapProvinces;
 };

@@ -11,6 +11,7 @@ CREATE TABLE `provinces` (
 	`map_id` text NOT NULL,
 	`color` text NOT NULL,
 	`type` text DEFAULT 'land' NOT NULL,
+	`shape` text DEFAULT (json_array()) NOT NULL,
 	FOREIGN KEY (`map_id`) REFERENCES `maps`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint

@@ -8,6 +8,7 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
             id: provinces.id,
             color: provinces.color,
             type: provinces.type,
+            shape: provinces.shape,
         })
         .from(provinces)
         .where(and(eq(provinces.mapId, mapId), type ? eq(provinces.type, type) : undefined))

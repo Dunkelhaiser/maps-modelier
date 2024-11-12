@@ -1,7 +1,7 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "23af6b00-5424-42eb-8698-07fa4316125a",
+    "id": "6a969c2a-42fb-44d4-baa9-966df972213a",
     "prevId": "00000000-0000-0000-0000-000000000000",
     "tables": {
         "maps": {
@@ -82,6 +82,14 @@
                     "notNull": true,
                     "autoincrement": false,
                     "default": "'land'"
+                },
+                "shape": {
+                    "name": "shape",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(json_array())"
                 }
             },
             "indexes": {

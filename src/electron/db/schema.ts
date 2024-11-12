@@ -25,6 +25,10 @@ export const provinces = sqliteTable(
             .references(() => maps.id, { onDelete: "cascade" }),
         color: text("color").notNull(),
         type: text("type").notNull().default("land"),
+        shape: text("shape", { mode: "json" })
+            .$type<number[][]>()
+            .notNull()
+            .default(sql`(json_array())`),
     },
     (table) => ({
         pk: unique("provinces_pk").on(table.mapId, table.id),
