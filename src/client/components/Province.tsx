@@ -6,13 +6,12 @@ import "@pixi/events";
 import { memo, useCallback } from "react";
 
 interface ProvinceProps extends Omit<ProvinceType, "color"> {
-    shape: PIXI.Polygon | PIXI.Polygon[];
     isSelected: boolean;
 }
 
 const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
     const drawRegion = useCallback(
-        (g: PIXI.Graphics, regionShape: PIXI.Polygon) => {
+        (g: PIXI.Graphics, regionShape: number[]) => {
             g.clear();
             const fillColor = type === "land" ? 0x39654a : 0x517478;
             const selectedFillColor = type === "land" ? 0x51916a : 0x5f8e93;
@@ -20,7 +19,7 @@ const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
             const selectedBorderColor = type === "land" ? 0x3d4b33 : 0x6f9ca1;
             g.beginFill(isSelected ? selectedFillColor : fillColor);
             g.lineStyle(0.5, isSelected ? selectedBorderColor : borderColor, 1);
-            g.drawPolygon(regionShape.points);
+            g.drawPolygon(regionShape);
             g.endFill();
         },
         [type, isSelected]
@@ -29,7 +28,7 @@ const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
     const shapes = Array.isArray(shape) ? shape : [shape];
 
     return shapes.map((regionShape) => (
-        <Graphics key={`${id}-region-${regionShape.points.toString()}`} draw={(g) => drawRegion(g, regionShape)} />
+        <Graphics key={`${id}-region-${regionShape.toString()}`} draw={(g) => drawRegion(g, regionShape)} />
     ));
 };
 

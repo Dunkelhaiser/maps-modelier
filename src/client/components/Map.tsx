@@ -1,5 +1,4 @@
 import { Container, Stage } from "@pixi/react";
-import { extractProvinceShapes } from "@utils/extractProvinceShapes";
 import { ActiveMap } from "@utils/types";
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
@@ -27,8 +26,6 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const waterProvinces = useMapStore((state) => state.waterProvinces);
     const setLandProvinces = useMapStore((state) => state.setLandProvinces);
     const setWaterProvinces = useMapStore((state) => state.setWaterProvinces);
-    const [landProvincesShapes, setLandProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
-    const [waterProvincesShapes, setWaterProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -41,8 +38,6 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     useEffect(() => {
         const loadShapes = async () => {
-            const startTime = performance.now();
-
             const [landProvincesArr, waterProvincesArr] = await Promise.all([
                 window.electronAPI.getAllProvinces(activeMap.id, "land"),
                 window.electronAPI.getAllProvinces(activeMap.id, "water"),
@@ -50,18 +45,6 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
             setLandProvinces(landProvincesArr);
             setWaterProvinces(waterProvincesArr);
-
-            const [landShapes, waterShapes] = await Promise.all([
-                extractProvinceShapes(activeMap.imageUrl, landProvincesArr),
-                extractProvinceShapes(activeMap.imageUrl, waterProvincesArr),
-            ]);
-
-            setLandProvincesShapes(landShapes);
-            setWaterProvincesShapes(waterShapes);
-
-            const endTime = performance.now();
-            // eslint-disable-next-line no-console
-            console.log(`Shapes loaded in ${endTime - startTime}ms`);
         };
         loadShapes();
     }, [activeMap.id, activeMap.imageUrl, setLandProvinces, setWaterProvinces]);
@@ -178,36 +161,34 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const renderProvinces = useMemo(() => {
         const waterProvincesContainer = (
             <Container sortableChildren>
-                {Object.keys(waterProvincesShapes).length > 0 &&
-                    waterProvinces.map((province) => (
-                        <ProvincesContainer
-                            key={province.id}
-                            id={province.id}
-                            color={province.color}
-                            shape={waterProvincesShapes[province.id]}
-                            type={province.type}
-                        />
-                    ))}
+                {waterProvinces.map((province) => (
+                    <ProvincesContainer
+                        key={province.id}
+                        id={province.id}
+                        color={province.color}
+                        shape={province.shape}
+                        type={province.type}
+                    />
+                ))}
             </Container>
         );
 
         const landProvincesContainer = (
             <Container sortableChildren>
-                {Object.keys(landProvincesShapes).length > 0 &&
-                    landProvinces.map((province) => (
-                        <ProvincesContainer
-                            key={province.id}
-                            id={province.id}
-                            color={province.color}
-                            shape={landProvincesShapes[province.id]}
-                            type={province.type}
-                        />
-                    ))}
+                {landProvinces.map((province) => (
+                    <ProvincesContainer
+                        key={province.id}
+                        id={province.id}
+                        color={province.color}
+                        shape={province.shape}
+                        type={province.type}
+                    />
+                ))}
             </Container>
         );
 
         return { waterProvincesContainer, landProvincesContainer };
-    }, [waterProvinces, landProvinces, waterProvincesShapes, landProvincesShapes]);
+    }, [waterProvinces, landProvinces]);
 
     const transformContainerProps = useMemo(
         () => ({

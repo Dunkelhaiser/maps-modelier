@@ -1,16 +1,11 @@
 import { Container } from "@pixi/react";
 import { Province as ProvinceType } from "@utils/types";
-import * as PIXI from "pixi.js";
 import { memo } from "react";
 import { MemoizedProvince } from "./Province";
 import { useMapStore } from "@/store/store";
 
-interface ProvinceContainerProps extends ProvinceType {
-    shape: PIXI.Polygon | PIXI.Polygon[];
-}
-
 export const ProvincesContainer = memo(
-    ({ id, shape, color, type }: ProvinceContainerProps) => {
+    ({ id, shape, color, type }: ProvinceType) => {
         const selectedProvince = useMapStore((state) => state.selectedProvince);
         const setSelectedProvince = useMapStore((state) => state.setSelectedProvince);
         const isSelected = selectedProvince?.id === id;
@@ -23,6 +18,7 @@ export const ProvincesContainer = memo(
                         id,
                         type,
                         color,
+                        shape,
                     })
                 }
                 zIndex={isSelected ? 1 : 0}
@@ -31,10 +27,7 @@ export const ProvincesContainer = memo(
             </Container>
         );
     },
-    (prevProps, nextProps) => {
-        return (
-            prevProps.id === nextProps.id && prevProps.type === nextProps.type && prevProps.shape === nextProps.shape
-        );
-    }
+    (prevProps, nextProps) =>
+        prevProps.id === nextProps.id && prevProps.type === nextProps.type && prevProps.shape === nextProps.shape
 );
 ProvincesContainer.displayName = "ProvinceContainer";
