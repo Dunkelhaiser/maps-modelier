@@ -6,6 +6,7 @@ interface MapStore {
     setActiveMap: (map: ActiveMap) => void;
     selectedProvince: number | null;
     setSelectedProvince: (id: number) => void;
+    deselectProvince: () => void;
 }
 
 export const useMapStore = create<MapStore>((set) => ({
@@ -13,4 +14,5 @@ export const useMapStore = create<MapStore>((set) => ({
     setActiveMap: (map: ActiveMap) => set({ activeMap: map }),
     selectedProvince: null,
     setSelectedProvince: (id: number) => set({ selectedProvince: id }),
+    deselectProvince: () => set({ selectedProvince: null }),
 }));
