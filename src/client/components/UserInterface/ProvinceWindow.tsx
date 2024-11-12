@@ -22,7 +22,7 @@ const ProvinceWindow = () => {
             <CardContent>
                 <div className="space-y-2">
                     <Label>Province Type</Label>
-                    <Select>
+                    <Select value={selectedProvince.type}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Type" />
                         </SelectTrigger>
