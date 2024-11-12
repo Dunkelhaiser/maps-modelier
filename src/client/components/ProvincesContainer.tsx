@@ -25,8 +25,6 @@ export const ProvincesContainer = memo(
                         color,
                     })
                 }
-                // eslint-disable-next-line no-console
-                pointerover={() => console.log(`Hovered over province ${id}`)}
                 zIndex={isSelected ? 1 : 0}
             >
                 <MemoizedProvince id={id} shape={shape} type={type} isSelected={isSelected} />
