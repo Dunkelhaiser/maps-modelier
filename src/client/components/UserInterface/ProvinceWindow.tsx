@@ -8,8 +8,13 @@ import { useMapStore } from "@/store/store";
 const ProvinceWindow = () => {
     const selectedProvince = useMapStore((state) => state.selectedProvince);
     const deselectProvince = useMapStore((state) => state.deselectProvince);
+    const activeMap = useMapStore((state) => state.activeMap)!;
 
     if (!selectedProvince) return null;
+
+    const handleTypeChange = async (type: "land" | "water") => {
+        await window.electronAPI.changeProvinceType(activeMap.id, selectedProvince.id, type);
+    };
 
     return (
         <Card className="absolute bottom-3 left-3">
@@ -22,7 +27,7 @@ const ProvinceWindow = () => {
             <CardContent>
                 <div className="space-y-2">
                     <Label>Province Type</Label>
-                    <Select value={selectedProvince.type}>
+                    <Select value={selectedProvince.type} onValueChange={handleTypeChange}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Type" />
                         </SelectTrigger>

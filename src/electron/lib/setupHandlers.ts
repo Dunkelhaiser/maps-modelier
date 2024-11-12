@@ -4,6 +4,7 @@ import { saveMapImage } from "./mapImage/saveMapImage.js";
 import { createMap } from "./maps/createMap.js";
 import { getMaps } from "./maps/getMaps.js";
 import { updateMapName } from "./maps/updateMapName.js";
+import { changeProvinceType } from "./provinces/changeProvinceType.js";
 import { extractProvinceShapes } from "./provinces/extractProvinceShapes.js";
 import { getAllProvinces } from "./provinces/getAllProvinces.js";
 import { getProvinceByColor } from "./provinces/getProvinceByColor.js";
@@ -19,4 +20,5 @@ export const setupHandlers = () => {
     ipcMain.handle("getProvinceByColor", getProvinceByColor);
     ipcMain.handle("getProvinceById", getProvinceById);
     ipcMain.handle("extractProvinceShapes", extractProvinceShapes);
+    ipcMain.handle("changeProvinceType", changeProvinceType);
 };

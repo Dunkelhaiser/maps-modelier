@@ -18,11 +18,12 @@ interface ElectronAPI {
     updateMapName: (id: string, name: string) => Promise<Map | null>;
     getAllProvinces: (mapId: string, type: "land" | "water") => Promise<Province[]>;
     getProvinceByColor: (mapId: string, color: string) => Promise<Province | null>;
-    getProvinceById: (mapId: string, id: string) => Promise<Province | null>;
+    getProvinceById: (mapId: string, id: number) => Promise<Province | null>;
     extractProvinceShapes: (
         imagePath: string,
         provinces: ProvinceType[]
     ) => Promise<Record<string, Polygon | Polygon[]>>;
+    changeProvinceType: (mapId: string, id: number, type: "land" | "water") => Promise<Province | null>;
 }
 
 declare global {
