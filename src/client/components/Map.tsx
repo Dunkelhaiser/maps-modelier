@@ -1,12 +1,13 @@
 import { Container, Stage } from "@pixi/react";
 import { extractProvinceShapes } from "@utils/extractProvinceShapes";
-import { ActiveMap, Province as ProvinceType } from "@utils/types";
+import { ActiveMap } from "@utils/types";
 import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProvincesContainer } from "./ProvincesContainer";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { useMapStore } from "@/store/store";
 
 interface MapRendererProps {
     activeMap: ActiveMap;
@@ -22,8 +23,10 @@ const MAX_SCALE_MULTIPLIER = 4;
 const ZOOM_SPEED = 0.1;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
-    const [landProvinces, setLandProvinces] = useState<ProvinceType[]>([]);
-    const [waterProvinces, setWaterProvinces] = useState<ProvinceType[]>([]);
+    const landProvinces = useMapStore((state) => state.landProvinces);
+    const waterProvinces = useMapStore((state) => state.waterProvinces);
+    const setLandProvinces = useMapStore((state) => state.setLandProvinces);
+    const setWaterProvinces = useMapStore((state) => state.setWaterProvinces);
     const [landProvincesShapes, setLandProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
     const [waterProvincesShapes, setWaterProvincesShapes] = useState<Record<number, PIXI.Polygon | PIXI.Polygon[]>>({});
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
@@ -61,7 +64,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             console.log(`Shapes loaded in ${endTime - startTime}ms`);
         };
         loadShapes();
-    }, [activeMap.id, activeMap.imageUrl]);
+    }, [activeMap.id, activeMap.imageUrl, setLandProvinces, setWaterProvinces]);
 
     useEffect(() => {
         const img = new Image();

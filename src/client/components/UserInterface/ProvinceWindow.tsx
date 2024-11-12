@@ -8,12 +8,14 @@ import { useMapStore } from "@/store/store";
 const ProvinceWindow = () => {
     const selectedProvince = useMapStore((state) => state.selectedProvince);
     const deselectProvince = useMapStore((state) => state.deselectProvince);
+    const syncProvinceType = useMapStore((state) => state.syncProvinceType);
     const activeMap = useMapStore((state) => state.activeMap)!;
 
     if (!selectedProvince) return null;
 
     const handleTypeChange = async (type: "land" | "water") => {
         await window.electronAPI.changeProvinceType(activeMap.id, selectedProvince.id, type);
+        syncProvinceType(selectedProvince.id, type);
     };
 
     return (
