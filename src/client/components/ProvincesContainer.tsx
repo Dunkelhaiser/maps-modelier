@@ -5,20 +5,26 @@ import { memo } from "react";
 import { MemoizedProvince } from "./Province";
 import { useMapStore } from "@/store/store";
 
-interface ProvinceContainerProps extends Omit<ProvinceType, "color"> {
+interface ProvinceContainerProps extends ProvinceType {
     shape: PIXI.Polygon | PIXI.Polygon[];
 }
 
 export const ProvincesContainer = memo(
-    ({ id, shape, type }: ProvinceContainerProps) => {
+    ({ id, shape, color, type }: ProvinceContainerProps) => {
         const selectedProvince = useMapStore((state) => state.selectedProvince);
         const setSelectedProvince = useMapStore((state) => state.setSelectedProvince);
-        const isSelected = selectedProvince === id;
+        const isSelected = selectedProvince?.id === id;
 
         return (
             <Container
                 eventMode="static"
-                pointerdown={() => setSelectedProvince(id)}
+                pointerdown={() =>
+                    setSelectedProvince({
+                        id,
+                        type,
+                        color,
+                    })
+                }
                 // eslint-disable-next-line no-console
                 pointerover={() => console.log(`Hovered over province ${id}`)}
                 zIndex={isSelected ? 1 : 0}

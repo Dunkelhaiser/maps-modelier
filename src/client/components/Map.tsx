@@ -180,6 +180,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
                         <ProvincesContainer
                             key={province.id}
                             id={province.id}
+                            color={province.color}
                             shape={waterProvincesShapes[province.id]}
                             type={province.type}
                         />
@@ -194,6 +195,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
                         <ProvincesContainer
                             key={province.id}
                             id={province.id}
+                            color={province.color}
                             shape={landProvincesShapes[province.id]}
                             type={province.type}
                         />
