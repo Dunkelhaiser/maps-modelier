@@ -32,7 +32,9 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const [scaleMultiplier, setScaleMultiplier] = useState(1);
     const dragStartRef = useRef<Position>({ x: 0, y: 0 });
 
-    const { width = 0, height = 0 } = useWindowSize();
+    const { width = 0, height: windowHeight = 0 } = useWindowSize();
+
+    const height = windowHeight - 42;
 
     useEffect(() => {
         const loadShapes = async () => {
