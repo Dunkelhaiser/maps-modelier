@@ -25,17 +25,32 @@ export const useMapStore = create<MapStore>((set) => ({
     setSelectedProvince: (province: Province) => set({ selectedProvince: province }),
     deselectProvince: () => set({ selectedProvince: null }),
     syncProvinceType: (provinceId, type) => {
-        set((state) => ({
-            landProvinces: state.landProvinces.map((province) =>
-                province.id === provinceId ? { ...province, type } : province
-            ),
-            waterProvinces: state.waterProvinces.map((province) =>
-                province.id === provinceId ? { ...province, type } : province
-            ),
-            selectedProvince:
-                state.selectedProvince?.id === provinceId
-                    ? { ...state.selectedProvince, type }
-                    : state.selectedProvince,
-        }));
+        set((state) => {
+            let newLandProvinces = state.landProvinces;
+            let newWaterProvinces = state.waterProvinces;
+
+            if (type === "water") {
+                const landProvince = state.landProvinces.find((p) => p.id === provinceId);
+                newLandProvinces = state.landProvinces.filter((p) => p.id !== provinceId);
+                newWaterProvinces = landProvince
+                    ? [...state.waterProvinces, { ...landProvince, type: "water" }]
+                    : state.waterProvinces;
+            } else {
+                const waterProvince = state.waterProvinces.find((p) => p.id === provinceId);
+                newWaterProvinces = state.waterProvinces.filter((p) => p.id !== provinceId);
+                newLandProvinces = waterProvince
+                    ? [...state.landProvinces, { ...waterProvince, type: "land" }]
+                    : state.landProvinces;
+            }
+
+            return {
+                landProvinces: newLandProvinces,
+                waterProvinces: newWaterProvinces,
+                selectedProvince:
+                    state.selectedProvince?.id === provinceId
+                        ? { ...state.selectedProvince, type }
+                        : state.selectedProvince,
+            };
+        });
     },
 }));
