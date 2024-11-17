@@ -23,7 +23,7 @@ interface ElectronAPI {
         imagePath: string,
         provinces: ProvinceType[]
     ) => Promise<Record<string, Polygon | Polygon[]>>;
-    changeProvinceType: (mapId: string, id: number, type: "land" | "water") => Promise<Province | null>;
+    changeProvinceType: (mapId: string, id: number[], type: "land" | "water") => Promise<Province | null>;
 }
 
 declare global {
