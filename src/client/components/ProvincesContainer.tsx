@@ -8,11 +8,11 @@ import { useMapStore } from "@/store/store";
 export const ProvincesContainer = memo(
     ({ id, shape, color, type }: ProvinceType) => {
         const selectedProvinces = useMapStore((state) => state.selectedProvinces);
-        const setSelectedProvince = useMapStore((state) => state.setSelectedProvince);
+        const setSelectedProvinces = useMapStore((state) => state.setSelectedProvinces);
         const isSelected = selectedProvinces.some((province) => province.id === id);
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {
-            setSelectedProvince(
+            setSelectedProvinces(
                 {
                     id,
                     type,

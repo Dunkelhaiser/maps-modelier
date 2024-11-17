@@ -9,7 +9,7 @@ interface MapStore {
     waterProvinces: Province[];
     setWaterProvinces: (provinces: Province[]) => void;
     selectedProvinces: Province[];
-    setSelectedProvince: (province: Province, isShiftKey: boolean) => void;
+    setSelectedProvinces: (province: Province, isShiftKey: boolean) => void;
     deselectProvinces: () => void;
     syncProvinceType: (provinceIds: number[], type: "land" | "water") => void;
 }
@@ -22,15 +22,15 @@ export const useMapStore = create<MapStore>((set) => ({
     waterProvinces: [],
     setWaterProvinces: (provinces: Province[]) => set({ waterProvinces: provinces }),
     selectedProvinces: [],
-    setSelectedProvince: (province: Province, isShiftKey: boolean) =>
+    setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
             if (!isShiftKey) {
                 return { selectedProvinces: [province] };
             }
 
-            const isAlreadySelected = state.selectedProvinces.some((p) => p.id === province.id);
+            const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
 
-            if (isAlreadySelected) {
+            if (isSelected) {
                 return {
                     selectedProvinces: state.selectedProvinces.filter((p) => p.id !== province.id),
                 };
