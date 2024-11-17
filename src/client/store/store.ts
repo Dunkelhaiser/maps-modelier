@@ -23,9 +23,23 @@ export const useMapStore = create<MapStore>((set) => ({
     setWaterProvinces: (provinces: Province[]) => set({ waterProvinces: provinces }),
     selectedProvinces: [],
     setSelectedProvince: (province: Province, isShiftKey: boolean) =>
-        set((state) => ({
-            selectedProvinces: isShiftKey ? [...state.selectedProvinces, province] : [province],
-        })),
+        set((state) => {
+            if (!isShiftKey) {
+                return { selectedProvinces: [province] };
+            }
+
+            const isAlreadySelected = state.selectedProvinces.some((p) => p.id === province.id);
+
+            if (isAlreadySelected) {
+                return {
+                    selectedProvinces: state.selectedProvinces.filter((p) => p.id !== province.id),
+                };
+            }
+            return {
+                selectedProvinces: [...state.selectedProvinces, province],
+            };
+        }),
+
     deselectProvinces: () => set({ selectedProvinces: [] }),
     syncProvinceType: (provinceIds, type) => {
         set((state) => {
