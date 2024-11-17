@@ -1,10 +1,9 @@
 import { Container, Stage } from "@pixi/react";
 import { ActiveMap } from "@utils/types";
-import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
-import "@pixi/events";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProvincesContainer } from "./ProvincesContainer";
+import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useMapStore } from "@/store/store";
 
@@ -100,7 +99,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     }, [width, height, mapDimensions, getCurrentScale, constrainPosition]);
 
     const handleDragStart = useCallback(
-        (event: PIXI.FederatedPointerEvent) => {
+        (event: FederatedPointerEvent) => {
             setIsDragging(true);
             dragStartRef.current = { x: event.globalX - position.x, y: event.globalY - position.y };
         },
@@ -108,7 +107,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     );
 
     const handleDragMove = useCallback(
-        (event: PIXI.FederatedPointerEvent) => {
+        (event: FederatedPointerEvent) => {
             if (!isDragging || !mapDimensions) return;
 
             const newPosition = {
@@ -127,7 +126,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     }, []);
 
     const handleWheel = useCallback(
-        (event: PIXI.FederatedWheelEvent) => {
+        (event: FederatedWheelEvent) => {
             if (!mapDimensions) return;
 
             const mouseX = event.globalX;

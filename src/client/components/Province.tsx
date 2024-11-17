@@ -1,9 +1,9 @@
 import { Graphics } from "@pixi/react";
 import { Province as ProvinceType } from "@utils/types";
-import * as PIXI from "pixi.js";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { memo, useCallback } from "react";
+import type { Graphics as GraphicsType } from "pixi.js";
 
 interface ProvinceProps extends Omit<ProvinceType, "color"> {
     isSelected: boolean;
@@ -11,7 +11,7 @@ interface ProvinceProps extends Omit<ProvinceType, "color"> {
 
 const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
     const drawRegion = useCallback(
-        (g: PIXI.Graphics, regionShape: number[]) => {
+        (g: GraphicsType, regionShape: number[]) => {
             g.clear();
             const fillColor = type === "land" ? 0x39654a : 0x517478;
             const selectedFillColor = type === "land" ? 0x51916a : 0x5f8e93;

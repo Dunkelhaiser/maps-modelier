@@ -1,8 +1,7 @@
 /* eslint-disable no-bitwise */
-/* eslint-disable import/namespace */
 import { createCanvas, ImageData, loadImage } from "@napi-rs/canvas";
 import { InferSelectModel } from "drizzle-orm";
-import * as PIXI from "pixi.js";
+import { Polygon } from "pixi.js";
 import { provinces as provincesSchema } from "../../db/schema.js";
 
 type ProvinceType = InferSelectModel<typeof provincesSchema>;
@@ -27,7 +26,7 @@ export const extractProvinceShapes = async (
 
     const visited = new Uint8Array(pixelCount);
     const queue = new Int32Array(pixelCount * 2);
-    const provinceOutlines: Record<string, PIXI.Polygon | PIXI.Polygon[]> = {};
+    const provinceOutlines: Record<string, Polygon | Polygon[]> = {};
 
     const colorLookup = new Uint32Array(256 * 256 * 256);
     const provinceColorMap = new Map<number, number>();
@@ -128,7 +127,7 @@ export const extractProvinceShapes = async (
 
     for (const [provinceId, { pixels, count }] of provinceData) {
         if (count === 0) {
-            provinceOutlines[provinceId] = new PIXI.Polygon([0, 0, 0, 1, 1, 1, 1, 0]);
+            provinceOutlines[provinceId] = new Polygon([0, 0, 0, 1, 1, 1, 1, 0]);
             continue;
         }
 
@@ -160,7 +159,7 @@ export const extractProvinceShapes = async (
             }
         }
 
-        const regionPolygons: PIXI.Polygon[] = [];
+        const regionPolygons: Polygon[] = [];
 
         for (const regionPixels of regions) {
             edgeSet.clear();
@@ -190,7 +189,7 @@ export const extractProvinceShapes = async (
 
             if (edgeSet.size === 0) {
                 const [x, y] = regionPixels;
-                regionPolygons.push(new PIXI.Polygon([x, y, x + 1, y, x + 1, y + 1, x, y + 1]));
+                regionPolygons.push(new Polygon([x, y, x + 1, y, x + 1, y + 1, x, y + 1]));
                 continue;
             }
 
@@ -234,7 +233,7 @@ export const extractProvinceShapes = async (
             }
 
             if (pathPoints.length >= 3) {
-                regionPolygons.push(new PIXI.Polygon(pathPoints.flat()));
+                regionPolygons.push(new Polygon(pathPoints.flat()));
             }
         }
 
