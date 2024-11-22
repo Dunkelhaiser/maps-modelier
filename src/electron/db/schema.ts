@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
+import { foreignKey, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const maps = sqliteTable("maps", {
     id: text("id")
@@ -31,6 +31,50 @@ export const provinces = sqliteTable(
             .default(sql`(json_array())`),
     },
     (table) => ({
-        pk: unique("provinces_pk").on(table.mapId, table.id),
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "provinces_pk" }),
+    })
+);
+
+export const states = sqliteTable(
+    "states",
+    {
+        id: integer("id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        name: text("name").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "states_pk" }),
+    })
+);
+
+export const stateProvinces = sqliteTable(
+    "state_provinces",
+    {
+        stateId: integer("state_id").notNull(),
+        provinceId: integer("province_id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.stateId, table.provinceId, table.mapId], name: "state_provinces_pk" }),
+        provincesReference: foreignKey({
+            columns: [table.mapId, table.provinceId],
+            foreignColumns: [provinces.mapId, provinces.id],
+            name: "provinces_reference",
+        }).onDelete("cascade"),
+        statesReference: foreignKey({
+            columns: [table.mapId, table.stateId],
+            foreignColumns: [states.mapId, states.id],
+            name: "states_reference",
+        }).onDelete("cascade"),
     })
 );
