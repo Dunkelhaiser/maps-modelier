@@ -19,4 +19,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
         ipcRenderer.invoke("extractProvinceShapes", imagePath, provinces),
     changeProvinceType: (mapId: string, id: number[], type: "land" | "water") =>
         ipcRenderer.invoke("changeProvinceType", mapId, id, type),
+    getStateByProvinceId: (mapId: string, provinceId: number) =>
+        ipcRenderer.invoke("getStateByProvinceId", mapId, provinceId),
 });
