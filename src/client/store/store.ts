@@ -1,4 +1,4 @@
-import { ActiveMap, Province } from "@utils/types";
+import { ActiveMap, Province, State } from "@utils/types";
 import { create } from "zustand";
 
 interface MapStore {
@@ -12,6 +12,9 @@ interface MapStore {
     setSelectedProvinces: (province: Province, isShiftKey: boolean) => void;
     deselectProvinces: () => void;
     syncProvinceType: (provinceIds: number[], type: "land" | "water") => void;
+    states: State[];
+    setStates: (states: State[]) => void;
+    selectedState: State | null;
 }
 
 export const useMapStore = create<MapStore>((set) => ({
@@ -24,23 +27,32 @@ export const useMapStore = create<MapStore>((set) => ({
     selectedProvinces: [],
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
+            let selectedProvinces: Province[];
+
             if (!isShiftKey) {
-                return { selectedProvinces: [province] };
+                selectedProvinces = [province];
+            } else {
+                const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
+                if (isSelected) {
+                    selectedProvinces = state.selectedProvinces.filter((p) => p.id !== province.id);
+                } else {
+                    selectedProvinces = [...state.selectedProvinces, province];
+                }
             }
 
-            const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
-
-            if (isSelected) {
-                return {
-                    selectedProvinces: state.selectedProvinces.filter((p) => p.id !== province.id),
-                };
+            let selectedState: State | null = null;
+            if (selectedProvinces.length > 0) {
+                selectedState =
+                    state.states.find((s) => selectedProvinces.every((p) => s.provinces.includes(p.id))) ?? null;
             }
+
             return {
-                selectedProvinces: [...state.selectedProvinces, province],
+                selectedProvinces,
+                selectedState,
             };
         }),
 
-    deselectProvinces: () => set({ selectedProvinces: [] }),
+    deselectProvinces: () => set({ selectedProvinces: [], selectedState: null }),
     syncProvinceType: (provinceIds, type) => {
         set((state) => {
             let newLandProvinces = [...state.landProvinces];
@@ -73,4 +85,8 @@ export const useMapStore = create<MapStore>((set) => ({
             };
         });
     },
+
+    states: [],
+    setStates: (states: State[]) => set({ states }),
+    selectedState: null,
 }));

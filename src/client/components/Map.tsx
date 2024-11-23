@@ -25,6 +25,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const waterProvinces = useMapStore((state) => state.waterProvinces);
     const setLandProvinces = useMapStore((state) => state.setLandProvinces);
     const setWaterProvinces = useMapStore((state) => state.setWaterProvinces);
+    const setStates = useMapStore((state) => state.setStates);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -36,17 +37,19 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const height = windowHeight - 42;
 
     useEffect(() => {
-        const loadShapes = async () => {
-            const [landProvincesArr, waterProvincesArr] = await Promise.all([
+        const loadData = async () => {
+            const [landProvincesArr, waterProvincesArr, states] = await Promise.all([
                 window.electronAPI.getAllProvinces(activeMap.id, "land"),
                 window.electronAPI.getAllProvinces(activeMap.id, "water"),
+                window.electronAPI.getAllStates(activeMap.id),
             ]);
 
             setLandProvinces(landProvincesArr);
             setWaterProvinces(waterProvincesArr);
+            setStates(states);
         };
-        loadShapes();
-    }, [activeMap.id, activeMap.imageUrl, setLandProvinces, setWaterProvinces]);
+        loadData();
+    }, [activeMap.id, activeMap.imageUrl, setLandProvinces, setStates, setWaterProvinces]);
 
     useEffect(() => {
         const img = new Image();

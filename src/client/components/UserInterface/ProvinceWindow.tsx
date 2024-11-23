@@ -5,7 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { X } from "lucide-react";
 import { useMapStore } from "@/store/store";
 
-const ProvinceWindow = () => {
+interface Props {
+    className?: string;
+}
+
+const ProvinceWindow = ({ className }: Props) => {
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const syncProvinceType = useMapStore((state) => state.syncProvinceType);
@@ -22,7 +26,7 @@ const ProvinceWindow = () => {
     const sameTypes = selectedProvinces.every((province) => province.type === selectedProvinces[0].type);
 
     return (
-        <Card className="absolute bottom-3 left-3">
+        <Card className={className}>
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>
                     {selectedProvinces.length === 1 ? "Province" : `${selectedProvinces.length} Provinces`}
