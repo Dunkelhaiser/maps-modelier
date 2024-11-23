@@ -40,7 +40,7 @@ export const states = sqliteTable(
     {
         id: integer("id")
             .notNull()
-            .$defaultFn(() => sql`(SELECT MAX(id) + 1 FROM states WHERE map_id = map_id)`),
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM states WHERE map_id = map_id)`),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
