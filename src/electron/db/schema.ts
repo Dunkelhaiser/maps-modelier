@@ -38,7 +38,9 @@ export const provinces = sqliteTable(
 export const states = sqliteTable(
     "states",
     {
-        id: integer("id").notNull(),
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT MAX(id) + 1 FROM states WHERE map_id = map_id)`),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
