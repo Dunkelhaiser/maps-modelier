@@ -7,7 +7,7 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
         .select({
             id: states.id,
             name: states.name,
-            provinces: sql`COALESCE(GROUP_CONCAT(${stateProvinces.provinceId}), '')`,
+            provinces: sql<string>`COALESCE(GROUP_CONCAT(${stateProvinces.provinceId}), '')`,
         })
         .from(states)
         .leftJoin(stateProvinces, eq(stateProvinces.stateId, states.id))
@@ -15,5 +15,8 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
         .groupBy(states.id)
         .orderBy(states.id);
 
-    return statesArr;
+    return statesArr.map((state) => ({
+        ...state,
+        provinces: state.provinces ? state.provinces.split(",").map(Number) : [],
+    }));
 };
