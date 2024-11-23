@@ -15,9 +15,10 @@ interface MapStore {
     states: State[];
     setStates: (states: State[]) => void;
     selectedState: State | null;
+    addState: (stateName: string) => void;
 }
 
-export const useMapStore = create<MapStore>((set) => ({
+export const useMapStore = create<MapStore>((set, get) => ({
     activeMap: null,
     setActiveMap: (map: ActiveMap) => set({ activeMap: map }),
     landProvinces: [],
@@ -88,5 +89,21 @@ export const useMapStore = create<MapStore>((set) => ({
 
     states: [],
     setStates: (states: State[]) => set({ states }),
+    addState: async (stateName) => {
+        const { activeMap, selectedProvinces } = get();
+
+        if (!activeMap) return;
+
+        const createdState = await window.electronAPI.createState(
+            activeMap.id,
+            stateName,
+            selectedProvinces.map((province) => province.id)
+        );
+
+        set((currentState) => ({
+            states: [...currentState.states, createdState],
+            selectedState: createdState,
+        }));
+    },
     selectedState: null,
 }));

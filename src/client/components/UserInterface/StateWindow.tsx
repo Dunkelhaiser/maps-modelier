@@ -1,6 +1,8 @@
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
+import { Input } from "@ui/Input";
 import { X } from "lucide-react";
+import { useState } from "react";
 import { useMapStore } from "@/store/store";
 
 interface Props {
@@ -8,16 +10,24 @@ interface Props {
 }
 
 const StateWindow = ({ className }: Props) => {
+    const [stateName, setStateName] = useState("");
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
+    const addState = useMapStore((state) => state.addState);
+
+    const createNewState = async () => {
+        addState(stateName);
+
+        setStateName("");
+    };
 
     if (selectedProvinces.length === 0) return null;
 
     return (
         <Card className={className}>
             <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>{selectedState?.name}</CardTitle>
+                <CardTitle>{selectedState?.name ?? "No State"}</CardTitle>
                 <Button
                     variant="ghost"
                     aria-label="Close"
@@ -28,7 +38,18 @@ const StateWindow = ({ className }: Props) => {
                     <X />
                 </Button>
             </CardHeader>
-            <CardContent>{selectedState?.name}</CardContent>
+            <CardContent>
+                {!selectedState && (
+                    <div className="space-y-2">
+                        <Input
+                            placeholder="State Name"
+                            value={stateName}
+                            onChange={(e) => setStateName(e.target.value)}
+                        />
+                        <Button onClick={createNewState}>Create State</Button>
+                    </div>
+                )}
+            </CardContent>
         </Card>
     );
 };
