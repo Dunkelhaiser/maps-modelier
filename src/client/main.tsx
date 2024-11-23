@@ -25,6 +25,7 @@ interface ElectronAPI {
     ) => Promise<Record<string, Polygon | Polygon[]>>;
     changeProvinceType: (mapId: string, id: number[], type: "land" | "water") => Promise<Province | null>;
     getStateByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
+    getAllStates: (mapId: string) => Promise<State[]>;
 }
 
 declare global {
