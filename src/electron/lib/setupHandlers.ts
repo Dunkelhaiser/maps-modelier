@@ -9,6 +9,7 @@ import { extractProvinceShapes } from "./provinces/extractProvinceShapes.js";
 import { getAllProvinces } from "./provinces/getAllProvinces.js";
 import { getProvinceByColor } from "./provinces/getProvinceByColor.js";
 import { getProvinceById } from "./provinces/getProvinceById.js";
+import { createState } from "./states/createState.js";
 import { getAllStates } from "./states/getAllStates.js";
 import { getStateByProvinceId } from "./states/getStateByProvinceId.js";
 
@@ -25,4 +26,5 @@ export const setupHandlers = () => {
     ipcMain.handle("changeProvinceType", changeProvinceType);
     ipcMain.handle("getStateByProvinceId", getStateByProvinceId);
     ipcMain.handle("getAllStates", getAllStates);
+    ipcMain.handle("createState", createState);
 };
