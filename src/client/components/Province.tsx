@@ -15,10 +15,13 @@ const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
             g.clear();
             const fillColor = type === "land" ? 0x39654a : 0x517478;
             const selectedFillColor = type === "land" ? 0x51916a : 0x5f8e93;
-            const borderColor = type === "land" ? 0x283121 : 0x3d575a;
-            const selectedBorderColor = type === "land" ? 0x3d4b33 : 0x6f9ca1;
             g.beginFill(isSelected ? selectedFillColor : fillColor);
-            g.lineStyle(0.5, isSelected ? selectedBorderColor : borderColor, 1);
+            g.lineStyle({
+                width: 0.5,
+                color: 0x000000,
+                alpha: 0.3,
+                alignment: 0.5,
+            });
             g.drawPolygon(regionShape);
             g.endFill();
         },
