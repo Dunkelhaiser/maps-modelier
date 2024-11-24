@@ -11,7 +11,13 @@ export const addProvinces = async (
     provinces.forEach(async (provinceId) => {
         await db
             .delete(stateProvinces)
-            .where(and(eq(stateProvinces.provinceId, provinceId), ne(stateProvinces.stateId, stateId)));
+            .where(
+                and(
+                    eq(stateProvinces.provinceId, provinceId),
+                    ne(stateProvinces.stateId, stateId),
+                    eq(stateProvinces.mapId, mapId)
+                )
+            );
     });
 
     await db.insert(stateProvinces).values(
