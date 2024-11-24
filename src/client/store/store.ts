@@ -36,8 +36,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 selectedProvinces = [province];
                 return {
                     selectedProvinces,
-                    selectedState:
-                        state.states.find((s) => selectedProvinces.every((p) => s.provinces.includes(p.id))) ?? null,
+                    selectedState: state.states.find((s) => s.provinces.includes(province.id)) ?? null,
                 };
             }
             const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
@@ -129,7 +128,18 @@ export const useMapStore = create<MapStore>((set, get) => ({
         };
 
         set((state) => ({
-            states: state.states.map((s) => (s.id === selectedState.id ? updatedState : s)),
+            states: state.states.map((s) => {
+                if (s.id === selectedState.id) {
+                    return updatedState;
+                }
+                if (s.provinces.some((p) => provinceIds.includes(p))) {
+                    return {
+                        ...s,
+                        provinces: s.provinces.filter((p) => !provinceIds.includes(p)),
+                    };
+                }
+                return s;
+            }),
             selectedState: updatedState,
         }));
     },
