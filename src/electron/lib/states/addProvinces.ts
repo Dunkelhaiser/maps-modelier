@@ -20,11 +20,14 @@ export const addProvinces = async (
             );
     });
 
-    await db.insert(stateProvinces).values(
-        provinces.map((provinceId) => ({
-            stateId,
-            provinceId,
-            mapId,
-        }))
-    );
+    await db
+        .insert(stateProvinces)
+        .values(
+            provinces.map((provinceId) => ({
+                stateId,
+                provinceId,
+                mapId,
+            }))
+        )
+        .onConflictDoNothing();
 };
