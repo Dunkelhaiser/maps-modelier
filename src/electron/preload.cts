@@ -26,4 +26,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
         ipcRenderer.invoke("createState", mapId, name, provinces),
     addProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
         ipcRenderer.invoke("addProvinces", mapId, stateId, provinceIds),
+    removeProvinces: (mapId: string, provinceIds: number[]) =>
+        ipcRenderer.invoke("removeProvinces", mapId, provinceIds),
 });

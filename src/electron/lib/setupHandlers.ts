@@ -13,6 +13,7 @@ import { addProvinces } from "./states/addProvinces.js";
 import { createState } from "./states/createState.js";
 import { getAllStates } from "./states/getAllStates.js";
 import { getStateByProvinceId } from "./states/getStateByProvinceId.js";
+import { removeProvinces } from "./states/removeProvinces.js";
 
 export const setupHandlers = () => {
     ipcMain.handle("saveMapImage", saveMapImage);
@@ -29,4 +30,5 @@ export const setupHandlers = () => {
     ipcMain.handle("getAllStates", getAllStates);
     ipcMain.handle("createState", createState);
     ipcMain.handle("addProvinces", addProvinces);
+    ipcMain.handle("removeProvinces", removeProvinces);
 };
