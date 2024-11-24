@@ -82,7 +82,10 @@ const StateBorders = ({ state }: Props) => {
 };
 
 export const MemoizedStateBorders = memo(StateBorders, (prevProps, nextProps) => {
-    return prevProps.state.id === nextProps.state.id;
+    return (
+        prevProps.state.id === nextProps.state.id &&
+        prevProps.state.provinces.length === nextProps.state.provinces.length &&
+        prevProps.state.provinces.every((id) => nextProps.state.provinces.includes(id))
+    );
 });
-
 MemoizedStateBorders.displayName = "MemoizedStateBorders";

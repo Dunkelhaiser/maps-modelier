@@ -16,6 +16,7 @@ interface MapStore {
     setStates: (states: State[]) => void;
     selectedState: State | null;
     addState: (stateName: string) => void;
+    addProvincesToState: (provinceIds: number[]) => void;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -29,20 +30,28 @@ export const useMapStore = create<MapStore>((set, get) => ({
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
             let selectedProvinces: Province[];
+            let { selectedState } = state;
 
             if (!isShiftKey) {
                 selectedProvinces = [province];
+                return {
+                    selectedProvinces,
+                    selectedState:
+                        state.states.find((s) => selectedProvinces.every((p) => s.provinces.includes(p.id))) ?? null,
+                };
+            }
+            const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
+            if (isSelected) {
+                selectedProvinces = state.selectedProvinces.filter((p) => p.id !== province.id);
             } else {
-                const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
-                if (isSelected) {
-                    selectedProvinces = state.selectedProvinces.filter((p) => p.id !== province.id);
-                } else {
-                    selectedProvinces = [...state.selectedProvinces, province];
+                selectedProvinces = [...state.selectedProvinces, province];
+
+                if (selectedState) {
+                    get().addProvincesToState([province.id]);
                 }
             }
 
-            let selectedState: State | null = null;
-            if (selectedProvinces.length > 0) {
+            if (!selectedState && selectedProvinces.length > 0) {
                 selectedState =
                     state.states.find((s) => selectedProvinces.every((p) => s.provinces.includes(p.id))) ?? null;
             }
@@ -106,4 +115,22 @@ export const useMapStore = create<MapStore>((set, get) => ({
         }));
     },
     selectedState: null,
+
+    addProvincesToState: async (provinceIds: number[]) => {
+        const { activeMap, selectedState } = get();
+
+        if (!activeMap || !selectedState) return;
+
+        await window.electronAPI.addProvinces(activeMap.id, selectedState.id, provinceIds);
+
+        const updatedState = {
+            ...selectedState,
+            provinces: [...new Set([...selectedState.provinces, ...provinceIds])],
+        };
+
+        set((state) => ({
+            states: state.states.map((s) => (s.id === selectedState.id ? updatedState : s)),
+            selectedState: updatedState,
+        }));
+    },
 }));
