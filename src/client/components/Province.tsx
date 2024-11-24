@@ -2,6 +2,7 @@ import { Graphics } from "@pixi/react";
 import { Province as ProvinceType } from "@utils/types";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
+import { brightenColor } from "@utils/utils";
 import { memo, useCallback } from "react";
 import type { Graphics as GraphicsType } from "pixi.js";
 
@@ -14,7 +15,7 @@ const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
             const fillColor = type === "land" ? 0x39654a : 0x517478;
-            const selectedFillColor = type === "land" ? 0x51916a : 0x5f8e93;
+            const selectedFillColor = brightenColor(fillColor, 0.4);
             g.beginFill(isSelected ? selectedFillColor : fillColor);
             g.lineStyle({
                 width: 0.5,
