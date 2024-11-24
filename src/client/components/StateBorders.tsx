@@ -1,6 +1,6 @@
-import { Graphics } from "@pixi/react";
+import { Container, Graphics } from "@pixi/react";
 import { State } from "@utils/types";
-import { darkenColor } from "@utils/utils";
+import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
 import { useMapStore } from "@/store/store";
@@ -12,6 +12,9 @@ interface Props {
 const StateBorders = ({ state }: Props) => {
     const landProvinces = useMapStore((store) => store.landProvinces);
     const waterProvinces = useMapStore((store) => store.waterProvinces);
+    const selectedState = useMapStore((store) => store.selectedState);
+
+    const isSelected = selectedState?.id === state.id;
 
     const provinces = useMemo(() => [...landProvinces, ...waterProvinces], [landProvinces, waterProvinces]);
 
@@ -23,7 +26,7 @@ const StateBorders = ({ state }: Props) => {
             stateProvinces.forEach((province) => {
                 const shapes = Array.isArray(province.shape) ? province.shape : [province.shape];
                 const fillColor = province.type === "land" ? 0x39654a : 0x517478;
-                const borderColor = darkenColor(fillColor, 0.5);
+                const borderColor = isSelected ? brightenColor(fillColor, 1) : darkenColor(fillColor, 0.5);
                 g.lineStyle({
                     width: 0.75,
                     color: borderColor,
@@ -75,10 +78,14 @@ const StateBorders = ({ state }: Props) => {
                 });
             });
         },
-        [state, provinces]
+        [provinces, state.provinces, isSelected]
     );
 
-    return <Graphics draw={drawBorders} />;
+    return (
+        <Container eventMode="static" zIndex={isSelected ? 1 : 0}>
+            <Graphics draw={drawBorders} />
+        </Container>
+    );
 };
 
 export const MemoizedStateBorders = memo(StateBorders, (prevProps, nextProps) => {
