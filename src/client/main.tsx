@@ -27,6 +27,7 @@ interface ElectronAPI {
     getStateByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
     getAllStates: (mapId: string) => Promise<State[]>;
     createState: (mapId: string, name: string, provinces?: number[]) => Promise<State>;
+    addProvinces: (mapId: string, stateId: number, provinceIds: number[]) => Promise<State>;
 }
 
 declare global {
