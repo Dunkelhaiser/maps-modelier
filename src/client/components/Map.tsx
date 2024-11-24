@@ -3,6 +3,7 @@ import { ActiveMap } from "@utils/types";
 import "@pixi/unsafe-eval";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProvincesContainer } from "./ProvincesContainer";
+import { MemoizedStateBorders } from "./StateBorders";
 import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import { useMapStore } from "@/store/store";
@@ -23,6 +24,7 @@ const ZOOM_SPEED = 0.1;
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const landProvinces = useMapStore((state) => state.landProvinces);
     const waterProvinces = useMapStore((state) => state.waterProvinces);
+    const states = useMapStore((state) => state.states);
     const setLandProvinces = useMapStore((state) => state.setLandProvinces);
     const setWaterProvinces = useMapStore((state) => state.setWaterProvinces);
     const setStates = useMapStore((state) => state.setStates);
@@ -38,7 +40,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     useEffect(() => {
         const loadData = async () => {
-            const [landProvincesArr, waterProvincesArr, states] = await Promise.all([
+            const [landProvincesArr, waterProvincesArr, statesArr] = await Promise.all([
                 window.electronAPI.getAllProvinces(activeMap.id, "land"),
                 window.electronAPI.getAllProvinces(activeMap.id, "water"),
                 window.electronAPI.getAllStates(activeMap.id),
@@ -46,7 +48,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
             setLandProvinces(landProvincesArr);
             setWaterProvinces(waterProvincesArr);
-            setStates(states);
+            setStates(statesArr);
         };
         loadData();
     }, [activeMap.id, activeMap.imageUrl, setLandProvinces, setStates, setWaterProvinces]);
@@ -189,8 +191,16 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             </Container>
         );
 
-        return { waterProvincesContainer, landProvincesContainer };
-    }, [waterProvinces, landProvinces]);
+        const stateBordersContainer = (
+            <Container sortableChildren zIndex={2}>
+                {states.map((state) => (
+                    <MemoizedStateBorders key={state.id} state={state} />
+                ))}
+            </Container>
+        );
+
+        return { waterProvincesContainer, landProvincesContainer, stateBordersContainer };
+    }, [waterProvinces, landProvinces, states]);
 
     const transformContainerProps = useMemo(
         () => ({
@@ -224,6 +234,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <Container {...transformContainerProps}>
                 {renderProvinces.waterProvincesContainer}
                 {renderProvinces.landProvincesContainer}
+                {renderProvinces.stateBordersContainer}
             </Container>
         </Stage>
     );
