@@ -30,31 +30,34 @@ export const useMapStore = create<MapStore>((set, get) => ({
     selectedProvinces: [],
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
-            let selectedProvinces: Province[];
             let { selectedState } = state;
 
+            if (selectedState && isShiftKey) {
+                const isProvinceInState = selectedState.provinces.includes(province.id);
+
+                if (isProvinceInState) {
+                    get().removeProvincesFromState([province.id]);
+                } else {
+                    get().addProvincesToState([province.id]);
+                }
+                return {};
+            }
+
+            let selectedProvinces: Province[];
             if (!isShiftKey) {
                 selectedProvinces = [province];
+                selectedState = state.states.find((s) => s.provinces.includes(province.id)) ?? null;
                 return {
                     selectedProvinces,
-                    selectedState: state.states.find((s) => s.provinces.includes(province.id)) ?? null,
+                    selectedState,
                 };
             }
+
             const isSelected = state.selectedProvinces.some((p) => p.id === province.id);
             if (isSelected) {
                 selectedProvinces = state.selectedProvinces.filter((p) => p.id !== province.id);
             } else {
                 selectedProvinces = [...state.selectedProvinces, province];
-
-                if (selectedState) {
-                    const isProvinceInState = selectedState.provinces.includes(province.id);
-
-                    if (isProvinceInState) {
-                        get().removeProvincesFromState([province.id]);
-                    } else {
-                        get().addProvincesToState([province.id]);
-                    }
-                }
             }
 
             if (!selectedState && selectedProvinces.length > 0) {
