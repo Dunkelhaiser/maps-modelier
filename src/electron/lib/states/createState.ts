@@ -13,7 +13,10 @@ export const createState = async (
             mapId,
             name,
         })
-        .returning();
+        .returning({
+            id: states.id,
+            name: states.name,
+        });
 
     if (provinces) {
         await db.insert(stateProvinces).values(
@@ -25,5 +28,5 @@ export const createState = async (
         );
     }
 
-    return createdState;
+    return { ...createdState, provinces };
 };
