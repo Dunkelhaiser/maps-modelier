@@ -17,6 +17,7 @@ interface MapStore {
     selectedState: State | null;
     addState: (stateName: string) => void;
     addProvincesToState: (provinceIds: number[]) => void;
+    removeProvincesFromState: (provinceIds: number[]) => void;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -46,7 +47,13 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 selectedProvinces = [...state.selectedProvinces, province];
 
                 if (selectedState) {
-                    get().addProvincesToState([province.id]);
+                    const isProvinceInState = selectedState.provinces.includes(province.id);
+
+                    if (isProvinceInState) {
+                        get().removeProvincesFromState([province.id]);
+                    } else {
+                        get().addProvincesToState([province.id]);
+                    }
                 }
             }
 
@@ -140,6 +147,23 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 }
                 return s;
             }),
+            selectedState: updatedState,
+        }));
+    },
+    removeProvincesFromState: async (provinceIds: number[]) => {
+        const { activeMap, selectedState } = get();
+
+        if (!activeMap || !selectedState) return;
+
+        await window.electronAPI.removeProvinces(activeMap.id, provinceIds);
+
+        const updatedState = {
+            ...selectedState,
+            provinces: selectedState.provinces.filter((id) => !provinceIds.includes(id)),
+        };
+
+        set((state) => ({
+            states: state.states.map((s) => (s.id === selectedState.id ? updatedState : s)),
             selectedState: updatedState,
         }));
     },
