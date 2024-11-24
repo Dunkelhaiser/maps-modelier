@@ -1,5 +1,6 @@
 import { Graphics } from "@pixi/react";
 import { State } from "@utils/types";
+import { darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
 import { useMapStore } from "@/store/store";
@@ -17,17 +18,16 @@ const StateBorders = ({ state }: Props) => {
     const drawBorders = useCallback(
         (g: GraphicsType) => {
             g.clear();
-            g.lineStyle({
-                width: 0.75,
-                color: 0x000000,
-                alpha: 0.2,
-                alignment: 0.5,
-            });
-
             const stateProvinces = provinces.filter((province) => state.provinces.includes(province.id));
 
             stateProvinces.forEach((province) => {
                 const shapes = Array.isArray(province.shape) ? province.shape : [province.shape];
+                const fillColor = province.type === "land" ? 0x39654a : 0x517478;
+                const borderColor = darkenColor(fillColor, 0.5);
+                g.lineStyle({
+                    width: 0.75,
+                    color: borderColor,
+                });
 
                 shapes.forEach((shape) => {
                     for (let i = 0; i < shape.length; i += 2) {

@@ -2,7 +2,7 @@ import { Graphics } from "@pixi/react";
 import { Province as ProvinceType } from "@utils/types";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
-import { brightenColor } from "@utils/utils";
+import { brightenColor, darkenColor } from "@utils/utils";
 import { memo, useCallback } from "react";
 import type { Graphics as GraphicsType } from "pixi.js";
 
@@ -15,13 +15,12 @@ const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
             const fillColor = type === "land" ? 0x39654a : 0x517478;
+            const borderColor = darkenColor(fillColor, isSelected ? 0.2 : 0.4);
             const selectedFillColor = brightenColor(fillColor, 0.4);
             g.beginFill(isSelected ? selectedFillColor : fillColor);
             g.lineStyle({
                 width: 0.5,
-                color: 0x000000,
-                alpha: 0.3,
-                alignment: 0.5,
+                color: borderColor,
             });
             g.drawPolygon(regionShape);
             g.endFill();
