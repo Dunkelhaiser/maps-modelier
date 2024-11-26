@@ -32,6 +32,14 @@ const config = {
                     DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
                     foreground: "hsl(var(--destructive-foreground) / <alpha-value>)",
                 },
+                success: {
+                    DEFAULT: "hsl(var(--success))",
+                    foreground: "hsl(var(--success-foreground))",
+                },
+                warning: {
+                    DEFAULT: "hsl(var(--warning))",
+                    foreground: "hsl(var(--warning-foreground))",
+                },
                 muted: {
                     DEFAULT: "hsl(var(--muted) / <alpha-value>)",
                     foreground: "hsl(var(--muted-foreground) / <alpha-value>)",

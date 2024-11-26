@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useMapStore } from "@/store/store";
 
 interface Props {
@@ -17,9 +18,14 @@ const StateWindow = ({ className }: Props) => {
     const addState = useMapStore((state) => state.addState);
 
     const createNewState = async () => {
-        addState(stateName);
-
-        setStateName("");
+        try {
+            await addState(stateName);
+            setStateName("");
+        } catch (err) {
+            if (err instanceof Error) {
+                toast.error(err.message);
+            } else toast.error("An error occurred");
+        }
     };
 
     if (selectedProvinces.length === 0) return null;

@@ -1,3 +1,4 @@
+import { Toaster } from "@ui/Toast";
 import Header from "./Header";
 import ProvinceWindow from "./ProvinceWindow";
 import StateWindow from "./StateWindow";
@@ -10,6 +11,7 @@ const UserInterface = () => {
                 <ProvinceWindow />
                 <StateWindow />
             </div>
+            <Toaster />
         </>
     );
 };
