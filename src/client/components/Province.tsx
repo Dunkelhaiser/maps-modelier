@@ -5,16 +5,13 @@ import "@pixi/events";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { memo, useCallback } from "react";
 import type { Graphics as GraphicsType } from "pixi.js";
-import { useMapStore } from "@/store/store";
 
 interface ProvinceProps extends Omit<ProvinceType, "color"> {
     isSelected: boolean;
+    isInSelectedState: boolean;
 }
 
-const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
-    const selectedState = useMapStore((state) => state.selectedState);
-    const isInSelectedState = selectedState?.provinces.includes(id) ?? false;
-
+const Province = ({ id, shape, type, isSelected, isInSelectedState }: ProvinceProps) => {
     const drawRegion = useCallback(
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
@@ -23,7 +20,7 @@ const Province = ({ id, shape, type, isSelected }: ProvinceProps) => {
 
             let finalFillColor = fillColor;
             if (isSelected) {
-                finalFillColor = brightenColor(fillColor, 0.5);
+                finalFillColor = brightenColor(fillColor, 0.4);
             } else if (isInSelectedState) {
                 finalFillColor = brightenColor(fillColor, 0.2);
             }
@@ -53,7 +50,8 @@ export const MemoizedProvince = memo(Province, (prevProps, nextProps) => {
         prevProps.id === nextProps.id &&
         prevProps.type === nextProps.type &&
         prevProps.shape === nextProps.shape &&
-        prevProps.isSelected === nextProps.isSelected
+        prevProps.isSelected === nextProps.isSelected &&
+        prevProps.isInSelectedState === nextProps.isInSelectedState
     );
 });
 MemoizedProvince.displayName = "MemoizedProvince";
