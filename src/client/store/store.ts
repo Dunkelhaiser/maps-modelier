@@ -74,10 +74,16 @@ export const useMapStore = create<MapStore>((set, get) => ({
     deselectProvinces: () => set({ selectedProvinces: [], selectedState: null }),
     syncProvinceType: (provinceIds, type) => {
         set((state) => {
+            const affectedStates = state.states.filter((s) =>
+                s.provinces.some((provinceId) => provinceIds.includes(provinceId))
+            );
+
+            const allProvinceIdsToChange = new Set([...provinceIds, ...affectedStates.flatMap((s) => s.provinces)]);
+
             let newLandProvinces = [...state.landProvinces];
             let newWaterProvinces = [...state.waterProvinces];
 
-            provinceIds.forEach((provinceId) => {
+            allProvinceIdsToChange.forEach((provinceId) => {
                 if (type === "water") {
                     const landProvince = state.landProvinces.find((p) => p.id === provinceId);
                     newLandProvinces = newLandProvinces.filter((p) => p.id !== provinceId);
@@ -94,7 +100,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
             });
 
             const updatedSelectedProvinces = state.selectedProvinces.map((province) =>
-                provinceIds.includes(province.id) ? { ...province, type } : province
+                allProvinceIdsToChange.has(province.id) ? { ...province, type } : province
             );
 
             return {
