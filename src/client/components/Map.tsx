@@ -191,15 +191,35 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             </Container>
         );
 
-        const stateBordersContainer = (
+        const landStates = states.filter((state) =>
+            state.provinces.some((id) => landProvinces.some((p) => p.id === id))
+        );
+        const waterStates = states.filter((state) =>
+            state.provinces.some((id) => waterProvinces.some((p) => p.id === id))
+        );
+
+        const waterStateBordersContainer = (
             <Container sortableChildren zIndex={2}>
-                {states.map((state) => (
+                {waterStates.map((state) => (
                     <MemoizedStateBorders key={state.id} state={state} />
                 ))}
             </Container>
         );
 
-        return { waterProvincesContainer, landProvincesContainer, stateBordersContainer };
+        const landStateBordersContainer = (
+            <Container sortableChildren zIndex={2}>
+                {landStates.map((state) => (
+                    <MemoizedStateBorders key={state.id} state={state} />
+                ))}
+            </Container>
+        );
+
+        return {
+            waterProvincesContainer,
+            landProvincesContainer,
+            waterStateBordersContainer,
+            landStateBordersContainer,
+        };
     }, [waterProvinces, landProvinces, states]);
 
     const transformContainerProps = useMemo(
@@ -234,7 +254,8 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <Container {...transformContainerProps}>
                 {renderProvinces.waterProvincesContainer}
                 {renderProvinces.landProvincesContainer}
-                {renderProvinces.stateBordersContainer}
+                {renderProvinces.waterStateBordersContainer}
+                {renderProvinces.landStateBordersContainer}
             </Container>
         </Stage>
     );
