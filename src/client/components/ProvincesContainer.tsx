@@ -2,6 +2,7 @@ import { Container } from "@pixi/react";
 import { Province as ProvinceType } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
+import { toast } from "sonner";
 import { MemoizedProvince } from "./Province";
 import { useMapStore } from "@/store/store";
 
@@ -19,6 +20,19 @@ export const ProvincesContainer = memo(
         const isInSelectedState = useMemo(() => selectedState?.provinces.includes(id) ?? false, [selectedState, id]);
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {
+            if (event.shiftKey && selectedState) {
+                const existingStateProvinces = selectedState.provinces;
+                const selectedStateType =
+                    existingStateProvinces.length > 0
+                        ? (selectedProvinces.find((p) => existingStateProvinces.includes(p.id))?.type ?? type)
+                        : null;
+
+                if (selectedStateType && type !== selectedStateType) {
+                    toast.error(`Cannot add ${type} provinces to a state with ${selectedStateType} provinces`);
+                    return;
+                }
+            }
+
             setSelectedProvinces(
                 {
                     id,
