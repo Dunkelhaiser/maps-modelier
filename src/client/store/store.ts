@@ -15,7 +15,7 @@ interface MapStore {
     states: State[];
     setStates: (states: State[]) => void;
     selectedState: State | null;
-    addState: (stateName: string) => void;
+    addState: (stateName: string) => Promise<void>;
     addProvincesToState: (provinceIds: number[]) => void;
     removeProvincesFromState: (provinceIds: number[]) => void;
 }
@@ -112,6 +112,11 @@ export const useMapStore = create<MapStore>((set, get) => ({
 
         if (!activeMap) return;
 
+        const provinceTypes = new Set(selectedProvinces.map((province) => province.type));
+        if (provinceTypes.size > 1) {
+            throw new Error("Cannot create a state with provinces of different types");
+        }
+
         const createdState = await window.electronAPI.createState(
             activeMap.id,
             stateName,
@@ -123,6 +128,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
             selectedState: createdState,
         }));
     },
+
     selectedState: null,
 
     addProvincesToState: async (provinceIds: number[]) => {
