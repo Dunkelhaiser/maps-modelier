@@ -11,6 +11,7 @@ import { getProvinceByColor } from "./provinces/getProvinceByColor.js";
 import { getProvinceById } from "./provinces/getProvinceById.js";
 import { addProvinces } from "./states/addProvinces.js";
 import { createState } from "./states/createState.js";
+import { deleteState } from "./states/deleteState.js";
 import { getAllStates } from "./states/getAllStates.js";
 import { getStateByProvinceId } from "./states/getStateByProvinceId.js";
 import { removeProvinces } from "./states/removeProvinces.js";
@@ -33,4 +34,5 @@ export const setupHandlers = () => {
     ipcMain.handle("addProvinces", addProvinces);
     ipcMain.handle("removeProvinces", removeProvinces);
     ipcMain.handle("renameState", renameState);
+    ipcMain.handle("deleteState", deleteState);
 };
