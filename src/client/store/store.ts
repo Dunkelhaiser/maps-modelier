@@ -23,6 +23,7 @@ interface MapStore {
     addProvincesToState: (provinceIds: number[]) => void;
     removeProvincesFromState: (provinceIds: number[]) => void;
     renameState: (name: string) => Promise<void>;
+    deleteState: () => Promise<void>;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -233,6 +234,21 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 s.id === selectedState.id ? { ...updatedState, provinces: selectedState.provinces } : s
             ),
             selectedState: { ...updatedState, provinces: selectedState.provinces },
+        }));
+    },
+
+    deleteState: async () => {
+        const { activeMap, selectedState } = get();
+
+        if (!activeMap) return;
+        if (!selectedState) return;
+
+        await window.electronAPI.deleteState(activeMap.id, selectedState.id);
+
+        set((state) => ({
+            states: state.states.filter((s) => s.id !== selectedState.id),
+            selectedState: null,
+            selectedProvinces: [],
         }));
     },
 }));
