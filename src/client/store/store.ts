@@ -186,9 +186,16 @@ export const useMapStore = create<MapStore>((set, get) => ({
             provinces: selectedState.provinces.filter((id) => !provinceIds.includes(id)),
         };
 
-        set((state) => ({
-            states: state.states.map((s) => (s.id === selectedState.id ? updatedState : s)),
-            selectedState: updatedState,
-        }));
+        set((state) => {
+            const remainingSelectedProvinces = state.selectedProvinces.filter(
+                (province) => !provinceIds.includes(province.id)
+            );
+
+            return {
+                states: state.states.map((s) => (s.id === selectedState.id ? updatedState : s)),
+                selectedState: remainingSelectedProvinces.length > 0 ? updatedState : null,
+                selectedProvinces: remainingSelectedProvinces,
+            };
+        });
     },
 }));
