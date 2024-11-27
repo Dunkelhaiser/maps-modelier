@@ -67,7 +67,9 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 selectedProvinces = [...state.selectedProvinces, province];
             }
 
-            if (!selectedState && selectedProvinces.length > 0) {
+            if (selectedProvinces.length === 0) {
+                selectedState = null;
+            } else if (!selectedState && selectedProvinces.length > 0) {
                 selectedState =
                     state.states.find((s) => selectedProvinces.every((p) => s.provinces.includes(p.id))) ?? null;
             }
