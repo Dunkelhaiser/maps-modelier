@@ -1,7 +1,11 @@
 import { ActiveMap, Province, State } from "@utils/types";
 import { create } from "zustand";
 
+type Mode = "viewing" | "provinces_editing" | "states_editing";
+
 interface MapStore {
+    mode: Mode;
+    setMode: (mode: Mode) => void;
     activeMap: ActiveMap | null;
     setActiveMap: (map: ActiveMap) => void;
     landProvinces: Province[];
@@ -21,6 +25,8 @@ interface MapStore {
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
+    mode: "viewing",
+    setMode: (mode) => set({ mode }),
     activeMap: null,
     setActiveMap: (map: ActiveMap) => set({ activeMap: map }),
     landProvinces: [],

@@ -6,6 +6,7 @@ import {
     DropdownMenuTrigger,
 } from "@ui/DropdownMenu";
 import { Settings } from "lucide-react";
+import ModeSelect from "./ModeSelect";
 
 const Header = () => {
     return (
@@ -17,6 +18,7 @@ const Header = () => {
                 <DropdownMenuContent>
                     <DropdownMenuLabel>Settings</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <ModeSelect />
                 </DropdownMenuContent>
             </DropdownMenu>
         </header>
