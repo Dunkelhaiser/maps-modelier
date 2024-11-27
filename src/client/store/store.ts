@@ -36,9 +36,10 @@ export const useMapStore = create<MapStore>((set, get) => ({
     selectedProvinces: [],
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
+            const { mode } = state;
             let { selectedState } = state;
 
-            if (selectedState && isShiftKey) {
+            if (selectedState && isShiftKey && mode === "states_editing") {
                 const isProvinceInState = selectedState.provinces.includes(province.id);
 
                 if (isProvinceInState) {
