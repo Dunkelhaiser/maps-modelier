@@ -1,3 +1,4 @@
+import { and, eq } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { states, stateProvinces } from "../../db/schema.js";
 
@@ -7,6 +8,12 @@ export const createState = async (
     name: string,
     provinces?: number[]
 ) => {
+    provinces?.forEach(async (provinceId) => {
+        await db
+            .delete(stateProvinces)
+            .where(and(eq(stateProvinces.provinceId, provinceId), eq(stateProvinces.mapId, mapId)));
+    });
+
     const [createdState] = await db
         .insert(states)
         .values({

@@ -132,16 +132,36 @@ export const useMapStore = create<MapStore>((set, get) => ({
             throw new Error("Cannot create a state with provinces of different types");
         }
 
+        const affectedStates = get().states.filter((state) =>
+            state.provinces.some((provinceId) => selectedProvinces.some((province) => province.id === provinceId))
+        );
+
         const createdState = await window.electronAPI.createState(
             activeMap.id,
             stateName,
             selectedProvinces.map((province) => province.id)
         );
 
-        set((currentState) => ({
-            states: [...currentState.states, createdState],
-            selectedState: createdState,
-        }));
+        set((currentState) => {
+            const updatedStates = currentState.states
+                .map((state) => {
+                    if (affectedStates.some((affectedState) => affectedState.id === state.id)) {
+                        return {
+                            ...state,
+                            provinces: state.provinces.filter(
+                                (provinceId) => !selectedProvinces.some((province) => province.id === provinceId)
+                            ),
+                        };
+                    }
+                    return state;
+                })
+                .concat(createdState);
+
+            return {
+                states: updatedStates,
+                selectedState: createdState,
+            };
+        });
     },
 
     selectedState: null,
