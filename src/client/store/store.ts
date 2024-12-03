@@ -24,6 +24,7 @@ interface MapStore {
     removeProvincesFromState: (provinceIds: number[]) => void;
     renameState: (name: string) => Promise<void>;
     deleteState: () => Promise<void>;
+    closeMap: () => void;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -250,5 +251,17 @@ export const useMapStore = create<MapStore>((set, get) => ({
             selectedState: null,
             selectedProvinces: [],
         }));
+    },
+
+    closeMap: () => {
+        set({
+            mode: "viewing",
+            activeMap: null,
+            landProvinces: [],
+            waterProvinces: [],
+            selectedProvinces: [],
+            states: [],
+            selectedState: null,
+        });
     },
 }));

@@ -36,7 +36,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     const { width = 0, height: windowHeight = 0 } = useWindowSize();
 
-    const height = windowHeight - 42;
+    const height = windowHeight - 45.6;
 
     useEffect(() => {
         const loadData = async () => {
