@@ -277,7 +277,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
         const createdCountry = await window.electronAPI.createCountry(activeMap.id, name, tag);
 
         set((state) => ({
-            countries: [...state.countries, createdCountry],
+            countries: [...state.countries, { ...createdCountry, states: [] }],
         }));
     },
     setCountries: (countries: Country[]) => set({ countries }),
