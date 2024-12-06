@@ -1,7 +1,7 @@
 import { ActiveMap, Province, State } from "@utils/types";
 import { create } from "zustand";
 
-type Mode = "viewing" | "provinces_editing" | "states_editing";
+type Mode = "viewing" | "provinces_editing" | "states_editing" | "countries_editing";
 
 interface MapStore {
     mode: Mode;
@@ -25,6 +25,7 @@ interface MapStore {
     renameState: (name: string) => Promise<void>;
     deleteState: () => Promise<void>;
     closeMap: () => void;
+    createCountry: (name: string, tag: string) => Promise<void>;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -263,5 +264,13 @@ export const useMapStore = create<MapStore>((set, get) => ({
             states: [],
             selectedState: null,
         });
+    },
+
+    createCountry: async (name, tag) => {
+        const { activeMap } = get();
+
+        if (!activeMap) return;
+
+        await window.electronAPI.createCountry(activeMap.id, name, tag);
     },
 }));

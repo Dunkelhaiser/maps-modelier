@@ -1,3 +1,4 @@
+import CreateCountryWindow from "./CreateCountryWindow";
 import CreateStateWindow from "./CreateStateWindow";
 import ProvinceWindow from "./ProvinceWindow";
 import StateWindow from "./StateWindow";
@@ -16,6 +17,7 @@ const FloatingWindows = () => {
             ) : (
                 mode === "states_editing" && selectedProvinces.length > 0 && <CreateStateWindow />
             )}
+            {mode === "countries_editing" && selectedProvinces.length > 0 && <CreateCountryWindow />}
         </div>
     );
 };
