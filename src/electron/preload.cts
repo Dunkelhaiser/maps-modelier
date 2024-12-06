@@ -26,8 +26,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
         ipcRenderer.invoke("createState", mapId, name, provinces),
     addProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
         ipcRenderer.invoke("addProvinces", mapId, stateId, provinceIds),
-    removeProvinces: (mapId: string, provinceIds: number[]) =>
-        ipcRenderer.invoke("removeProvinces", mapId, provinceIds),
+    removeProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
+        ipcRenderer.invoke("removeProvinces", mapId, stateId, provinceIds),
     renameState: (mapId: string, stateId: number, name: string) =>
         ipcRenderer.invoke("renameState", mapId, stateId, name),
     deleteState: (mapId: string, stateId: number) => ipcRenderer.invoke("deleteState", mapId, stateId),
