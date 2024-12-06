@@ -84,14 +84,12 @@ export const stateProvinces = sqliteTable(
 export const countries = sqliteTable(
     "countries",
     {
-        id: integer("id")
-            .notNull()
-            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM countries WHERE map_id = map_id)`),
+        tag: text("tag").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
-        color: text("color").notNull(),
+        color: text("color").notNull().default("#39654a"),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
@@ -100,6 +98,6 @@ export const countries = sqliteTable(
             .default(sql`(unixepoch())`),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.id], name: "countries_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.tag], name: "countries_pk" }),
     })
 );

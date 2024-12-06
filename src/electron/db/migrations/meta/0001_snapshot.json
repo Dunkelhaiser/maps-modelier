@@ -1,15 +1,15 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "93ca2aff-0d96-4f20-8b09-be97185a33a7",
+    "id": "89ad4cfd-6c6a-4fd8-a364-bc8174e17252",
     "prevId": "b532f67e-8d6d-4371-828b-4b4fc069bb4d",
     "tables": {
         "countries": {
             "name": "countries",
             "columns": {
-                "id": {
-                    "name": "id",
-                    "type": "integer",
+                "tag": {
+                    "name": "tag",
+                    "type": "text",
                     "primaryKey": false,
                     "notNull": true,
                     "autoincrement": false
@@ -33,7 +33,8 @@
                     "type": "text",
                     "primaryKey": false,
                     "notNull": true,
-                    "autoincrement": false
+                    "autoincrement": false,
+                    "default": "'#39654a'"
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -66,7 +67,7 @@
             },
             "compositePrimaryKeys": {
                 "countries_pk": {
-                    "columns": ["map_id", "id"],
+                    "columns": ["map_id", "tag"],
                     "name": "countries_pk"
                 }
             },
