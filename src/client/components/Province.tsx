@@ -7,15 +7,19 @@ import { memo, useCallback } from "react";
 import type { Graphics as GraphicsType } from "pixi.js";
 
 interface ProvinceProps extends Omit<ProvinceType, "color"> {
+    countryColor?: string;
     isSelected: boolean;
     isInSelectedState: boolean;
 }
 
-const Province = ({ id, shape, type, isSelected, isInSelectedState }: ProvinceProps) => {
+const Province = ({ id, shape, type, countryColor, isSelected, isInSelectedState }: ProvinceProps) => {
     const drawRegion = useCallback(
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
-            const fillColor = type === "land" ? 0x39654a : 0x517478;
+
+            const unassignedFillColor = type === "land" ? 0x39654a : 0x517478;
+            const fillColor = countryColor ? parseInt(countryColor.replace("#", "0x"), 16) : unassignedFillColor;
+
             const borderColor = darkenColor(fillColor, isSelected ? 0.2 : 0.4);
 
             let finalFillColor = fillColor;
@@ -35,7 +39,7 @@ const Province = ({ id, shape, type, isSelected, isInSelectedState }: ProvincePr
             g.drawPolygon(regionShape);
             g.endFill();
         },
-        [type, isSelected, isInSelectedState]
+        [type, countryColor, isSelected, isInSelectedState]
     );
 
     const shapes = Array.isArray(shape) ? shape : [shape];
@@ -50,6 +54,7 @@ export const MemoizedProvince = memo(Province, (prevProps, nextProps) => {
         prevProps.id === nextProps.id &&
         prevProps.type === nextProps.type &&
         prevProps.shape === nextProps.shape &&
+        prevProps.countryColor === nextProps.countryColor &&
         prevProps.isSelected === nextProps.isSelected &&
         prevProps.isInSelectedState === nextProps.isInSelectedState
     );

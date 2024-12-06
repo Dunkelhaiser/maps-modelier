@@ -13,10 +13,16 @@ const StateBorders = ({ state }: Props) => {
     const landProvinces = useMapStore((store) => store.landProvinces);
     const waterProvinces = useMapStore((store) => store.waterProvinces);
     const selectedState = useMapStore((store) => store.selectedState);
+    const countries = useMapStore((store) => store.countries);
 
     const isSelected = selectedState?.id === state.id;
 
     const provinces = useMemo(() => [...landProvinces, ...waterProvinces], [landProvinces, waterProvinces]);
+
+    const countryColor = useMemo(() => {
+        const country = countries.find((c) => c.states.includes(state.id));
+        return country?.color;
+    }, [countries, state.id]);
 
     const drawBorders = useCallback(
         (g: GraphicsType) => {
@@ -25,8 +31,11 @@ const StateBorders = ({ state }: Props) => {
 
             stateProvinces.forEach((province) => {
                 const shapes = Array.isArray(province.shape) ? province.shape : [province.shape];
-                const fillColor = province.type === "land" ? 0x39654a : 0x517478;
+
+                const unassignedFillColor = province.type === "land" ? 0x39654a : 0x517478;
+                const fillColor = countryColor ? parseInt(countryColor.replace("#", "0x"), 16) : unassignedFillColor;
                 const borderColor = isSelected ? brightenColor(fillColor, 1) : darkenColor(fillColor, 0.5);
+
                 g.lineStyle({
                     width: 0.75,
                     color: borderColor,
@@ -78,7 +87,7 @@ const StateBorders = ({ state }: Props) => {
                 });
             });
         },
-        [provinces, state.provinces, isSelected]
+        [provinces, state.provinces, isSelected, countryColor]
     );
 
     return (
