@@ -2,7 +2,7 @@
     "appId": "com.dunkelhaiser.maps-modelier",
     "files": ["dist/client", "dist/electron", "src/assets"],
     "icon": "./dist/client/desktopIcon.png",
-    "extraResources": ["dist/electron/preload.cjs", "dist/electron/db/data.db"],
+    "extraResources": ["dist/electron/preload.cjs", "dist/electron/db/data.db", "dist/electron/db/migrations/*"],
     "mac": {
         "target": "dmg"
     },
