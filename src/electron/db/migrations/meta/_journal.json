@@ -15,6 +15,13 @@
             "when": 1733496973186,
             "tag": "0001_easy_orphan",
             "breakpoints": true
+        },
+        {
+            "idx": 2,
+            "version": "6",
+            "when": 1733503577260,
+            "tag": "0002_zippy_johnny_storm",
+            "breakpoints": true
         }
     ]
 }

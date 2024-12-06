@@ -101,3 +101,29 @@ export const countries = sqliteTable(
         pk: primaryKey({ columns: [table.mapId, table.tag], name: "countries_pk" }),
     })
 );
+
+export const countryStates = sqliteTable(
+    "country_states",
+    {
+        countryTag: text("country_tag").notNull(),
+        stateId: integer("state_id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+    },
+    (table) => {
+        return {
+            pk: primaryKey({ columns: [table.mapId, table.countryTag, table.stateId], name: "country_states_pk" }),
+            statesReference: foreignKey({
+                columns: [table.mapId, table.stateId],
+                foreignColumns: [states.mapId, states.id],
+                name: "states_reference",
+            }).onDelete("cascade"),
+            countriesReference: foreignKey({
+                columns: [table.mapId, table.countryTag],
+                foreignColumns: [countries.mapId, countries.tag],
+                name: "countries_reference",
+            }).onDelete("cascade"),
+        };
+    }
+);
