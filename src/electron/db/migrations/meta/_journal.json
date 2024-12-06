@@ -8,6 +8,13 @@
             "when": 1732388483088,
             "tag": "0000_sudden_puff_adder",
             "breakpoints": true
+        },
+        {
+            "idx": 1,
+            "version": "6",
+            "when": 1733475332702,
+            "tag": "0001_simple_wraith",
+            "breakpoints": true
         }
     ]
 }

@@ -80,3 +80,26 @@ export const stateProvinces = sqliteTable(
         }).onDelete("cascade"),
     })
 );
+
+export const countries = sqliteTable(
+    "countries",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM countries WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        name: text("name").notNull(),
+        color: text("color").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "countries_pk" }),
+    })
+);
