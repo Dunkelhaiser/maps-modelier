@@ -12,3 +12,10 @@ export interface State {
     name: string;
     provinces: number[];
 }
+
+export interface Country {
+    tag: string;
+    name: string;
+    color: string;
+    states: number[];
+}
