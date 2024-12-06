@@ -28,6 +28,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const setLandProvinces = useMapStore((state) => state.setLandProvinces);
     const setWaterProvinces = useMapStore((state) => state.setWaterProvinces);
     const setStates = useMapStore((state) => state.setStates);
+    const setCountries = useMapStore((state) => state.setCountries);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -40,18 +41,20 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     useEffect(() => {
         const loadData = async () => {
-            const [landProvincesArr, waterProvincesArr, statesArr] = await Promise.all([
+            const [landProvincesArr, waterProvincesArr, statesArr, countriesArr] = await Promise.all([
                 window.electronAPI.getAllProvinces(activeMap.id, "land"),
                 window.electronAPI.getAllProvinces(activeMap.id, "water"),
                 window.electronAPI.getAllStates(activeMap.id),
+                window.electronAPI.getAllCountries(activeMap.id),
             ]);
 
             setLandProvinces(landProvincesArr);
             setWaterProvinces(waterProvincesArr);
             setStates(statesArr);
+            setCountries(countriesArr);
         };
         loadData();
-    }, [activeMap.id, activeMap.imageUrl, setLandProvinces, setStates, setWaterProvinces]);
+    }, [activeMap.id, activeMap.imageUrl, setCountries, setLandProvinces, setStates, setWaterProvinces]);
 
     useEffect(() => {
         const img = new Image();

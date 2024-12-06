@@ -27,6 +27,7 @@ interface MapStore {
     closeMap: () => void;
     countries: Country[];
     createCountry: (name: string, tag: string) => Promise<void>;
+    setCountries: (countries: Country[]) => void;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -279,4 +280,5 @@ export const useMapStore = create<MapStore>((set, get) => ({
             countries: [...state.countries, createdCountry],
         }));
     },
+    setCountries: (countries: Country[]) => set({ countries }),
 }));
