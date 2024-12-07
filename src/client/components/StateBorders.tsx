@@ -37,7 +37,7 @@ const StateBorders = ({ state }: Props) => {
                 const borderColor = isSelected ? brightenColor(fillColor, 1) : darkenColor(fillColor, 0.5);
 
                 g.lineStyle({
-                    width: 0.75,
+                    width: 0.5,
                     color: borderColor,
                 });
 

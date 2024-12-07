@@ -33,7 +33,7 @@ const Province = ({ id, shape, type, countryColor, isSelected, isInSelectedState
 
             g.beginFill(finalFillColor);
             g.lineStyle({
-                width: 0.5,
+                width: 0.25,
                 color: isSelected ? selectedBorderColor : borderColor,
             });
             g.drawPolygon(regionShape);
