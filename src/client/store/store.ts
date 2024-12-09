@@ -359,7 +359,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 if (country.tag === countryTag) {
                     return {
                         ...country,
-                        states: [...country.states, ...stateIds],
+                        states: [...new Set([...country.states, ...stateIds])],
                     };
                 }
                 if (currentCountry && country.tag === currentCountry.tag) {
@@ -371,11 +371,24 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 return country;
             });
 
+            const updatedSelectedCountry =
+                updatedCountries.find((country) => country.tag === state.selectedCountry?.tag) ?? null;
+
             return {
                 countries: updatedCountries,
+                selectedCountry: updatedSelectedCountry && {
+                    ...updatedSelectedCountry,
+                    states: updatedSelectedCountry.states,
+                },
+                selectedState:
+                    state.selectedState &&
+                    updatedCountries.some((country) => country.states.includes(state.selectedState?.id ?? -1))
+                        ? state.selectedState
+                        : null,
             };
         });
     },
+
     removeStatesFromCountry: async (countryTag, stateIds) => {
         const { activeMap } = get();
 
@@ -394,8 +407,20 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 return country;
             });
 
+            const updatedSelectedCountry =
+                updatedCountries.find((country) => country.tag === state.selectedCountry?.tag) ?? null;
+
             return {
                 countries: updatedCountries,
+                selectedCountry: updatedSelectedCountry && {
+                    ...updatedSelectedCountry,
+                    states: updatedSelectedCountry.states,
+                },
+                selectedState:
+                    state.selectedState &&
+                    updatedCountries.some((country) => country.states.includes(state.selectedState?.id ?? -1))
+                        ? state.selectedState
+                        : null,
             };
         });
     },
