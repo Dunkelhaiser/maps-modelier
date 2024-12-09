@@ -1,4 +1,5 @@
 import { ipcMain } from "electron";
+import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { getAllCountries } from "./countries/getAllCountries.js";
 import { loadMapImage } from "./mapImage/loadMapImage.js";
@@ -39,4 +40,5 @@ export const setupHandlers = () => {
     ipcMain.handle("deleteState", deleteState);
     ipcMain.handle("createCountry", createCountry);
     ipcMain.handle("getAllCountries", getAllCountries);
+    ipcMain.handle("addStates", addStates);
 };
