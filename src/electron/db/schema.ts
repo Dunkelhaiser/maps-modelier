@@ -123,7 +123,9 @@ export const countryStates = sqliteTable(
                 columns: [table.mapId, table.countryTag],
                 foreignColumns: [countries.mapId, countries.tag],
                 name: "countries_reference",
-            }).onDelete("cascade"),
+            })
+                .onDelete("cascade")
+                .onUpdate("cascade"),
         };
     }
 );
