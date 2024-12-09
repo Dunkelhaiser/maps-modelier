@@ -31,7 +31,7 @@ interface ElectronAPI {
     removeProvinces: (mapId: string, stateId: number, provinceIds: number[]) => Promise<void>;
     renameState: (mapId: string, stateId: number, name: string) => Promise<Omit<State, "provinces">>;
     deleteState: (mapId: string, stateId: number) => Promise<void>;
-    createCountry: (mapId: string, name: string, tag: string) => Promise<Omit<Country, "states">>;
+    createCountry: (mapId: string, name: string, tag: string, color?: string) => Promise<Omit<Country, "states">>;
     getAllCountries: (mapId: string) => Promise<Country[]>;
     addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
 }
