@@ -1,6 +1,7 @@
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 import { Trash, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMapStore } from "@/store/store";
@@ -15,8 +16,18 @@ const StateWindow = ({ className }: Props) => {
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
     const renameState = useMapStore((state) => state.renameState);
     const deleteState = useMapStore((state) => state.deleteState);
+    const countries = useMapStore((state) => state.countries);
+    const addStatesToCountry = useMapStore((state) => state.addStatesToCountry);
+
+    const stateCountry = countries.find((country) => country.states.includes(selectedState?.id ?? -1));
 
     const renameStateHandler = () => renameState(stateName);
+
+    const addStateHandler = (tag: string) => {
+        if (selectedState) {
+            addStatesToCountry(tag, [selectedState.id]);
+        }
+    };
 
     useEffect(() => {
         setStateName(selectedState?.name ?? "");
@@ -36,15 +47,26 @@ const StateWindow = ({ className }: Props) => {
                     <X />
                 </Button>
             </CardHeader>
-            <CardContent>
-                <div className="space-y-2">
-                    <Input placeholder="State Name" value={stateName} onChange={(e) => setStateName(e.target.value)} />
+            <CardContent className="space-y-2">
+                <Select onValueChange={addStateHandler} value={stateCountry?.tag}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="State Owner" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {countries.map((country) => (
+                            <SelectItem key={country.tag} value={country.tag}>
+                                {country.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <Input placeholder="State Name" value={stateName} onChange={(e) => setStateName(e.target.value)} />
+                <div className="flex flex-row justify-between gap-4">
                     <Button onClick={renameStateHandler}>Rename State</Button>
+                    <Button variant="destructive" aria-label="Delete State" onClick={deleteState}>
+                        <Trash />
+                    </Button>
                 </div>
-
-                <Button variant="destructive" className="mt-4" aria-label="Delete State" onClick={deleteState}>
-                    <Trash />
-                </Button>
             </CardContent>
         </Card>
     );
