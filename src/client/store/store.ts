@@ -85,6 +85,8 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 if (selectedState) {
                     selectedCountry =
                         state.countries.find((country) => country.states.includes(selectedState!.id)) ?? null;
+                } else {
+                    selectedCountry = null;
                 }
 
                 return {
@@ -111,6 +113,8 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 if (selectedState) {
                     selectedCountry =
                         state.countries.find((country) => country.states.includes(selectedState!.id)) ?? null;
+                } else {
+                    selectedCountry = null;
                 }
             }
 
