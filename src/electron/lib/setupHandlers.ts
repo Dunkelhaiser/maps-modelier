@@ -3,6 +3,7 @@ import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { getAllCountries } from "./countries/getAllCountries.js";
 import { removeStates } from "./countries/removeStates.js";
+import { updateCountry } from "./countries/updateCountry.js";
 import { loadMapImage } from "./mapImage/loadMapImage.js";
 import { saveMapImage } from "./mapImage/saveMapImage.js";
 import { createMap } from "./maps/createMap.js";
@@ -43,4 +44,5 @@ export const setupHandlers = () => {
     ipcMain.handle("getAllCountries", getAllCountries);
     ipcMain.handle("addStates", addStates);
     ipcMain.handle("removeStates", removeStates);
+    ipcMain.handle("updateCountry", updateCountry);
 };
