@@ -29,6 +29,8 @@ interface MapStore {
     createCountry: (name: string, tag: string, color: string) => Promise<void>;
     setCountries: (countries: Country[]) => void;
     selectedCountry: Country | null;
+    addStatesToCountry: (countryTag: string, stateIds: number[]) => void;
+    removeStatesFromCountry: (countryTag: string, stateIds: number[]) => void;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -50,57 +52,14 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 const stateToRemove = state.states.find((s) => s.provinces.includes(province.id));
 
                 if (stateToRemove && selectedCountry.states.includes(stateToRemove.id)) {
-                    window.electronAPI.removeStates(state.activeMap!.id, selectedCountry.tag, [stateToRemove.id]);
-
-                    const updatedCountries = state.countries.map((country) => {
-                        if (country.tag === selectedCountry!.tag) {
-                            return {
-                                ...country,
-                                states: country.states.filter((stateId) => stateId !== stateToRemove.id),
-                            };
-                        }
-                        return country;
-                    });
-
-                    return {
-                        countries: updatedCountries,
-                        selectedCountry: {
-                            ...selectedCountry,
-                            states: selectedCountry.states.filter((stateId) => stateId !== stateToRemove.id),
-                        },
-                    };
+                    get().removeStatesFromCountry(selectedCountry.tag, [stateToRemove.id]);
+                    return {};
                 }
 
                 const stateToAdd = state.states.find((s) => s.provinces.includes(province.id));
 
                 if (stateToAdd) {
-                    const currentCountry = state.countries.find((country) => country.states.includes(stateToAdd.id));
-
-                    window.electronAPI.addStates(state.activeMap!.id, selectedCountry.tag, [stateToAdd.id]);
-
-                    const updatedCountries = state.countries.map((country) => {
-                        if (country.tag === selectedCountry!.tag) {
-                            return {
-                                ...country,
-                                states: [...country.states, stateToAdd.id],
-                            };
-                        }
-                        if (currentCountry && country.tag === currentCountry.tag) {
-                            return {
-                                ...country,
-                                states: country.states.filter((stateId) => stateId !== stateToAdd.id),
-                            };
-                        }
-                        return country;
-                    });
-
-                    return {
-                        countries: updatedCountries,
-                        selectedCountry: {
-                            ...selectedCountry,
-                            states: [...selectedCountry.states, stateToAdd.id],
-                        },
-                    };
+                    get().addStatesToCountry(selectedCountry.tag, [stateToAdd.id]);
                 }
                 return {};
             }
@@ -357,4 +316,60 @@ export const useMapStore = create<MapStore>((set, get) => ({
     },
     setCountries: (countries: Country[]) => set({ countries }),
     selectedCountry: null,
+    addStatesToCountry: async (countryTag, stateIds) => {
+        const { activeMap } = get();
+
+        if (!activeMap) return;
+
+        const currentCountry = get().countries.find((country) =>
+            country.states.some((stateId) => stateIds.includes(stateId))
+        );
+
+        await window.electronAPI.addStates(activeMap.id, countryTag, stateIds);
+
+        set((state) => {
+            const updatedCountries = state.countries.map((country) => {
+                if (country.tag === countryTag) {
+                    return {
+                        ...country,
+                        states: [...country.states, ...stateIds],
+                    };
+                }
+                if (currentCountry && country.tag === currentCountry.tag) {
+                    return {
+                        ...country,
+                        states: country.states.filter((stateId) => !stateIds.includes(stateId)),
+                    };
+                }
+                return country;
+            });
+
+            return {
+                countries: updatedCountries,
+            };
+        });
+    },
+    removeStatesFromCountry: async (countryTag, stateIds) => {
+        const { activeMap } = get();
+
+        if (!activeMap) return;
+
+        await window.electronAPI.removeStates(activeMap.id, countryTag, stateIds);
+
+        set((state) => {
+            const updatedCountries = state.countries.map((country) => {
+                if (country.tag === countryTag) {
+                    return {
+                        ...country,
+                        states: country.states.filter((stateId) => !stateIds.includes(stateId)),
+                    };
+                }
+                return country;
+            });
+
+            return {
+                countries: updatedCountries,
+            };
+        });
+    },
 }));
