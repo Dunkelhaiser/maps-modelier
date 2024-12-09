@@ -305,15 +305,41 @@ export const useMapStore = create<MapStore>((set, get) => ({
 
     countries: [],
     createCountry: async (name, tag, color) => {
-        const { activeMap } = get();
+        const { activeMap, selectedState, countries } = get();
 
         if (!activeMap) return;
 
         const createdCountry = await window.electronAPI.createCountry(activeMap.id, name, tag, color);
 
-        set((state) => ({
-            countries: [...state.countries, { ...createdCountry, states: [] }],
-        }));
+        const isStateUnassigned = !countries.some((country) => country.states.includes(selectedState?.id ?? -1));
+
+        set((state) => {
+            const updatedCountries = [...state.countries, { ...createdCountry, states: [] }];
+
+            if (selectedState && isStateUnassigned) {
+                const updatedCountriesWithState = updatedCountries.map((country) => {
+                    if (country.tag === createdCountry.tag) {
+                        return {
+                            ...country,
+                            states: [selectedState.id],
+                        };
+                    }
+                    return country;
+                });
+
+                get().addStatesToCountry(createdCountry.tag, [selectedState.id]);
+
+                return {
+                    countries: updatedCountriesWithState,
+                    selectedCountry: { ...createdCountry, states: [selectedState.id] },
+                };
+            }
+
+            return {
+                countries: updatedCountries,
+                selectedCountry: { ...createdCountry, states: [] },
+            };
+        });
     },
     setCountries: (countries: Country[]) => set({ countries }),
     selectedCountry: null,
