@@ -26,7 +26,7 @@ interface MapStore {
     deleteState: () => Promise<void>;
     closeMap: () => void;
     countries: Country[];
-    createCountry: (name: string, tag: string) => Promise<void>;
+    createCountry: (name: string, tag: string, color: string) => Promise<void>;
     setCountries: (countries: Country[]) => void;
     selectedCountry: Country | null;
 }
@@ -286,12 +286,12 @@ export const useMapStore = create<MapStore>((set, get) => ({
     },
 
     countries: [],
-    createCountry: async (name, tag) => {
+    createCountry: async (name, tag, color) => {
         const { activeMap } = get();
 
         if (!activeMap) return;
 
-        const createdCountry = await window.electronAPI.createCountry(activeMap.id, name, tag);
+        const createdCountry = await window.electronAPI.createCountry(activeMap.id, name, tag, color);
 
         set((state) => ({
             countries: [...state.countries, { ...createdCountry, states: [] }],

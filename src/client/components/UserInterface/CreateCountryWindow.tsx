@@ -13,14 +13,16 @@ interface Props {
 const CreateCountryWindow = ({ className }: Props) => {
     const [countryName, setCountryName] = useState("");
     const [countryTag, setCountryTag] = useState("");
+    const [countryColor, setCountryColor] = useState("");
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const createCountry = useMapStore((state) => state.createCountry);
 
     const createNewState = async () => {
         try {
-            await createCountry(countryName, countryTag);
+            await createCountry(countryName, countryTag, countryColor);
             setCountryName("");
             setCountryTag("");
+            setCountryColor("");
         } catch (err) {
             if (err instanceof Error) {
                 toast.error(err.message);
@@ -49,6 +51,11 @@ const CreateCountryWindow = ({ className }: Props) => {
                     onChange={(e) => setCountryName(e.target.value)}
                 />
                 <Input placeholder="Country Tag" value={countryTag} onChange={(e) => setCountryTag(e.target.value)} />
+                <Input
+                    placeholder="Country Color"
+                    value={countryColor}
+                    onChange={(e) => setCountryColor(e.target.value)}
+                />
                 <Button onClick={createNewState}>Create Country</Button>
             </CardContent>
         </Card>
