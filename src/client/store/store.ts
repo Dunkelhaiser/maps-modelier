@@ -47,6 +47,30 @@ export const useMapStore = create<MapStore>((set, get) => ({
             let { selectedState, selectedCountry } = state;
 
             if (selectedCountry && isShiftKey && mode === "countries_editing") {
+                const stateToRemove = state.states.find((s) => s.provinces.includes(province.id));
+
+                if (stateToRemove && selectedCountry.states.includes(stateToRemove.id)) {
+                    window.electronAPI.removeStates(state.activeMap!.id, selectedCountry.tag, [stateToRemove.id]);
+
+                    const updatedCountries = state.countries.map((country) => {
+                        if (country.tag === selectedCountry!.tag) {
+                            return {
+                                ...country,
+                                states: country.states.filter((stateId) => stateId !== stateToRemove.id),
+                            };
+                        }
+                        return country;
+                    });
+
+                    return {
+                        countries: updatedCountries,
+                        selectedCountry: {
+                            ...selectedCountry,
+                            states: selectedCountry.states.filter((stateId) => stateId !== stateToRemove.id),
+                        },
+                    };
+                }
+
                 const stateToAdd = state.states.find((s) => s.provinces.includes(province.id));
 
                 if (stateToAdd) {
