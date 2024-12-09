@@ -19,3 +19,9 @@ export interface Country {
     color: string;
     states: number[];
 }
+
+export interface CountryProperties {
+    tag?: string;
+    name?: string;
+    color?: string;
+}

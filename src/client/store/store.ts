@@ -1,4 +1,4 @@
-import { ActiveMap, Country, Province, State } from "@utils/types";
+import { ActiveMap, Country, CountryProperties, Province, State } from "@utils/types";
 import { create } from "zustand";
 
 type Mode = "viewing" | "provinces_editing" | "states_editing" | "countries_editing";
@@ -31,6 +31,7 @@ interface MapStore {
     selectedCountry: Country | null;
     addStatesToCountry: (countryTag: string, stateIds: number[]) => void;
     removeStatesFromCountry: (countryTag: string, stateIds: number[]) => void;
+    updateCountry: (tag: string, options: CountryProperties) => Promise<void>;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -369,6 +370,35 @@ export const useMapStore = create<MapStore>((set, get) => ({
 
             return {
                 countries: updatedCountries,
+            };
+        });
+    },
+
+    updateCountry: async (tag, options) => {
+        const { activeMap } = get();
+
+        if (!activeMap) return;
+
+        const updatedCountry = await window.electronAPI.updateCountry(activeMap.id, tag, options);
+
+        set((state) => {
+            const { selectedCountry } = state;
+            const updatedCountries = state.countries.map((country) => {
+                if (country.tag === tag) {
+                    return {
+                        ...country,
+                        ...updatedCountry,
+                    };
+                }
+                return country;
+            });
+
+            const updatedSelectedCountry =
+                selectedCountry?.tag === tag ? { ...selectedCountry, ...updatedCountry } : selectedCountry;
+
+            return {
+                countries: updatedCountries,
+                selectedCountry: updatedSelectedCountry,
             };
         });
     },

@@ -1,7 +1,7 @@
 import { Polygon } from "pixi.js";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import type { Country, Map, Province, State } from "@utils/types.ts";
+import type { Country, CountryProperties, Map, Province, State } from "@utils/types.ts";
 import "./index.css";
 
 interface ProvinceType {
@@ -35,11 +35,7 @@ interface ElectronAPI {
     getAllCountries: (mapId: string) => Promise<Country[]>;
     addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
-    updateCountry: (
-        mapId: string,
-        countryTag: string,
-        options: { tag?: string; name?: string; color?: string }
-    ) => Promise<Omit<Country, "states">>;
+    updateCountry: (mapId: string, countryTag: string, options: CountryProperties) => Promise<Omit<Country, "states">>;
 }
 
 declare global {
