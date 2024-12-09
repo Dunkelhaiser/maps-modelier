@@ -28,6 +28,7 @@ interface MapStore {
     countries: Country[];
     createCountry: (name: string, tag: string) => Promise<void>;
     setCountries: (countries: Country[]) => void;
+    selectedCountry: Country | null;
 }
 
 export const useMapStore = create<MapStore>((set, get) => ({
@@ -57,12 +58,21 @@ export const useMapStore = create<MapStore>((set, get) => ({
             }
 
             let selectedProvinces: Province[];
+            let selectedCountry: Country | null = null;
+
             if (!isShiftKey) {
                 selectedProvinces = [province];
                 selectedState = state.states.find((s) => s.provinces.includes(province.id)) ?? null;
+
+                if (selectedState) {
+                    selectedCountry =
+                        state.countries.find((country) => country.states.includes(selectedState!.id)) ?? null;
+                }
+
                 return {
                     selectedProvinces,
                     selectedState,
+                    selectedCountry,
                 };
             }
 
@@ -75,14 +85,21 @@ export const useMapStore = create<MapStore>((set, get) => ({
 
             if (selectedProvinces.length === 0) {
                 selectedState = null;
+                selectedCountry = null;
             } else if (!selectedState && selectedProvinces.length > 0) {
                 selectedState =
                     state.states.find((s) => selectedProvinces.every((p) => s.provinces.includes(p.id))) ?? null;
+
+                if (selectedState) {
+                    selectedCountry =
+                        state.countries.find((country) => country.states.includes(selectedState!.id)) ?? null;
+                }
             }
 
             return {
                 selectedProvinces,
                 selectedState,
+                selectedCountry,
             };
         }),
 
@@ -281,4 +298,5 @@ export const useMapStore = create<MapStore>((set, get) => ({
         }));
     },
     setCountries: (countries: Country[]) => set({ countries }),
+    selectedCountry: null,
 }));
