@@ -44,7 +44,42 @@ export const useMapStore = create<MapStore>((set, get) => ({
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
             const { mode } = state;
-            let { selectedState } = state;
+            let { selectedState, selectedCountry } = state;
+
+            if (selectedCountry && isShiftKey && mode === "countries_editing") {
+                const stateToAdd = state.states.find((s) => s.provinces.includes(province.id));
+
+                if (stateToAdd) {
+                    const currentCountry = state.countries.find((country) => country.states.includes(stateToAdd.id));
+
+                    window.electronAPI.addStates(state.activeMap!.id, selectedCountry.tag, [stateToAdd.id]);
+
+                    const updatedCountries = state.countries.map((country) => {
+                        if (country.tag === selectedCountry!.tag) {
+                            return {
+                                ...country,
+                                states: [...country.states, stateToAdd.id],
+                            };
+                        }
+                        if (currentCountry && country.tag === currentCountry.tag) {
+                            return {
+                                ...country,
+                                states: country.states.filter((stateId) => stateId !== stateToAdd.id),
+                            };
+                        }
+                        return country;
+                    });
+
+                    return {
+                        countries: updatedCountries,
+                        selectedCountry: {
+                            ...selectedCountry,
+                            states: [...selectedCountry.states, stateToAdd.id],
+                        },
+                    };
+                }
+                return {};
+            }
 
             if (selectedState && isShiftKey && mode === "states_editing") {
                 const isProvinceInState = selectedState.provinces.includes(province.id);
@@ -58,7 +93,6 @@ export const useMapStore = create<MapStore>((set, get) => ({
             }
 
             let selectedProvinces: Province[];
-            let selectedCountry: Country | null = null;
 
             if (!isShiftKey) {
                 selectedProvinces = [province];
