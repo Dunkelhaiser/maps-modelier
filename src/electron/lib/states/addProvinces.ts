@@ -1,4 +1,4 @@
-import { and, eq, ne } from "drizzle-orm";
+import { and, eq, inArray, ne } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { stateProvinces } from "../../db/schema.js";
 
@@ -8,26 +8,26 @@ export const addProvinces = async (
     stateId: number,
     provinces: number[]
 ) => {
-    provinces.forEach(async (provinceId) => {
-        await db
+    await db.transaction(async (tx) => {
+        await tx
             .delete(stateProvinces)
             .where(
                 and(
-                    eq(stateProvinces.provinceId, provinceId),
+                    eq(stateProvinces.mapId, mapId),
                     ne(stateProvinces.stateId, stateId),
-                    eq(stateProvinces.mapId, mapId)
+                    inArray(stateProvinces.provinceId, provinces)
                 )
             );
-    });
 
-    await db
-        .insert(stateProvinces)
-        .values(
-            provinces.map((provinceId) => ({
-                stateId,
-                provinceId,
-                mapId,
-            }))
-        )
-        .onConflictDoNothing();
+        await tx
+            .insert(stateProvinces)
+            .values(
+                provinces.map((provinceId) => ({
+                    stateId,
+                    provinceId,
+                    mapId,
+                }))
+            )
+            .onConflictDoNothing();
+    });
 };
