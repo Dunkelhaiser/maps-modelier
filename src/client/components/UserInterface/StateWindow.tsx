@@ -48,18 +48,20 @@ const StateWindow = ({ className }: Props) => {
                 </Button>
             </CardHeader>
             <CardContent className="space-y-2">
-                <Select onValueChange={addStateHandler} value={stateCountry?.tag}>
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="State Owner" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {countries.map((country) => (
-                            <SelectItem key={country.tag} value={country.tag}>
-                                {country.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                {selectedState?.type === "land" && (
+                    <Select onValueChange={addStateHandler} value={stateCountry?.tag}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="State Owner" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {countries.map((country) => (
+                                <SelectItem key={country.tag} value={country.tag}>
+                                    {country.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                )}
                 <Input placeholder="State Name" value={stateName} onChange={(e) => setStateName(e.target.value)} />
                 <div className="flex flex-row justify-between gap-4">
                     <Button onClick={renameStateHandler}>Rename State</Button>

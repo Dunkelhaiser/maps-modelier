@@ -5,11 +5,16 @@ export type Map = InferSelectModel<typeof maps>;
 
 export type ActiveMap = Map & { imageUrl: string };
 
-export type Province = Omit<InferSelectModel<typeof provinces>, "mapId">;
+type Type = "land" | "water";
+
+export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapId"> {
+    type: Type;
+}
 
 export interface State {
     id: number;
     name: string;
+    type: Type;
     provinces: number[];
 }
 

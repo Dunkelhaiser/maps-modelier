@@ -7,6 +7,7 @@ export const getStateByProvinceId = async (_: Electron.IpcMainInvokeEvent, mapId
         .select({
             id: states.id,
             name: states.name,
+            type: states.type,
             provinces: sql`GROUP_CONCAT(${stateProvinces.provinceId})`,
         })
         .from(states)

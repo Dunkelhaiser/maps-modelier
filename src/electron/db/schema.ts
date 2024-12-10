@@ -45,6 +45,7 @@ export const states = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
+        type: text("type").notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
