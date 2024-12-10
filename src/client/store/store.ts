@@ -153,6 +153,8 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 }
             });
 
+            const newStates = state.states.map((s) => ({ ...s, type }));
+
             const updatedSelectedProvinces = state.selectedProvinces.map((province) =>
                 allProvinceIdsToChange.has(province.id) ? { ...province, type } : province
             );
@@ -161,6 +163,8 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 landProvinces: newLandProvinces,
                 waterProvinces: newWaterProvinces,
                 selectedProvinces: updatedSelectedProvinces,
+                states: newStates,
+                selectedState: state.selectedState && { ...state.selectedState, type },
             };
         });
     },

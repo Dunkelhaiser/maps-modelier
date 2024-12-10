@@ -1,6 +1,6 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../../db/db.js";
-import { provinces, stateProvinces } from "../../db/schema.js";
+import { provinces, stateProvinces, states } from "../../db/schema.js";
 
 export const changeProvinceType = async (
     _: Electron.IpcMainInvokeEvent,
@@ -35,6 +35,18 @@ export const changeProvinceType = async (
         .set({ type })
         .where(and(eq(provinces.mapId, mapId), inArray(provinces.id, provinceIds)))
         .returning();
+
+    if (stateIds.length > 0) {
+        await db
+            .update(states)
+            .set({ type })
+            .where(
+                inArray(
+                    states.id,
+                    stateIds.map((state) => state.stateId)
+                )
+            );
+    }
 
     return updatedProvinces;
 };
