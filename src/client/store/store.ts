@@ -136,6 +136,16 @@ export const useMapStore = create<MapStore>((set, get) => ({
 
             let newLandProvinces = [...state.landProvinces];
             let newWaterProvinces = [...state.waterProvinces];
+            let newCountries = [...state.countries];
+
+            if (type === "water") {
+                newCountries = newCountries.map((country) => ({
+                    ...country,
+                    states: country.states.filter(
+                        (stateId) => !affectedStates.some((affectedState) => affectedState.id === stateId)
+                    ),
+                }));
+            }
 
             allProvinceIdsToChange.forEach((provinceId) => {
                 if (type === "water") {
@@ -164,6 +174,7 @@ export const useMapStore = create<MapStore>((set, get) => ({
                 waterProvinces: newWaterProvinces,
                 selectedProvinces: updatedSelectedProvinces,
                 states: newStates,
+                countries: newCountries,
                 selectedState: state.selectedState && { ...state.selectedState, type },
             };
         });
