@@ -10,19 +10,24 @@ export const changeProvinceType = async (
 ) => {
     let provinceIds = Array.isArray(id) ? id : [id];
 
-    const stateId = await db
+    const stateIds = await db
         .select({ stateId: stateProvinces.stateId })
         .from(stateProvinces)
-        .where(eq(stateProvinces.provinceId, provinceIds[0]))
+        .where(inArray(stateProvinces.provinceId, provinceIds))
         .groupBy(stateProvinces.stateId);
 
-    if (stateId.length > 0) {
+    if (stateIds.length > 0) {
         const stateProvinceQuery = await db
             .select({ id: stateProvinces.provinceId })
             .from(stateProvinces)
-            .where(eq(stateProvinces.stateId, stateId[0].stateId));
+            .where(
+                inArray(
+                    stateProvinces.stateId,
+                    stateIds.map((state) => state.stateId)
+                )
+            );
 
-        provinceIds = stateProvinceQuery.map((p) => p.id);
+        provinceIds = [...new Set([...provinceIds, ...stateProvinceQuery.map((p) => p.id)])];
     }
 
     const updatedProvinces = await db
