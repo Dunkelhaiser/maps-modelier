@@ -318,7 +318,9 @@ export const useMapStore = create<MapStore>((set, get) => ({
         const isStateUnassigned = !countries.some((country) => country.states.includes(selectedState?.id ?? -1));
 
         set((state) => {
-            const updatedCountries = [...state.countries, { ...createdCountry, states: [] }];
+            const updatedCountries = [...state.countries, { ...createdCountry, states: [] }].sort((a, b) =>
+                a.name.localeCompare(b.name)
+            );
 
             if (selectedState && isStateUnassigned) {
                 const updatedCountriesWithState = updatedCountries.map((country) => {
