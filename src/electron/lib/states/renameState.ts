@@ -10,6 +10,7 @@ export const renameState = async (_: Electron.IpcMainInvokeEvent, mapId: string,
         .returning({
             id: states.id,
             name: states.name,
+            type: states.type,
         });
 
     return updatedState;
