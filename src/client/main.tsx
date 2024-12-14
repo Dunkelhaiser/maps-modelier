@@ -15,6 +15,7 @@ interface ElectronAPI {
     loadMapImage: (imagePath: string) => Promise<string>;
     getMaps: () => Promise<Map[]>;
     createMap: (name: string, imageData: string) => Promise<Map | null>;
+    deleteMap: (id: string) => Promise<void>;
     updateMapName: (id: string, name: string) => Promise<Map | null>;
     getAllProvinces: (mapId: string, type: "land" | "water") => Promise<Province[]>;
     getProvinceByColor: (mapId: string, color: string) => Promise<Province | null>;
