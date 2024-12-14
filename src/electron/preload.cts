@@ -12,7 +12,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getMaps: () => ipcRenderer.invoke("getMaps"),
     createMap: (name: string, imageData: string) => ipcRenderer.invoke("createMap", name, imageData),
     deleteMap: (id: string) => ipcRenderer.invoke("deleteMap", id),
-    updateMapName: (id: string, name: string) => ipcRenderer.invoke("updateMapName", id, name),
+    renameMap: (id: string, name: string) => ipcRenderer.invoke("renameMap", id, name),
     getAllProvinces: (mapId: string, type: "land" | "water") => ipcRenderer.invoke("getAllProvinces", mapId, type),
     getProvinceByColor: (mapId: string, color: string) => ipcRenderer.invoke("getProvinceByColor", mapId, color),
     getProvinceById: (mapId: string, id: string) => ipcRenderer.invoke("getProvinceById", mapId, id),
