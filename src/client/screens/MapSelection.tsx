@@ -1,20 +1,18 @@
+import CreateMapDialog from "@components/Dialogs/CreateMapDialog";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/Card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ui/Dialog";
 import FileUpload from "@ui/FileUpload";
-import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { Map } from "@utils/types";
-import { PlusCircle, Map as MapIcon } from "lucide-react";
+import { Map as MapIcon } from "lucide-react";
 import { useState } from "react";
 import { useGetMaps } from "@/ipc/maps";
 import { useMapStore } from "@/store/store";
 
 const MapSelection = () => {
     const setActiveMap = useMapStore((state) => state.setActiveMap);
-    const [newMapName, setNewMapName] = useState("");
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
-    const [isNewMapDialogOpen, setIsNewMapDialogOpen] = useState(false);
     const [selectedMapForUpload, setSelectedMapForUpload] = useState<Map | null>(null);
     const { data, isError, isFetching, refetch } = useGetMaps();
 
@@ -28,19 +26,6 @@ const MapSelection = () => {
                 }
             };
             reader.readAsDataURL(file);
-        }
-    };
-
-    const handleNewMapSubmit = async () => {
-        if (selectedFile && newMapName.trim()) {
-            const newMap = await window.electronAPI.createMap(newMapName.trim(), selectedFile);
-            if (newMap) {
-                await window.electronAPI.saveMapImage(selectedFile, newMap.id);
-                setActiveMap({ ...newMap, imageUrl: selectedFile });
-                setIsNewMapDialogOpen(false);
-                setNewMapName("");
-                setSelectedFile(null);
-            }
         }
     };
 
@@ -75,38 +60,7 @@ const MapSelection = () => {
                 <CardDescription>Create a new map or select an existing one</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6">
-                <Dialog open={isNewMapDialogOpen} onOpenChange={setIsNewMapDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="w-full" size="lg">
-                            <PlusCircle className="mr-2 size-5" />
-                            Create New Map
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Create New Map</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <div>
-                                <Label htmlFor="map-name">Map Name</Label>
-                                <Input
-                                    id="map-name"
-                                    value={newMapName}
-                                    onChange={(e) => setNewMapName(e.target.value)}
-                                    placeholder="Enter map name"
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="map-file">Province Map Image</Label>
-                                <FileUpload id="map-file" type="file" accept="image/*" onChange={handleFileInput} />
-                            </div>
-                            <Button onClick={handleNewMapSubmit} disabled={!selectedFile || !newMapName.trim()}>
-                                Create Map
-                            </Button>
-                        </div>
-                    </DialogContent>
-                </Dialog>
-
+                <CreateMapDialog />
                 <Dialog
                     open={selectedMapForUpload !== null}
                     onOpenChange={(open) => !open && setSelectedMapForUpload(null)}
