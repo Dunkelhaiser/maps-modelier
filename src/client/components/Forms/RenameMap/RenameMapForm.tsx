@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@ui/Button";
+import { DialogClose } from "@ui/Dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Map } from "@utils/types";
@@ -43,7 +44,14 @@ const RenameMapForm = ({ map, closeDialog }: Props) => {
                         </FormItem>
                     )}
                 />
-                <Button isLoading={form.formState.isSubmitting}>Rename Map</Button>
+                <div className="flex justify-end gap-2">
+                    <DialogClose asChild>
+                        <Button type="button" variant="ghost">
+                            Cancel
+                        </Button>
+                    </DialogClose>
+                    <Button isLoading={form.formState.isSubmitting}>Rename Map</Button>
+                </div>
             </form>
         </Form>
     );
