@@ -1,4 +1,3 @@
-import { Toaster } from "@ui/Toast";
 import FloatingWindows from "./FloatingWindows";
 import Header from "./Header";
 
@@ -7,7 +6,6 @@ const UserInterface = () => {
         <>
             <Header />
             <FloatingWindows />
-            <Toaster />
         </>
     );
 };
