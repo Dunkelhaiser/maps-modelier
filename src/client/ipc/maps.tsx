@@ -19,3 +19,15 @@ export const useRenameMap = (id: string) => {
         },
     });
 };
+
+export const useDeleteMap = (id: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => await window.electronAPI.deleteMap(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["maps"] });
+            toast.success("Map deleted successfully");
+        },
+    });
+};

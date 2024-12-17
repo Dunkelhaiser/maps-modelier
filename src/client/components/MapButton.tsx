@@ -1,8 +1,8 @@
-import { Button } from "@ui/Button";
 import { Map } from "@utils/types";
-import { MapIcon, Trash } from "lucide-react";
+import { MapIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import DeleteMapDialog from "./Dialogs/DeleteMapDialog";
 import RenameMapDialog from "./Dialogs/RenameMapDialog";
 import UploadMapImageDialog from "./Dialogs/UploadMapImageDialog";
 import { useMapStore } from "@/store/store";
@@ -47,13 +47,7 @@ const MapButton = ({ map }: Props) => {
                 </div>
                 <div className="z-10 ml-auto space-x-0.5">
                     <RenameMapDialog map={map} />
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-destructive hover:bg-red-100/45 hover:text-destructive"
-                    >
-                        <Trash />
-                    </Button>
+                    <DeleteMapDialog map={map} />
                 </div>
             </div>
             <UploadMapImageDialog
