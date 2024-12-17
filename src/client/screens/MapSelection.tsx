@@ -17,7 +17,7 @@ const MapSelection = () => {
             <CardContent className="grid gap-6">
                 <CreateMapDialog />
 
-                <div className="space-y-4">
+                <div className="space-y-2">
                     <h3 className="text-lg font-medium">Existing Maps</h3>
                     {isFetching && <p className="text-sm text-muted-foreground">Loading maps...</p>}
                     {isError && (
