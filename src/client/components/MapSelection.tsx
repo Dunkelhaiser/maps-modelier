@@ -6,24 +6,17 @@ import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { Map } from "@utils/types";
 import { PlusCircle, Map as MapIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGetMaps } from "@/ipc/maps";
 import { useMapStore } from "@/store/store";
 
 const MapSelection = () => {
     const setActiveMap = useMapStore((state) => state.setActiveMap);
-    const [existingMaps, setExistingMaps] = useState<Map[]>([]);
     const [newMapName, setNewMapName] = useState("");
     const [selectedFile, setSelectedFile] = useState<string | null>(null);
     const [isNewMapDialogOpen, setIsNewMapDialogOpen] = useState(false);
     const [selectedMapForUpload, setSelectedMapForUpload] = useState<Map | null>(null);
-
-    useEffect(() => {
-        const getMaps = async () => {
-            const maps = await window.electronAPI.getMaps();
-            setExistingMaps(maps);
-        };
-        getMaps();
-    }, []);
+    const { data, isError, isFetching, refetch } = useGetMaps();
 
     const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -136,10 +129,19 @@ const MapSelection = () => {
 
                 <div className="space-y-4">
                     <h3 className="text-lg font-medium">Existing Maps</h3>
-                    {existingMaps.length === 0 ? (
+                    {isFetching && <p className="text-sm text-muted-foreground">Loading maps...</p>}
+                    {isError && (
+                        <>
+                            <p className="text-sm font-medium text-red-600">Failed to load maps</p>
+                            <Button variant="outline" onClick={() => refetch()}>
+                                Retry
+                            </Button>
+                        </>
+                    )}
+                    {data?.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No maps created yet</p>
                     ) : (
-                        existingMaps.map((map) => (
+                        data?.map((map) => (
                             <Button
                                 key={map.id}
                                 variant="outline"
