@@ -1,0 +1,31 @@
+import RenameMapForm from "@components/Forms/RenameMap/RenameMapForm";
+import { Button } from "@ui/Button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
+import { Map } from "@utils/types";
+import { Edit } from "lucide-react";
+import { useState } from "react";
+
+interface Props {
+    map: Map;
+}
+
+const RenameMapDialog = ({ map }: Props) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="hover:bg-white/75" aria-label="Rename map">
+                    <Edit />
+                </Button>
+            </DialogTrigger>
+            <DialogContent aria-describedby={undefined}>
+                <DialogHeader>
+                    <DialogTitle>Rename Map</DialogTitle>
+                </DialogHeader>
+                <RenameMapForm map={map} closeDialog={() => setIsOpen(false)} />
+            </DialogContent>
+        </Dialog>
+    );
+};
+export default RenameMapDialog;
