@@ -30,6 +30,7 @@
         "./src/**/*.{ts,tsx}": "eslint --fix --report-unused-disable-directives --max-warnings 0"
     },
     "dependencies": {
+        "@hookform/resolvers": "^3.9.1",
         "@napi-rs/canvas": "^0.1.59",
         "@napi-rs/canvas-win32-x64-msvc": "^0.1.60",
         "@pixi/events": "^7.4.2",
@@ -51,9 +52,11 @@
         "pixi.js": "^7.4.2",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
+        "react-hook-form": "^7.54.1",
         "sonner": "^1.7.0",
         "tailwind-merge": "^2.5.4",
         "tailwindcss-animate": "^1.0.7",
+        "zod": "^3.24.1",
         "zustand": "^5.0.1"
     },
     "devDependencies": {
