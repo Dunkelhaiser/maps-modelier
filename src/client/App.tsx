@@ -1,6 +1,5 @@
-import { MapCanvas } from "@components/Map";
-import MapSelection from "@components/MapSelection";
-import UserInterface from "@components/UserInterface/UserInterface";
+import MapSelection from "@screens/MapSelection";
+import MapView from "@screens/MapView";
 import { useMapStore } from "./store/store";
 
 const App = () => {
@@ -8,14 +7,7 @@ const App = () => {
 
     return (
         <main className="grid h-screen w-screen place-items-center">
-            {!activeMap ? (
-                <MapSelection />
-            ) : (
-                <>
-                    <UserInterface />
-                    <MapCanvas activeMap={activeMap} />
-                </>
-            )}
+            {!activeMap ? <MapSelection /> : <MapView activeMap={activeMap} />}
         </main>
     );
 };
