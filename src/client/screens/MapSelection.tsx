@@ -2,6 +2,7 @@ import CreateMapDialog from "@components/Dialogs/CreateMapDialog";
 import MapButton from "@components/MapButton";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/Card";
+import { ScrollArea } from "@ui/ScrollArea";
 import { useGetMaps } from "@/ipc/maps";
 
 const MapSelection = () => {
@@ -30,7 +31,9 @@ const MapSelection = () => {
                     {data?.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No maps created yet</p>
                     ) : (
-                        data?.map((map) => <MapButton map={map} key={map.id} />)
+                        <ScrollArea className="h-[50vh]">
+                            <div className="space-y-4">{data?.map((map) => <MapButton map={map} key={map.id} />)}</div>
+                        </ScrollArea>
                     )}
                 </div>
             </CardContent>
