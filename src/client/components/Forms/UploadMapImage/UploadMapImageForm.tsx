@@ -47,7 +47,7 @@ const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
                         </FormItem>
                     )}
                 />
-                <Button disabled={!form.formState.isValid || form.formState.isSubmitting}>Upload Map</Button>
+                <Button isLoading={form.formState.isSubmitting}>Upload Map</Button>
             </form>
         </Form>
     );

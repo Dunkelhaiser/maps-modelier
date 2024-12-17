@@ -60,7 +60,7 @@ const CreateMapForm = () => {
                         </FormItem>
                     )}
                 />
-                <Button disabled={!form.formState.isValid || form.formState.isSubmitting}>Create Map</Button>
+                <Button isLoading={form.formState.isSubmitting}>Create Map</Button>
             </form>
         </Form>
     );

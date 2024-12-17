@@ -48,7 +48,7 @@ const DeleteMapDialog = ({ map }: Props) => {
                         type="button"
                         variant="destructive"
                         onClick={() => deleteMap.mutateAsync()}
-                        disabled={deleteMap.isPending}
+                        isLoading={deleteMap.isPending}
                     >
                         <Trash />
                         Delete

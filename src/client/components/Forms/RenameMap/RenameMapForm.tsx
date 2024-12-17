@@ -43,7 +43,7 @@ const RenameMapForm = ({ map, closeDialog }: Props) => {
                         </FormItem>
                     )}
                 />
-                <Button disabled={!form.formState.isValid || form.formState.isSubmitting}>Rename Map</Button>
+                <Button isLoading={form.formState.isSubmitting}>Rename Map</Button>
             </form>
         </Form>
     );
