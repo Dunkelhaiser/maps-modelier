@@ -31,7 +31,7 @@ const MapSelection = () => {
                     {data?.length === 0 ? (
                         <p className="text-sm text-muted-foreground">No maps created yet</p>
                     ) : (
-                        <ScrollArea className="h-[50vh]">
+                        <ScrollArea viewportClassName="max-h-[50vh]">
                             <div className="space-y-4 px-4 py-2">
                                 {data?.map((map) => <MapButton map={map} key={map.id} />)}
                             </div>
