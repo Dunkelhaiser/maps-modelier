@@ -33,7 +33,10 @@
         "paths": {
             "@ui/*": ["./src/client/components/ui/*"],
             "@components/*": ["./src/client/components/*"],
+            "@ipc/*": ["./src/client/ipc/*"],
+            "@hooks/*": ["./src/client/hooks/*"],
             "@screens/*": ["./src/client/screens/*"],
+            "@store/*": ["./src/client/store/*"],
             "@utils/*": ["./src/client/utils/*"],
             "@/*": ["./src/client/*"]
         }

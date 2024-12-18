@@ -1,12 +1,12 @@
+import { useWindowSize } from "@hooks/useWindowSize";
 import { Container, Stage } from "@pixi/react";
+import { useMapStore } from "@store/store";
 import { ActiveMap } from "@utils/types";
 import "@pixi/unsafe-eval";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProvincesContainer } from "./ProvincesContainer";
 import { MemoizedStateBorders } from "./StateBorders";
 import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
-import { useWindowSize } from "@/hooks/useWindowSize";
-import { useMapStore } from "@/store/store";
 
 interface MapRendererProps {
     activeMap: ActiveMap;

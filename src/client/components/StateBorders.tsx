@@ -1,9 +1,9 @@
 import { Container, Graphics } from "@pixi/react";
+import { useMapStore } from "@store/store";
 import { State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
-import { useMapStore } from "@/store/store";
 
 interface Props {
     state: State;

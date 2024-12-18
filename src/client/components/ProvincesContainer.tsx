@@ -1,10 +1,10 @@
 import { Container } from "@pixi/react";
+import { useMapStore } from "@store/store";
 import { Province as ProvinceType } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
 import { toast } from "sonner";
 import { MemoizedProvince } from "./Province";
-import { useMapStore } from "@/store/store";
 
 export const ProvincesContainer = memo(
     ({ id, shape, color, type }: ProvinceType) => {

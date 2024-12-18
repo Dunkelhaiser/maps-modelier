@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRenameMap } from "@ipc/maps";
 import { Button } from "@ui/Button";
 import { DialogClose } from "@ui/Dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -6,7 +7,6 @@ import { Input } from "@ui/Input";
 import { Map } from "@utils/types";
 import { useForm } from "react-hook-form";
 import { RenameMapInput, renameMapSchema } from "./renameMapSchema";
-import { useRenameMap } from "@/ipc/maps";
 
 interface Props {
     map: Map;

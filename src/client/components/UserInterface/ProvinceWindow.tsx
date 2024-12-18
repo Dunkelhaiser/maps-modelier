@@ -1,9 +1,9 @@
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 import { X } from "lucide-react";
-import { useMapStore } from "@/store/store";
 
 interface Props {
     className?: string;

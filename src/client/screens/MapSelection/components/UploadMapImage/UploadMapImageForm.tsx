@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Map } from "@utils/types";
 import { useForm } from "react-hook-form";
 import { UploadeMapImageInput, uploadMapImageSchema } from "./uploadMapImageSchema";
-import { useMapStore } from "@/store/store";
 
 interface Props {
     selectedMapForUpload: Map | null;

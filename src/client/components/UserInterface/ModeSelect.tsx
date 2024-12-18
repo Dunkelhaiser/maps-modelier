@@ -1,5 +1,5 @@
+import { useMapStore } from "@store/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
-import { useMapStore } from "@/store/store";
 
 const ModeSelect = () => {
     const mode = useMapStore((state) => state.mode);

@@ -1,6 +1,6 @@
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { LogOut } from "lucide-react";
-import { useMapStore } from "@/store/store";
 
 const CloseMapBtn = () => {
     const closeMap = useMapStore((state) => state.closeMap);

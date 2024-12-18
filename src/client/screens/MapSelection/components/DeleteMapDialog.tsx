@@ -1,3 +1,4 @@
+import { useDeleteMap } from "@ipc/maps";
 import { Button } from "@ui/Button";
 import {
     Dialog,
@@ -10,7 +11,6 @@ import {
 } from "@ui/Dialog";
 import { Map } from "@utils/types";
 import { Trash } from "lucide-react";
-import { useDeleteMap } from "@/ipc/maps";
 
 interface Props {
     map: Map;

@@ -1,9 +1,9 @@
+import { useGetMaps } from "@ipc/maps";
 import CreateMapDialog from "@screens/MapSelection/components/CreateMap/CreateMapDialog";
 import MapButton from "@screens/MapSelection/components/MapButton";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/Card";
 import { ScrollArea } from "@ui/ScrollArea";
-import { useGetMaps } from "@/ipc/maps";
 
 const MapSelection = () => {
     const { data, isError, isFetching, refetch } = useGetMaps();
