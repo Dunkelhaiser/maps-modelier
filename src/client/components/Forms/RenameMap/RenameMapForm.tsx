@@ -30,7 +30,7 @@ const RenameMapForm = ({ map, closeDialog }: Props) => {
 
     return (
         <Form {...form}>
-            <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(renameMapHandler)}>
+            <form className="grid gap-4" onSubmit={form.handleSubmit(renameMapHandler)}>
                 <FormField
                     control={form.control}
                     name="name"
