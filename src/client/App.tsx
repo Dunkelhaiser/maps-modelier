@@ -1,5 +1,5 @@
 import MapSelection from "@screens/MapSelection/MapSelection";
-import MapView from "@screens/MapView";
+import MapView from "@screens/MapView/MapView";
 import { useMapStore } from "@store/store";
 import { Toaster } from "@ui/Toast";
 

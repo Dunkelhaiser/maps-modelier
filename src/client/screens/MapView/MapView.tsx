@@ -1,5 +1,5 @@
-import { MapCanvas } from "@components/Map";
-import UserInterface from "@components/UserInterface/UserInterface";
+import { MapCanvas } from "@screens/MapView/components/Map/Map";
+import UserInterface from "@screens/MapView/components/UserInterface/UserInterface";
 import { ActiveMap } from "@utils/types";
 
 interface Props {
