@@ -2,9 +2,9 @@ import { Map } from "@utils/types";
 import { MapIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import DeleteMapDialog from "./Dialogs/DeleteMapDialog";
-import RenameMapDialog from "./Dialogs/RenameMapDialog";
-import UploadMapImageDialog from "./Dialogs/UploadMapImageDialog";
+import DeleteMapDialog from "./DeleteMapDialog";
+import RenameMapDialog from "./RenameMap/RenameMapDialog";
+import UploadMapImageDialog from "./UploadMapImage/UploadMapImageDialog";
 import { useMapStore } from "@/store/store";
 
 interface Props {

@@ -1,4 +1,4 @@
-import UploadMapImageForm from "@components/Forms/UploadMapImage/UploadMapImageForm";
+import UploadMapImageForm from "@screens/MapSelection/components/UploadMapImage/UploadMapImageForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ui/Dialog";
 import { Map } from "@utils/types";
 

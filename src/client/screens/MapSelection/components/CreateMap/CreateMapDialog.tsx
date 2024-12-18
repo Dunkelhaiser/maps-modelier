@@ -1,7 +1,7 @@
-import CreateMapForm from "@components/Forms/CreateMap/CreateMapForm";
 import { Button } from "@ui/Button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
 import { PlusCircle } from "lucide-react";
+import CreateMapForm from "./CreateMapForm";
 
 const CreateMapDialog = () => {
     return (

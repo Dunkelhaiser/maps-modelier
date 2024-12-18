@@ -1,5 +1,5 @@
-import CreateMapDialog from "@components/Dialogs/CreateMapDialog";
-import MapButton from "@components/MapButton";
+import CreateMapDialog from "@screens/MapSelection/components/CreateMap/CreateMapDialog";
+import MapButton from "@screens/MapSelection/components/MapButton";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@ui/Card";
 import { ScrollArea } from "@ui/ScrollArea";

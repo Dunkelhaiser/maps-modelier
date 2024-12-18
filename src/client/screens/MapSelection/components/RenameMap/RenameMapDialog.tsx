@@ -1,4 +1,4 @@
-import RenameMapForm from "@components/Forms/RenameMap/RenameMapForm";
+import RenameMapForm from "@screens/MapSelection/components/RenameMap/RenameMapForm";
 import { Button } from "@ui/Button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
 import { Map } from "@utils/types";
