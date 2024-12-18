@@ -6,8 +6,12 @@ import { memo, useMemo } from "react";
 import { toast } from "sonner";
 import { MemoizedProvince } from "./Province";
 
+interface Props {
+    province: ProvinceType;
+}
+
 export const ProvincesContainer = memo(
-    ({ id, shape, color, type }: ProvinceType) => {
+    ({ province: { id, shape, color, type, ethnicities, population } }: Props) => {
         const selectedProvinces = useMapStore((state) => state.selectedProvinces);
         const setSelectedProvinces = useMapStore((state) => state.setSelectedProvinces);
         const selectedState = useMapStore((state) => state.selectedState);
@@ -52,6 +56,8 @@ export const ProvincesContainer = memo(
                     type,
                     color,
                     shape,
+                    ethnicities,
+                    population,
                 },
                 event.shiftKey
             );
@@ -70,7 +76,6 @@ export const ProvincesContainer = memo(
             </Container>
         );
     },
-    (prevProps, nextProps) =>
-        prevProps.id === nextProps.id && prevProps.type === nextProps.type && prevProps.shape === nextProps.shape
+    (prevProps, nextProps) => prevProps.province === nextProps.province
 );
 ProvincesContainer.displayName = "ProvinceContainer";

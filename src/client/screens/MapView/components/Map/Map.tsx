@@ -169,13 +169,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         const waterProvincesContainer = (
             <Container sortableChildren>
                 {waterProvinces.map((province) => (
-                    <ProvincesContainer
-                        key={province.id}
-                        id={province.id}
-                        color={province.color}
-                        shape={province.shape}
-                        type={province.type}
-                    />
+                    <ProvincesContainer key={province.id} province={province} />
                 ))}
             </Container>
         );
@@ -183,13 +177,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         const landProvincesContainer = (
             <Container sortableChildren>
                 {landProvinces.map((province) => (
-                    <ProvincesContainer
-                        key={province.id}
-                        id={province.id}
-                        color={province.color}
-                        shape={province.shape}
-                        type={province.type}
-                    />
+                    <ProvincesContainer key={province.id} province={province} />
                 ))}
             </Container>
         );

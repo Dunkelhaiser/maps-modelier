@@ -6,7 +6,7 @@ import { brightenColor, darkenColor } from "@utils/utils";
 import { memo, useCallback } from "react";
 import type { Graphics as GraphicsType } from "pixi.js";
 
-interface ProvinceProps extends Omit<ProvinceType, "color"> {
+interface ProvinceProps extends Omit<ProvinceType, "color" | "population" | "ethnicities"> {
     countryColor?: string;
     isSelected: boolean;
     isInSelectedState: boolean;

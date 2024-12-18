@@ -9,6 +9,12 @@ type Type = "land" | "water";
 
 export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapId"> {
     type: Type;
+    population: number;
+    ethnicities: {
+        id: number;
+        name: string;
+        population: number;
+    }[];
 }
 
 export interface State {

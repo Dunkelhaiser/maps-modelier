@@ -35,6 +35,56 @@ export const provinces = sqliteTable(
     })
 );
 
+export const ethnicities = sqliteTable(
+    "ethnicities",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM ethnicities WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        name: text("name").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "ethnicities_pk" }),
+    })
+);
+
+export const provincePopulations = sqliteTable(
+    "province_populations",
+    {
+        provinceId: integer("province_id").notNull(),
+        ethnicityId: integer("ethnicity_id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        population: integer("population").notNull().default(0),
+    },
+    (table) => ({
+        pk: primaryKey({
+            columns: [table.mapId, table.provinceId, table.ethnicityId],
+            name: "province_populations_pk",
+        }),
+        provincesReference: foreignKey({
+            columns: [table.mapId, table.provinceId],
+            foreignColumns: [provinces.mapId, provinces.id],
+            name: "provinces_reference",
+        }).onDelete("cascade"),
+        ethnicitiesReference: foreignKey({
+            columns: [table.mapId, table.ethnicityId],
+            foreignColumns: [ethnicities.mapId, ethnicities.id],
+            name: "ethnicities_reference",
+        }).onDelete("cascade"),
+    })
+);
+
 export const states = sqliteTable(
     "states",
     {
