@@ -1,4 +1,4 @@
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { Map } from "@utils/types";
 import { MapIcon } from "lucide-react";
 import { useState } from "react";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const MapButton = ({ map }: Props) => {
-    const setActiveMap = useMapStore((state) => state.setActiveMap);
+    const setActiveMap = useAppStore((state) => state.setActiveMap);
     const [selectedMapForUpload, setSelectedMapForUpload] = useState<Map | null>(null);
 
     const handleExistingMapSelect = async () => {

@@ -1,4 +1,4 @@
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -11,12 +11,12 @@ interface Props {
 }
 
 const CountryWindow = ({ className }: Props) => {
-    const selectedCountry = useMapStore((state) => state.selectedCountry);
+    const selectedCountry = useAppStore((state) => state.selectedCountry);
     const [countryName, setCountryName] = useState(selectedCountry?.name ?? "");
     const [countryTag, setCountryTag] = useState(selectedCountry?.tag ?? "");
     const [countryColor, setCountryColor] = useState(selectedCountry?.color ?? "");
-    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
-    const updateCountry = useMapStore((state) => state.updateCountry);
+    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
+    const updateCountry = useAppStore((state) => state.updateCountry);
 
     const createNewState = async () => {
         if (!selectedCountry?.tag) return;

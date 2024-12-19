@@ -1,4 +1,4 @@
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import CountryWindow from "./CountryWindow";
 import CreateCountryWindow from "./CreateCountryWindow";
 import CreateStateWindow from "./CreateStateWindow";
@@ -6,10 +6,10 @@ import ProvinceWindow from "./ProvinceWindow";
 import StateWindow from "./StateWindow";
 
 const FloatingWindows = () => {
-    const mode = useMapStore((state) => state.mode);
-    const selectedProvinces = useMapStore((state) => state.selectedProvinces);
-    const selectedState = useMapStore((state) => state.selectedState);
-    const selectedCountry = useMapStore((state) => state.selectedCountry);
+    const mode = useAppStore((state) => state.mode);
+    const selectedProvinces = useAppStore((state) => state.selectedProvinces);
+    const selectedState = useAppStore((state) => state.selectedState);
+    const selectedCountry = useAppStore((state) => state.selectedCountry);
 
     return (
         <div className="absolute bottom-3 left-3 flex flex-col gap-4">

@@ -1,5 +1,5 @@
 import { Container, Graphics } from "@pixi/react";
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
@@ -10,10 +10,10 @@ interface Props {
 }
 
 const StateBorders = ({ state }: Props) => {
-    const landProvinces = useMapStore((store) => store.landProvinces);
-    const waterProvinces = useMapStore((store) => store.waterProvinces);
-    const selectedState = useMapStore((store) => store.selectedState);
-    const countries = useMapStore((store) => store.countries);
+    const landProvinces = useAppStore((store) => store.landProvinces);
+    const waterProvinces = useAppStore((store) => store.waterProvinces);
+    const selectedState = useAppStore((store) => store.selectedState);
+    const countries = useAppStore((store) => store.countries);
 
     const isSelected = selectedState?.id === state.id;
 

@@ -1,4 +1,4 @@
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -12,8 +12,8 @@ interface Props {
 
 const CreateStateWindow = ({ className }: Props) => {
     const [stateName, setStateName] = useState("");
-    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
-    const addState = useMapStore((state) => state.addState);
+    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
+    const addState = useAppStore((state) => state.addState);
 
     const createNewState = async () => {
         try {

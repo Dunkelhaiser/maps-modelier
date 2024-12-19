@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { CreateMapInput, createMapSchema } from "./createMapSchema";
 
 const CreateMapForm = () => {
-    const setActiveMap = useMapStore((state) => state.setActiveMap);
+    const setActiveMap = useAppStore((state) => state.setActiveMap);
 
     const form = useForm<CreateMapInput>({
         resolver: zodResolver(createMapSchema),

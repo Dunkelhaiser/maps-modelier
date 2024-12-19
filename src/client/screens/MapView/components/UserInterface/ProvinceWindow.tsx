@@ -1,4 +1,4 @@
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
@@ -10,10 +10,10 @@ interface Props {
 }
 
 const ProvinceWindow = ({ className }: Props) => {
-    const selectedProvinces = useMapStore((state) => state.selectedProvinces);
-    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
-    const syncProvinceType = useMapStore((state) => state.syncProvinceType);
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const selectedProvinces = useAppStore((state) => state.selectedProvinces);
+    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
+    const syncProvinceType = useAppStore((state) => state.syncProvinceType);
+    const activeMap = useAppStore((state) => state.activeMap)!;
 
     if (selectedProvinces.length === 0) return null;
 

@@ -1,6 +1,6 @@
 import { useWindowSize } from "@hooks/useWindowSize";
 import { Container, Stage } from "@pixi/react";
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { ActiveMap } from "@utils/types";
 import "@pixi/unsafe-eval";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -22,13 +22,13 @@ const MAX_SCALE_MULTIPLIER = 4;
 const ZOOM_SPEED = 0.1;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
-    const landProvinces = useMapStore((state) => state.landProvinces);
-    const waterProvinces = useMapStore((state) => state.waterProvinces);
-    const states = useMapStore((state) => state.states);
-    const setLandProvinces = useMapStore((state) => state.setLandProvinces);
-    const setWaterProvinces = useMapStore((state) => state.setWaterProvinces);
-    const setStates = useMapStore((state) => state.setStates);
-    const setCountries = useMapStore((state) => state.setCountries);
+    const landProvinces = useAppStore((state) => state.landProvinces);
+    const waterProvinces = useAppStore((state) => state.waterProvinces);
+    const states = useAppStore((state) => state.states);
+    const setLandProvinces = useAppStore((state) => state.setLandProvinces);
+    const setWaterProvinces = useAppStore((state) => state.setWaterProvinces);
+    const setStates = useAppStore((state) => state.setStates);
+    const setCountries = useAppStore((state) => state.setCountries);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);

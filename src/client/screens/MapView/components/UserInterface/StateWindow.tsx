@@ -1,4 +1,4 @@
-import { useMapStore } from "@store/store";
+import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -11,13 +11,13 @@ interface Props {
 }
 
 const StateWindow = ({ className }: Props) => {
-    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
-    const selectedState = useMapStore((state) => state.selectedState);
+    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
+    const selectedState = useAppStore((state) => state.selectedState);
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
-    const renameState = useMapStore((state) => state.renameState);
-    const deleteState = useMapStore((state) => state.deleteState);
-    const countries = useMapStore((state) => state.countries);
-    const addStatesToCountry = useMapStore((state) => state.addStatesToCountry);
+    const renameState = useAppStore((state) => state.renameState);
+    const deleteState = useAppStore((state) => state.deleteState);
+    const countries = useAppStore((state) => state.countries);
+    const addStatesToCountry = useAppStore((state) => state.addStatesToCountry);
 
     const stateCountry = countries.find((country) => country.states.includes(selectedState?.id ?? -1));
 
