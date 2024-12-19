@@ -36,3 +36,9 @@ export interface CountryProperties {
     name?: string;
     color?: string;
 }
+
+export interface Ethnicity {
+    id: number;
+    name: string;
+    totalNumber: number;
+}

@@ -41,4 +41,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
         ipcRenderer.invoke("removeStates", mapId, countryTag, states),
     updateCountry: (mapId: string, countryTag: string, options: { tag?: string; name?: string; color?: string }) =>
         ipcRenderer.invoke("updateCountry", mapId, countryTag, options),
+    getAllEthnicities: (mapId: string) => ipcRenderer.invoke("getAllEthnicities", mapId),
 });

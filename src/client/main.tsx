@@ -3,7 +3,7 @@ import { errorToast } from "@utils/errorToast.ts";
 import { Polygon } from "pixi.js";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import type { Country, CountryProperties, Map, Province, State } from "@utils/types.ts";
+import type { Country, CountryProperties, Ethnicity, Map, Province, State } from "@utils/types.ts";
 import "./index.css";
 
 interface ProvinceType {
@@ -39,6 +39,7 @@ interface ElectronAPI {
     addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     updateCountry: (mapId: string, countryTag: string, options: CountryProperties) => Promise<Omit<Country, "states">>;
+    getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
 }
 
 declare global {
