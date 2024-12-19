@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateMap } from "@ipc/maps";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
@@ -9,6 +10,7 @@ import { CreateMapInput, createMapSchema } from "./createMapSchema";
 
 const CreateMapForm = () => {
     const setActiveMap = useAppStore((state) => state.setActiveMap);
+    const createMap = useCreateMap();
 
     const form = useForm<CreateMapInput>({
         resolver: zodResolver(createMapSchema),
@@ -19,8 +21,8 @@ const CreateMapForm = () => {
     });
     const fileRef = form.register("provinces");
 
-    const handleNewMapSubmit = async (data: CreateMapInput) => {
-        const newMap = await window.electronAPI.createMap(data.name, data.provinces);
+    const createMapHandler = async (data: CreateMapInput) => {
+        const newMap = await createMap.mutateAsync(data);
         if (newMap) {
             await window.electronAPI.saveMapImage(data.provinces, newMap.id);
             setActiveMap({ ...newMap, imageUrl: data.provinces });
@@ -30,7 +32,7 @@ const CreateMapForm = () => {
 
     return (
         <Form {...form}>
-            <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(handleNewMapSubmit)}>
+            <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(createMapHandler)}>
                 <FormField
                     control={form.control}
                     name="name"

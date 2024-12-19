@@ -1,3 +1,4 @@
+import { CreateMapInput } from "@screens/MapSelection/components/CreateMap/createMapSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -5,6 +6,18 @@ export const useGetMaps = () => {
     return useQuery({
         queryFn: async () => await window.electronAPI.getMaps(),
         queryKey: ["maps"],
+    });
+};
+
+export const useCreateMap = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: CreateMapInput) => await window.electronAPI.createMap(data.name, data.provinces),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["maps"] });
+            toast.success("Map created successfully");
+        },
     });
 };
 
