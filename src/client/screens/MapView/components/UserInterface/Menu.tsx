@@ -11,7 +11,7 @@ const Menu = () => {
         <ToggleGroup type="single" onValueChange={setScreen}>
             <TooltipProvider>
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <ToggleGroupItem value="countries" aria-label="Countries">
                             <Map />
                         </ToggleGroupItem>
@@ -21,7 +21,7 @@ const Menu = () => {
                     </TooltipContent>
                 </Tooltip>
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                         <ToggleGroupItem value="ethnicities" aria-label="Ethnicities">
                             <UsersRound />
                         </ToggleGroupItem>
