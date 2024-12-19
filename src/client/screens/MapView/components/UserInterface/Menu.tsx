@@ -5,10 +5,11 @@ import { Map, UsersRound } from "lucide-react";
 
 const Menu = () => {
     const setScreen = useSidebarStore((state) => state.setScreen);
+    const screen = useSidebarStore((state) => state.screen);
 
     return (
         /* @ts-expect-error no value type inference */
-        <ToggleGroup type="single" onValueChange={setScreen}>
+        <ToggleGroup type="single" onValueChange={setScreen} value={screen}>
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
