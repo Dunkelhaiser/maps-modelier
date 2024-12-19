@@ -12,8 +12,13 @@ export interface CountriesSlice {
     updateCountry: (tag: string, options: CountryProperties) => Promise<void>;
 }
 
-export const createCountriesSlice: StateCreator<AppStore, [], [], CountriesSlice> = (set, get) => ({
+export const initialCountriesSlice = {
     countries: [],
+    selectedCountry: null,
+};
+
+export const createCountriesSlice: StateCreator<AppStore, [], [], CountriesSlice> = (set, get) => ({
+    ...initialCountriesSlice,
     createCountry: async (name, tag, color) => {
         const { activeMap, selectedState, countries } = get();
 
@@ -54,7 +59,6 @@ export const createCountriesSlice: StateCreator<AppStore, [], [], CountriesSlice
         });
     },
     setCountries: (countries: Country[]) => set({ countries }),
-    selectedCountry: null,
     addStatesToCountry: async (countryTag, stateIds) => {
         const { activeMap } = get();
 

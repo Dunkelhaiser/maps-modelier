@@ -1,5 +1,8 @@
 import { ActiveMap } from "@utils/types";
 import { StateCreator } from "zustand";
+import { initialCountriesSlice } from "./countries";
+import { initialProvincesSlice } from "./provinces";
+import { initialStatesSlice } from "./states";
 import { AppStore } from "./store";
 
 export type Mode = "viewing" | "provinces_editing" | "states_editing" | "countries_editing";
@@ -12,20 +15,21 @@ export interface MapSlice {
     closeMap: () => void;
 }
 
-export const createMapSlice: StateCreator<AppStore, [], [], MapSlice> = (set) => ({
-    mode: "viewing",
-    setMode: (mode) => set({ mode }),
+const initialMapSlice = {
+    mode: "viewing" as const,
     activeMap: null,
+};
+
+export const createMapSlice: StateCreator<AppStore, [], [], MapSlice> = (set) => ({
+    ...initialMapSlice,
+    setMode: (mode) => set({ mode }),
     setActiveMap: (map: ActiveMap) => set({ activeMap: map }),
     closeMap: () => {
         set({
-            mode: "viewing",
-            activeMap: null,
-            landProvinces: [],
-            waterProvinces: [],
-            selectedProvinces: [],
-            states: [],
-            selectedState: null,
+            ...initialMapSlice,
+            ...initialProvincesSlice,
+            ...initialStatesSlice,
+            ...initialCountriesSlice,
         });
     },
 });

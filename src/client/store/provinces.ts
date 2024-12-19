@@ -13,12 +13,16 @@ export interface ProvincesSlice {
     syncProvinceType: (provinceIds: number[], type: "land" | "water") => void;
 }
 
-export const createProvincesSlice: StateCreator<AppStore, [], [], ProvincesSlice> = (set, get) => ({
+export const initialProvincesSlice = {
     landProvinces: [],
-    setLandProvinces: (provinces: Province[]) => set({ landProvinces: provinces }),
     waterProvinces: [],
-    setWaterProvinces: (provinces: Province[]) => set({ waterProvinces: provinces }),
     selectedProvinces: [],
+};
+
+export const createProvincesSlice: StateCreator<AppStore, [], [], ProvincesSlice> = (set, get) => ({
+    ...initialProvincesSlice,
+    setLandProvinces: (provinces: Province[]) => set({ landProvinces: provinces }),
+    setWaterProvinces: (provinces: Province[]) => set({ waterProvinces: provinces }),
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
             const { mode } = state;

@@ -13,10 +13,14 @@ export interface StatesSlice {
     deleteState: () => Promise<void>;
 }
 
-export const createStatesSlice: StateCreator<AppStore, [], [], StatesSlice> = (set, get) => ({
+export const initialStatesSlice = {
     states: [],
-    setStates: (states: State[]) => set({ states }),
     selectedState: null,
+};
+
+export const createStatesSlice: StateCreator<AppStore, [], [], StatesSlice> = (set, get) => ({
+    ...initialStatesSlice,
+    setStates: (states: State[]) => set({ states }),
     addState: async (stateName) => {
         const { activeMap, selectedProvinces } = get();
 
