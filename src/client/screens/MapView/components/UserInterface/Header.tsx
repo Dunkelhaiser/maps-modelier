@@ -8,12 +8,14 @@ import {
 } from "@ui/DropdownMenu";
 import { Settings } from "lucide-react";
 import CloseMapBtn from "./CloseMapBtn";
+import Menu from "./Menu";
 import ModeSelect from "./ModeSelect";
 
 const Header = () => {
     return (
-        <header className="flex w-full items-center border bg-card px-8 py-1 text-card-foreground shadow">
+        <header className="flex w-full items-center gap-4 border bg-card px-8 py-1 text-card-foreground shadow">
             <CloseMapBtn />
+            <Menu />
             <DropdownMenu>
                 <DropdownMenuTrigger className="ml-auto" asChild>
                     <Button variant="ghost" size="icon">
