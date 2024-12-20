@@ -42,6 +42,7 @@ interface ElectronAPI {
     getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
     deleteEthnicity: (mapId: string, id: number) => Promise<void>;
     renameEthnicity: (mapId: string, id: number, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;
+    createEthnicity: (mapId: string, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;
 }
 
 declare global {
