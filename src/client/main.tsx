@@ -40,6 +40,7 @@ interface ElectronAPI {
     removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     updateCountry: (mapId: string, countryTag: string, options: CountryProperties) => Promise<Omit<Country, "states">>;
     getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
+    deleteEthnicity: (mapId: string, id: number) => Promise<void>;
 }
 
 declare global {
