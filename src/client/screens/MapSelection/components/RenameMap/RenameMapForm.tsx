@@ -4,9 +4,9 @@ import { Button } from "@ui/Button";
 import { DialogClose } from "@ui/Dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
+import { NameInput, nameSchema } from "@utils/sharedSchemas";
 import { Map } from "@utils/types";
 import { useForm } from "react-hook-form";
-import { RenameMapInput, renameMapSchema } from "./renameMapSchema";
 
 interface Props {
     map: Map;
@@ -16,14 +16,14 @@ interface Props {
 const RenameMapForm = ({ map, closeDialog }: Props) => {
     const renameMap = useRenameMap(map.id);
 
-    const form = useForm<RenameMapInput>({
-        resolver: zodResolver(renameMapSchema),
+    const form = useForm<NameInput>({
+        resolver: zodResolver(nameSchema),
         defaultValues: {
             name: map.name,
         },
     });
 
-    const renameMapHandler = async (data: RenameMapInput) => {
+    const renameMapHandler = async (data: NameInput) => {
         await renameMap.mutateAsync(data.name);
         closeDialog();
     };
