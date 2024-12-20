@@ -31,3 +31,15 @@ export const useRenameEthnicity = (mapId: string, id: number) => {
         },
     });
 };
+
+export const useCreateEthnicity = (mapId: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (name: string) => await window.electronAPI.createEthnicity(mapId, name),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["ethnicities"] });
+            toast.success("Ethnicity created successfully");
+        },
+    });
+};

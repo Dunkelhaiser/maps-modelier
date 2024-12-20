@@ -2,11 +2,10 @@ import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useGetAllEthnicities } from "@ipc/ethnicities";
 import { useSidebarStore } from "@store/sidebar";
 import { useAppStore } from "@store/store";
-import { Button } from "@ui/Button";
 import { CardContent, CardTitle } from "@ui/Card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/Table";
-import { Plus } from "lucide-react";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
 import EthnicityRow from "./EthnicityRow";
+import EthnicityRowCreate from "./EthnicityRowCreate";
 
 const Ethnicities = () => {
     const activeMap = useAppStore((state) => state.activeMap)!;
@@ -28,15 +27,7 @@ const Ethnicities = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow className="hover:bg-card">
-                            <TableCell className="font-medium" />
-                            <TableCell className="text-right" />
-                            <TableCell className="text-right">
-                                <Button size="icon" variant="ghost" className="size-6" aria-label="Add">
-                                    <Plus className="!size-3.5" />
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+                        <EthnicityRowCreate mapId={activeMap.id} />
                         {data?.map((ethnicity) => (
                             <EthnicityRow ethnicity={ethnicity} mapId={activeMap.id} key={ethnicity.id} />
                         ))}
