@@ -40,5 +40,5 @@ export interface CountryProperties {
 export interface Ethnicity {
     id: number;
     name: string;
-    totalNumber: number;
+    totalNumber?: number;
 }
