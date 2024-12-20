@@ -6,6 +6,7 @@ import { removeStates } from "./countries/removeStates.js";
 import { updateCountry } from "./countries/updateCountry.js";
 import { deleteEthnicity } from "./ethnicities/deleteEthnicity.js";
 import { getAllEthnicities } from "./ethnicities/getAllEthnicities.js";
+import { renameEthnicity } from "./ethnicities/renameEthnicity.js";
 import { loadMapImage } from "./mapImage/loadMapImage.js";
 import { saveMapImage } from "./mapImage/saveMapImage.js";
 import { createMap } from "./maps/createMap.js";
@@ -51,4 +52,5 @@ export const setupHandlers = () => {
     ipcMain.handle("updateCountry", updateCountry);
     ipcMain.handle("getAllEthnicities", getAllEthnicities);
     ipcMain.handle("deleteEthnicity", deleteEthnicity);
+    ipcMain.handle("renameEthnicity", renameEthnicity);
 };
