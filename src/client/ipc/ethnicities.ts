@@ -19,3 +19,15 @@ export const useDeleteEthnicity = (mapId: string, id: number) => {
         },
     });
 };
+
+export const useRenameEthnicity = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (name: string) => await window.electronAPI.renameEthnicity(mapId, id, name),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["ethnicities"] });
+            toast.success("Ethnicity renamed successfully");
+        },
+    });
+};
