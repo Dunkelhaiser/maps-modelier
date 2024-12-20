@@ -1,6 +1,6 @@
 import { useSidebarStore } from "@store/sidebar";
 import { Card } from "@ui/Card";
-import Ethnicities from "./Ethnicities";
+import Ethnicities from "./Ethnicities/Ethnicities";
 
 const Sidebar = () => {
     const screen = useSidebarStore((state) => state.screen);

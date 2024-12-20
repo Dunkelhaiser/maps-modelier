@@ -5,7 +5,8 @@ import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/Table";
-import { Edit, Plus, Trash } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
+import DeleteEthnicityDialog from "./DeleteEthnicityDialog";
 
 const Ethnicities = () => {
     const activeMap = useAppStore((state) => state.activeMap)!;
@@ -44,9 +45,7 @@ const Ethnicities = () => {
                                     <Button size="icon" variant="ghost" className="size-6" aria-label="Edit">
                                         <Edit className="!size-3.5" />
                                     </Button>
-                                    <Button size="icon" variant="ghost" className="size-6" aria-label="Delete">
-                                        <Trash className="!size-3.5" />
-                                    </Button>
+                                    <DeleteEthnicityDialog mapId={activeMap.id} id={ethnicity.id} />
                                 </TableCell>
                             </TableRow>
                         ))}
