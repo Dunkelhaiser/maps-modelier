@@ -17,7 +17,7 @@ const Ethnicities = () => {
             <CardHeaderWithClose onClick={closeSidebar}>
                 <CardTitle className="text-xl">Ethnicities</CardTitle>
             </CardHeaderWithClose>
-            <CardContent className="flex flex-col gap-2">
+            <CardContent className="flex h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] flex-col gap-2 overflow-auto">
                 <Table>
                     <TableHeader>
                         <TableRow className="hover:bg-card">
