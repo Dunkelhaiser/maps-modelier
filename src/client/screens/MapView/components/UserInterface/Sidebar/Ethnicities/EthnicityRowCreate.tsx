@@ -6,7 +6,7 @@ import { Input } from "@ui/Input";
 import { TableCell, TableRow } from "@ui/Table";
 import { NameInput, nameSchema } from "@utils/sharedSchemas";
 import { Check, Plus, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface Props {
@@ -54,6 +54,10 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
         },
     });
 
+    useEffect(() => {
+        form.setFocus("name");
+    }, [form]);
+
     const createEthnicityHandler = async (data: NameInput) => {
         await createEthnicity.mutateAsync(data.name);
         stopCreating();
@@ -74,7 +78,6 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
                                             variant="plain"
                                             aria-label="Ethnicity name"
                                             placeholder="Enter ethnicity name"
-                                            className="ring-1 ring-ring"
                                             {...field}
                                         />
                                     </FormControl>

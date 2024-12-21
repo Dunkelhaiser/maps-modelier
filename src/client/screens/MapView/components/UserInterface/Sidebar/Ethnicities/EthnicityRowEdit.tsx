@@ -7,6 +7,7 @@ import { TableCell, TableRow } from "@ui/Table";
 import { NameInput, nameSchema } from "@utils/sharedSchemas";
 import { Ethnicity } from "@utils/types";
 import { Check, X } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface Props {
@@ -24,6 +25,10 @@ const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
             name: ethnicity.name,
         },
     });
+
+    useEffect(() => {
+        form.setFocus("name");
+    }, [form]);
 
     const renameEthnicityHandler = async (data: NameInput) => {
         if (data.name === ethnicity.name) {
@@ -50,7 +55,6 @@ const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
                                             variant="plain"
                                             aria-label="Ethnicity name"
                                             placeholder="Enter ethnicity name"
-                                            className="ring-1 ring-ring"
                                             {...field}
                                         />
                                     </FormControl>
