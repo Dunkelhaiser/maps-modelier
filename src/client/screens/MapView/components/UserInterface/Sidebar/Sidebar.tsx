@@ -7,7 +7,7 @@ const Sidebar = () => {
 
     return (
         screen && (
-            <Card className="absolute bottom-3 left-3 top-[calc(45.6px_+_0.75rem)] w-96">
+            <Card className="absolute bottom-3 left-3 top-[calc(45.6px_+_0.75rem)] w-[28rem]">
                 {screen === "ethnicities" && <Ethnicities />}
             </Card>
         )
