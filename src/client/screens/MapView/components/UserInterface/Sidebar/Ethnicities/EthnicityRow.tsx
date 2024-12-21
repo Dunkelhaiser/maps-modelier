@@ -15,7 +15,7 @@ const EthnicityRow = ({ mapId, ethnicity }: Props) => {
     const [isEditing, setIsEditing] = useState(false);
 
     return !isEditing ? (
-        <TableRow>
+        <TableRow className="w-[9.25rem]">
             <TableCell className="font-medium">{ethnicity.name}</TableCell>
             <TableCell className="text-right">{ethnicity.totalNumber?.toLocaleString() ?? 0}</TableCell>
             <TableCell className="space-x-1 text-right">

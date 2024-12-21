@@ -18,7 +18,7 @@ const EthnicityRowCreate = ({ mapId }: Props) => {
 
     return !isCreating ? (
         <TableRow className="hover:bg-card">
-            <TableCell className="font-medium" />
+            <TableCell className="w-[9.25rem] font-medium" />
             <TableCell className="text-right" />
             <TableCell className="text-right">
                 <Button
@@ -65,9 +65,13 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
 
     return (
         <TableRow>
-            <TableCell className="w-[105.91px] font-medium">
+            <TableCell className="w-[9.25rem] font-medium">
                 <Form {...form}>
-                    <form id="createForm" className="grid gap-4" onSubmit={form.handleSubmit(createEthnicityHandler)}>
+                    <form
+                        id="createForm"
+                        className="grid max-w-[8.5rem] gap-4"
+                        onSubmit={form.handleSubmit(createEthnicityHandler)}
+                    >
                         <FormField
                             control={form.control}
                             name="name"

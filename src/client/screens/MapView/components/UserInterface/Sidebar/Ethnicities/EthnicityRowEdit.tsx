@@ -42,9 +42,13 @@ const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
 
     return (
         <TableRow>
-            <TableCell className="w-[105.91px] font-medium">
+            <TableCell className="w-[9.25rem] font-medium">
                 <Form {...form}>
-                    <form id="renameForm" className="grid gap-4" onSubmit={form.handleSubmit(renameEthnicityHandler)}>
+                    <form
+                        id="renameForm"
+                        className="grid max-w-[8.5rem] gap-4"
+                        onSubmit={form.handleSubmit(renameEthnicityHandler)}
+                    >
                         <FormField
                             control={form.control}
                             name="name"
@@ -55,6 +59,7 @@ const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
                                             variant="plain"
                                             aria-label="Ethnicity name"
                                             placeholder="Enter ethnicity name"
+                                            className="max-w-[8.5rem]"
                                             {...field}
                                         />
                                     </FormControl>
