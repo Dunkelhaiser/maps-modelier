@@ -44,7 +44,11 @@ export interface Ethnicity {
 }
 
 export interface Population {
-    provinceId: number;
+    ethnicityId: number;
+    population: number;
+}
+
+export interface EthnicityPopulation {
     ethnicityId: number;
     population: number;
 }

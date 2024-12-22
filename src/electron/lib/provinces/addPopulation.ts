@@ -1,26 +1,62 @@
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { provincePopulations } from "../../db/schema.js";
+
+interface EthnicityPopulation {
+    ethnicityId: number;
+    population: number;
+}
 
 export const addPopulation = async (
     _: Electron.IpcMainInvokeEvent,
     mapId: string,
     provinceId: number,
-    ethnicityId: number,
-    population: number
+    ethnicityPopulation: EthnicityPopulation[]
 ) => {
-    const [addedPopulation] = await db
-        .insert(provincePopulations)
-        .values({
-            mapId,
-            ethnicityId,
-            population,
-            provinceId,
-        })
-        .returning({
-            provinceId: provincePopulations.provinceId,
-            ethnicityId: provincePopulations.ethnicityId,
-            population: provincePopulations.population,
-        });
+    const populations = await db.transaction(async (tx) => {
+        const existingPopulations = await tx
+            .select()
+            .from(provincePopulations)
+            .where(and(eq(provincePopulations.mapId, mapId), eq(provincePopulations.provinceId, provinceId)));
 
-    return addedPopulation;
+        const existingEthnicitiesIds = new Set(existingPopulations.map((p) => p.ethnicityId));
+        const newEthnicitiesIds = new Set(ethnicityPopulation.map((p) => p.ethnicityId));
+
+        const ethnicitiesIdsToRemove = [...existingEthnicitiesIds].filter((id) => !newEthnicitiesIds.has(id));
+
+        if (ethnicitiesIdsToRemove.length > 0) {
+            await tx
+                .delete(provincePopulations)
+                .where(
+                    and(
+                        eq(provincePopulations.mapId, mapId),
+                        eq(provincePopulations.provinceId, provinceId),
+                        inArray(provincePopulations.ethnicityId, ethnicitiesIdsToRemove)
+                    )
+                );
+        }
+
+        return await tx
+            .insert(provincePopulations)
+            .values(
+                ethnicityPopulation.map(({ ethnicityId, population }) => ({
+                    mapId,
+                    provinceId,
+                    ethnicityId,
+                    population,
+                }))
+            )
+            .onConflictDoUpdate({
+                target: [provincePopulations.mapId, provincePopulations.provinceId, provincePopulations.ethnicityId],
+                set: {
+                    population: sql`excluded.population`,
+                },
+            })
+            .returning({
+                ethnicityId: provincePopulations.ethnicityId,
+                population: provincePopulations.population,
+            });
+    });
+
+    return populations;
 };

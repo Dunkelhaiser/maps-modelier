@@ -6,6 +6,11 @@ type ProvinceType = {
     type: string;
 };
 
+interface EthnicityPopulation {
+    ethnicityId: number;
+    population: number;
+}
+
 contextBridge.exposeInMainWorld("electronAPI", {
     saveMapImage: (imageData: string, mapId: string) => ipcRenderer.invoke("saveMapImage", imageData, mapId),
     loadMapImage: (imagePath: string) => ipcRenderer.invoke("loadMapImage", imagePath),
@@ -46,6 +51,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
     renameEthnicity: (mapId: string, id: number, name: string) =>
         ipcRenderer.invoke("renameEthnicity", mapId, id, name),
     createEthnicity: (mapId: string, name: string) => ipcRenderer.invoke("createEthnicity", mapId, name),
-    addPopulation: (mapId: string, provinceId: number, ethnicityId: number, population: number) =>
-        ipcRenderer.invoke("addPopulation", mapId, provinceId, ethnicityId, population),
+    addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: EthnicityPopulation[]) =>
+        ipcRenderer.invoke("addPopulation", mapId, provinceId, ethnicityPopulation),
 });
