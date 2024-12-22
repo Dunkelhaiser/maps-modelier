@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 import { X } from "lucide-react";
+import PopulationForm from "./PopulationForm/PopulationForm";
 
 interface Props {
     className?: string;
@@ -41,7 +42,7 @@ const ProvinceWindow = ({ className }: Props) => {
                     <X />
                 </Button>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
                 <div className="space-y-2">
                     <Label>Province Type</Label>
                     <Select value={sameTypes ? selectedProvinces[0].type : undefined} onValueChange={handleTypeChange}>
@@ -54,6 +55,7 @@ const ProvinceWindow = ({ className }: Props) => {
                         </SelectContent>
                     </Select>
                 </div>
+                {selectedProvinces.length === 1 && selectedProvinces[0].type === "land" && <PopulationForm />}
             </CardContent>
         </Card>
     );
