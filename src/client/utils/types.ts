@@ -42,3 +42,9 @@ export interface Ethnicity {
     name: string;
     totalNumber?: number;
 }
+
+export interface Population {
+    provinceId: number;
+    ethnicityId: number;
+    population: number;
+}

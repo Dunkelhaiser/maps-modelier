@@ -14,6 +14,7 @@ import { createMap } from "./maps/createMap.js";
 import { deleteMap } from "./maps/deleteMap.js";
 import { getMaps } from "./maps/getMaps.js";
 import { renameMap } from "./maps/renameMap.js";
+import { addPopulation } from "./provinces/addPopulation.js";
 import { changeProvinceType } from "./provinces/changeProvinceType.js";
 import { extractProvinceShapes } from "./provinces/extractProvinceShapes.js";
 import { getAllProvinces } from "./provinces/getAllProvinces.js";
@@ -55,4 +56,5 @@ export const setupHandlers = () => {
     ipcMain.handle("deleteEthnicity", deleteEthnicity);
     ipcMain.handle("renameEthnicity", renameEthnicity);
     ipcMain.handle("createEthnicity", createEthnicity);
+    ipcMain.handle("addPopulation", addPopulation);
 };

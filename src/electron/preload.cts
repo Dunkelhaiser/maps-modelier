@@ -46,4 +46,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
     renameEthnicity: (mapId: string, id: number, name: string) =>
         ipcRenderer.invoke("renameEthnicity", mapId, id, name),
     createEthnicity: (mapId: string, name: string) => ipcRenderer.invoke("createEthnicity", mapId, name),
+    addPopulation: (mapId: string, provinceId: number, ethnicityId: number, population: number) =>
+        ipcRenderer.invoke("addPopulation", mapId, provinceId, ethnicityId, population),
 });
