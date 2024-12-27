@@ -15,7 +15,7 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
             color: provinces.color,
             type: provinces.type,
             shape: provinces.shape,
-            population: sum(provincePopulations.population),
+            population: sum(provincePopulations.population).mapWith(Number),
             ethnicities: sql<Ethnicity[]>`
                 json_group_array(
                     json_object(
