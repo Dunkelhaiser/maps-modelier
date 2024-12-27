@@ -20,12 +20,16 @@ const PopulationForm = ({ ethnicities }: Props) => {
     const selectedProvinces = useAppStore((state) => state.selectedProvinces);
     const addPopulation = useAddPopulation(activeMap.id, selectedProvinces[0].id);
 
+    const defaultValues = {
+        populations: ethnicities ?? [],
+    };
+
     const form = useForm<PopulationInput>({
         resolver: zodResolver(populationSchema),
-        defaultValues: {
-            populations: ethnicities ?? [],
-        },
+        defaultValues,
     });
+
+    const isFormUnchanged = JSON.stringify(defaultValues) === JSON.stringify(form.getValues());
 
     const {
         fields: populationsField,
@@ -87,7 +91,9 @@ const PopulationForm = ({ ethnicities }: Props) => {
                         >
                             Add Ethnicity
                         </Button>
-                        <Button isLoading={form.formState.isSubmitting}>Save</Button>
+                        <Button isLoading={form.formState.isSubmitting} disabled={isFormUnchanged}>
+                            Save
+                        </Button>
                     </div>
                 </form>
             </Form>
