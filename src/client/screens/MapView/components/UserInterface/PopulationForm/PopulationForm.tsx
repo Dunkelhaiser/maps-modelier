@@ -5,12 +5,17 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
+import { EthnicityPopulation } from "@utils/types";
 import { X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import EthnicitiesSelect from "./EthnicitiesSelect";
 import { PopulationInput, populationSchema } from "./populationSchema";
 
-const PopulationForm = () => {
+interface Props {
+    ethnicities?: EthnicityPopulation[];
+}
+
+const PopulationForm = ({ ethnicities }: Props) => {
     const activeMap = useAppStore((state) => state.activeMap)!;
     const selectedProvinces = useAppStore((state) => state.selectedProvinces);
     const addPopulation = useAddPopulation(activeMap.id, selectedProvinces[0].id);
@@ -18,7 +23,7 @@ const PopulationForm = () => {
     const form = useForm<PopulationInput>({
         resolver: zodResolver(populationSchema),
         defaultValues: {
-            populations: [],
+            populations: ethnicities ?? [],
         },
     });
 

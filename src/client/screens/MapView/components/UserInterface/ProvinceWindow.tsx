@@ -55,7 +55,14 @@ const ProvinceWindow = ({ className }: Props) => {
                         </SelectContent>
                     </Select>
                 </div>
-                {selectedProvinces.length === 1 && selectedProvinces[0].type === "land" && <PopulationForm />}
+                {selectedProvinces.length === 1 && selectedProvinces[0].type === "land" && (
+                    <PopulationForm
+                        ethnicities={selectedProvinces[0].ethnicities.map((e) => ({
+                            ethnicityId: e.id,
+                            population: e.population,
+                        }))}
+                    />
+                )}
             </CardContent>
         </Card>
     );
