@@ -1,5 +1,5 @@
 import { useWindowSize } from "@hooks/useWindowSize";
-import { useGetProvinces } from "@ipc/province";
+import { useGetProvinces } from "@ipc/provinces";
 import { Container, Stage } from "@pixi/react";
 import { useAppStore } from "@store/store";
 import { ActiveMap } from "@utils/types";

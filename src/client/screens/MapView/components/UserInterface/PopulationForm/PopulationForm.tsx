@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAddPopulation } from "@ipc/province";
+import { useAddPopulation } from "@ipc/provinces";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
