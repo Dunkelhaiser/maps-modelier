@@ -5,12 +5,7 @@ import { queryClient } from "@/main";
 export const selectSingleProvince = (province: Province) => {
     const selectedProvinces = [province];
     const selectedState = findState(province.id);
-    if (!selectedState) {
-        useAppStore.setState({ selectedProvinces });
-        return;
-    }
-
-    const selectedCountry = findCountry(selectedState.id);
+    const selectedCountry = findCountry(selectedState?.id);
     useAppStore.setState({ selectedProvinces, selectedState, selectedCountry });
 };
 
@@ -36,7 +31,8 @@ const findState = (provinceId: number) => {
     return selectedState;
 };
 
-const findCountry = (stateId: number) => {
+const findCountry = (stateId?: number) => {
+    if (!stateId) return null;
     const countries = getCountries();
     const selectedCountry = countries?.find((c) => c.states.includes(stateId));
     return selectedCountry;
