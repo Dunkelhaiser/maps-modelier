@@ -1,4 +1,5 @@
 import { useWindowSize } from "@hooks/useWindowSize";
+import { useGetProvinces } from "@ipc/province";
 import { Container, Stage } from "@pixi/react";
 import { useAppStore } from "@store/store";
 import { ActiveMap } from "@utils/types";
@@ -22,8 +23,8 @@ const MAX_SCALE_MULTIPLIER = 4;
 const ZOOM_SPEED = 0.1;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
-    const landProvinces = useAppStore((state) => state.landProvinces);
-    const waterProvinces = useAppStore((state) => state.waterProvinces);
+    const landProvinces = useGetProvinces(activeMap.id, "land");
+    const waterProvinces = useGetProvinces(activeMap.id, "water");
     const states = useAppStore((state) => state.states);
     const setLandProvinces = useAppStore((state) => state.setLandProvinces);
     const setWaterProvinces = useAppStore((state) => state.setWaterProvinces);
@@ -41,15 +42,11 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     useEffect(() => {
         const loadData = async () => {
-            const [landProvincesArr, waterProvincesArr, statesArr, countriesArr] = await Promise.all([
-                window.electronAPI.getAllProvinces(activeMap.id, "land"),
-                window.electronAPI.getAllProvinces(activeMap.id, "water"),
+            const [statesArr, countriesArr] = await Promise.all([
                 window.electronAPI.getAllStates(activeMap.id),
                 window.electronAPI.getAllCountries(activeMap.id),
             ]);
 
-            setLandProvinces(landProvincesArr);
-            setWaterProvinces(waterProvincesArr);
             setStates(statesArr);
             setCountries(countriesArr);
         };
@@ -168,31 +165,27 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const renderProvinces = useMemo(() => {
         const waterProvincesContainer = (
             <Container sortableChildren>
-                {waterProvinces.map((province) => (
-                    <ProvincesContainer key={province.id} province={province} />
-                ))}
+                {waterProvinces.data?.map((province) => <ProvincesContainer key={province.id} province={province} />)}
             </Container>
         );
 
         const landProvincesContainer = (
             <Container sortableChildren>
-                {landProvinces.map((province) => (
-                    <ProvincesContainer key={province.id} province={province} />
-                ))}
+                {landProvinces.data?.map((province) => <ProvincesContainer key={province.id} province={province} />)}
             </Container>
         );
 
         const landStates = states.filter((state) =>
-            state.provinces.some((id) => landProvinces.some((p) => p.id === id))
+            state.provinces.some((id) => landProvinces.data?.some((p) => p.id === id))
         );
         const waterStates = states.filter((state) =>
-            state.provinces.some((id) => waterProvinces.some((p) => p.id === id))
+            state.provinces.some((id) => waterProvinces.data?.some((p) => p.id === id))
         );
 
         const waterStateBordersContainer = (
             <Container sortableChildren zIndex={2}>
                 {waterStates.map((state) => (
-                    <MemoizedStateBorders key={state.id} state={state} />
+                    <MemoizedStateBorders key={state.id} state={state} provinces={waterProvinces.data ?? []} />
                 ))}
             </Container>
         );
@@ -200,7 +193,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         const landStateBordersContainer = (
             <Container sortableChildren zIndex={2}>
                 {landStates.map((state) => (
-                    <MemoizedStateBorders key={state.id} state={state} />
+                    <MemoizedStateBorders key={state.id} state={state} provinces={landProvinces.data ?? []} />
                 ))}
             </Container>
         );

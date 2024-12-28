@@ -1,23 +1,20 @@
 import { Container, Graphics } from "@pixi/react";
 import { useAppStore } from "@store/store";
-import { State } from "@utils/types";
+import { Province, State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
 
 interface Props {
     state: State;
+    provinces: Province[];
 }
 
-const StateBorders = ({ state }: Props) => {
-    const landProvinces = useAppStore((store) => store.landProvinces);
-    const waterProvinces = useAppStore((store) => store.waterProvinces);
+const StateBorders = ({ state, provinces }: Props) => {
     const selectedState = useAppStore((store) => store.selectedState);
     const countries = useAppStore((store) => store.countries);
 
     const isSelected = selectedState?.id === state.id;
-
-    const provinces = useMemo(() => [...landProvinces, ...waterProvinces], [landProvinces, waterProvinces]);
 
     const countryColor = useMemo(() => {
         const country = countries.find((c) => c.states.includes(state.id));
