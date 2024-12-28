@@ -1,5 +1,6 @@
 import { Container, Graphics } from "@pixi/react";
 import { useAppStore } from "@store/store";
+import { getCountries } from "@utils/mapFuncs";
 import { Province, State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
@@ -12,12 +13,12 @@ interface Props {
 
 const StateBorders = ({ state, provinces }: Props) => {
     const selectedState = useAppStore((store) => store.selectedState);
-    const countries = useAppStore((store) => store.countries);
+    const countries = getCountries();
 
     const isSelected = selectedState?.id === state.id;
 
     const countryColor = useMemo(() => {
-        const country = countries.find((c) => c.states.includes(state.id));
+        const country = countries?.find((c) => c.states.includes(state.id));
         return country?.color;
     }, [countries, state.id]);
 

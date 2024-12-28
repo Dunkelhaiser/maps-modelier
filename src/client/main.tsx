@@ -65,7 +65,7 @@ declare global {
     }
 }
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
     defaultOptions: {
         mutations: {
             onError: errorToast,
