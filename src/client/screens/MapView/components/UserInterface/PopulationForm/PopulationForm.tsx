@@ -8,6 +8,7 @@ import { Label } from "@ui/Label";
 import { ScrollArea } from "@ui/ScrollArea";
 import { EthnicityPopulation } from "@utils/types";
 import { X } from "lucide-react";
+import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import EthnicitiesSelect from "./EthnicitiesSelect";
 import { PopulationInput, populationSchema } from "./populationSchema";
@@ -21,14 +22,21 @@ const PopulationForm = ({ ethnicities }: Props) => {
     const selectedProvinces = useAppStore((state) => state.selectedProvinces);
     const addPopulation = useAddPopulation(activeMap.id, selectedProvinces[0].id);
 
-    const defaultValues = {
-        populations: ethnicities ?? [],
-    };
+    const defaultValues = useMemo(
+        () => ({
+            populations: ethnicities ?? [],
+        }),
+        [ethnicities]
+    );
 
     const form = useForm<PopulationInput>({
         resolver: zodResolver(populationSchema),
         defaultValues,
     });
+
+    useEffect(() => {
+        form.reset(defaultValues);
+    }, [defaultValues, form]);
 
     const isFormUnchanged = JSON.stringify(defaultValues) === JSON.stringify(form.getValues());
 
