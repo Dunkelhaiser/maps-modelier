@@ -1,6 +1,6 @@
 import { Container } from "@pixi/react";
 import { useAppStore } from "@store/store";
-import { getCountries } from "@utils/mapFuncs";
+import { getCountries, selectProvince } from "@utils/mapFuncs";
 import { Province as ProvinceType, State } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
@@ -15,7 +15,6 @@ interface Props {
 export const ProvincesContainer = memo(
     ({ province: { id, shape, color, type, ethnicities, population }, states }: Props) => {
         const selectedProvinces = useAppStore((state) => state.selectedProvinces);
-        const setSelectedProvinces = useAppStore((state) => state.setSelectedProvinces);
         const selectedState = useAppStore((state) => state.selectedState);
         const countries = getCountries();
 
@@ -51,7 +50,7 @@ export const ProvincesContainer = memo(
                 }
             }
 
-            setSelectedProvinces(
+            selectProvince(
                 {
                     id,
                     type,
