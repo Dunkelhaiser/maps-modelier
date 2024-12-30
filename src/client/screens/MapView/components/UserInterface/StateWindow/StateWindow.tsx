@@ -1,12 +1,10 @@
 import { useAddStates, useGetCountries } from "@ipc/countries";
-import { useDeleteState, useRenameState } from "@ipc/states";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
-import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
-import { Trash, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import RenameStateForm from "./renameStateForm";
 
 interface Props {
     className?: string;
@@ -15,26 +13,17 @@ interface Props {
 const StateWindow = ({ className }: Props) => {
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
-    const [stateName, setStateName] = useState(selectedState?.name ?? "");
     const activeMap = useMapStore((state) => state.activeMap)!;
-    const renameState = useRenameState(activeMap.id, selectedState!.id);
-    const deleteState = useDeleteState(activeMap.id, selectedState!.id);
     const { data: countries } = useGetCountries(activeMap.id);
     const addStates = useAddStates(activeMap.id);
 
     const stateCountry = countries?.find((country) => country.states.includes(selectedState?.id ?? -1));
-
-    const renameStateHandler = () => renameState.mutate(stateName);
 
     const addStateHandler = (tag: string) => {
         if (selectedState) {
             addStates.mutateAsync({ countryTag: tag, stateIds: [selectedState.id] });
         }
     };
-
-    useEffect(() => {
-        setStateName(selectedState?.name ?? "");
-    }, [selectedState]);
 
     return (
         <Card className={className}>
@@ -65,13 +54,7 @@ const StateWindow = ({ className }: Props) => {
                         </SelectContent>
                     </Select>
                 )}
-                <Input placeholder="State Name" value={stateName} onChange={(e) => setStateName(e.target.value)} />
-                <div className="flex flex-row justify-between gap-4">
-                    <Button onClick={renameStateHandler}>Rename State</Button>
-                    <Button variant="destructive" aria-label="Delete State" onClick={() => deleteState.mutate()}>
-                        <Trash />
-                    </Button>
-                </div>
+                <RenameStateForm />
             </CardContent>
         </Card>
     );
