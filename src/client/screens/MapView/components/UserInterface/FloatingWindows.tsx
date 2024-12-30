@@ -2,9 +2,9 @@ import { useSidebarStore } from "@store/sidebar";
 import { useMapSotre } from "@store/store";
 import CountryWindow from "./CountryWindow";
 import CreateCountryWindow from "./CreateCountryWindow";
-import CreateStateWindow from "./CreateStateWindow";
 import ProvinceWindow from "./ProvinceWindow";
-import StateWindow from "./StateWindow";
+import CreateStateWindow from "./StateWindow/CreateStateWindow";
+import StateWindow from "./StateWindow/StateWindow";
 
 const FloatingWindows = () => {
     const mode = useMapSotre((state) => state.mode);
