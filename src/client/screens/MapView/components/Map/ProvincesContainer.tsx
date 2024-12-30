@@ -1,9 +1,9 @@
-import { useGetCountries } from "@ipc/countries";
+import { useAddStates, useGetCountries } from "@ipc/countries";
 import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useAppStore } from "@store/store";
 import { selectProvince } from "@utils/mapFuncs";
-import { Province as ProvinceType, State } from "@utils/types";
+import { Country, Province as ProvinceType, State } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
 import { toast } from "sonner";
@@ -18,11 +18,13 @@ export const ProvincesContainer = memo(
     ({ province: { id, shape, color, type, ethnicities, population }, states }: Props) => {
         const selectedProvinces = useAppStore((state) => state.selectedProvinces);
         const selectedState = useAppStore((state) => state.selectedState);
+        const selectedCountry = useAppStore((state) => state.selectedCountry);
         const activeMap = useAppStore((state) => state.activeMap)!;
         const mode = useAppStore((state) => state.mode);
         const { data: countries } = useGetCountries(activeMap.id);
         const addProvinces = useAddProvinces(activeMap.id);
         const removeProvinces = useRemoveProvinces(activeMap.id);
+        const addStates = useAddStates(activeMap.id);
 
         const isSelected = useMemo(
             () => selectedProvinces.some((province) => province.id === id),
@@ -68,20 +70,30 @@ export const ProvincesContainer = memo(
             else addProvincesToState(state);
         };
 
-        const handleProvinceClick = (event: FederatedMouseEvent) =>
-            mode === "states_editing" && selectedState && event.shiftKey
-                ? handleStateEdit(selectedState)
-                : selectProvince(
-                      {
-                          id,
-                          type,
-                          color,
-                          shape,
-                          ethnicities,
-                          population,
-                      },
-                      event.shiftKey
-                  );
+        const addStateToCountry = async ({ tag }: Country, stateId: number) => {
+            addStates.mutate({ countryTag: tag, stateIds: [stateId] });
+        };
+
+        const handleProvinceClick = (event: FederatedMouseEvent) => {
+            if (mode === "countries_editing" && selectedCountry && event.shiftKey) {
+                const stateToAdd = states.find((s) => s.provinces.includes(id));
+                if (stateToAdd) addStateToCountry(selectedCountry, stateToAdd.id);
+            } else if (mode === "states_editing" && selectedState && event.shiftKey) {
+                handleStateEdit(selectedState);
+            } else {
+                selectProvince(
+                    {
+                        id,
+                        type,
+                        color,
+                        shape,
+                        ethnicities,
+                        population,
+                    },
+                    event.shiftKey
+                );
+            }
+        };
 
         return (
             <Container eventMode="static" pointerdown={handleProvinceClick} zIndex={isSelected ? 1 : 0}>
