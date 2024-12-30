@@ -1,3 +1,4 @@
+import { useGetCountries } from "@ipc/countries";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
@@ -16,10 +17,11 @@ const StateWindow = ({ className }: Props) => {
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
     const renameState = useAppStore((state) => state.renameState);
     const deleteState = useAppStore((state) => state.deleteState);
-    const countries = useAppStore((state) => state.countries);
+    const activeMap = useAppStore((state) => state.activeMap)!;
+    const { data: countries } = useGetCountries(activeMap.id);
     const addStatesToCountry = useAppStore((state) => state.addStatesToCountry);
 
-    const stateCountry = countries.find((country) => country.states.includes(selectedState?.id ?? -1));
+    const stateCountry = countries?.find((country) => country.states.includes(selectedState?.id ?? -1));
 
     const renameStateHandler = () => renameState(stateName);
 
@@ -54,7 +56,7 @@ const StateWindow = ({ className }: Props) => {
                             <SelectValue placeholder="State Owner" />
                         </SelectTrigger>
                         <SelectContent>
-                            {countries.map((country) => (
+                            {countries?.map((country) => (
                                 <SelectItem key={country.tag} value={country.tag}>
                                     {country.name}
                                 </SelectItem>
