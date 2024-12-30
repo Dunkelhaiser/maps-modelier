@@ -180,19 +180,25 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         );
 
         const waterStateBordersContainer = (
-            <Container sortableChildren zIndex={2}>
-                {waterStates?.map((state) => (
-                    <MemoizedStateBorders key={state.id} state={state} provinces={waterProvinces.data ?? []} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren zIndex={2}>
+                    {waterStates?.map((state) => (
+                        <MemoizedStateBorders key={state.id} state={state} provinces={waterProvinces.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         const landStateBordersContainer = (
-            <Container sortableChildren zIndex={2}>
-                {landStates?.map((state) => (
-                    <MemoizedStateBorders key={state.id} state={state} provinces={landProvinces.data ?? []} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren zIndex={2}>
+                    {landStates?.map((state) => (
+                        <MemoizedStateBorders key={state.id} state={state} provinces={landProvinces.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         return {
