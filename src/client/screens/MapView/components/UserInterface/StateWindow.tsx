@@ -1,5 +1,5 @@
 import { useGetCountries } from "@ipc/countries";
-import { useRenameState } from "@ipc/states";
+import { useDeleteState, useRenameState } from "@ipc/states";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
@@ -18,7 +18,7 @@ const StateWindow = ({ className }: Props) => {
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
     const activeMap = useAppStore((state) => state.activeMap)!;
     const renameState = useRenameState(activeMap.id, selectedState!.id);
-    const deleteState = useAppStore((state) => state.deleteState);
+    const deleteState = useDeleteState(activeMap.id, selectedState!.id);
     const { data: countries } = useGetCountries(activeMap.id);
     const addStatesToCountry = useAppStore((state) => state.addStatesToCountry);
 
@@ -68,7 +68,7 @@ const StateWindow = ({ className }: Props) => {
                 <Input placeholder="State Name" value={stateName} onChange={(e) => setStateName(e.target.value)} />
                 <div className="flex flex-row justify-between gap-4">
                     <Button onClick={renameStateHandler}>Rename State</Button>
-                    <Button variant="destructive" aria-label="Delete State" onClick={deleteState}>
+                    <Button variant="destructive" aria-label="Delete State" onClick={() => deleteState.mutate()}>
                         <Trash />
                     </Button>
                 </div>

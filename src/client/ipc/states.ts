@@ -33,3 +33,16 @@ export const useRenameState = (mapId: string, stateId: number) => {
         },
     });
 };
+
+export const useDeleteState = (mapId: string, stateId: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => await window.electronAPI.deleteState(mapId, stateId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+            useAppStore.setState({ selectedState: null });
+        },
+    });
+};

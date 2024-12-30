@@ -8,7 +8,6 @@ export interface StatesSlice {
     selectedState: State | null;
     addProvincesToState: (provinceIds: number[]) => void;
     removeProvincesFromState: (stateId: number, provinceIds: number[]) => void;
-    deleteState: () => Promise<void>;
 }
 
 export const initialStatesSlice = {
@@ -70,19 +69,5 @@ export const createStatesSlice: StateCreator<AppStore, [], [], StatesSlice> = (s
                 selectedProvinces: remainingSelectedProvinces,
             };
         });
-    },
-    deleteState: async () => {
-        const { activeMap, selectedState } = get();
-
-        if (!activeMap) return;
-        if (!selectedState) return;
-
-        await window.electronAPI.deleteState(activeMap.id, selectedState.id);
-
-        set((state) => ({
-            states: state.states.filter((s) => s.id !== selectedState.id),
-            selectedState: null,
-            selectedProvinces: [],
-        }));
     },
 });
