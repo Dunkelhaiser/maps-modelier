@@ -56,6 +56,11 @@ export const ProvincesContainer = memo(
 
         const removeProvincesFromState = async ({ id: stateId }: State) => {
             removeProvinces.mutate({ stateId, provinceIds: [id] });
+            const remainingSelectedProvinces = selectedProvinces.filter((p) => p.id !== id);
+            useAppStore.setState({
+                selectedProvinces: remainingSelectedProvinces,
+                selectedState: remainingSelectedProvinces.length > 0 ? selectedState : null,
+            });
         };
 
         const handleStateEdit = async (state: State) => {
