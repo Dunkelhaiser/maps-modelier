@@ -6,7 +6,6 @@ export interface StatesSlice {
     states: State[];
     setStates: (states: State[]) => void;
     selectedState: State | null;
-    addState: (stateName: string) => Promise<void>;
     addProvincesToState: (provinceIds: number[]) => void;
     removeProvincesFromState: (stateId: number, provinceIds: number[]) => void;
     renameState: (name: string) => Promise<void>;
@@ -21,47 +20,6 @@ export const initialStatesSlice = {
 export const createStatesSlice: StateCreator<AppStore, [], [], StatesSlice> = (set, get) => ({
     ...initialStatesSlice,
     setStates: (states: State[]) => set({ states }),
-    addState: async (stateName) => {
-        const { activeMap, selectedProvinces } = get();
-
-        if (!activeMap) return;
-
-        const provinceTypes = new Set(selectedProvinces.map((province) => province.type));
-        if (provinceTypes.size > 1) {
-            throw new Error("Cannot create a state with provinces of different types");
-        }
-
-        const affectedStates = get().states.filter((state) =>
-            state.provinces.some((provinceId) => selectedProvinces.some((province) => province.id === provinceId))
-        );
-
-        const createdState = await window.electronAPI.createState(
-            activeMap.id,
-            stateName,
-            selectedProvinces.map((province) => province.id)
-        );
-
-        set((currentState) => {
-            const updatedStates = currentState.states
-                .map((state) => {
-                    if (affectedStates.some((affectedState) => affectedState.id === state.id)) {
-                        return {
-                            ...state,
-                            provinces: state.provinces.filter(
-                                (provinceId) => !selectedProvinces.some((province) => province.id === provinceId)
-                            ),
-                        };
-                    }
-                    return state;
-                })
-                .concat(createdState);
-
-            return {
-                states: updatedStates,
-                selectedState: createdState,
-            };
-        });
-    },
     addProvincesToState: async (provinceIds: number[]) => {
         const { activeMap, selectedState } = get();
 

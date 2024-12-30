@@ -1,3 +1,4 @@
+import { useCreateState } from "@ipc/states";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
@@ -13,11 +14,14 @@ interface Props {
 const CreateStateWindow = ({ className }: Props) => {
     const [stateName, setStateName] = useState("");
     const deselectProvinces = useAppStore((state) => state.deselectProvinces);
-    const addState = useAppStore((state) => state.addState);
+    const selectedProvince = useAppStore((state) => state.selectedProvinces);
+    const activeMap = useAppStore((state) => state.activeMap)!;
+    const addState = useCreateState(activeMap.id);
 
     const createNewState = async () => {
         try {
-            await addState(stateName);
+            const selectedProvincesIds = selectedProvince.map((province) => province.id);
+            await addState.mutateAsync({ name: stateName, provinces: selectedProvincesIds });
             setStateName("");
         } catch (err) {
             if (err instanceof Error) {
