@@ -1,4 +1,5 @@
 import { useGetCountries } from "@ipc/countries";
+import { useRenameState } from "@ipc/states";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
@@ -15,15 +16,15 @@ const StateWindow = ({ className }: Props) => {
     const deselectProvinces = useAppStore((state) => state.deselectProvinces);
     const selectedState = useAppStore((state) => state.selectedState);
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
-    const renameState = useAppStore((state) => state.renameState);
-    const deleteState = useAppStore((state) => state.deleteState);
     const activeMap = useAppStore((state) => state.activeMap)!;
+    const renameState = useRenameState(activeMap.id, selectedState!.id);
+    const deleteState = useAppStore((state) => state.deleteState);
     const { data: countries } = useGetCountries(activeMap.id);
     const addStatesToCountry = useAppStore((state) => state.addStatesToCountry);
 
     const stateCountry = countries?.find((country) => country.states.includes(selectedState?.id ?? -1));
 
-    const renameStateHandler = () => renameState(stateName);
+    const renameStateHandler = () => renameState.mutate(stateName);
 
     const addStateHandler = (tag: string) => {
         if (selectedState) {

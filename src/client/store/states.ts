@@ -8,7 +8,6 @@ export interface StatesSlice {
     selectedState: State | null;
     addProvincesToState: (provinceIds: number[]) => void;
     removeProvincesFromState: (stateId: number, provinceIds: number[]) => void;
-    renameState: (name: string) => Promise<void>;
     deleteState: () => Promise<void>;
 }
 
@@ -71,21 +70,6 @@ export const createStatesSlice: StateCreator<AppStore, [], [], StatesSlice> = (s
                 selectedProvinces: remainingSelectedProvinces,
             };
         });
-    },
-    renameState: async (name: string) => {
-        const { activeMap, selectedState } = get();
-
-        if (!activeMap) return;
-        if (!selectedState) return;
-
-        const updatedState = await window.electronAPI.renameState(activeMap.id, selectedState.id, name);
-
-        set((state) => ({
-            states: state.states.map((s) =>
-                s.id === selectedState.id ? { ...updatedState, provinces: selectedState.provinces } : s
-            ),
-            selectedState: { ...updatedState, provinces: selectedState.provinces },
-        }));
     },
     deleteState: async () => {
         const { activeMap, selectedState } = get();

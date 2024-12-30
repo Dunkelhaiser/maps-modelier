@@ -20,3 +20,16 @@ export const useCreateState = (mapId: string) => {
         },
     });
 };
+
+export const useRenameState = (mapId: string, stateId: number) => {
+    const queryClient = useQueryClient();
+    const selectedState = useAppStore((state) => state.selectedState);
+
+    return useMutation({
+        mutationFn: async (name: string) => await window.electronAPI.renameState(mapId, stateId, name),
+        onSuccess: ({ name }) => {
+            queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
+            useAppStore.setState({ selectedState: selectedState && { ...selectedState, name } });
+        },
+    });
+};
