@@ -1,0 +1,45 @@
+import { useMapSotre } from "@store/store";
+import { Country, Province, State } from "./types";
+import { queryClient } from "@/main";
+
+export const selectSingleProvince = (province: Province) => {
+    const selectedProvinces = [province];
+    const selectedState = findState(province.id);
+    const selectedCountry = findCountry(selectedState?.id);
+    useMapSotre.setState({ selectedProvinces, selectedState, selectedCountry });
+};
+
+export const selectMultipleProvinces = (province: Province) => {
+    const { selectedProvinces } = useMapSotre.getState();
+    const isProvinceSelected = selectedProvinces.some((p) => p.id === province.id);
+
+    if (isProvinceSelected) {
+        const afterProvinceDisselection = selectedProvinces.filter((p) => p.id !== province.id);
+        useMapSotre.setState({ selectedProvinces: afterProvinceDisselection });
+    } else {
+        useMapSotre.setState({ selectedProvinces: [...selectedProvinces, province] });
+    }
+};
+
+export const selectProvince = (province: Province, isShiftKey: boolean) =>
+    isShiftKey ? selectMultipleProvinces(province) : selectSingleProvince(province);
+
+const findState = (provinceId: number) => {
+    const { activeMap } = useMapSotre.getState();
+    const [[, states]] = queryClient.getQueriesData<State[]>({ queryKey: [activeMap?.id, "states"] });
+    const selectedState = states?.find((s) => s.provinces.includes(provinceId));
+    return selectedState;
+};
+
+const findCountry = (stateId?: number) => {
+    if (!stateId) return null;
+    const countries = getCountries();
+    const selectedCountry = countries?.find((c) => c.states.includes(stateId));
+    return selectedCountry;
+};
+
+export const getCountries = () => {
+    const { activeMap } = useMapSotre.getState();
+    const [[, countries]] = queryClient.getQueriesData<Country[]>({ queryKey: [activeMap?.id, "countries"] });
+    return countries;
+};

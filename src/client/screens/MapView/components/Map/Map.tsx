@@ -1,12 +1,16 @@
 import { useWindowSize } from "@hooks/useWindowSize";
+import { useGetCountries } from "@ipc/countries";
+import { useGetProvinces } from "@ipc/provinces";
+import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
-import { useAppStore } from "@store/store";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ActiveMap } from "@utils/types";
 import "@pixi/unsafe-eval";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProvincesContainer } from "./ProvincesContainer";
 import { MemoizedStateBorders } from "./StateBorders";
 import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
+import { queryClient } from "@/main";
 
 interface MapRendererProps {
     activeMap: ActiveMap;
@@ -22,13 +26,10 @@ const MAX_SCALE_MULTIPLIER = 4;
 const ZOOM_SPEED = 0.1;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
-    const landProvinces = useAppStore((state) => state.landProvinces);
-    const waterProvinces = useAppStore((state) => state.waterProvinces);
-    const states = useAppStore((state) => state.states);
-    const setLandProvinces = useAppStore((state) => state.setLandProvinces);
-    const setWaterProvinces = useAppStore((state) => state.setWaterProvinces);
-    const setStates = useAppStore((state) => state.setStates);
-    const setCountries = useAppStore((state) => state.setCountries);
+    const landProvinces = useGetProvinces(activeMap.id, "land");
+    const waterProvinces = useGetProvinces(activeMap.id, "water");
+    const states = useGetStates(activeMap.id);
+    useGetCountries(activeMap.id);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -38,23 +39,6 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const { width = 0, height: windowHeight = 0 } = useWindowSize();
 
     const height = windowHeight - 45.6;
-
-    useEffect(() => {
-        const loadData = async () => {
-            const [landProvincesArr, waterProvincesArr, statesArr, countriesArr] = await Promise.all([
-                window.electronAPI.getAllProvinces(activeMap.id, "land"),
-                window.electronAPI.getAllProvinces(activeMap.id, "water"),
-                window.electronAPI.getAllStates(activeMap.id),
-                window.electronAPI.getAllCountries(activeMap.id),
-            ]);
-
-            setLandProvinces(landProvincesArr);
-            setWaterProvinces(waterProvincesArr);
-            setStates(statesArr);
-            setCountries(countriesArr);
-        };
-        loadData();
-    }, [activeMap.id, activeMap.imageUrl, setCountries, setLandProvinces, setStates, setWaterProvinces]);
 
     useEffect(() => {
         const img = new Image();
@@ -167,42 +151,54 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     const renderProvinces = useMemo(() => {
         const waterProvincesContainer = (
-            <Container sortableChildren>
-                {waterProvinces.map((province) => (
-                    <ProvincesContainer key={province.id} province={province} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren>
+                    {waterProvinces.data?.map((province) => (
+                        <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         const landProvincesContainer = (
-            <Container sortableChildren>
-                {landProvinces.map((province) => (
-                    <ProvincesContainer key={province.id} province={province} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren>
+                    {landProvinces.data?.map((province) => (
+                        <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
-        const landStates = states.filter((state) =>
-            state.provinces.some((id) => landProvinces.some((p) => p.id === id))
+        const landStates = states.data?.filter((state) =>
+            state.provinces.some((id) => landProvinces.data?.some((p) => p.id === id))
         );
-        const waterStates = states.filter((state) =>
-            state.provinces.some((id) => waterProvinces.some((p) => p.id === id))
+        const waterStates = states.data?.filter((state) =>
+            state.provinces.some((id) => waterProvinces.data?.some((p) => p.id === id))
         );
 
         const waterStateBordersContainer = (
-            <Container sortableChildren zIndex={2}>
-                {waterStates.map((state) => (
-                    <MemoizedStateBorders key={state.id} state={state} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren zIndex={2}>
+                    {waterStates?.map((state) => (
+                        <MemoizedStateBorders key={state.id} state={state} provinces={waterProvinces.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         const landStateBordersContainer = (
-            <Container sortableChildren zIndex={2}>
-                {landStates.map((state) => (
-                    <MemoizedStateBorders key={state.id} state={state} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren zIndex={2}>
+                    {landStates?.map((state) => (
+                        <MemoizedStateBorders key={state.id} state={state} provinces={landProvinces.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         return {

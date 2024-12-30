@@ -1,4 +1,6 @@
-import { useAppStore } from "@store/store";
+import { useAddStates, useGetCountries } from "@ipc/countries";
+import { useDeleteState, useRenameState } from "@ipc/states";
+import { useMapSotre } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -11,21 +13,22 @@ interface Props {
 }
 
 const StateWindow = ({ className }: Props) => {
-    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
-    const selectedState = useAppStore((state) => state.selectedState);
+    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
+    const selectedState = useMapSotre((state) => state.selectedState);
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
-    const renameState = useAppStore((state) => state.renameState);
-    const deleteState = useAppStore((state) => state.deleteState);
-    const countries = useAppStore((state) => state.countries);
-    const addStatesToCountry = useAppStore((state) => state.addStatesToCountry);
+    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const renameState = useRenameState(activeMap.id, selectedState!.id);
+    const deleteState = useDeleteState(activeMap.id, selectedState!.id);
+    const { data: countries } = useGetCountries(activeMap.id);
+    const addStates = useAddStates(activeMap.id);
 
-    const stateCountry = countries.find((country) => country.states.includes(selectedState?.id ?? -1));
+    const stateCountry = countries?.find((country) => country.states.includes(selectedState?.id ?? -1));
 
-    const renameStateHandler = () => renameState(stateName);
+    const renameStateHandler = () => renameState.mutate(stateName);
 
     const addStateHandler = (tag: string) => {
         if (selectedState) {
-            addStatesToCountry(tag, [selectedState.id]);
+            addStates.mutateAsync({ countryTag: tag, stateIds: [selectedState.id] });
         }
     };
 
@@ -54,7 +57,7 @@ const StateWindow = ({ className }: Props) => {
                             <SelectValue placeholder="State Owner" />
                         </SelectTrigger>
                         <SelectContent>
-                            {countries.map((country) => (
+                            {countries?.map((country) => (
                                 <SelectItem key={country.tag} value={country.tag}>
                                     {country.name}
                                 </SelectItem>
@@ -65,7 +68,7 @@ const StateWindow = ({ className }: Props) => {
                 <Input placeholder="State Name" value={stateName} onChange={(e) => setStateName(e.target.value)} />
                 <div className="flex flex-row justify-between gap-4">
                     <Button onClick={renameStateHandler}>Rename State</Button>
-                    <Button variant="destructive" aria-label="Delete State" onClick={deleteState}>
+                    <Button variant="destructive" aria-label="Delete State" onClick={() => deleteState.mutate()}>
                         <Trash />
                     </Button>
                 </div>

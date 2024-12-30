@@ -1,4 +1,5 @@
-import { useAppStore } from "@store/store";
+import { useCreateCountry } from "@ipc/countries";
+import { useMapSotre } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -14,12 +15,13 @@ const CreateCountryWindow = ({ className }: Props) => {
     const [countryName, setCountryName] = useState("");
     const [countryTag, setCountryTag] = useState("");
     const [countryColor, setCountryColor] = useState("");
-    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
-    const createCountry = useAppStore((state) => state.createCountry);
+    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
+    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const createCountry = useCreateCountry(activeMap.id);
 
     const createNewState = async () => {
         try {
-            await createCountry(countryName, countryTag, countryColor);
+            createCountry.mutate({ name: countryName, tag: countryTag, color: countryColor });
             setCountryName("");
             setCountryTag("");
             setCountryColor("");

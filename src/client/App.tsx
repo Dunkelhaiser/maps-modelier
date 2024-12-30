@@ -1,10 +1,10 @@
 import MapSelection from "@screens/MapSelection/MapSelection";
 import MapView from "@screens/MapView/MapView";
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Toaster } from "@ui/Toast";
 
 const App = () => {
-    const activeMap = useAppStore((state) => state.activeMap);
+    const activeMap = useMapSotre((state) => state.activeMap);
 
     return (
         <>

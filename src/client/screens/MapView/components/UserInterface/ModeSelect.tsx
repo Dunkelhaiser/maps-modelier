@@ -1,9 +1,9 @@
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
 const ModeSelect = () => {
-    const mode = useAppStore((state) => state.mode);
-    const setMode = useAppStore((state) => state.setMode);
+    const mode = useMapSotre((state) => state.mode);
+    const setMode = useMapSotre((state) => state.setMode);
 
     return (
         <Select onValueChange={setMode} value={mode}>

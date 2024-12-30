@@ -1,9 +1,9 @@
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Button } from "@ui/Button";
 import { LogOut } from "lucide-react";
 
 const CloseMapBtn = () => {
-    const closeMap = useAppStore((state) => state.closeMap);
+    const closeMap = useMapSotre((state) => state.closeMap);
 
     return (
         <Button aria-label="Close Map" onClick={closeMap} variant="ghost" size="icon">

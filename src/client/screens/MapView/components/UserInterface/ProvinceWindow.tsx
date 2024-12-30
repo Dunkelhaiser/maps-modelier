@@ -1,4 +1,5 @@
-import { useAppStore } from "@store/store";
+import { useChangeProvinceType } from "@ipc/provinces";
+import { useMapSotre } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
@@ -11,17 +12,16 @@ interface Props {
 }
 
 const ProvinceWindow = ({ className }: Props) => {
-    const selectedProvinces = useAppStore((state) => state.selectedProvinces);
-    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
-    const syncProvinceType = useAppStore((state) => state.syncProvinceType);
-    const activeMap = useAppStore((state) => state.activeMap)!;
+    const selectedProvinces = useMapSotre((state) => state.selectedProvinces);
+    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
+    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const changeProvinceType = useChangeProvinceType(activeMap.id);
 
     if (selectedProvinces.length === 0) return null;
 
     const handleTypeChange = async (type: "land" | "water") => {
         const provinceIds = selectedProvinces.map((province) => province.id);
-        await window.electronAPI.changeProvinceType(activeMap.id, provinceIds, type);
-        syncProvinceType(provinceIds, type);
+        changeProvinceType.mutate({ provinceIds, type });
     };
 
     const sameTypes = selectedProvinces.every((province) => province.type === selectedProvinces[0].type);
