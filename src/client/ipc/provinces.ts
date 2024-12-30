@@ -1,4 +1,4 @@
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EthnicityPopulation } from "@utils/types";
 import { toast } from "sonner";
@@ -26,8 +26,8 @@ export const useGetProvinces = (mapId: string, type: "land" | "water") => {
 
 export const useChangeProvinceType = (mapId: string) => {
     const queryClient = useQueryClient();
-    const selectedProvinces = useAppStore((state) => state.selectedProvinces);
-    const selectedState = useAppStore((state) => state.selectedState);
+    const selectedProvinces = useMapSotre((state) => state.selectedProvinces);
+    const selectedState = useMapSotre((state) => state.selectedState);
 
     return useMutation({
         mutationFn: async ({ provinceIds, type }: { provinceIds: number[]; type: "land" | "water" }) => {
@@ -43,7 +43,7 @@ export const useChangeProvinceType = (mapId: string) => {
 
             const updatedSelectedState = selectedState && { ...selectedState, type };
 
-            useAppStore.setState({ selectedProvinces: updatedSelectedProvinces, selectedState: updatedSelectedState });
+            useMapSotre.setState({ selectedProvinces: updatedSelectedProvinces, selectedState: updatedSelectedState });
         },
     });
 };

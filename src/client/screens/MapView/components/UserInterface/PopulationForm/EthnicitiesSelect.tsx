@@ -1,5 +1,5 @@
 import { useGetAllEthnicities } from "@ipc/ethnicities";
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const EthnicitiesSelect = ({ onChange, value }: Props) => {
-    const activeMap = useAppStore((state) => state.activeMap)!;
+    const activeMap = useMapSotre((state) => state.activeMap)!;
     const ethnicities = useGetAllEthnicities(activeMap.id);
 
     return (

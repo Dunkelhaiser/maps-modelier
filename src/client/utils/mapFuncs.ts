@@ -1,4 +1,4 @@
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Country, Province, State } from "./types";
 import { queryClient } from "@/main";
 
@@ -6,18 +6,18 @@ export const selectSingleProvince = (province: Province) => {
     const selectedProvinces = [province];
     const selectedState = findState(province.id);
     const selectedCountry = findCountry(selectedState?.id);
-    useAppStore.setState({ selectedProvinces, selectedState, selectedCountry });
+    useMapSotre.setState({ selectedProvinces, selectedState, selectedCountry });
 };
 
 export const selectMultipleProvinces = (province: Province) => {
-    const { selectedProvinces } = useAppStore.getState();
+    const { selectedProvinces } = useMapSotre.getState();
     const isProvinceSelected = selectedProvinces.some((p) => p.id === province.id);
 
     if (isProvinceSelected) {
         const afterProvinceDisselection = selectedProvinces.filter((p) => p.id !== province.id);
-        useAppStore.setState({ selectedProvinces: afterProvinceDisselection });
+        useMapSotre.setState({ selectedProvinces: afterProvinceDisselection });
     } else {
-        useAppStore.setState({ selectedProvinces: [...selectedProvinces, province] });
+        useMapSotre.setState({ selectedProvinces: [...selectedProvinces, province] });
     }
 };
 
@@ -25,7 +25,7 @@ export const selectProvince = (province: Province, isShiftKey: boolean) =>
     isShiftKey ? selectMultipleProvinces(province) : selectSingleProvince(province);
 
 const findState = (provinceId: number) => {
-    const { activeMap } = useAppStore.getState();
+    const { activeMap } = useMapSotre.getState();
     const [[, states]] = queryClient.getQueriesData<State[]>({ queryKey: [activeMap?.id, "states"] });
     const selectedState = states?.find((s) => s.provinces.includes(provinceId));
     return selectedState;
@@ -39,7 +39,7 @@ const findCountry = (stateId?: number) => {
 };
 
 export const getCountries = () => {
-    const { activeMap } = useAppStore.getState();
+    const { activeMap } = useMapSotre.getState();
     const [[, countries]] = queryClient.getQueriesData<Country[]>({ queryKey: [activeMap?.id, "countries"] });
     return countries;
 };

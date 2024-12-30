@@ -1,5 +1,5 @@
 import { useChangeProvinceType } from "@ipc/provinces";
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
@@ -12,9 +12,9 @@ interface Props {
 }
 
 const ProvinceWindow = ({ className }: Props) => {
-    const selectedProvinces = useAppStore((state) => state.selectedProvinces);
-    const deselectProvinces = useAppStore((state) => state.deselectProvinces);
-    const activeMap = useAppStore((state) => state.activeMap)!;
+    const selectedProvinces = useMapSotre((state) => state.selectedProvinces);
+    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
+    const activeMap = useMapSotre((state) => state.activeMap)!;
     const changeProvinceType = useChangeProvinceType(activeMap.id);
 
     if (selectedProvinces.length === 0) return null;

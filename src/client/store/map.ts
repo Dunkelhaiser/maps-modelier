@@ -3,7 +3,7 @@ import { StateCreator } from "zustand";
 import { initialCountriesSlice } from "./countries";
 import { initialProvincesSlice } from "./provinces";
 import { initialStatesSlice } from "./states";
-import { AppStore } from "./store";
+import { MapStore } from "./store";
 
 export type Mode = "viewing" | "provinces_editing" | "states_editing" | "countries_editing";
 
@@ -20,7 +20,7 @@ const initialMapSlice = {
     activeMap: null,
 };
 
-export const createMapSlice: StateCreator<AppStore, [], [], MapSlice> = (set) => ({
+export const createMapSlice: StateCreator<MapStore, [], [], MapSlice> = (set) => ({
     ...initialMapSlice,
     setMode: (mode) => set({ mode }),
     setActiveMap: (map: ActiveMap) => set({ activeMap: map }),

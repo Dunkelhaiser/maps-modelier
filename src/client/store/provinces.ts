@@ -1,6 +1,6 @@
 import { Province } from "@utils/types";
 import { StateCreator } from "zustand";
-import { AppStore } from "./store";
+import { MapStore } from "./store";
 
 export interface ProvincesSlice {
     selectedProvinces: Province[];
@@ -11,7 +11,7 @@ export const initialProvincesSlice = {
     selectedProvinces: [],
 };
 
-export const createProvincesSlice: StateCreator<AppStore, [], [], ProvincesSlice> = (set) => ({
+export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice> = (set) => ({
     ...initialProvincesSlice,
     deselectProvinces: () => set({ selectedProvinces: [], selectedState: null }),
 });

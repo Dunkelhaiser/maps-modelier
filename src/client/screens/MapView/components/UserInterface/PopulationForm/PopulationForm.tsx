@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAddPopulation } from "@ipc/provinces";
-import { useAppStore } from "@store/store";
+import { useMapSotre } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const PopulationForm = ({ ethnicities }: Props) => {
-    const activeMap = useAppStore((state) => state.activeMap)!;
-    const selectedProvinces = useAppStore((state) => state.selectedProvinces);
+    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const selectedProvinces = useMapSotre((state) => state.selectedProvinces);
     const addPopulation = useAddPopulation(activeMap.id, selectedProvinces[0].id);
 
     const defaultValues = useMemo(
