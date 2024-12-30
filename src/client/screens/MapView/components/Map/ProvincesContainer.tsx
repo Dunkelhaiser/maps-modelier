@@ -1,7 +1,8 @@
+import { useGetCountries } from "@ipc/countries";
 import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useAppStore } from "@store/store";
-import { getCountries, selectProvince } from "@utils/mapFuncs";
+import { selectProvince } from "@utils/mapFuncs";
 import { Province as ProvinceType, State } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
@@ -19,7 +20,7 @@ export const ProvincesContainer = memo(
         const selectedState = useAppStore((state) => state.selectedState);
         const activeMap = useAppStore((state) => state.activeMap)!;
         const mode = useAppStore((state) => state.mode);
-        const countries = getCountries();
+        const { data: countries } = useGetCountries(activeMap.id);
         const addProvinces = useAddProvinces(activeMap.id);
         const removeProvinces = useRemoveProvinces(activeMap.id);
 
@@ -90,6 +91,13 @@ export const ProvincesContainer = memo(
             </Container>
         );
     },
-    (prevProps, nextProps) => prevProps.province === nextProps.province
+    (prevProps, nextProps) => {
+        return (
+            prevProps.province.id === nextProps.province.id &&
+            prevProps.province.color === nextProps.province.color &&
+            prevProps.province.type === nextProps.province.type &&
+            prevProps.states === nextProps.states
+        );
+    }
 );
 ProvincesContainer.displayName = "ProvinceContainer";
