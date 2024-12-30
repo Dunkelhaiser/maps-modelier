@@ -3,26 +3,17 @@ import { StateCreator } from "zustand";
 import { AppStore } from "./store";
 
 export interface ProvincesSlice {
-    landProvinces: Province[];
-    setLandProvinces: (provinces: Province[]) => void;
-    waterProvinces: Province[];
-    setWaterProvinces: (provinces: Province[]) => void;
     selectedProvinces: Province[];
     setSelectedProvinces: (province: Province, isShiftKey: boolean) => void;
     deselectProvinces: () => void;
-    syncProvinceType: (provinceIds: number[], type: "land" | "water") => void;
 }
 
 export const initialProvincesSlice = {
-    landProvinces: [],
-    waterProvinces: [],
     selectedProvinces: [],
 };
 
 export const createProvincesSlice: StateCreator<AppStore, [], [], ProvincesSlice> = (set, get) => ({
     ...initialProvincesSlice,
-    setLandProvinces: (provinces: Province[]) => set({ landProvinces: provinces }),
-    setWaterProvinces: (provinces: Province[]) => set({ waterProvinces: provinces }),
     setSelectedProvinces: (province: Province, isShiftKey: boolean) =>
         set((state) => {
             const { mode } = state;
@@ -105,57 +96,4 @@ export const createProvincesSlice: StateCreator<AppStore, [], [], ProvincesSlice
         }),
 
     deselectProvinces: () => set({ selectedProvinces: [], selectedState: null }),
-    syncProvinceType: (provinceIds, type) => {
-        set((state) => {
-            const affectedStates = state.states.filter((s) =>
-                s.provinces.some((provinceId) => provinceIds.includes(provinceId))
-            );
-
-            const allProvinceIdsToChange = new Set([...provinceIds, ...affectedStates.flatMap((s) => s.provinces)]);
-
-            let newLandProvinces = [...state.landProvinces];
-            let newWaterProvinces = [...state.waterProvinces];
-            let newCountries = [...state.countries];
-
-            if (type === "water") {
-                newCountries = newCountries.map((country) => ({
-                    ...country,
-                    states: country.states.filter(
-                        (stateId) => !affectedStates.some((affectedState) => affectedState.id === stateId)
-                    ),
-                }));
-            }
-
-            allProvinceIdsToChange.forEach((provinceId) => {
-                if (type === "water") {
-                    const landProvince = state.landProvinces.find((p) => p.id === provinceId);
-                    newLandProvinces = newLandProvinces.filter((p) => p.id !== provinceId);
-                    if (landProvince) {
-                        newWaterProvinces = [...newWaterProvinces, { ...landProvince, type: "water" }];
-                    }
-                } else {
-                    const waterProvince = state.waterProvinces.find((p) => p.id === provinceId);
-                    newWaterProvinces = newWaterProvinces.filter((p) => p.id !== provinceId);
-                    if (waterProvince) {
-                        newLandProvinces = [...newLandProvinces, { ...waterProvince, type: "land" }];
-                    }
-                }
-            });
-
-            const newStates = state.states.map((s) => ({ ...s, type }));
-
-            const updatedSelectedProvinces = state.selectedProvinces.map((province) =>
-                allProvinceIdsToChange.has(province.id) ? { ...province, type } : province
-            );
-
-            return {
-                landProvinces: newLandProvinces,
-                waterProvinces: newWaterProvinces,
-                selectedProvinces: updatedSelectedProvinces,
-                states: newStates,
-                countries: newCountries,
-                selectedState: state.selectedState && { ...state.selectedState, type },
-            };
-        });
-    },
 });
