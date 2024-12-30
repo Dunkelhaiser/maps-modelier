@@ -1,4 +1,4 @@
-import { useGetCountries } from "@ipc/countries";
+import { useAddStates, useGetCountries } from "@ipc/countries";
 import { useDeleteState, useRenameState } from "@ipc/states";
 import { useAppStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -20,7 +20,7 @@ const StateWindow = ({ className }: Props) => {
     const renameState = useRenameState(activeMap.id, selectedState!.id);
     const deleteState = useDeleteState(activeMap.id, selectedState!.id);
     const { data: countries } = useGetCountries(activeMap.id);
-    const addStatesToCountry = useAppStore((state) => state.addStatesToCountry);
+    const addStates = useAddStates(activeMap.id);
 
     const stateCountry = countries?.find((country) => country.states.includes(selectedState?.id ?? -1));
 
@@ -28,7 +28,7 @@ const StateWindow = ({ className }: Props) => {
 
     const addStateHandler = (tag: string) => {
         if (selectedState) {
-            addStatesToCountry(tag, [selectedState.id]);
+            addStates.mutateAsync({ countryTag: tag, stateIds: [selectedState.id] });
         }
     };
 
