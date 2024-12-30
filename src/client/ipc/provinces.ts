@@ -30,18 +30,18 @@ export const useChangeProvinceType = (mapId: string) => {
     const selectedState = useAppStore((state) => state.selectedState);
 
     return useMutation({
-        mutationFn: async (data: { provinceIds: number[]; type: "land" | "water" }) => {
-            await window.electronAPI.changeProvinceType(mapId, data.provinceIds, data.type);
+        mutationFn: async ({ provinceIds, type }: { provinceIds: number[]; type: "land" | "water" }) => {
+            await window.electronAPI.changeProvinceType(mapId, provinceIds, type);
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "land"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "water"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
-            if (data.type === "water") queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+            if (type === "water") queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
 
             const updatedSelectedProvinces = selectedProvinces.map((province) =>
-                data.provinceIds.includes(province.id) ? { ...province, type: data.type } : province
+                provinceIds.includes(province.id) ? { ...province, type } : province
             );
 
-            const updatedSelectedState = selectedState && { ...selectedState, type: data.type };
+            const updatedSelectedState = selectedState && { ...selectedState, type };
 
             useAppStore.setState({ selectedProvinces: updatedSelectedProvinces, selectedState: updatedSelectedState });
         },
