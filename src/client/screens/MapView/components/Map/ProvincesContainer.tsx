@@ -77,6 +77,9 @@ export const ProvincesContainer = memo(
 
         const removeStateFromCountry = async ({ tag }: Country, stateId: number) => {
             removeStates.mutate({ countryTag: tag, stateIds: [stateId] });
+            const deselectState = selectedState?.id === stateId;
+            if (deselectState)
+                useAppStore.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
         };
 
         const handleCountryEdit = async (country: Country, stateId: number) => {
