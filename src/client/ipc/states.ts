@@ -46,3 +46,22 @@ export const useDeleteState = (mapId: string, stateId: number) => {
         },
     });
 };
+
+export const useAddProvinces = (mapId: string) => {
+    const queryClient = useQueryClient();
+    const selectedState = useAppStore((state) => state.selectedState);
+
+    return useMutation({
+        mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
+            await window.electronAPI.addProvinces(mapId, stateId, provinceIds),
+        onSuccess: (_, { provinceIds }) => {
+            queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
+            useAppStore.setState({
+                selectedState: selectedState && {
+                    ...selectedState,
+                    provinces: [...new Set([...selectedState.provinces, ...provinceIds])],
+                },
+            });
+        },
+    });
+};

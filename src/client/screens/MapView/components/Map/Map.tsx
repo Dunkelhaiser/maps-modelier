@@ -3,12 +3,14 @@ import { useGetCountries } from "@ipc/countries";
 import { useGetProvinces } from "@ipc/provinces";
 import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ActiveMap } from "@utils/types";
 import "@pixi/unsafe-eval";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ProvincesContainer } from "./ProvincesContainer";
 import { MemoizedStateBorders } from "./StateBorders";
 import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
+import { queryClient } from "@/main";
 
 interface MapRendererProps {
     activeMap: ActiveMap;
@@ -149,19 +151,25 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
 
     const renderProvinces = useMemo(() => {
         const waterProvincesContainer = (
-            <Container sortableChildren>
-                {waterProvinces.data?.map((province) => (
-                    <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren>
+                    {waterProvinces.data?.map((province) => (
+                        <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         const landProvincesContainer = (
-            <Container sortableChildren>
-                {landProvinces.data?.map((province) => (
-                    <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
-                ))}
-            </Container>
+            // ! This is a workaround before the issue is resolved
+            <QueryClientProvider client={queryClient}>
+                <Container sortableChildren>
+                    {landProvinces.data?.map((province) => (
+                        <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
+                    ))}
+                </Container>
+            </QueryClientProvider>
         );
 
         const landStates = states.data?.filter((state) =>
