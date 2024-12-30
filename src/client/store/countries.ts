@@ -1,4 +1,4 @@
-import { Country, CountryProperties } from "@utils/types";
+import { Country } from "@utils/types";
 import { StateCreator } from "zustand";
 import { AppStore } from "./store";
 
@@ -9,7 +9,6 @@ export interface CountriesSlice {
     selectedCountry: Country | null;
     addStatesToCountry: (countryTag: string, stateIds: number[]) => void;
     removeStatesFromCountry: (countryTag: string, stateIds: number[]) => void;
-    updateCountry: (tag: string, options: CountryProperties) => Promise<void>;
 }
 
 export const initialCountriesSlice = {
@@ -136,34 +135,6 @@ export const createCountriesSlice: StateCreator<AppStore, [], [], CountriesSlice
                     updatedCountries.some((country) => country.states.includes(state.selectedState?.id ?? -1))
                         ? state.selectedState
                         : null,
-            };
-        });
-    },
-    updateCountry: async (tag, options) => {
-        const { activeMap } = get();
-
-        if (!activeMap) return;
-
-        const updatedCountry = await window.electronAPI.updateCountry(activeMap.id, tag, options);
-
-        set((state) => {
-            const { selectedCountry } = state;
-            const updatedCountries = state.countries.map((country) => {
-                if (country.tag === tag) {
-                    return {
-                        ...country,
-                        ...updatedCountry,
-                    };
-                }
-                return country;
-            });
-
-            const updatedSelectedCountry =
-                selectedCountry?.tag === tag ? { ...selectedCountry, ...updatedCountry } : selectedCountry;
-
-            return {
-                countries: updatedCountries,
-                selectedCountry: updatedSelectedCountry,
             };
         });
     },

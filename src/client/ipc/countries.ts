@@ -1,4 +1,6 @@
+import { useAppStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CountryProperties } from "@utils/types";
 
 export const useGetCountries = (mapId: string) => {
     return useQuery({
@@ -15,6 +17,19 @@ export const useCreateCountry = (mapId: string) => {
             await window.electronAPI.createCountry(mapId, name, tag, color),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+        },
+    });
+};
+
+export const useUpdateCountry = (mapId: string, tag: string) => {
+    const queryClient = useQueryClient();
+    const selectedCountry = useAppStore((state) => state.selectedCountry);
+
+    return useMutation({
+        mutationFn: async (options: CountryProperties) => await window.electronAPI.updateCountry(mapId, tag, options),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+            useAppStore.setState({ selectedCountry: selectedCountry && { ...selectedCountry, ...data } });
         },
     });
 };
