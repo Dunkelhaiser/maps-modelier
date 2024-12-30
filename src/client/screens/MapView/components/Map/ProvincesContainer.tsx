@@ -1,4 +1,4 @@
-import { useAddProvinces } from "@ipc/states";
+import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useAppStore } from "@store/store";
 import { getCountries, selectProvince } from "@utils/mapFuncs";
@@ -21,6 +21,7 @@ export const ProvincesContainer = memo(
         const mode = useAppStore((state) => state.mode);
         const countries = getCountries();
         const addProvinces = useAddProvinces(activeMap.id);
+        const removeProvinces = useRemoveProvinces(activeMap.id);
 
         const isSelected = useMemo(
             () => selectedProvinces.some((province) => province.id === id),
@@ -52,9 +53,18 @@ export const ProvincesContainer = memo(
             addProvinces.mutate({ stateId, provinceIds: [id] });
         };
 
+        const removeProvincesFromState = async ({ id: stateId }: State) => {
+            removeProvinces.mutate({ stateId, provinceIds: [id] });
+        };
+
+        const handleStateEdit = async (state: State) => {
+            if (state.provinces.includes(id)) removeProvincesFromState(state);
+            else addProvincesToState(state);
+        };
+
         const handleProvinceClick = (event: FederatedMouseEvent) =>
             mode === "states_editing" && selectedState && event.shiftKey
-                ? addProvincesToState(selectedState)
+                ? handleStateEdit(selectedState)
                 : selectProvince(
                       {
                           id,

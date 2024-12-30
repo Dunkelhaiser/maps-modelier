@@ -65,3 +65,22 @@ export const useAddProvinces = (mapId: string) => {
         },
     });
 };
+
+export const useRemoveProvinces = (mapId: string) => {
+    const queryClient = useQueryClient();
+    const selectedState = useAppStore((state) => state.selectedState);
+
+    return useMutation({
+        mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
+            await window.electronAPI.removeProvinces(mapId, stateId, provinceIds),
+        onSuccess: (_, { provinceIds }) => {
+            queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
+            useAppStore.setState({
+                selectedState: selectedState && {
+                    ...selectedState,
+                    provinces: selectedState.provinces.filter((id) => !provinceIds.includes(id)),
+                },
+            });
+        },
+    });
+};
