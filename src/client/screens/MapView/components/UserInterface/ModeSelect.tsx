@@ -1,9 +1,9 @@
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
 const ModeSelect = () => {
-    const mode = useMapSotre((state) => state.mode);
-    const setMode = useMapSotre((state) => state.setMode);
+    const mode = useMapStore((state) => state.mode);
+    const setMode = useMapStore((state) => state.setMode);
 
     return (
         <Select onValueChange={setMode} value={mode}>

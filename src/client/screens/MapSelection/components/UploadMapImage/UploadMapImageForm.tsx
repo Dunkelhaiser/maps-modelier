@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
-    const setActiveMap = useMapSotre((state) => state.setActiveMap);
+    const setActiveMap = useMapStore((state) => state.setActiveMap);
 
     const form = useForm<UploadeMapImageInput>({
         resolver: zodResolver(uploadMapImageSchema),

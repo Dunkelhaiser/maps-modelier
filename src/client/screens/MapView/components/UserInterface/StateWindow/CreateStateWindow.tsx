@@ -1,4 +1,4 @@
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { X } from "lucide-react";
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const CreateStateWindow = ({ className }: Props) => {
-    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
+    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
 
     return (
         <Card className={className}>

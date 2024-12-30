@@ -1,14 +1,14 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useGetAllEthnicities } from "@ipc/ethnicities";
 import { useSidebarStore } from "@store/sidebar";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
 import EthnicityRow from "./EthnicityRow";
 import EthnicityRowCreate from "./EthnicityRowCreate";
 
 const Ethnicities = () => {
-    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const activeMap = useMapStore((state) => state.activeMap)!;
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
     const { data } = useGetAllEthnicities(activeMap.id);
 

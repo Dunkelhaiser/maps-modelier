@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateState } from "@ipc/states";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
@@ -14,8 +14,8 @@ const CreateStateForm = () => {
             name: "",
         },
     });
-    const activeMap = useMapSotre((state) => state.activeMap)!;
-    const selectedProvince = useMapSotre((state) => state.selectedProvinces);
+    const activeMap = useMapStore((state) => state.activeMap)!;
+    const selectedProvince = useMapStore((state) => state.selectedProvinces);
     const createState = useCreateState(activeMap.id);
 
     const createStateHanlder = (data: NameInput) => {

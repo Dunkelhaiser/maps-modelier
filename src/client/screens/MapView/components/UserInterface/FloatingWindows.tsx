@@ -1,5 +1,5 @@
 import { useSidebarStore } from "@store/sidebar";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import CountryWindow from "./CountryWindow";
 import CreateCountryWindow from "./CreateCountryWindow";
 import ProvinceWindow from "./ProvinceWindow";
@@ -7,11 +7,11 @@ import CreateStateWindow from "./StateWindow/CreateStateWindow";
 import StateWindow from "./StateWindow/StateWindow";
 
 const FloatingWindows = () => {
-    const mode = useMapSotre((state) => state.mode);
+    const mode = useMapStore((state) => state.mode);
     const screen = useSidebarStore((state) => state.screen);
-    const selectedProvinces = useMapSotre((state) => state.selectedProvinces);
-    const selectedState = useMapSotre((state) => state.selectedState);
-    const selectedCountry = useMapSotre((state) => state.selectedCountry);
+    const selectedProvinces = useMapStore((state) => state.selectedProvinces);
+    const selectedState = useMapStore((state) => state.selectedState);
+    const selectedCountry = useMapStore((state) => state.selectedCountry);
 
     return (
         !screen && (

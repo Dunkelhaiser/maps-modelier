@@ -1,4 +1,4 @@
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetStates = (mapId: string) => {
@@ -16,20 +16,20 @@ export const useCreateState = (mapId: string) => {
             await window.electronAPI.createState(mapId, name, provinces),
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
-            useMapSotre.setState({ selectedState: data });
+            useMapStore.setState({ selectedState: data });
         },
     });
 };
 
 export const useRenameState = (mapId: string, stateId: number) => {
     const queryClient = useQueryClient();
-    const selectedState = useMapSotre((state) => state.selectedState);
+    const selectedState = useMapStore((state) => state.selectedState);
 
     return useMutation({
         mutationFn: async (name: string) => await window.electronAPI.renameState(mapId, stateId, name),
         onSuccess: ({ name }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
-            useMapSotre.setState({ selectedState: selectedState && { ...selectedState, name } });
+            useMapStore.setState({ selectedState: selectedState && { ...selectedState, name } });
         },
     });
 };
@@ -42,21 +42,21 @@ export const useDeleteState = (mapId: string, stateId: number) => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
-            useMapSotre.setState({ selectedState: null });
+            useMapStore.setState({ selectedState: null });
         },
     });
 };
 
 export const useAddProvinces = (mapId: string) => {
     const queryClient = useQueryClient();
-    const selectedState = useMapSotre((state) => state.selectedState);
+    const selectedState = useMapStore((state) => state.selectedState);
 
     return useMutation({
         mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
             await window.electronAPI.addProvinces(mapId, stateId, provinceIds),
         onSuccess: (_, { provinceIds }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
-            useMapSotre.setState({
+            useMapStore.setState({
                 selectedState: selectedState && {
                     ...selectedState,
                     provinces: [...new Set([...selectedState.provinces, ...provinceIds])],
@@ -68,14 +68,14 @@ export const useAddProvinces = (mapId: string) => {
 
 export const useRemoveProvinces = (mapId: string) => {
     const queryClient = useQueryClient();
-    const selectedState = useMapSotre((state) => state.selectedState);
+    const selectedState = useMapStore((state) => state.selectedState);
 
     return useMutation({
         mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
             await window.electronAPI.removeProvinces(mapId, stateId, provinceIds),
         onSuccess: (_, { provinceIds }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
-            useMapSotre.setState({
+            useMapStore.setState({
                 selectedState: selectedState && {
                     ...selectedState,
                     provinces: selectedState.provinces.filter((id) => !provinceIds.includes(id)),

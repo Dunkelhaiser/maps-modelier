@@ -1,5 +1,5 @@
 import { useCreateCountry } from "@ipc/countries";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -15,8 +15,8 @@ const CreateCountryWindow = ({ className }: Props) => {
     const [countryName, setCountryName] = useState("");
     const [countryTag, setCountryTag] = useState("");
     const [countryColor, setCountryColor] = useState("");
-    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
-    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
+    const activeMap = useMapStore((state) => state.activeMap)!;
     const createCountry = useCreateCountry(activeMap.id);
 
     const createNewState = async () => {

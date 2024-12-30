@@ -1,7 +1,7 @@
 import { useAddStates, useGetCountries, useRemoveStates } from "@ipc/countries";
 import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { selectProvince } from "@utils/mapFuncs";
 import { Country, Province as ProvinceType, State } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
@@ -16,11 +16,11 @@ interface Props {
 
 export const ProvincesContainer = memo(
     ({ province: { id, shape, color, type, ethnicities, population }, states }: Props) => {
-        const selectedProvinces = useMapSotre((state) => state.selectedProvinces);
-        const selectedState = useMapSotre((state) => state.selectedState);
-        const selectedCountry = useMapSotre((state) => state.selectedCountry);
-        const activeMap = useMapSotre((state) => state.activeMap)!;
-        const mode = useMapSotre((state) => state.mode);
+        const selectedProvinces = useMapStore((state) => state.selectedProvinces);
+        const selectedState = useMapStore((state) => state.selectedState);
+        const selectedCountry = useMapStore((state) => state.selectedCountry);
+        const activeMap = useMapStore((state) => state.activeMap)!;
+        const mode = useMapStore((state) => state.mode);
         const { data: countries } = useGetCountries(activeMap.id);
         const addProvinces = useAddProvinces(activeMap.id);
         const removeProvinces = useRemoveProvinces(activeMap.id);
@@ -60,7 +60,7 @@ export const ProvincesContainer = memo(
         const removeProvincesFromState = async ({ id: stateId }: State) => {
             removeProvinces.mutate({ stateId, provinceIds: [id] });
             const remainingSelectedProvinces = selectedProvinces.filter((p) => p.id !== id);
-            useMapSotre.setState({
+            useMapStore.setState({
                 selectedProvinces: remainingSelectedProvinces,
                 selectedState: remainingSelectedProvinces.length > 0 ? selectedState : null,
             });
@@ -79,7 +79,7 @@ export const ProvincesContainer = memo(
             removeStates.mutate({ countryTag: tag, stateIds: [stateId] });
             const deselectState = selectedState?.id === stateId;
             if (deselectState)
-                useMapSotre.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
+                useMapStore.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
         };
 
         const handleCountryEdit = async (country: Country, stateId: number) => {

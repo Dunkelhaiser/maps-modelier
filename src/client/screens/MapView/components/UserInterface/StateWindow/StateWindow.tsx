@@ -1,6 +1,6 @@
 import { useAddStates, useGetCountries } from "@ipc/countries";
 import { useDeleteState, useRenameState } from "@ipc/states";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Input } from "@ui/Input";
@@ -13,10 +13,10 @@ interface Props {
 }
 
 const StateWindow = ({ className }: Props) => {
-    const deselectProvinces = useMapSotre((state) => state.deselectProvinces);
-    const selectedState = useMapSotre((state) => state.selectedState);
+    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
+    const selectedState = useMapStore((state) => state.selectedState);
     const [stateName, setStateName] = useState(selectedState?.name ?? "");
-    const activeMap = useMapSotre((state) => state.activeMap)!;
+    const activeMap = useMapStore((state) => state.activeMap)!;
     const renameState = useRenameState(activeMap.id, selectedState!.id);
     const deleteState = useDeleteState(activeMap.id, selectedState!.id);
     const { data: countries } = useGetCountries(activeMap.id);

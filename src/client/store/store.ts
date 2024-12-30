@@ -6,7 +6,7 @@ import { createStatesSlice, StatesSlice } from "./states";
 
 export type MapStore = MapSlice & ProvincesSlice & StatesSlice & CountriesSlice;
 
-export const useMapSotre = create<MapStore>()((...a) => ({
+export const useMapStore = create<MapStore>()((...a) => ({
     ...createMapSlice(...a),
     ...createProvincesSlice(...a),
     ...createStatesSlice(...a),

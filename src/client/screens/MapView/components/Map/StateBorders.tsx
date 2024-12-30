@@ -1,6 +1,6 @@
 import { useGetCountries } from "@ipc/countries";
 import { Container, Graphics } from "@pixi/react";
-import { useMapSotre } from "@store/store";
+import { useMapStore } from "@store/store";
 import { Province, State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
@@ -12,8 +12,8 @@ interface Props {
 }
 
 const StateBorders = ({ state, provinces }: Props) => {
-    const selectedState = useMapSotre((store) => store.selectedState);
-    const activeMap = useMapSotre((store) => store.activeMap)!;
+    const selectedState = useMapStore((store) => store.selectedState);
+    const activeMap = useMapStore((store) => store.activeMap)!;
     const { data: countries } = useGetCountries(activeMap.id);
 
     const isSelected = selectedState?.id === state.id;
