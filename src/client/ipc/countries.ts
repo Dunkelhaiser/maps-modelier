@@ -52,3 +52,22 @@ export const useAddStates = (mapId: string) => {
         },
     });
 };
+
+export const useRemoveStates = (mapId: string) => {
+    const queryClient = useQueryClient();
+    const selectedCountry = useAppStore((state) => state.selectedCountry);
+
+    return useMutation({
+        mutationFn: async ({ countryTag, stateIds }: { countryTag: string; stateIds: number[] }) =>
+            await window.electronAPI.removeStates(mapId, countryTag, stateIds),
+        onSuccess: (_, { stateIds }) => {
+            queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+            useAppStore.setState({
+                selectedCountry: selectedCountry && {
+                    ...selectedCountry,
+                    states: selectedCountry.states.filter((id) => !stateIds.includes(id)),
+                },
+            });
+        },
+    });
+};
