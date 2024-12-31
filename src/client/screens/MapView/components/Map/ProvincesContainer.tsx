@@ -126,6 +126,8 @@ export const ProvincesContainer = memo(
             prevProps.province.id === nextProps.province.id &&
             prevProps.province.color === nextProps.province.color &&
             prevProps.province.type === nextProps.province.type &&
+            prevProps.province.population === nextProps.province.population &&
+            prevProps.province.ethnicities === nextProps.province.ethnicities &&
             prevProps.states === nextProps.states
         );
     }
