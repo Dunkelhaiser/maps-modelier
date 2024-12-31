@@ -36,6 +36,8 @@ export const addPopulation = async (
                 );
         }
 
+        if (ethnicityPopulation.length === 0) return [];
+
         return await tx
             .insert(provincePopulations)
             .values(
