@@ -3,7 +3,7 @@ import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { X } from "lucide-react";
 import AssignStateForm from "./AssignStateForm";
-import RenameStateForm from "./renameStateForm";
+import RenameStateForm from "./RenameStateForm";
 
 interface Props {
     className?: string;
