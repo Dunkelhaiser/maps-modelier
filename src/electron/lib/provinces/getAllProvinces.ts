@@ -15,7 +15,12 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
             color: provinces.color,
             type: provinces.type,
             shape: provinces.shape,
-            population: sum(provincePopulations.population).mapWith(Number),
+            population: sql<number>`
+                CASE 
+                    WHEN ${provinces.type} = 'land' THEN COALESCE(${sum(provincePopulations.population)}, 0)
+                    ELSE ${sum(provincePopulations.population)}
+                END
+            `.mapWith(Number),
             ethnicities: sql<Ethnicity[]>`
                 json_group_array(
                     json_object(
