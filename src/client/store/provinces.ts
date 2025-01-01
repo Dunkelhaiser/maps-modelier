@@ -5,12 +5,16 @@ import { queryClient } from "@/main";
 
 export interface ProvincesSlice {
     selectedProvinces: Province[];
+    selectedState: State | null;
+    selectedCountry: Country | null;
     selectProvince: (province: Province, isShiftKey: boolean) => void;
     deselectProvinces: () => void;
 }
 
 export const initialProvincesSlice = {
     selectedProvinces: [],
+    selectedState: null,
+    selectedCountry: null,
 };
 
 export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice> = (set, get) => ({

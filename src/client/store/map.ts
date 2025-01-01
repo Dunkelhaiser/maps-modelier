@@ -1,8 +1,6 @@
 import { ActiveMap } from "@utils/types";
 import { StateCreator } from "zustand";
-import { initialCountriesSlice } from "./countries";
 import { initialProvincesSlice } from "./provinces";
-import { initialStatesSlice } from "./states";
 import { MapStore } from "./store";
 
 export type Mode = "viewing" | "provinces_editing" | "states_editing" | "countries_editing";
@@ -28,8 +26,6 @@ export const createMapSlice: StateCreator<MapStore, [], [], MapSlice> = (set) =>
         set({
             ...initialMapSlice,
             ...initialProvincesSlice,
-            ...initialStatesSlice,
-            ...initialCountriesSlice,
         });
     },
 });
