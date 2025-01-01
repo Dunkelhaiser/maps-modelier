@@ -1,3 +1,4 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useUpdateCountry } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const CountryWindow = ({ className }: Props) => {
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const [countryName, setCountryName] = useState(selectedCountry?.name ?? "");
     const [countryTag, setCountryTag] = useState(selectedCountry?.tag ?? "");

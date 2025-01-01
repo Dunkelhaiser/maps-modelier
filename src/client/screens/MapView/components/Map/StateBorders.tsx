@@ -1,3 +1,4 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetCountries } from "@ipc/countries";
 import { Container, Graphics } from "@pixi/react";
 import { useMapStore } from "@store/store";
@@ -13,7 +14,7 @@ interface Props {
 
 const StateBorders = ({ state, provinces }: Props) => {
     const selectedState = useMapStore((store) => store.selectedState);
-    const activeMap = useMapStore((store) => store.activeMap)!;
+    const activeMap = useActiveMap();
     const { data: countries } = useGetCountries(activeMap.id);
 
     const isSelected = selectedState?.id === state.id;

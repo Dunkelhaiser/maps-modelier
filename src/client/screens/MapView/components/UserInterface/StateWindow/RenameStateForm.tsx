@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useDeleteState, useRenameState } from "@ipc/states";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -22,7 +23,7 @@ const RenameStateForm = () => {
         form.reset({ name: selectedState.name });
     }, [form, selectedState.name]);
 
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const renameState = useRenameState(activeMap.id, selectedState.id);
     const deleteState = useDeleteState(activeMap.id, selectedState.id);
 

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useAddPopulation } from "@ipc/provinces";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const PopulationForm = ({ ethnicities }: Props) => {
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const addPopulation = useAddPopulation(activeMap.id, selectedProvinces[0].id);
 

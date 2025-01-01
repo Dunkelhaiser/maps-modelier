@@ -1,5 +1,5 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAllEthnicities } from "@ipc/ethnicities";
-import { useMapStore } from "@store/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const EthnicitiesSelect = ({ onChange, value }: Props) => {
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const ethnicities = useGetAllEthnicities(activeMap.id);
 
     return (

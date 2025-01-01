@@ -1,3 +1,4 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useCreateCountry } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -16,7 +17,7 @@ const CreateCountryWindow = ({ className }: Props) => {
     const [countryTag, setCountryTag] = useState("");
     const [countryColor, setCountryColor] = useState("");
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const createCountry = useCreateCountry(activeMap.id);
 
     const createNewState = async () => {

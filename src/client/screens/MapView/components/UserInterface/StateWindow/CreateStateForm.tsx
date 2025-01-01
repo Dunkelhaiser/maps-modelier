@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useCreateState } from "@ipc/states";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -14,7 +15,7 @@ const CreateStateForm = () => {
             name: "",
         },
     });
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const selectedProvince = useMapStore((state) => state.selectedProvinces);
     const createState = useCreateState(activeMap.id);
 

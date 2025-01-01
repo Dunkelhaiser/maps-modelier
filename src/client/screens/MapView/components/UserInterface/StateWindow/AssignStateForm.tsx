@@ -1,3 +1,4 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useAddStates, useGetCountries } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { FormItem } from "@ui/Form";
@@ -5,7 +6,7 @@ import { Label } from "@ui/Label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
 const AssignStateForm = () => {
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const selectedState = useMapStore((state) => state.selectedState)!;
     const { data: countries } = useGetCountries(activeMap.id);
     const stateCountry = countries?.find((country) => country.states.includes(selectedState.id));

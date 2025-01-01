@@ -1,3 +1,4 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useChangeProvinceType } from "@ipc/provinces";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -14,7 +15,7 @@ interface Props {
 const ProvinceWindow = ({ className }: Props) => {
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
-    const activeMap = useMapStore((state) => state.activeMap)!;
+    const activeMap = useActiveMap();
     const changeProvinceType = useChangeProvinceType(activeMap.id);
 
     if (selectedProvinces.length === 0) return null;

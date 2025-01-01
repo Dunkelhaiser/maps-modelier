@@ -1,3 +1,4 @@
+import { useActiveMap } from "@hooks/useActiveMap";
 import { useAddStates, useGetCountries, useRemoveStates } from "@ipc/countries";
 import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
@@ -19,7 +20,7 @@ export const ProvincesContainer = memo(
         const selectedProvinces = useMapStore((state) => state.selectedProvinces);
         const selectedState = useMapStore((state) => state.selectedState);
         const selectedCountry = useMapStore((state) => state.selectedCountry);
-        const activeMap = useMapStore((state) => state.activeMap)!;
+        const activeMap = useActiveMap();
         const mode = useMapStore((state) => state.mode);
         const { data: countries } = useGetCountries(activeMap.id);
         const addProvinces = useAddProvinces(activeMap.id);
