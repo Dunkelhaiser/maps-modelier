@@ -26,6 +26,8 @@ const ProvinceWindow = ({ className }: Props) => {
     };
 
     const sameTypes = selectedProvinces.every((province) => province.type === selectedProvinces[0].type);
+    const allLand = selectedProvinces.every((province) => province.type === "land");
+    const totalPopulation = selectedProvinces.reduce((sum, province) => sum + (province.population || 0), 0);
 
     return (
         <Card className={className}>
@@ -44,6 +46,12 @@ const ProvinceWindow = ({ className }: Props) => {
                 </Button>
             </CardHeader>
             <CardContent className="space-y-4">
+                {allLand && (
+                    <p className="text-sm">
+                        <span className="font-medium">Overall Population:</span> {totalPopulation.toLocaleString()}{" "}
+                        people
+                    </p>
+                )}
                 <div className="space-y-2">
                     <Label>Province Type</Label>
                     <Select value={sameTypes ? selectedProvinces[0].type : undefined} onValueChange={handleTypeChange}>
