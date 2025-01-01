@@ -3,7 +3,6 @@ import { useAddStates, useGetCountries, useRemoveStates } from "@ipc/countries";
 import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useMapStore } from "@store/store";
-import { selectProvince } from "@utils/mapFuncs";
 import { Country, Province as ProvinceType, State } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
@@ -20,6 +19,7 @@ export const ProvincesContainer = memo(
         const selectedProvinces = useMapStore((state) => state.selectedProvinces);
         const selectedState = useMapStore((state) => state.selectedState);
         const selectedCountry = useMapStore((state) => state.selectedCountry);
+        const selectProvince = useMapStore((state) => state.selectProvince);
         const activeMap = useActiveMap();
         const mode = useMapStore((state) => state.mode);
         const { data: countries } = useGetCountries(activeMap.id);
