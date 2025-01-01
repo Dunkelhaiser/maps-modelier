@@ -49,7 +49,12 @@ const RenameStateForm = () => {
                 />
                 <div className="flex flex-row justify-between gap-4">
                     <Button isLoading={form.formState.isSubmitting}>Rename State</Button>
-                    <Button variant="destructive" aria-label="Delete State" onClick={() => deleteState.mutate()}>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        aria-label="Delete State"
+                        onClick={() => deleteState.mutate()}
+                    >
                         <Trash />
                     </Button>
                 </div>
