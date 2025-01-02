@@ -2,13 +2,33 @@ import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
+import { EthnicityComposition } from "@utils/types";
 import { X } from "lucide-react";
+import EthnicComposition from "./EthnicComposition";
 
 const ViewWindow = () => {
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
     const selectedCountry = useMapStore((state) => state.selectedCountry);
+
+    const calculateMergedEthnicities = () => {
+        const merged = new Map<number, EthnicityComposition>();
+
+        selectedProvinces.forEach((province) => {
+            province.ethnicities.forEach((ethnicity) => {
+                const current = merged.get(ethnicity.id) ?? {
+                    id: ethnicity.id,
+                    name: ethnicity.name,
+                    population: 0,
+                };
+                current.population += ethnicity.population;
+                merged.set(ethnicity.id, current);
+            });
+        });
+
+        return Array.from(merged.values());
+    };
 
     return (
         <Card>
@@ -40,23 +60,30 @@ const ViewWindow = () => {
                         </div>
                         <div>
                             <Label>Province Population</Label>
-                            <p>{selectedProvinces[0]?.population.toLocaleString()} people</p>
+                            <EthnicComposition
+                                totalPopulation={selectedProvinces[0].population}
+                                ethnicities={selectedProvinces[0].ethnicities}
+                            />
                         </div>
                         <div>
                             <Label>State Population</Label>
-                            <p>{selectedState?.population.toLocaleString()} people</p>
+                            <EthnicComposition
+                                totalPopulation={selectedState!.population}
+                                ethnicities={selectedState!.ethnicities}
+                            />
                         </div>
                     </>
                 )}
                 {selectedProvinces.length > 1 && (
                     <div>
                         <Label>Provinces Population</Label>
-                        <p>
-                            {selectedProvinces
-                                .reduce((sum, province) => sum + (province.population || 0), 0)
-                                .toLocaleString()}{" "}
-                            people
-                        </p>
+                        <EthnicComposition
+                            totalPopulation={selectedProvinces.reduce(
+                                (sum, province) => sum + (province.population || 0),
+                                0
+                            )}
+                            ethnicities={calculateMergedEthnicities()}
+                        />
                     </div>
                 )}
             </CardContent>

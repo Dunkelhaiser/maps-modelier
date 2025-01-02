@@ -5,7 +5,7 @@ import CreateCountryWindow from "./CreateCountryWindow";
 import ProvinceWindow from "./ProvinceWindow";
 import CreateStateWindow from "./StateWindow/CreateStateWindow";
 import StateWindow from "./StateWindow/StateWindow";
-import ViewWindow from "./ViewWindow";
+import ViewWindow from "./ViewWindow/ViewWindow";
 
 const FloatingWindows = () => {
     const mode = useMapStore((state) => state.mode);

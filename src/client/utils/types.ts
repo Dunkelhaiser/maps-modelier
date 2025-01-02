@@ -7,7 +7,7 @@ export type ActiveMap = Map & { imageUrl: string };
 
 type Type = "land" | "water";
 
-interface EthnicityComposition {
+export interface EthnicityComposition {
     id: number;
     name: string;
     population: number;
