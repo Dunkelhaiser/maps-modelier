@@ -7,14 +7,16 @@ export type ActiveMap = Map & { imageUrl: string };
 
 type Type = "land" | "water";
 
+interface EthnicityComposition {
+    id: number;
+    name: string;
+    population: number;
+}
+
 export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapId"> {
     type: Type;
     population: number;
-    ethnicities: {
-        id: number;
-        name: string;
-        population: number;
-    }[];
+    ethnicities: EthnicityComposition[];
 }
 
 export interface State {
@@ -22,6 +24,8 @@ export interface State {
     name: string;
     type: Type;
     provinces: number[];
+    population: number;
+    ethnicities: EthnicityComposition[];
 }
 
 export interface Country {
