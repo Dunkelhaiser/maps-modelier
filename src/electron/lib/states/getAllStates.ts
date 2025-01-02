@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql, sum } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
 
@@ -35,6 +35,7 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
             )
             .where(eq(states.mapId, mapId))
             .groupBy(states.id, ethnicities.id, ethnicities.name)
+            .orderBy(desc(sum(provincePopulations.population)))
     );
 
     const stateEthnicities = db.$with("state_ethnicities").as(
@@ -48,7 +49,7 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
                         'name', ${ethnicityTotals.ethnicityName},
                         'population', ${ethnicityTotals.totalPopulation}
                     )
-                )
+                ) FILTER (WHERE ${ethnicityTotals.ethnicityId} IS NOT NULL AND ${ethnicityTotals.totalPopulation} > 0)
             `.as("ethnicity_data"),
             })
             .from(ethnicityTotals)
@@ -83,8 +84,8 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
     return statesArr.map((state) => ({
         ...state,
         provinces: state.provinces ? state.provinces.split(",").map(Number) : [],
-        ethnicities: (
-            JSON.parse(state.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & { id: number | null })[]
-        ).filter((e) => e.id !== null && e.population > 0),
+        ethnicities: JSON.parse(state.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
+            id: number | null;
+        })[],
     }));
 };
