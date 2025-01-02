@@ -5,6 +5,7 @@ import CreateCountryWindow from "./CreateCountryWindow";
 import ProvinceWindow from "./ProvinceWindow";
 import CreateStateWindow from "./StateWindow/CreateStateWindow";
 import StateWindow from "./StateWindow/StateWindow";
+import ViewWindow from "./ViewWindow";
 
 const FloatingWindows = () => {
     const mode = useMapStore((state) => state.mode);
@@ -16,6 +17,10 @@ const FloatingWindows = () => {
     return (
         !screen && (
             <div className="absolute bottom-3 left-3 flex flex-col gap-4">
+                {mode === "viewing" &&
+                    selectedProvinces.length === 1 &&
+                    selectedProvinces[0].type === "land" &&
+                    selectedState && <ViewWindow />}
                 {mode === "provinces_editing" && <ProvinceWindow />}
                 {mode === "states_editing" && selectedProvinces.length > 0 && selectedState ? (
                     <StateWindow />
