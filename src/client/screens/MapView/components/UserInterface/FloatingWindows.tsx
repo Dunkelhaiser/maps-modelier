@@ -18,7 +18,7 @@ const FloatingWindows = () => {
         !screen && (
             <div className="absolute bottom-3 left-3 flex flex-col gap-4">
                 {mode === "viewing" &&
-                    selectedProvinces.length === 1 &&
+                    selectedProvinces.length > 0 &&
                     selectedProvinces[0].type === "land" &&
                     selectedState && <ViewWindow />}
                 {mode === "provinces_editing" && <ProvinceWindow />}

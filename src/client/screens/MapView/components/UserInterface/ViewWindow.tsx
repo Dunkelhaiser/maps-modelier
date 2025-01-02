@@ -13,7 +13,9 @@ const ViewWindow = () => {
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-12">
-                <CardTitle>{selectedState?.name}</CardTitle>
+                <CardTitle>
+                    {selectedProvinces.length > 1 ? `${selectedProvinces.length} Provinces` : selectedState?.name}
+                </CardTitle>
                 <Button
                     variant="ghost"
                     aria-label="Close"
@@ -25,26 +27,38 @@ const ViewWindow = () => {
                 </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-                {
-
-                    <div className="space-y-2">
-                    <Label>Owner</Label>
-                    {/* temporary placeholder */}
-                    <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_KykquMknj5dTIu5rxG4Y6bCGCNOCA5qSQ&s"
-                        alt={`${selectedCountry?.name} flag`}
-                        className="aspect-[4/3] h-8 object-cover"
-                    />
-                </div>
-                <div>
-                    <Label>Province Population</Label>
-                    <p>{selectedProvinces[0]?.population.toLocaleString()} people</p>
-                </div>
-                <div>
-                    <Label>State Population</Label>
-                    <p>{selectedState?.population.toLocaleString()} people</p>
-                </div>
-                }
+                {selectedProvinces.length === 1 && (
+                    <>
+                        <div className="space-y-2">
+                            <Label>Owner</Label>
+                            {/* temporary placeholder */}
+                            <img
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_KykquMknj5dTIu5rxG4Y6bCGCNOCA5qSQ&s"
+                                alt={`${selectedCountry?.name} flag`}
+                                className="aspect-[4/3] h-8 object-cover"
+                            />
+                        </div>
+                        <div>
+                            <Label>Province Population</Label>
+                            <p>{selectedProvinces[0]?.population.toLocaleString()} people</p>
+                        </div>
+                        <div>
+                            <Label>State Population</Label>
+                            <p>{selectedState?.population.toLocaleString()} people</p>
+                        </div>
+                    </>
+                )}
+                {selectedProvinces.length > 1 && (
+                    <div>
+                        <Label>Provinces Population</Label>
+                        <p>
+                            {selectedProvinces
+                                .reduce((sum, province) => sum + (province.population || 0), 0)
+                                .toLocaleString()}{" "}
+                            people
+                        </p>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );
