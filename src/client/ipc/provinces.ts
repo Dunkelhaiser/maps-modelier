@@ -10,6 +10,7 @@ export const useAddPopulation = (mapId: string, provinceId: number) => {
         mutationFn: async (ethnicitiesPopulation: EthnicityPopulation[]) => {
             await window.electronAPI.addPopulation(mapId, provinceId, ethnicitiesPopulation);
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "land"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
         },
         onSuccess: () => {
             toast.success("Population added successfully");
