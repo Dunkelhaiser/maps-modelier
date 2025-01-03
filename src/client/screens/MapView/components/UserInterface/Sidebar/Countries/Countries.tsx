@@ -6,6 +6,7 @@ import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
 import CountryRow from "./CountryRow";
+import CountryRowCreate from "./CountryRowCreate";
 
 const Countries = () => {
     const activeMap = useActiveMap();
@@ -28,7 +29,10 @@ const Countries = () => {
                             {mode !== "viewing" && <TableHead className="text-right">Actions</TableHead>}
                         </TableRow>
                     </TableHeader>
-                    <TableBody>{data?.map((country) => <CountryRow country={country} key={country.tag} />)}</TableBody>
+                    <TableBody>
+                        {mode !== "viewing" && <CountryRowCreate />}
+                        {data?.map((country) => <CountryRow country={country} key={country.tag} />)}
+                    </TableBody>
                 </Table>
             </CardContent>
         </>

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type Screen = "countries" | "ethnicities" | null;
+export type Screen = "countries" | "countries_editing" | "ethnicities" | null;
 
 export interface SidebarStore {
     screen: Screen;
