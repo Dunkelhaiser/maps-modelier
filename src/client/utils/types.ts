@@ -33,6 +33,8 @@ export interface Country {
     name: string;
     color: string;
     states: number[];
+    population: number;
+    ethnicities: EthnicityComposition[];
 }
 
 export interface CountryProperties {
