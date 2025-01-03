@@ -13,7 +13,11 @@ const CreateCountryForm = () => {
     const setScreen = useSidebarStore((state) => state.setScreen);
     const form = useForm<CountryInput>({
         resolver: zodResolver(countrySchema),
-        defaultValues: {},
+        defaultValues: {
+            name: "",
+            tag: "",
+            color: "",
+        },
     });
 
     const createCountry = useCreateCountry(activeMap.id);
