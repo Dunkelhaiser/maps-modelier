@@ -1,3 +1,4 @@
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { TableCell, TableRow } from "@ui/Table";
 import { Country } from "@utils/types";
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const CountryRow = ({ country }: Props) => {
+    const mode = useMapStore((state) => state.mode);
+
     return (
         <TableRow className="w-[9.25rem]">
             <TableCell className="font-medium">
@@ -19,11 +22,13 @@ const CountryRow = ({ country }: Props) => {
             </TableCell>
             <TableCell className="font-medium">{country.name}</TableCell>
             <TableCell className="text-right">{country.population.toLocaleString()}</TableCell>
-            <TableCell className="space-x-1 text-right">
-                <Button size="icon" variant="ghost" className="size-6" aria-label="Edit">
-                    <Edit className="!size-3.5" />
-                </Button>
-            </TableCell>
+            {mode !== "viewing" && (
+                <TableCell className="space-x-1 text-right">
+                    <Button size="icon" variant="ghost" className="size-6" aria-label="Edit">
+                        <Edit className="!size-3.5" />
+                    </Button>
+                </TableCell>
+            )}
         </TableRow>
     );
 };

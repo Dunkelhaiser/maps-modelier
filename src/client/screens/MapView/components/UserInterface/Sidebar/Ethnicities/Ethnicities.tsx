@@ -2,6 +2,7 @@ import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAllEthnicities } from "@ipc/ethnicities";
 import { useSidebarStore } from "@store/sidebar";
+import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
 import EthnicityRow from "./EthnicityRow";
@@ -9,6 +10,7 @@ import EthnicityRowCreate from "./EthnicityRowCreate";
 
 const Ethnicities = () => {
     const activeMap = useActiveMap();
+    const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
     const { data } = useGetAllEthnicities(activeMap.id);
 
@@ -23,11 +25,11 @@ const Ethnicities = () => {
                         <TableRow className="hover:bg-card">
                             <TableHead>Name</TableHead>
                             <TableHead className="text-right">Total Number</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            {mode !== "viewing" && <TableHead className="text-right">Actions</TableHead>}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <EthnicityRowCreate mapId={activeMap.id} />
+                        {mode !== "viewing" && <EthnicityRowCreate mapId={activeMap.id} />}
                         {data?.map((ethnicity) => (
                             <EthnicityRow ethnicity={ethnicity} mapId={activeMap.id} key={ethnicity.id} />
                         ))}
