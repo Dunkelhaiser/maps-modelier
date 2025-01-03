@@ -30,6 +30,7 @@ export const useUpdateCountry = (mapId: string, tag: string) => {
     return useMutation({
         mutationFn: async (options: CountryProperties) => await window.electronAPI.updateCountry(mapId, tag, options),
         onSuccess: (data) => {
+            toast.success("Country updated successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
             useMapStore.setState({ selectedCountry: selectedCountry && { ...selectedCountry, ...data } });
         },
