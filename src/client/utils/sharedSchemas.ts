@@ -33,6 +33,33 @@ export const imageSchema = zod
         });
     });
 
+export const audioSchema = zod
+    .unknown()
+    .transform((value) => value as File[])
+    .superRefine((files, ctx) => {
+        if (files.length !== 1) {
+            ctx.addIssue({
+                code: zod.ZodIssueCode.custom,
+                message: "Provide an audio",
+                fatal: true,
+            });
+
+            return zod.NEVER;
+        }
+        return true;
+    })
+    .refine((files) => files[0].size <= MAX_FILE_SIZE, "Max audio size is 500MB")
+    .refine((files) => files[0].type.includes("audio"), "Provide an audio file")
+    .transform((files) => files[0])
+    .transform((file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        return new Promise<string>((resolve, reject) => {
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+        });
+    });
+
 export const nameSchema = zod.object({
     name: zod
         .string()
