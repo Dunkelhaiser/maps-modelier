@@ -8,7 +8,7 @@ const CountryRowCreate = () => {
 
     return (
         <TableRow className="hover:bg-card">
-            <TableCell className="aspect-[4/3] h-6" />
+            <TableCell className="aspect-[3/2] h-6" />
             <TableCell className="text-right" />
             <TableCell className="text-right" />
             <TableCell className="text-right">

@@ -55,7 +55,7 @@ const ViewWindow = () => {
                             <img
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_KykquMknj5dTIu5rxG4Y6bCGCNOCA5qSQ&s"
                                 alt={`${selectedCountry?.name} flag`}
-                                className="aspect-[4/3] h-8 object-cover"
+                                className="aspect-[3/2] h-8 object-cover"
                             />
                         </div>
                         <div>

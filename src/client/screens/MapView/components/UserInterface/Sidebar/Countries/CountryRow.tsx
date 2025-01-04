@@ -24,7 +24,7 @@ const CountryRow = ({ country }: Props) => {
                 <img
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_KykquMknj5dTIu5rxG4Y6bCGCNOCA5qSQ&s"
                     alt={`${country.name} flag`}
-                    className="aspect-[4/3] h-6 object-cover"
+                    className="aspect-[3/2] h-6 object-cover"
                 />
             </TableCell>
             <TableCell className="font-medium">{country.name}</TableCell>
