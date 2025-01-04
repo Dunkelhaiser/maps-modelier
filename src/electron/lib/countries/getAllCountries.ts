@@ -58,13 +58,16 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
             .groupBy(ethnicityTotals.countryTag)
     );
 
-    // Main query
     const countriesArr = await db
         .with(ethnicityTotals, countryEthnicities)
         .select({
             tag: countries.tag,
             name: countries.name,
             color: countries.color,
+            flag: countries.flag,
+            coatOfArms: countries.coatOfArms,
+            anthemName: countries.anthemName,
+            anthemPath: countries.anthemPath,
             states: sql<string>`COALESCE(GROUP_CONCAT(${countryStates.stateId}), '')`,
             population: sql<number>`
                 COALESCE((
@@ -86,11 +89,18 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
         .groupBy(countries.tag)
         .orderBy(countries.tag);
 
-    return countriesArr.map((country) => ({
-        ...country,
-        states: country.states ? country.states.split(",").map(Number) : [],
-        ethnicities: JSON.parse(country.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
-            id: number | null;
-        })[],
-    }));
+    return countriesArr.map((country) => {
+        const { anthemName, anthemPath, ...countryData } = country;
+        return {
+            ...countryData,
+            anthem: {
+                name: anthemName,
+                url: anthemPath,
+            },
+            states: country.states ? country.states.split(",").map(Number) : [],
+            ethnicities: JSON.parse(country.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
+                id: number | null;
+            })[],
+        };
+    });
 };

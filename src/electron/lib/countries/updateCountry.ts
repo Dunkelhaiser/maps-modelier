@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { countries } from "../../db/schema.js";
 
@@ -14,15 +14,13 @@ export const updateCountry = async (
     countryTag: string,
     options: CountryProperties
 ) => {
+    const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(countries);
+
     const [updatedCountry] = await db
         .update(countries)
         .set({ ...options })
         .where(and(eq(countries.tag, countryTag), eq(countries.mapId, mapId)))
-        .returning({
-            tag: countries.tag,
-            name: countries.name,
-            color: countries.color,
-        });
+        .returning(cols);
 
     return updatedCountry;
 };

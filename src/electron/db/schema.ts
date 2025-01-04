@@ -141,6 +141,10 @@ export const countries = sqliteTable(
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
         color: text("color").notNull().default("#39654a"),
+        flag: text("flag").notNull(),
+        coatOfArms: text("coat_of_arms").notNull(),
+        anthemName: text("anthem_name").notNull(),
+        anthemPath: text("anthem_path").notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),

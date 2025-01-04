@@ -32,6 +32,12 @@ export interface Country {
     tag: string;
     name: string;
     color: string;
+    flag: string;
+    coatOfArms: string;
+    anthem: {
+        name: string;
+        url: string;
+    };
     states: number[];
     population: number;
     ethnicities: EthnicityComposition[];
