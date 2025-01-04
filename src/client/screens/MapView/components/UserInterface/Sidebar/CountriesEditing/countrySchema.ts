@@ -8,6 +8,18 @@ export const countrySchema = zod
             .string()
             .trim()
             .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" }),
+    })
+    .merge(nameSchema);
+
+export type CountryInput = zod.infer<typeof countrySchema>;
+
+export const createCountrySchema = zod
+    .object({
+        tag: zod.string().trim().length(3, { message: "Enter valid tag" }),
+        color: zod
+            .string()
+            .trim()
+            .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" }),
         flag: imageSchema,
         coatOfArms: imageSchema,
         anthem: zod
@@ -18,4 +30,4 @@ export const countrySchema = zod
     })
     .merge(nameSchema);
 
-export type CountryInput = zod.infer<typeof countrySchema>;
+export type CreateCountryInput = zod.infer<typeof createCountrySchema>;

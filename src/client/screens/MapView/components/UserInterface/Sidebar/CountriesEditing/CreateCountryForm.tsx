@@ -7,13 +7,13 @@ import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { useForm } from "react-hook-form";
-import { CountryInput, countrySchema } from "./countrySchema";
+import { CreateCountryInput, createCountrySchema } from "./countrySchema";
 
 const CreateCountryForm = () => {
     const activeMap = useActiveMap();
     const setScreen = useSidebarStore((state) => state.setScreen);
-    const form = useForm<CountryInput>({
-        resolver: zodResolver(countrySchema),
+    const form = useForm<CreateCountryInput>({
+        resolver: zodResolver(createCountrySchema),
         defaultValues: {
             name: "",
             tag: "",
@@ -32,7 +32,7 @@ const CreateCountryForm = () => {
 
     const createCountry = useCreateCountry(activeMap.id);
 
-    const createCountryHandler = async (data: CountryInput) => {
+    const createCountryHandler = async (data: CreateCountryInput) => {
         await createCountry.mutateAsync(data);
         setScreen("countries");
     };
