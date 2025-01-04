@@ -17,7 +17,7 @@ const CreateCountryForm = () => {
         defaultValues: {
             name: "",
             tag: "",
-            color: "",
+            color: "#39654a",
             anthem: {
                 audio: undefined,
                 name: "",
