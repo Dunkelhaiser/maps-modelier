@@ -45,32 +45,34 @@ const EditCountryForm = () => {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="tag"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Tag</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter country tag" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="color"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Color</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter country color" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="flex flex-row gap-2">
+                    <FormField
+                        control={form.control}
+                        name="tag"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tag</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter country tag" className="h-8" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="color"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Color</FormLabel>
+                                <FormControl>
+                                    <Input type="color" className="h-8 w-12" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <Button isLoading={form.formState.isSubmitting}>Save</Button>
             </form>
         </Form>

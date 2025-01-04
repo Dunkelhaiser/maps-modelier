@@ -39,7 +39,7 @@ const CreateCountryForm = () => {
 
     return (
         <Form {...form}>
-            <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(createCountryHandler)}>
+            <form className="flex flex-col gap-4 py-4" onSubmit={form.handleSubmit(createCountryHandler)}>
                 <FormField
                     control={form.control}
                     name="name"
@@ -97,7 +97,7 @@ const CreateCountryForm = () => {
                             <FormItem className="w-full grow">
                                 <FormLabel>Anthem</FormLabel>
                                 <FormControl>
-                                    <Input type="file" {...anthemRef} accept="audio/*" />
+                                    <Input type="file" className="h-8" {...anthemRef} accept="audio/*" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -110,39 +110,41 @@ const CreateCountryForm = () => {
                             <FormItem>
                                 <FormLabel>Anthem name</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input className="h-8" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
                 </div>
-                <FormField
-                    control={form.control}
-                    name="tag"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Tag</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter country tag" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="color"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Color</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter country color" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="flex flex-row gap-2">
+                    <FormField
+                        control={form.control}
+                        name="tag"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Tag</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter country tag" className="h-8" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="color"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Color</FormLabel>
+                                <FormControl>
+                                    <Input type="color" className="h-8 w-12" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <Button isLoading={form.formState.isSubmitting}>Create Country</Button>
             </form>
         </Form>
