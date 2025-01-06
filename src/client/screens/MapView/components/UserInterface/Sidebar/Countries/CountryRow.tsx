@@ -21,11 +21,7 @@ const CountryRow = ({ country }: Props) => {
     return (
         <TableRow className="w-[9.25rem]">
             <TableCell className="font-medium">
-                <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_KykquMknj5dTIu5rxG4Y6bCGCNOCA5qSQ&s"
-                    alt={`${country.name} flag`}
-                    className="aspect-[3/2] h-6 object-cover"
-                />
+                <img src={country.flag} alt={`${country.name} flag`} className="aspect-[3/2] h-6 object-cover" />
             </TableCell>
             <TableCell className="font-medium">{country.name}</TableCell>
             <TableCell className="text-right">{country.population.toLocaleString()}</TableCell>

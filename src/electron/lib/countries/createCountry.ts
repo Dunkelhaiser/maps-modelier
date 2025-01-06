@@ -1,7 +1,7 @@
 import { getTableColumns } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { countries } from "../../db/schema.js";
-import { saveFile } from "../saveFile.js";
+import { saveFile } from "../utils/saveFile.js";
 
 interface CreateCountryAttributes {
     name: string;

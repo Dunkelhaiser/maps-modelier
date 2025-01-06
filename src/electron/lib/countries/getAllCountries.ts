@@ -1,6 +1,7 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { countries, countryStates, states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
+import { loadFile } from "../utils/loadFile.js";
 
 interface Ethnicity {
     id: number;
@@ -89,18 +90,31 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
         .groupBy(countries.tag)
         .orderBy(countries.tag);
 
-    return countriesArr.map((country) => {
-        const { anthemName, anthemPath, ...countryData } = country;
-        return {
-            ...countryData,
-            anthem: {
-                name: anthemName,
-                url: anthemPath,
-            },
-            states: country.states ? country.states.split(",").map(Number) : [],
-            ethnicities: JSON.parse(country.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
-                id: number | null;
-            })[],
-        };
-    });
+    const loadedCountries = await Promise.all(
+        countriesArr.map(async (country) => {
+            const { anthemName, anthemPath, flag, coatOfArms, ...countryData } = country;
+
+            const [flagData, coatOfArmsData, anthemData] = await Promise.all([
+                loadFile(flag),
+                loadFile(coatOfArms),
+                loadFile(anthemPath),
+            ]);
+
+            return {
+                ...countryData,
+                flag: flagData,
+                coatOfArms: coatOfArmsData,
+                anthem: {
+                    name: anthemName,
+                    data: anthemData,
+                },
+                states: country.states ? country.states.split(",").map(Number) : [],
+                ethnicities: JSON.parse(country.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
+                    id: number | null;
+                })[],
+            };
+        })
+    );
+
+    return loadedCountries;
 };
