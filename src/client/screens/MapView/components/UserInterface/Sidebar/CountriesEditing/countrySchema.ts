@@ -24,7 +24,7 @@ export const createCountrySchema = zod
         coatOfArms: imageSchema,
         anthem: zod
             .object({
-                audio: audioSchema,
+                url: audioSchema,
             })
             .merge(nameSchema),
     })

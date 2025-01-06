@@ -11,6 +11,18 @@ interface EthnicityPopulation {
     population: number;
 }
 
+interface CreateCountryAttributes {
+    name: string;
+    tag: string;
+    color?: string;
+    flag: string;
+    coatOfArms: string;
+    anthem: {
+        name: string;
+        url: string;
+    };
+}
+
 contextBridge.exposeInMainWorld("electronAPI", {
     saveMapImage: (imageData: string, mapId: string) => ipcRenderer.invoke("saveMapImage", imageData, mapId),
     loadMapImage: (imagePath: string) => ipcRenderer.invoke("loadMapImage", imagePath),
@@ -37,8 +49,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
     renameState: (mapId: string, stateId: number, name: string) =>
         ipcRenderer.invoke("renameState", mapId, stateId, name),
     deleteState: (mapId: string, stateId: number) => ipcRenderer.invoke("deleteState", mapId, stateId),
-    createCountry: (mapId: string, name: string, tag: string, color?: string) =>
-        ipcRenderer.invoke("createCountry", mapId, name, tag, color),
+    createCountry: (mapId: string, attributes: CreateCountryAttributes) =>
+        ipcRenderer.invoke("createCountry", mapId, attributes),
     getAllCountries: (mapId: string) => ipcRenderer.invoke("getAllCountries", mapId),
     addStates: (mapId: string, countryTag: string, states: number[]) =>
         ipcRenderer.invoke("addStates", mapId, countryTag, states),

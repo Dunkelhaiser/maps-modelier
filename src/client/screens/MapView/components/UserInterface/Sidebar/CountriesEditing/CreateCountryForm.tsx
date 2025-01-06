@@ -19,7 +19,7 @@ const CreateCountryForm = () => {
             tag: "",
             color: "#39654a",
             anthem: {
-                audio: undefined,
+                url: undefined,
                 name: "",
             },
             flag: undefined,
@@ -28,7 +28,7 @@ const CreateCountryForm = () => {
     });
     const flagRef = form.register("flag");
     const coatOfArmsRef = form.register("coatOfArms");
-    const anthemRef = form.register("anthem.audio");
+    const anthemRef = form.register("anthem.url");
 
     const createCountry = useCreateCountry(activeMap.id);
 
@@ -92,7 +92,7 @@ const CreateCountryForm = () => {
                 <div className="flex flex-row gap-2">
                     <FormField
                         control={form.control}
-                        name="anthem.audio"
+                        name="anthem.url"
                         render={() => (
                             <FormItem className="w-full grow">
                                 <FormLabel>Anthem</FormLabel>

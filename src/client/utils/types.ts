@@ -28,6 +28,18 @@ export interface State {
     ethnicities: EthnicityComposition[];
 }
 
+export interface CountryAttributes {
+    name: string;
+    tag: string;
+    color?: string;
+    flag: string;
+    coatOfArms: string;
+    anthem: {
+        name: string;
+        url: string;
+    };
+}
+
 export interface Country {
     tag: string;
     name: string;
