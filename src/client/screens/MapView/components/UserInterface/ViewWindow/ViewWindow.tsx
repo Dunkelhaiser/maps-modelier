@@ -51,9 +51,8 @@ const ViewWindow = () => {
                     <>
                         <div className="space-y-2">
                             <Label>Owner</Label>
-                            {/* temporary placeholder */}
                             <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW_KykquMknj5dTIu5rxG4Y6bCGCNOCA5qSQ&s"
+                                src={selectedCountry?.flag}
                                 alt={`${selectedCountry?.name} flag`}
                                 className="aspect-[3/2] h-8 object-cover"
                             />
