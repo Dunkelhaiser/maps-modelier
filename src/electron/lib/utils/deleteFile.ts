@@ -3,6 +3,8 @@ import path from "path";
 import { app } from "electron";
 
 export const deleteFile = async (fileName: string, directory = ["media"]) => {
+    if (fileName === "") return;
+
     const userDataPath = app.getPath("userData");
     const directoryPath = path.join(userDataPath, ...directory);
     const filePath = path.join(directoryPath, fileName);
