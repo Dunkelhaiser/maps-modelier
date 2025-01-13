@@ -26,7 +26,14 @@ const AssignStateForm = () => {
                 <SelectContent>
                     {countries?.map((country) => (
                         <SelectItem key={country.tag} value={country.tag}>
-                            {country.name}
+                            <div className="flex flex-row items-center gap-2">
+                                <img
+                                    src={country.flag}
+                                    alt={`${country.name} flag`}
+                                    className="aspect-[3/2] h-4 rounded-sm object-cover"
+                                />
+                                {country.name}
+                            </div>
                         </SelectItem>
                     ))}
                 </SelectContent>
