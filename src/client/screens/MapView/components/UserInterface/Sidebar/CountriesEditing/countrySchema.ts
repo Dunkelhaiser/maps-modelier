@@ -15,7 +15,11 @@ export type CountryInput = zod.infer<typeof countrySchema>;
 
 export const createCountrySchema = zod
     .object({
-        tag: zod.string().trim().toUpperCase().length(3, { message: "Enter valid tag" }),
+        tag: zod
+            .string()
+            .trim()
+            .toUpperCase()
+            .regex(/^[A-Z]{3}$/, { message: "Enter valid tag" }),
         color: zod
             .string()
             .trim()
