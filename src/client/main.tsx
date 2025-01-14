@@ -6,7 +6,6 @@ import App from "./App.tsx";
 import type {
     Country,
     CountryAttributes,
-    CountryProperties,
     Ethnicity,
     EthnicityPopulation,
     Map,
@@ -48,7 +47,11 @@ interface ElectronAPI {
     getAllCountries: (mapId: string) => Promise<Country[]>;
     addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
-    updateCountry: (mapId: string, countryTag: string, options: CountryProperties) => Promise<Omit<Country, "states">>;
+    updateCountry: (
+        mapId: string,
+        countryTag: string,
+        attributes: Partial<CountryAttributes>
+    ) => Promise<Omit<Country, "states">>;
     getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
     deleteEthnicity: (mapId: string, id: number) => Promise<void>;
     renameEthnicity: (mapId: string, id: number, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;

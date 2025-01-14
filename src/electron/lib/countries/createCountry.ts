@@ -3,7 +3,7 @@ import { db } from "../../db/db.js";
 import { countries } from "../../db/schema.js";
 import { saveFile } from "../utils/saveFile.js";
 
-interface CreateCountryAttributes {
+export interface CreateCountryAttributes {
     name: string;
     tag: string;
     color?: string;
@@ -27,9 +27,9 @@ export const createCountry = async (
     } = attributes;
 
     const countryFolder = ["media", mapId, attributes.tag];
-    const flag = await saveFile(attributes.flag, `flag`, countryFolder);
-    const coatOfArms = await saveFile(attributes.coatOfArms, `coat_of_arms`, countryFolder);
-    const anthem = await saveFile(attributes.anthem.url, `anthem`, countryFolder);
+    const flag = await saveFile(attributes.flag, "flag", countryFolder);
+    const coatOfArms = await saveFile(attributes.coatOfArms, "coat_of_arms", countryFolder);
+    const anthem = await saveFile(attributes.anthem.url, "anthem", countryFolder);
 
     const [createdCountry] = await db
         .insert(countries)

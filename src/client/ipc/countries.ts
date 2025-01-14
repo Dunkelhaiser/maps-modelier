@@ -1,6 +1,6 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CountryAttributes, CountryProperties } from "@utils/types";
+import { CountryAttributes, DeepPartial } from "@utils/types";
 import { toast } from "sonner";
 
 export const useGetCountries = (mapId: string) => {
@@ -27,7 +27,8 @@ export const useUpdateCountry = (mapId: string, tag: string) => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
 
     return useMutation({
-        mutationFn: async (options: CountryProperties) => await window.electronAPI.updateCountry(mapId, tag, options),
+        mutationFn: async (attributes: DeepPartial<CountryAttributes>) =>
+            await window.electronAPI.updateCountry(mapId, tag, attributes),
         onSuccess: (data) => {
             toast.success("Country updated successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });

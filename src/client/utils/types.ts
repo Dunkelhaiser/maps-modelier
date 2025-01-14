@@ -55,12 +55,6 @@ export interface Country {
     ethnicities: EthnicityComposition[];
 }
 
-export interface CountryProperties {
-    tag?: string;
-    name?: string;
-    color?: string;
-}
-
 export interface Ethnicity {
     id: number;
     name: string;
@@ -76,3 +70,9 @@ export interface EthnicityPopulation {
     ethnicityId: number;
     population: number;
 }
+
+export type DeepPartial<T> = T extends object
+    ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;
