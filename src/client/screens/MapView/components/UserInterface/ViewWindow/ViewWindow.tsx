@@ -49,14 +49,16 @@ const ViewWindow = () => {
             <CardContent className="space-y-4">
                 {selectedProvinces.length === 1 && (
                     <>
-                        <div className="space-y-2">
-                            <Label>Owner</Label>
-                            <img
-                                src={selectedCountry?.flag}
-                                alt={`${selectedCountry?.name} flag`}
-                                className="aspect-[3/2] h-8 object-cover"
-                            />
-                        </div>
+                        {selectedCountry && (
+                            <div className="space-y-2">
+                                <Label>Owner</Label>
+                                <img
+                                    src={selectedCountry.flag}
+                                    alt={`${selectedCountry.name} flag`}
+                                    className="aspect-[3/2] h-8 object-cover"
+                                />
+                            </div>
+                        )}
                         <div>
                             <Label>Province Population</Label>
                             <EthnicComposition
