@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import type {
     Country,
     CountryAttributes,
+    DeepPartial,
     Ethnicity,
     EthnicityPopulation,
     Map,
@@ -50,7 +51,7 @@ interface ElectronAPI {
     updateCountry: (
         mapId: string,
         countryTag: string,
-        attributes: Partial<CountryAttributes>
+        attributes: DeepPartial<CountryAttributes>
     ) => Promise<Omit<Country, "states">>;
     getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
     deleteEthnicity: (mapId: string, id: number) => Promise<void>;
