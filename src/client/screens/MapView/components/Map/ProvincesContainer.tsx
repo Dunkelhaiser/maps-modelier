@@ -15,7 +15,8 @@ interface Props {
 }
 
 export const ProvincesContainer = memo(
-    ({ province: { id, shape, color, type, ethnicities, population }, states }: Props) => {
+    ({ province, states }: Props) => {
+        const { id, shape, type } = province;
         const selectedProvinces = useMapStore((state) => state.selectedProvinces);
         const selectedState = useMapStore((state) => state.selectedState);
         const selectedCountry = useMapStore((state) => state.selectedCountry);
@@ -29,7 +30,7 @@ export const ProvincesContainer = memo(
         const removeStates = useRemoveStates(activeMap.id);
 
         const isSelected = useMemo(
-            () => selectedProvinces.some((province) => province.id === id),
+            () => selectedProvinces.some((selectedProvince) => selectedProvince.id === id),
             [selectedProvinces, id]
         );
 
@@ -90,38 +91,22 @@ export const ProvincesContainer = memo(
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {
             if (mode === "viewing") {
-                selectProvince(
-                    {
-                        id,
-                        type,
-                        color,
-                        shape,
-                        ethnicities,
-                        population,
-                    },
-                    event.shiftKey
-                );
+                selectProvince(province, event.shiftKey);
                 return;
             }
 
             if (event.altKey && selectedCountry) {
                 const affectedState = states.find((s) => s.provinces.includes(id));
                 if (affectedState) handleCountryEdit(selectedCountry, affectedState.id);
-            } else if (event.ctrlKey && selectedState) {
-                handleStateEdit(selectedState);
-            } else {
-                selectProvince(
-                    {
-                        id,
-                        type,
-                        color,
-                        shape,
-                        ethnicities,
-                        population,
-                    },
-                    event.shiftKey
-                );
+                return;
             }
+
+            if (event.ctrlKey && selectedState) {
+                handleStateEdit(selectedState);
+                return;
+            }
+
+            selectProvince(province, event.shiftKey);
         };
 
         return (
