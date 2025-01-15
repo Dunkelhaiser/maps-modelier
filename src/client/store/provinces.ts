@@ -1,5 +1,6 @@
 import { Country, Province, State } from "@utils/types";
 import { StateCreator } from "zustand";
+import { useSidebarStore } from "./sidebar";
 import { MapStore } from "./store";
 import { queryClient } from "@/main";
 
@@ -21,6 +22,10 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
     ...initialProvincesSlice,
 
     selectProvince: (province: Province, isShiftKey: boolean) => {
+        const { screen } = useSidebarStore.getState();
+
+        if (screen) return;
+
         if (isShiftKey) {
             const { selectedProvinces } = get();
             const isProvinceSelected = selectedProvinces.some((p) => p.id === province.id);
