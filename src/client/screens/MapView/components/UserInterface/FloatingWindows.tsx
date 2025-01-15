@@ -1,7 +1,5 @@
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
-import CountryWindow from "./CountryWindow";
-import CreateCountryWindow from "./CreateCountryWindow";
 import ProvinceWindow from "./ProvinceWindow";
 import CreateStateWindow from "./StateWindow/CreateStateWindow";
 import StateWindow from "./StateWindow/StateWindow";
@@ -12,7 +10,6 @@ const FloatingWindows = () => {
     const screen = useSidebarStore((state) => state.screen);
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
-    const selectedCountry = useMapStore((state) => state.selectedCountry);
 
     return (
         !screen && (
@@ -26,11 +23,6 @@ const FloatingWindows = () => {
                     <StateWindow />
                 ) : (
                     mode === "states_editing" && selectedProvinces.length > 0 && <CreateStateWindow />
-                )}
-                {mode === "countries_editing" && selectedProvinces.length > 0 && selectedCountry ? (
-                    <CountryWindow />
-                ) : (
-                    mode === "countries_editing" && selectedProvinces.length > 0 && <CreateCountryWindow />
                 )}
             </div>
         )
