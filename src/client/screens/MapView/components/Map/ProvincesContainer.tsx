@@ -74,6 +74,13 @@ export const ProvincesContainer = memo(
         };
 
         const addStateToCountry = async ({ tag }: Country, stateId: number) => {
+            const stateToAdd = states.find((s) => s.id === stateId);
+
+            if (stateToAdd?.type === "water") {
+                toast.error("Cannot add water state to a country");
+                return;
+            }
+
             addStates.mutate({ countryTag: tag, stateIds: [stateId] });
         };
 
