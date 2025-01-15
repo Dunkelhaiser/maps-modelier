@@ -1,10 +1,17 @@
 import { useSidebarStore } from "@store/sidebar";
+import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { TableCell, TableRow } from "@ui/Table";
 import { Plus } from "lucide-react";
 
 const CountryRowCreate = () => {
     const setScreen = useSidebarStore((state) => state.setScreen);
+    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
+
+    const createCountryHandler = () => {
+        setScreen("countries_editing");
+        deselectProvinces();
+    };
 
     return (
         <TableRow className="hover:bg-card">
@@ -18,7 +25,7 @@ const CountryRowCreate = () => {
                     className="size-6"
                     aria-label="Add"
                     type="button"
-                    onClick={() => setScreen("countries_editing")}
+                    onClick={createCountryHandler}
                 >
                     <Plus className="!size-3.5" />
                 </Button>
