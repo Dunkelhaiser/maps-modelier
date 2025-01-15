@@ -3,7 +3,7 @@ import { StateCreator } from "zustand";
 import { initialProvincesSlice } from "./provinces";
 import { MapStore } from "./store";
 
-export type Mode = "viewing" | "provinces_editing" | "states_editing" | "countries_editing";
+export type Mode = "viewing" | "editing";
 
 export interface MapSlice {
     mode: Mode;

@@ -18,11 +18,15 @@ const FloatingWindows = () => {
                     selectedProvinces.length > 0 &&
                     selectedProvinces[0].type === "land" &&
                     selectedState && <ViewWindow />}
-                {mode === "provinces_editing" && <ProvinceWindow />}
-                {mode === "states_editing" && selectedProvinces.length > 0 && selectedState ? (
-                    <StateWindow />
-                ) : (
-                    mode === "states_editing" && selectedProvinces.length > 0 && <CreateStateWindow />
+                {mode === "editing" && (
+                    <div className="flex flex-row items-end gap-4">
+                        <ProvinceWindow />
+                        {selectedProvinces.length > 0 && selectedState ? (
+                            <StateWindow />
+                        ) : (
+                            selectedProvinces.length > 0 && <CreateStateWindow />
+                        )}
+                    </div>
                 )}
             </div>
         )

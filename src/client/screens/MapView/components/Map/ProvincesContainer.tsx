@@ -89,10 +89,25 @@ export const ProvincesContainer = memo(
         };
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {
-            if (mode === "countries_editing" && selectedCountry && event.shiftKey) {
+            if (mode === "viewing") {
+                selectProvince(
+                    {
+                        id,
+                        type,
+                        color,
+                        shape,
+                        ethnicities,
+                        population,
+                    },
+                    event.shiftKey
+                );
+                return;
+            }
+
+            if (event.altKey && selectedCountry) {
                 const affectedState = states.find((s) => s.provinces.includes(id));
                 if (affectedState) handleCountryEdit(selectedCountry, affectedState.id);
-            } else if (mode === "states_editing" && selectedState && event.shiftKey) {
+            } else if (event.ctrlKey && selectedState) {
                 handleStateEdit(selectedState);
             } else {
                 selectProvince(

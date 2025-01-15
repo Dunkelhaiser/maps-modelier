@@ -12,9 +12,7 @@ const ModeSelect = () => {
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="viewing">Viewing</SelectItem>
-                <SelectItem value="provinces_editing">Provinces Editing</SelectItem>
-                <SelectItem value="states_editing">States Editing</SelectItem>
-                <SelectItem value="countries_editing">Countries Editing</SelectItem>
+                <SelectItem value="editing">Editing</SelectItem>
             </SelectContent>
         </Select>
     );
