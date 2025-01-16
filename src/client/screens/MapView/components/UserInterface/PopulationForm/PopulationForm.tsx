@@ -57,7 +57,7 @@ const PopulationForm = ({ ethnicities }: Props) => {
     return (
         <div>
             <Form {...form}>
-                <form className="grid gap-4 py-4" onSubmit={form.handleSubmit(addPopulationHandler)}>
+                <form className="grid gap-4 pt-4" onSubmit={form.handleSubmit(addPopulationHandler)}>
                     <Label>Population</Label>
                     <ScrollArea viewportClassName="max-h-[50vh]">
                         <div className="space-y-4 py-1 pr-4">
