@@ -21,14 +21,14 @@ const isFileTypeMatch = (fileType: string, acceptedType: string) => {
     return fileType === acceptedType;
 };
 
-export const fileSchema = ({
+export const fileSchema = <TOptional extends boolean = false>({
     maxSize = MAX_FILE_SIZE,
     acceptedTypes,
     emptyMessage = "Provide a file",
     sizeMessage = `Max size is ${maxSize}MB`,
     typesMessage = "Provide a file in the accepted format",
-    optional = false,
-}: FileOptions) =>
+    optional = false as TOptional,
+}: FileOptions & { optional?: TOptional }) =>
     zod
         .unknown()
         .transform((value) => value as File[])
@@ -55,17 +55,27 @@ export const fileSchema = ({
             return acceptedTypes.some((type) => isFileTypeMatch(files[0].type, type));
         }, typesMessage)
         .transform((files) => {
-            if (optional && files.length === 0) return undefined;
+            if (optional && files.length === 0) {
+                return Promise.resolve(undefined as TOptional extends true ? string | undefined : string);
+            }
             const [file] = files;
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            return new Promise<string | undefined>((resolve, reject) => {
-                reader.onload = () => resolve(reader.result as string);
+            return new Promise<TOptional extends true ? string | undefined : string>((resolve, reject) => {
+                reader.onload = () => {
+                    if (reader.result === null) {
+                        reject(new Error("Failed to read file"));
+                        return;
+                    }
+                    resolve(reader.result as TOptional extends true ? string | undefined : string);
+                };
                 reader.onerror = reject;
             });
         });
 
-export const imageSchema = ({ optional = false } = {}) =>
+export const imageSchema = <TOptional extends boolean = false>(
+    { optional = false as TOptional } = {} as { optional?: TOptional }
+) =>
     fileSchema({
         acceptedTypes: ACCEPTED_IMAGE_TYPES,
         typesMessage: "Provide an image in .jpg, .jpeg, .png, .webp or .bmp format",
@@ -74,7 +84,9 @@ export const imageSchema = ({ optional = false } = {}) =>
         optional,
     });
 
-export const audioSchema = ({ optional = false } = {}) =>
+export const audioSchema = <TOptional extends boolean = false>(
+    { optional = false as TOptional } = {} as { optional?: TOptional }
+) =>
     fileSchema({
         acceptedTypes: ["audio/*"],
         typesMessage: "Provide an audio file",
