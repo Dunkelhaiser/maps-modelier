@@ -3,7 +3,7 @@ import { z as zod } from "zod";
 
 export const createMapSchema = zod
     .object({
-        provinces: imageSchema,
+        provinces: imageSchema(),
     })
     .merge(nameSchema);
 
