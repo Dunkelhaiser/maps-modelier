@@ -11,10 +11,10 @@ const EthnicComposition = ({ totalPopulation, ethnicities }: Props) => {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <p>{totalPopulation.toLocaleString()} people</p>
+                    <p className="w-fit">{totalPopulation.toLocaleString()} people</p>
                 </TooltipTrigger>
                 {totalPopulation > 0 && (
-                    <TooltipContent className="flex flex-col gap-2">
+                    <TooltipContent side="right" className="flex flex-col gap-2">
                         {ethnicities.map((ethnicity) => (
                             <div key={ethnicity.id}>
                                 <p>
