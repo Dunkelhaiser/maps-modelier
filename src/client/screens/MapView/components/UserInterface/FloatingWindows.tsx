@@ -7,12 +7,12 @@ import ViewWindow from "./ViewWindow/ViewWindow";
 
 const FloatingWindows = () => {
     const mode = useMapStore((state) => state.mode);
-    const screen = useSidebarStore((state) => state.screen);
+    const activeSidebar = useSidebarStore((state) => state.activeSidebar);
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
 
     return (
-        !screen && (
+        !activeSidebar && (
             <div className="absolute bottom-3 left-3 flex flex-col gap-4">
                 {mode === "viewing" && selectedProvinces.length > 0 && selectedState && <ViewWindow />}
                 {mode === "editing" && (

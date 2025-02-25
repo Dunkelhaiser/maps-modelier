@@ -11,7 +11,7 @@ import { CreateCountryInput, createCountrySchema } from "./countrySchema";
 
 const CreateCountryForm = () => {
     const activeMap = useActiveMap();
-    const setScreen = useSidebarStore((state) => state.setScreen);
+    const openSidebar = useSidebarStore((state) => state.openSidebar);
     const form = useForm<CreateCountryInput>({
         resolver: zodResolver(createCountrySchema),
         defaultValues: {
@@ -34,7 +34,7 @@ const CreateCountryForm = () => {
 
     const createCountryHandler = async (data: CreateCountryInput) => {
         await createCountry.mutateAsync(data);
-        setScreen("countries");
+        openSidebar("countries");
     };
 
     return (

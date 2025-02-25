@@ -5,11 +5,11 @@ import { TableCell, TableRow } from "@ui/Table";
 import { Plus } from "lucide-react";
 
 const CountryRowCreate = () => {
-    const setScreen = useSidebarStore((state) => state.setScreen);
+    const openSidebar = useSidebarStore((state) => state.openSidebar);
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
 
     const createCountryHandler = () => {
-        setScreen("countries_editing");
+        openSidebar("countries_editing");
         deselectProvinces();
     };
 

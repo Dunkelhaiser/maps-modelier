@@ -4,12 +4,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ui/To
 import { Map, UsersRound } from "lucide-react";
 
 const Menu = () => {
-    const setScreen = useSidebarStore((state) => state.setScreen);
-    const screen = useSidebarStore((state) => state.screen);
+    const openSidebar = useSidebarStore((state) => state.openSidebar);
+    const activeSidebar = useSidebarStore((state) => state.activeSidebar);
 
     return (
         /* @ts-expect-error no value type inference */
-        <ToggleGroup type="single" onValueChange={setScreen} value={screen}>
+        <ToggleGroup type="single" onValueChange={openSidebar} value={activeSidebar}>
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>

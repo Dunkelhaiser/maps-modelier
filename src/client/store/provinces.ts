@@ -22,9 +22,9 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
     ...initialProvincesSlice,
 
     selectProvince: (province: Province, isShiftKey: boolean) => {
-        const { screen } = useSidebarStore.getState();
+        const { activeSidebar } = useSidebarStore.getState();
 
-        if (screen) return;
+        if (activeSidebar) return;
 
         if (isShiftKey) {
             const { selectedProvinces } = get();

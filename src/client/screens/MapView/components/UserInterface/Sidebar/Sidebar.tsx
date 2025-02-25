@@ -5,14 +5,14 @@ import CountriesEditing from "./CountriesEditing/CountriesEditing";
 import Ethnicities from "./Ethnicities/Ethnicities";
 
 const Sidebar = () => {
-    const screen = useSidebarStore((state) => state.screen);
+    const activeSidebar = useSidebarStore((state) => state.activeSidebar);
 
     return (
-        screen && (
+        activeSidebar && (
             <Card className="absolute bottom-3 left-3 top-[calc(45.6px_+_0.75rem)] w-[28rem]">
-                {screen === "ethnicities" && <Ethnicities />}
-                {screen === "countries" && <Countries />}
-                {screen === "countries_editing" && <CountriesEditing />}
+                {activeSidebar === "ethnicities" && <Ethnicities />}
+                {activeSidebar === "countries" && <Countries />}
+                {activeSidebar === "countries_editing" && <CountriesEditing />}
             </Card>
         )
     );

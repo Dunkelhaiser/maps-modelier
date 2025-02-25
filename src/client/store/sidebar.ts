@@ -1,15 +1,15 @@
 import { create } from "zustand";
 
-export type Screen = "countries" | "countries_editing" | "ethnicities" | null;
+export type Sidebar = "countries" | "countries_editing" | "ethnicities" | null;
 
 export interface SidebarStore {
-    screen: Screen;
-    setScreen: (screen: Screen) => void;
+    activeSidebar: Sidebar;
+    openSidebar: (screen: Sidebar) => void;
     closeSidebar: () => void;
 }
 
 export const useSidebarStore = create<SidebarStore>()((set) => ({
-    screen: null,
-    setScreen: (screen) => set({ screen }),
-    closeSidebar: () => set({ screen: null }),
+    activeSidebar: null,
+    openSidebar: (screen) => set({ activeSidebar: screen }),
+    closeSidebar: () => set({ activeSidebar: null }),
 }));
