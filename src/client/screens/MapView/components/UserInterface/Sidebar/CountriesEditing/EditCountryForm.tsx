@@ -7,6 +7,7 @@ import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateCountryInput, updateCountrySchema } from "./countrySchema";
 
@@ -31,6 +32,20 @@ const EditCountryForm = () => {
     const flagRef = form.register("flag");
     const coatOfArmsRef = form.register("coatOfArms");
     const anthemRef = form.register("anthem.url");
+
+    useEffect(() => {
+        form.reset({
+            name: selectedCountry.name,
+            tag: selectedCountry.tag,
+            color: selectedCountry.color,
+            anthem: {
+                url: undefined,
+                name: selectedCountry.anthem.name,
+            },
+            flag: undefined,
+            coatOfArms: undefined,
+        });
+    }, [form, selectedCountry.anthem.name, selectedCountry.color, selectedCountry.name, selectedCountry.tag]);
 
     const updateCountry = useUpdateCountry(activeMap.id, selectedCountry.tag);
 
