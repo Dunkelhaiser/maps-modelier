@@ -12,7 +12,7 @@ const CountriesEditing = () => {
     return (
         <>
             <CardHeaderWithClose onClick={closeSidebar}>
-                <CardTitle className="text-xl">{selectedCountry ? "Edit Country" : "Create Country"}</CardTitle>
+                <CardTitle className="text-xl">{selectedCountry?.tag ? "Edit Country" : "Create Country"}</CardTitle>
             </CardHeaderWithClose>
             <CardContent className="flex h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] flex-col gap-2 overflow-auto">
                 {selectedCountry ? <EditCountryForm /> : <CreateCountryForm />}

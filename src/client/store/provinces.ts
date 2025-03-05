@@ -1,7 +1,7 @@
 import { Country, Province, State } from "@utils/types";
 import { StateCreator } from "zustand";
 import { useSidebarStore } from "./sidebar";
-import { MapStore, useMapStore } from "./store";
+import { MapStore } from "./store";
 import { queryClient } from "@/main";
 
 export interface ProvincesSlice {
@@ -23,15 +23,9 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
 
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => {
         const { activeSidebar, openSidebar } = useSidebarStore.getState();
-        const { mode } = useMapStore.getState();
 
         if (isRightClick) {
-            if (province.type === "water") {
-                openSidebar("countries");
-                return;
-            }
-
-            openSidebar(mode === "editing" ? "countries_editing" : "countries");
+            openSidebar("countries");
             const selectedState = findState(province.id, get().activeMap?.id);
             const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap?.id) : null;
             set({ selectedCountry });

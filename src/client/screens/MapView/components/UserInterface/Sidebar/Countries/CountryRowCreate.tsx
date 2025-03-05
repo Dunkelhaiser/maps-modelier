@@ -6,11 +6,25 @@ import { Plus } from "lucide-react";
 
 const CountryRowCreate = () => {
     const openSidebar = useSidebarStore((state) => state.openSidebar);
-    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
 
     const createCountryHandler = () => {
-        openSidebar("countries_editing");
-        deselectProvinces();
+        openSidebar("countries");
+        useMapStore.setState({
+            selectedCountry: {
+                anthem: {
+                    name: "",
+                    url: "",
+                },
+                coatOfArms: "",
+                flag: "",
+                name: "",
+                population: 0,
+                states: [],
+                tag: "",
+                color: "",
+                ethnicities: [],
+            },
+        });
     };
 
     return (

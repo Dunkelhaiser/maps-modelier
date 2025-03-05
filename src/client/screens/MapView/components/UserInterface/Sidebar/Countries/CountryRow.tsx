@@ -12,11 +12,9 @@ interface Props {
 const CountryRow = ({ country }: Props) => {
     const mode = useMapStore((state) => state.mode);
     const openSidebar = useSidebarStore((state) => state.openSidebar);
-    const deselectProvinces = useMapStore((state) => state.deselectProvinces);
 
     const editCountry = () => {
-        openSidebar("countries_editing");
-        deselectProvinces();
+        openSidebar("countries");
         useMapStore.setState({ selectedCountry: country });
     };
 
