@@ -98,7 +98,7 @@ export const ProvincesContainer = memo(
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {
             if (mode === "viewing") {
-                selectProvince(province, event.shiftKey);
+                selectProvince(province, event.shiftKey, event.button === 2);
                 return;
             }
 
@@ -113,7 +113,7 @@ export const ProvincesContainer = memo(
                 return;
             }
 
-            selectProvince(province, event.shiftKey);
+            selectProvince(province, event.shiftKey, event.button === 2);
         };
 
         return (
