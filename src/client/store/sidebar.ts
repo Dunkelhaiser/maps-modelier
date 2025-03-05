@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { useMapStore } from "./store";
 
 export type Sidebar = "countries" | "countries_editing" | "ethnicities" | null;
 
@@ -10,6 +11,9 @@ export interface SidebarStore {
 
 export const useSidebarStore = create<SidebarStore>()((set) => ({
     activeSidebar: null,
-    openSidebar: (screen) => set({ activeSidebar: screen }),
+    openSidebar: (screen) => {
+        useMapStore.getState().deselectProvinces();
+        set({ activeSidebar: screen });
+    },
     closeSidebar: () => set({ activeSidebar: null }),
 }));
