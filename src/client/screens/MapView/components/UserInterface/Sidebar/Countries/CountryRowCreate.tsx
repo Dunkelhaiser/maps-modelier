@@ -31,7 +31,6 @@ const CountryRowCreate = () => {
         <TableRow className="hover:bg-card">
             <TableCell className="aspect-[3/2] h-6" />
             <TableCell className="text-right" />
-            <TableCell className="text-right" />
             <TableCell className="text-right">
                 <Button
                     size="icon"

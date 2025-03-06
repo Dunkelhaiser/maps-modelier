@@ -26,11 +26,10 @@ const Countries = () => {
                             <TableHead>Flag</TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead className="text-right">Population</TableHead>
-                            {mode !== "viewing" && <TableHead className="text-right">Actions</TableHead>}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {mode !== "viewing" && <CountryRowCreate />}
+                        {mode === "editing" && <CountryRowCreate />}
                         {data?.map((country) => <CountryRow country={country} key={country.tag} />)}
                     </TableBody>
                 </Table>
