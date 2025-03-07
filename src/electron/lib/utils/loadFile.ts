@@ -10,6 +10,7 @@ const mimeTypes: Record<string, string> = {
     webp: "image/webp",
     svg: "image/svg+xml",
     mp3: "audio/mpeg",
+    mpeg: "audio/mpeg",
     wav: "audio/wav",
     ogg: "audio/ogg",
 };
