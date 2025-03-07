@@ -1,6 +1,7 @@
 import { getTableColumns } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { countries } from "../../db/schema.js";
+import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 
 export interface CreateCountryAttributes {
@@ -20,7 +21,16 @@ export const createCountry = async (
     mapId: string,
     attributes: CreateCountryAttributes
 ) => {
-    const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(countries);
+    const {
+        mapId: mapIdCol,
+        createdAt,
+        updatedAt,
+        anthemPath,
+        anthemName: anthemNameCol,
+        flag: flagCol,
+        coatOfArms: coatOfArmsCol,
+        ...cols
+    } = getTableColumns(countries);
     const {
         anthem: { name: anthemName },
         ...data
@@ -43,5 +53,15 @@ export const createCountry = async (
         })
         .returning(cols);
 
-    return createdCountry;
+    const flagData = await loadFile(flag);
+    const coatOfArmsData = await loadFile(coatOfArms);
+    const anthemData = await loadFile(anthem);
+
+    return {
+        ...createdCountry,
+        states: [],
+        flag: flagData,
+        coatOfArms: coatOfArmsData,
+        anthem: { name: anthemName, url: anthemData },
+    };
 };
