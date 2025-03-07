@@ -36,7 +36,7 @@ export interface CountryAttributes {
     coatOfArms: string;
     anthem: {
         name: string;
-        url: string;
+        data: string;
     };
 }
 
@@ -48,7 +48,7 @@ export interface Country {
     coatOfArms: string;
     anthem: {
         name: string;
-        url: string;
+        data: string;
     };
     states: number[];
     population: number;
