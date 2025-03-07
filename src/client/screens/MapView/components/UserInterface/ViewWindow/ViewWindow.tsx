@@ -1,8 +1,9 @@
+import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
-import { EthnicityComposition } from "@utils/types";
+import { Country, EthnicityComposition } from "@utils/types";
 import { X } from "lucide-react";
 import EthnicComposition from "./EthnicComposition";
 
@@ -11,6 +12,7 @@ const ViewWindow = () => {
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
     const selectedCountry = useMapStore((state) => state.selectedCountry);
+    const openSidebar = useSidebarStore((state) => state.openSidebar);
 
     const areAllLandProvinces = selectedProvinces.every((province) => province.type === "land");
 
@@ -30,6 +32,11 @@ const ViewWindow = () => {
         });
 
         return Array.from(merged.values());
+    };
+
+    const selectCountry = (country: Country) => {
+        openSidebar("countries");
+        useMapStore.setState({ selectedCountry: country });
     };
 
     return (
@@ -53,13 +60,15 @@ const ViewWindow = () => {
                     {selectedProvinces.length === 1 && (
                         <>
                             {selectedCountry && (
-                                <div className="space-y-2">
+                                <div className="flex flex-col items-start gap-2">
                                     <Label>Owner</Label>
-                                    <img
-                                        src={selectedCountry.flag}
-                                        alt={`${selectedCountry.name} flag`}
-                                        className="aspect-[3/2] h-8 object-cover"
-                                    />
+                                    <button type="button" onClick={() => selectCountry(selectedCountry)}>
+                                        <img
+                                            src={selectedCountry.flag}
+                                            alt={`${selectedCountry.name} flag`}
+                                            className="aspect-[3/2] h-8 rounded-md object-cover"
+                                        />
+                                    </button>
                                 </div>
                             )}
                             <div>
