@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useUpdateCountry } from "@ipc/countries";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
@@ -14,7 +13,7 @@ import { UpdateCountryInput, updateCountrySchema } from "./countrySchema";
 const EditCountryForm = () => {
     const activeMap = useActiveMap();
     const selectedCountry = useMapStore((state) => state.selectedCountry)!;
-    const openSidebar = useSidebarStore((state) => state.openSidebar);
+    const selectCountry = useMapStore((state) => state.selectCountry);
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
         defaultValues: {
@@ -50,8 +49,8 @@ const EditCountryForm = () => {
     const updateCountry = useUpdateCountry(activeMap.id, selectedCountry.tag);
 
     const updateCountryHandler = async (data: UpdateCountryInput) => {
-        await updateCountry.mutateAsync(data);
-        openSidebar("countries");
+        const updatedCountry = await updateCountry.mutateAsync(data);
+        selectCountry(updatedCountry);
     };
 
     return (
