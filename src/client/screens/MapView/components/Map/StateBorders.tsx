@@ -1,6 +1,7 @@
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetCountries } from "@ipc/countries";
 import { Container, Graphics } from "@pixi/react";
+import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { Province, State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
@@ -14,10 +15,20 @@ interface Props {
 
 const StateBorders = ({ state, provinces }: Props) => {
     const selectedState = useMapStore((store) => store.selectedState);
+    const selectedCountry = useMapStore((store) => store.selectedCountry);
+    const selectedProvinces = useMapStore((store) => store.selectedProvinces);
+    const activeSidebar = useSidebarStore((store) => store.activeSidebar);
     const activeMap = useActiveMap();
     const { data: countries } = useGetCountries(activeMap.id);
 
     const isSelected = selectedState?.id === state.id;
+
+    const isInSelectedCountry = useMemo(() => {
+        if (activeSidebar !== "countries" || !selectedCountry || selectedState || selectedProvinces.length > 0) {
+            return false;
+        }
+        return selectedCountry.states.includes(state.id);
+    }, [activeSidebar, selectedCountry, selectedState, selectedProvinces, state.id]);
 
     const countryColor = useMemo(() => {
         const country = countries?.find((c) => c.states.includes(state.id));
@@ -34,7 +45,15 @@ const StateBorders = ({ state, provinces }: Props) => {
 
                 const unassignedFillColor = province.type === "land" ? 0x39654a : 0x517478;
                 const fillColor = countryColor ? parseInt(countryColor.replace("#", "0x"), 16) : unassignedFillColor;
-                const borderColor = isSelected ? brightenColor(fillColor, 1) : darkenColor(fillColor, 0.5);
+
+                let borderColor;
+                if (isSelected) {
+                    borderColor = brightenColor(fillColor, 1);
+                } else if (isInSelectedCountry) {
+                    borderColor = brightenColor(darkenColor(fillColor, 0.2), 0.4);
+                } else {
+                    borderColor = darkenColor(fillColor, 0.5);
+                }
 
                 g.lineStyle({
                     width: 0.5,
@@ -87,11 +106,14 @@ const StateBorders = ({ state, provinces }: Props) => {
                 });
             });
         },
-        [provinces, state.provinces, isSelected, countryColor]
+        [provinces, state.provinces, isSelected, countryColor, isInSelectedCountry]
     );
 
+    // eslint-disable-next-line no-nested-ternary
+    const zIndex = isSelected ? 3 : isInSelectedCountry ? 2 : 1;
+
     return (
-        <Container eventMode="static" zIndex={isSelected ? 1 : 0}>
+        <Container eventMode="static" zIndex={zIndex}>
             <Graphics draw={drawBorders} />
         </Container>
     );

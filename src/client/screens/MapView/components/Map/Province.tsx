@@ -10,9 +10,18 @@ interface ProvinceProps extends Omit<ProvinceType, "color" | "population" | "eth
     countryColor?: string;
     isSelected: boolean;
     isInSelectedState: boolean;
+    isInSelectedCountry: boolean;
 }
 
-const Province = ({ id, shape, type, countryColor, isSelected, isInSelectedState }: ProvinceProps) => {
+const Province = ({
+    id,
+    shape,
+    type,
+    countryColor,
+    isSelected,
+    isInSelectedState,
+    isInSelectedCountry,
+}: ProvinceProps) => {
     const drawRegion = useCallback(
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
@@ -20,26 +29,29 @@ const Province = ({ id, shape, type, countryColor, isSelected, isInSelectedState
             const unassignedFillColor = type === "land" ? 0x39654a : 0x517478;
             const fillColor = countryColor ? parseInt(countryColor.replace("#", "0x"), 16) : unassignedFillColor;
 
-            const borderColor = darkenColor(fillColor, isSelected ? 0.2 : 0.4);
+            const borderColor = darkenColor(fillColor, isSelected || isInSelectedCountry ? 0.2 : 0.4);
 
             let finalFillColor = fillColor;
-            if (isSelected) {
+            if (isSelected || isInSelectedCountry) {
                 finalFillColor = brightenColor(fillColor, 0.4);
             } else if (isInSelectedState) {
                 finalFillColor = brightenColor(fillColor, 0.2);
             }
 
-            const selectedBorderColor = brightenColor(borderColor, 0.3);
+            let finalBorderColor = borderColor;
+            if (isSelected || isInSelectedCountry) {
+                finalBorderColor = brightenColor(borderColor, 0.3);
+            }
 
             g.beginFill(finalFillColor);
             g.lineStyle({
                 width: 0.25,
-                color: isSelected ? selectedBorderColor : borderColor,
+                color: finalBorderColor,
             });
             g.drawPolygon(regionShape);
             g.endFill();
         },
-        [type, countryColor, isSelected, isInSelectedState]
+        [type, countryColor, isSelected, isInSelectedState, isInSelectedCountry]
     );
 
     const shapes = Array.isArray(shape) ? shape : [shape];
@@ -56,7 +68,8 @@ export const MemoizedProvince = memo(Province, (prevProps, nextProps) => {
         prevProps.shape === nextProps.shape &&
         prevProps.countryColor === nextProps.countryColor &&
         prevProps.isSelected === nextProps.isSelected &&
-        prevProps.isInSelectedState === nextProps.isInSelectedState
+        prevProps.isInSelectedState === nextProps.isInSelectedState &&
+        prevProps.isInSelectedCountry === nextProps.isInSelectedCountry
     );
 });
 MemoizedProvince.displayName = "MemoizedProvince";
