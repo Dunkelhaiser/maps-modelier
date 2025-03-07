@@ -106,7 +106,7 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
                 coatOfArms: coatOfArmsData,
                 anthem: {
                     name: anthemName,
-                    data: anthemData,
+                    url: anthemData,
                 },
                 states: country.states ? country.states.split(",").map(Number) : [],
                 ethnicities: JSON.parse(country.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
