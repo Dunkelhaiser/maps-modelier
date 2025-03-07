@@ -48,11 +48,7 @@ interface ElectronAPI {
     getAllCountries: (mapId: string) => Promise<Country[]>;
     addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
-    updateCountry: (
-        mapId: string,
-        countryTag: string,
-        attributes: DeepPartial<CountryAttributes>
-    ) => Promise<Omit<Country, "states">>;
+    updateCountry: (mapId: string, countryTag: string, attributes: DeepPartial<CountryAttributes>) => Promise<Country>;
     getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
     deleteEthnicity: (mapId: string, id: number) => Promise<void>;
     renameEthnicity: (mapId: string, id: number, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;

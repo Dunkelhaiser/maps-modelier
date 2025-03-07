@@ -1,8 +1,9 @@
 import path from "path";
 import { and, eq, getTableColumns } from "drizzle-orm";
 import { db } from "../../db/db.js";
-import { countries } from "../../db/schema.js";
+import { countries, countryStates } from "../../db/schema.js";
 import { deleteFile } from "../utils/deleteFile.js";
+import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 import { CreateCountryAttributes } from "./createCountry.js";
 
@@ -56,5 +57,19 @@ export const updateCountry = async (
         .where(and(eq(countries.tag, countryTag), eq(countries.mapId, mapId)))
         .returning(cols);
 
-    return updatedCountry;
+    const flagData = await loadFile(updatedCountry.flag);
+    const coatOfArmsData = await loadFile(updatedCountry.coatOfArms);
+    const anthemData = await loadFile(updatedCountry.anthemPath);
+
+    const { anthemName, anthemPath, flag: flagField, coatOfArms: coatOfArmsField, ...countryData } = updatedCountry;
+
+    const states = await db.select().from(countryStates).where(eq(countryStates.countryTag, countryTag));
+
+    return {
+        ...countryData,
+        states: states.map((state) => state.stateId),
+        flag: flagData,
+        coatOfArms: coatOfArmsData,
+        anthem: { name: updatedCountry.anthemName, url: anthemData },
+    };
 };
