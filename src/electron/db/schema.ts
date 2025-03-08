@@ -236,3 +236,83 @@ export const allianceMembers = sqliteTable(
         }).onDelete("cascade"),
     })
 );
+
+export const wars = sqliteTable(
+    "wars",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM wars WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        name: text("name").notNull(),
+        aggressor: text("aggressor").references(() => countries.tag, { onDelete: "set null" }),
+        defender: text("defender").references(() => countries.tag, { onDelete: "set null" }),
+        startedAt: integer("started_at", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        endedAt: integer("ended_at", { mode: "timestamp" }),
+        createdAt: integer("created_at", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updated_at", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "wars_pk" }),
+    })
+);
+
+export const warSides = sqliteTable(
+    "war_sides",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM war_sides WHERE war_id = war_id)`),
+        warId: integer("war_id")
+            .notNull()
+            .references(() => wars.id, { onDelete: "cascade" }),
+        side: text("side").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.warId, table.id], name: "war_sides_pk" }),
+        warsReference: foreignKey({
+            columns: [table.mapId, table.warId],
+            foreignColumns: [wars.mapId, wars.id],
+            name: "wars_reference",
+        }).onDelete("cascade"),
+    })
+);
+
+export const warParticipants = sqliteTable(
+    "war_participants",
+    {
+        sideId: integer("side_id")
+            .notNull()
+            .references(() => warSides.id, { onDelete: "cascade" }),
+        countryTag: text("country_tag")
+            .notNull()
+            .references(() => countries.tag, { onDelete: "cascade" }),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.sideId, table.countryTag], name: "war_participants_pk" }),
+        warSidesReference: foreignKey({
+            columns: [table.mapId, table.sideId],
+            foreignColumns: [warSides.mapId, warSides.id],
+            name: "war_sides_reference",
+        }).onDelete("cascade"),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryTag],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "countries_reference",
+        }).onDelete("cascade"),
+    })
+);
