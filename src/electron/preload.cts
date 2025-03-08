@@ -51,6 +51,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     deleteState: (mapId: string, stateId: number) => ipcRenderer.invoke("deleteState", mapId, stateId),
     createCountry: (mapId: string, attributes: CreateCountryAttributes) =>
         ipcRenderer.invoke("createCountry", mapId, attributes),
+    deleteCountry: (mapId: string, tag: string) => ipcRenderer.invoke("deleteCountry", mapId, tag),
     getAllCountries: (mapId: string) => ipcRenderer.invoke("getAllCountries", mapId),
     addStates: (mapId: string, countryTag: string, states: number[]) =>
         ipcRenderer.invoke("addStates", mapId, countryTag, states),
