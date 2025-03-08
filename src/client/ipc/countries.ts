@@ -74,3 +74,15 @@ export const useRemoveStates = (mapId: string) => {
         },
     });
 };
+
+export const useDeleteCountry = (mapId: string, tag: string) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => await window.electronAPI.deleteCountry(mapId, tag),
+        onSuccess: () => {
+            toast.success("Country deleted successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+        },
+    });
+};

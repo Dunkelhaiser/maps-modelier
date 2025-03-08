@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useUpdateCountry } from "@ipc/countries";
+import { useDeleteCountry, useUpdateCountry } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
+import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateCountryInput, updateCountrySchema } from "./countrySchema";
@@ -51,6 +52,13 @@ const EditCountryForm = () => {
     const updateCountryHandler = async (data: UpdateCountryInput) => {
         const updatedCountry = await updateCountry.mutateAsync(data);
         selectCountry(updatedCountry);
+    };
+
+    const deleteCountry = useDeleteCountry(activeMap.id, selectedCountry.tag);
+
+    const deleteCountryHandler = async () => {
+        await deleteCountry.mutateAsync();
+        selectCountry(null);
     };
 
     return (
@@ -164,6 +172,15 @@ const EditCountryForm = () => {
                     />
                 </div>
                 <Button isLoading={form.formState.isSubmitting}>Save</Button>
+                <Button
+                    type="button"
+                    variant="destructive"
+                    aria-label="Delete Country"
+                    onClick={deleteCountryHandler}
+                    isLoading={deleteCountry.isPending}
+                >
+                    <Trash />
+                </Button>
             </form>
         </Form>
     );
