@@ -184,3 +184,55 @@ export const countryStates = sqliteTable(
         };
     }
 );
+
+export const alliances = sqliteTable(
+    "alliances",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM alliances WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        leader: text("leader").references(() => countries.tag, { onDelete: "set null" }),
+        name: text("name").notNull(),
+        type: text("type").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "alliances_pk" }),
+    })
+);
+
+export const allianceMembers = sqliteTable(
+    "alliance_members",
+    {
+        allianceId: integer("alliance_id")
+            .notNull()
+            .references(() => alliances.id, { onDelete: "cascade" }),
+        countryTag: text("country_tag")
+            .notNull()
+            .references(() => countries.tag, { onDelete: "cascade" }),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.allianceId, table.countryTag], name: "alliance_members_pk" }),
+        alliancesReference: foreignKey({
+            columns: [table.mapId, table.allianceId],
+            foreignColumns: [alliances.mapId, alliances.id],
+            name: "alliances_reference",
+        }).onDelete("cascade"),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryTag],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "countries_reference",
+        }).onDelete("cascade"),
+    })
+);
