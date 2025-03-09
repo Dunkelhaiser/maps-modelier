@@ -1,4 +1,5 @@
 import { and, eq, sql, sum } from "drizzle-orm";
+import { Type } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { provinces, provincePopulations, ethnicities } from "../../db/schema.js";
 
@@ -8,7 +9,7 @@ interface Ethnicity {
     population: number;
 }
 
-export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: string, type?: "land" | "water") => {
+export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: string, type?: Type) => {
     const provincesArr = await db
         .select({
             id: provinces.id,
@@ -43,8 +44,12 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
 
     return provincesArr.map((province) => ({
         ...province,
+        type: province.type as Type,
         ethnicities: (
-            JSON.parse(province.ethnicities as unknown as string) as Omit<Ethnicity, "id"> & { id: number | null }[]
+            JSON.parse(province.ethnicities as unknown as string) as (
+                | Ethnicity
+                | { id: null; name: string; population: number }
+            )[]
         ).filter((e) => e.id !== null),
     }));
 };
