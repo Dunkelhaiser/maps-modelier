@@ -16,6 +16,8 @@ export const maps = sqliteTable("maps", {
         .default(sql`(unixepoch())`),
 });
 
+const provinceType = ["land", "water"] as const;
+
 export const provinces = sqliteTable(
     "provinces",
     {
@@ -24,7 +26,7 @@ export const provinces = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         color: text("color").notNull(),
-        type: text("type").notNull().default("land"),
+        type: text("type", { enum: provinceType }).notNull().default("land"),
         shape: text("shape", { mode: "json" })
             .$type<number[][]>()
             .notNull()
@@ -95,7 +97,7 @@ export const states = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
-        type: text("type").notNull(),
+        type: text("type", { enum: provinceType }).notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
