@@ -18,7 +18,7 @@ const MapButton = ({ map }: Props) => {
     const handleExistingMapSelect = async () => {
         if (map.imgPath) {
             try {
-                const imageUrl = await window.electronAPI.loadMapImage(map.imgPath);
+                const imageUrl = await window.electron.mapImage.load(map.imgPath);
                 setActiveMap({ ...map, imageUrl });
             } catch (err) {
                 toast.error(`Failed to load map image: ${JSON.stringify(err)}`);

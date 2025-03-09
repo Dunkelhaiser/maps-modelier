@@ -44,7 +44,6 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
 
     return provincesArr.map((province) => ({
         ...province,
-        type: province.type as Type,
         ethnicities: (
             JSON.parse(province.ethnicities as unknown as string) as (
                 | Ethnicity

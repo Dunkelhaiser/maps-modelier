@@ -1,69 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { errorToast } from "@utils/errorToast.ts";
-import { Polygon } from "pixi.js";
 import { createRoot } from "react-dom/client";
+import { ElectronAPI } from "src/shared/types.ts";
 import App from "./App.tsx";
-import type {
-    Country,
-    CountryAttributes,
-    DeepPartial,
-    Ethnicity,
-    EthnicityPopulation,
-    Map,
-    Population,
-    Province,
-    State,
-} from "@utils/types.ts";
 import "./index.css";
-
-interface ProvinceType {
-    id: number;
-    color: string;
-    type: string;
-}
-
-interface ElectronAPI {
-    saveMapImage: (imageData: string, mapId: string) => Promise<string>;
-    loadMapImage: (imagePath: string) => Promise<string>;
-    getMaps: () => Promise<Map[]>;
-    createMap: (name: string, imageData: string) => Promise<Map | null>;
-    deleteMap: (id: string) => Promise<void>;
-    renameMap: (id: string, name: string) => Promise<Map | null>;
-    getAllProvinces: (mapId: string, type: "land" | "water") => Promise<Province[]>;
-    getProvinceByColor: (mapId: string, color: string) => Promise<Province | null>;
-    getProvinceById: (mapId: string, id: number) => Promise<Province | null>;
-    extractProvinceShapes: (
-        imagePath: string,
-        provinces: ProvinceType[]
-    ) => Promise<Record<string, Polygon | Polygon[]>>;
-    changeProvinceType: (mapId: string, id: number[], type: "land" | "water") => Promise<Province | null>;
-    getStateByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
-    getAllStates: (mapId: string) => Promise<State[]>;
-    createState: (mapId: string, name: string, provinces?: number[]) => Promise<State>;
-    addProvinces: (mapId: string, stateId: number, provinceIds: number[]) => Promise<void>;
-    removeProvinces: (mapId: string, stateId: number, provinceIds: number[]) => Promise<void>;
-    renameState: (mapId: string, stateId: number, name: string) => Promise<Omit<State, "provinces">>;
-    deleteState: (mapId: string, stateId: number) => Promise<void>;
-    createCountry: (mapId: string, attributes: CountryAttributes) => Promise<Country>;
-    deleteCountry: (mapId: string, tag: string) => Promise<void>;
-    getAllCountries: (mapId: string) => Promise<Country[]>;
-    addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
-    removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
-    updateCountry: (mapId: string, countryTag: string, attributes: DeepPartial<CountryAttributes>) => Promise<Country>;
-    getAllEthnicities: (mapId: string) => Promise<Ethnicity[]>;
-    deleteEthnicity: (mapId: string, id: number) => Promise<void>;
-    renameEthnicity: (mapId: string, id: number, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;
-    createEthnicity: (mapId: string, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;
-    addPopulation: (
-        mapId: string,
-        provinceId: number,
-        ethnicityPopulation: EthnicityPopulation[]
-    ) => Promise<Population[]>;
-}
 
 declare global {
     interface Window {
-        electronAPI: ElectronAPI;
+        electron: ElectronAPI;
     }
 }
 

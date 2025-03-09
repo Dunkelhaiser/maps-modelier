@@ -1,17 +1,17 @@
 import path from "path";
 import { and, eq, getTableColumns } from "drizzle-orm";
+import { CreateCountryAttributes, DeepPartial } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { countries, countryStates } from "../../db/schema.js";
 import { deleteFile } from "../utils/deleteFile.js";
 import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
-import { CreateCountryAttributes } from "./createCountry.js";
 
 export const updateCountry = async (
     _: Electron.IpcMainInvokeEvent,
     mapId: string,
     countryTag: string,
-    attributes: Partial<CreateCountryAttributes>
+    attributes: DeepPartial<CreateCountryAttributes>
 ) => {
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(countries);
 

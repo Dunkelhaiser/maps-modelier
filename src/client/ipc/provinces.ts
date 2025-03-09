@@ -8,7 +8,7 @@ export const useAddPopulation = (mapId: string, provinceId: number) => {
 
     return useMutation({
         mutationFn: async (ethnicitiesPopulation: EthnicityPopulation[]) => {
-            await window.electronAPI.addPopulation(mapId, provinceId, ethnicitiesPopulation);
+            await window.electron.provinces.addPopulation(mapId, provinceId, ethnicitiesPopulation);
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "land"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
         },
@@ -21,7 +21,7 @@ export const useAddPopulation = (mapId: string, provinceId: number) => {
 export const useGetProvinces = (mapId: string, type: "land" | "water") => {
     return useQuery({
         queryKey: [mapId, "provinces", type],
-        queryFn: async () => await window.electronAPI.getAllProvinces(mapId, type),
+        queryFn: async () => await window.electron.provinces.getAll(mapId, type),
     });
 };
 
@@ -32,7 +32,7 @@ export const useChangeProvinceType = (mapId: string) => {
 
     return useMutation({
         mutationFn: async ({ provinceIds, type }: { provinceIds: number[]; type: "land" | "water" }) => {
-            await window.electronAPI.changeProvinceType(mapId, provinceIds, type);
+            await window.electron.provinces.changeType(mapId, provinceIds, type);
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "land"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "water"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });

@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export const useGetStates = (mapId: string) => {
     return useQuery({
         queryKey: [mapId, "states"],
-        queryFn: async () => await window.electronAPI.getAllStates(mapId),
+        queryFn: async () => await window.electron.states.getAll(mapId),
     });
 };
 
@@ -13,7 +13,7 @@ export const useCreateState = (mapId: string) => {
 
     return useMutation({
         mutationFn: async ({ name, provinces }: { name: string; provinces?: number[] }) =>
-            await window.electronAPI.createState(mapId, name, provinces),
+            await window.electron.states.create(mapId, name, provinces),
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({ selectedState: data });
@@ -26,7 +26,7 @@ export const useRenameState = (mapId: string, stateId: number) => {
     const selectedState = useMapStore((state) => state.selectedState);
 
     return useMutation({
-        mutationFn: async (name: string) => await window.electronAPI.renameState(mapId, stateId, name),
+        mutationFn: async (name: string) => await window.electron.states.rename(mapId, stateId, name),
         onSuccess: ({ name }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({ selectedState: selectedState && { ...selectedState, name } });
@@ -38,7 +38,7 @@ export const useDeleteState = (mapId: string, stateId: number) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async () => await window.electronAPI.deleteState(mapId, stateId),
+        mutationFn: async () => await window.electron.states.delete(mapId, stateId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
@@ -53,7 +53,7 @@ export const useAddProvinces = (mapId: string) => {
 
     return useMutation({
         mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
-            await window.electronAPI.addProvinces(mapId, stateId, provinceIds),
+            await window.electron.states.addProvinces(mapId, stateId, provinceIds),
         onSuccess: (_, { provinceIds }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({
@@ -72,7 +72,7 @@ export const useRemoveProvinces = (mapId: string) => {
 
     return useMutation({
         mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
-            await window.electronAPI.removeProvinces(mapId, stateId, provinceIds),
+            await window.electron.states.removeProvinces(mapId, stateId, provinceIds),
         onSuccess: (_, { provinceIds }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({

@@ -41,6 +41,6 @@
             "@/*": ["./src/client/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "src/shared"],
     "exclude": ["src/electron"]
 }

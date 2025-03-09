@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+import type { IpcRequest, IpcChannels } from "../shared/types.js" with { "resolution-mode": "import" };
 
 type ProvinceType = {
     id: number;
@@ -23,47 +24,67 @@ interface CreateCountryAttributes {
     };
 }
 
-contextBridge.exposeInMainWorld("electronAPI", {
-    saveMapImage: (imageData: string, mapId: string) => ipcRenderer.invoke("saveMapImage", imageData, mapId),
-    loadMapImage: (imagePath: string) => ipcRenderer.invoke("loadMapImage", imagePath),
-    getMaps: () => ipcRenderer.invoke("getMaps"),
-    createMap: (name: string, imageData: string) => ipcRenderer.invoke("createMap", name, imageData),
-    deleteMap: (id: string) => ipcRenderer.invoke("deleteMap", id),
-    renameMap: (id: string, name: string) => ipcRenderer.invoke("renameMap", id, name),
-    getAllProvinces: (mapId: string, type: "land" | "water") => ipcRenderer.invoke("getAllProvinces", mapId, type),
-    getProvinceByColor: (mapId: string, color: string) => ipcRenderer.invoke("getProvinceByColor", mapId, color),
-    getProvinceById: (mapId: string, id: string) => ipcRenderer.invoke("getProvinceById", mapId, id),
-    extractProvinceShapes: (imagePath: string, provinces: ProvinceType[]) =>
-        ipcRenderer.invoke("extractProvinceShapes", imagePath, provinces),
-    changeProvinceType: (mapId: string, id: number[], type: "land" | "water") =>
-        ipcRenderer.invoke("changeProvinceType", mapId, id, type),
-    getStateByProvinceId: (mapId: string, provinceId: number) =>
-        ipcRenderer.invoke("getStateByProvinceId", mapId, provinceId),
-    getAllStates: (mapId: string) => ipcRenderer.invoke("getAllStates", mapId),
-    createState: (mapId: string, name: string, provinces?: number[]) =>
-        ipcRenderer.invoke("createState", mapId, name, provinces),
-    addProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
-        ipcRenderer.invoke("addProvinces", mapId, stateId, provinceIds),
-    removeProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
-        ipcRenderer.invoke("removeProvinces", mapId, stateId, provinceIds),
-    renameState: (mapId: string, stateId: number, name: string) =>
-        ipcRenderer.invoke("renameState", mapId, stateId, name),
-    deleteState: (mapId: string, stateId: number) => ipcRenderer.invoke("deleteState", mapId, stateId),
-    createCountry: (mapId: string, attributes: CreateCountryAttributes) =>
-        ipcRenderer.invoke("createCountry", mapId, attributes),
-    deleteCountry: (mapId: string, tag: string) => ipcRenderer.invoke("deleteCountry", mapId, tag),
-    getAllCountries: (mapId: string) => ipcRenderer.invoke("getAllCountries", mapId),
-    addStates: (mapId: string, countryTag: string, states: number[]) =>
-        ipcRenderer.invoke("addStates", mapId, countryTag, states),
-    removeStates: (mapId: string, countryTag: string, states: number[]) =>
-        ipcRenderer.invoke("removeStates", mapId, countryTag, states),
-    updateCountry: (mapId: string, countryTag: string, attributes: Partial<CreateCountryAttributes>) =>
-        ipcRenderer.invoke("updateCountry", mapId, countryTag, attributes),
-    getAllEthnicities: (mapId: string) => ipcRenderer.invoke("getAllEthnicities", mapId),
-    deleteEthnicity: (mapId: string, id: number) => ipcRenderer.invoke("deleteEthnicity", mapId, id),
-    renameEthnicity: (mapId: string, id: number, name: string) =>
-        ipcRenderer.invoke("renameEthnicity", mapId, id, name),
-    createEthnicity: (mapId: string, name: string) => ipcRenderer.invoke("createEthnicity", mapId, name),
-    addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: EthnicityPopulation[]) =>
-        ipcRenderer.invoke("addPopulation", mapId, provinceId, ethnicityPopulation),
-});
+const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
+    domain: D,
+    command: C,
+    ...args: Parameters<Extract<IpcChannels[D][C], (...args: any[]) => any>>
+): ReturnType<Extract<IpcChannels[D][C], (...args: any[]) => any>> => {
+    const request: IpcRequest = { domain, command, args };
+    return ipcRenderer.invoke("ipc", request) as ReturnType<Extract<IpcChannels[D][C], (...args: any[]) => any>>;
+};
+
+const api = {
+    mapImage: {
+        save: (imageData: string, mapId: string) => invoke("mapImage", "save", imageData, mapId),
+        load: (imagePath: string) => invoke("mapImage", "load", imagePath),
+    },
+    maps: {
+        getAll: () => invoke("maps", "getAll"),
+        create: (name: string, imageData: string) => invoke("maps", "create", name, imageData),
+        rename: (id: string, name: string) => invoke("maps", "rename", id, name),
+        delete: (id: string) => invoke("maps", "delete", id),
+    },
+    provinces: {
+        getAll: (mapId: string, type: "land" | "water") => invoke("provinces", "getAll", mapId, type),
+        // getByColor: (mapId: string, color: string) => invoke("provinces", "getByColor", mapId, color),
+        // getById: (mapId: string, id: number) => invoke("provinces", "getById", mapId, id),
+        extractShapes: (imagePath: string, provinces: ProvinceType[]) =>
+            invoke("provinces", "extractShapes", imagePath, provinces),
+        changeType: (mapId: string, id: number[], type: "land" | "water") =>
+            invoke("provinces", "changeType", mapId, id, type),
+        addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: EthnicityPopulation[]) =>
+            invoke("provinces", "addPopulation", mapId, provinceId, ethnicityPopulation),
+    },
+    states: {
+        getAll: (mapId: string) => invoke("states", "getAll", mapId),
+        // getByProvinceId: (mapId: string, provinceId: number) => invoke("states", "getByProvinceId", mapId, provinceId),
+        create: (mapId: string, name: string, provinces?: number[]) =>
+            invoke("states", "create", mapId, name, provinces),
+        rename: (mapId: string, stateId: number, name: string) => invoke("states", "rename", mapId, stateId, name),
+        delete: (mapId: string, stateId: number) => invoke("states", "delete", mapId, stateId),
+        addProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
+            invoke("states", "addProvinces", mapId, stateId, provinceIds),
+        removeProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
+            invoke("states", "removeProvinces", mapId, stateId, provinceIds),
+    },
+    countries: {
+        getAll: (mapId: string) => invoke("countries", "getAll", mapId),
+        create: (mapId: string, attributes: CreateCountryAttributes) =>
+            invoke("countries", "create", mapId, attributes),
+        update: (mapId: string, countryTag: string, attributes: Partial<CreateCountryAttributes>) =>
+            invoke("countries", "update", mapId, countryTag, attributes),
+        delete: (mapId: string, tag: string) => invoke("countries", "delete", mapId, tag),
+        addStates: (mapId: string, countryTag: string, states: number[]) =>
+            invoke("countries", "addStates", mapId, countryTag, states),
+        removeStates: (mapId: string, countryTag: string, states: number[]) =>
+            invoke("countries", "removeStates", mapId, countryTag, states),
+    },
+    ethnicities: {
+        getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),
+        create: (mapId: string, name: string) => invoke("ethnicities", "create", mapId, name),
+        rename: (mapId: string, id: number, name: string) => invoke("ethnicities", "rename", mapId, id, name),
+        delete: (mapId: string, id: number) => invoke("ethnicities", "delete", mapId, id),
+    },
+};
+
+contextBridge.exposeInMainWorld("electron", api);

@@ -1,13 +1,8 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
+import { EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { countries, countryStates, states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
-
-interface Ethnicity {
-    id: number;
-    name: string;
-    population: number;
-}
 
 export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
     const ethnicityTotals = db.$with("ethnicity_totals").as(
@@ -109,9 +104,7 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
                     url: anthemData,
                 },
                 states: country.states ? country.states.split(",").map(Number) : [],
-                ethnicities: JSON.parse(country.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
-                    id: number | null;
-                })[],
+                ethnicities: JSON.parse(country.ethnicities as unknown as string) as EthnicityComposition[],
             };
         })
     );

@@ -24,7 +24,7 @@ const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
 
     const handleExistingMapImageUpload = async (data: UploadeMapImageInput) => {
         if (!selectedMapForUpload) return;
-        await window.electronAPI.saveMapImage(data.provinces, selectedMapForUpload.id);
+        await window.electron.mapImage.save(data.provinces, selectedMapForUpload.id);
         setActiveMap({ ...selectedMapForUpload, imageUrl: data.provinces });
     };
 

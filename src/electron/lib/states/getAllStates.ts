@@ -1,12 +1,7 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
+import { EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
-
-interface Ethnicity {
-    id: number;
-    name: string;
-    population: number;
-}
 
 export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
     const ethnicityTotals = db.$with("ethnicity_totals").as(
@@ -84,8 +79,6 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
     return statesArr.map((state) => ({
         ...state,
         provinces: state.provinces ? state.provinces.split(",").map(Number) : [],
-        ethnicities: JSON.parse(state.ethnicities as unknown as string) as (Omit<Ethnicity, "id"> & {
-            id: number | null;
-        })[],
+        ethnicities: JSON.parse(state.ethnicities as unknown as string) as EthnicityComposition[],
     }));
 };

@@ -1,10 +1,7 @@
 /* eslint-disable no-bitwise */
 import { createCanvas, ImageData, loadImage } from "@napi-rs/canvas";
-import { InferSelectModel } from "drizzle-orm";
 import { Polygon } from "pixi.js";
-import { provinces as provincesSchema } from "../../db/schema.js";
-
-type ProvinceType = InferSelectModel<typeof provincesSchema>;
+import { ProvinceType } from "../../../shared/types.js";
 
 export const extractProvinceShapes = async (
     _: Electron.IpcMainInvokeEvent,

@@ -1,20 +1,9 @@
 import { getTableColumns } from "drizzle-orm";
+import { CreateCountryAttributes, EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { countries } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
-
-export interface CreateCountryAttributes {
-    name: string;
-    tag: string;
-    color?: string;
-    flag: string;
-    coatOfArms: string;
-    anthem: {
-        name: string;
-        url: string;
-    };
-}
 
 export const createCountry = async (
     _: Electron.IpcMainInvokeEvent,
@@ -59,7 +48,9 @@ export const createCountry = async (
 
     return {
         ...createdCountry,
-        states: [],
+        states: [] as number[],
+        population: 0,
+        ethnicities: [] as EthnicityComposition[],
         flag: flagData,
         coatOfArms: coatOfArmsData,
         anthem: { name: anthemName, url: anthemData },

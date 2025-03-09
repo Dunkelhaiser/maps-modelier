@@ -1,13 +1,9 @@
 import { and, eq, inArray } from "drizzle-orm";
+import { Province, Type } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { countryStates, provinces, stateProvinces, states } from "../../db/schema.js";
 
-export const changeProvinceType = async (
-    _: Electron.IpcMainInvokeEvent,
-    mapId: string,
-    id: number[],
-    type: "land" | "water"
-) => {
+export const changeProvinceType = async (_: Electron.IpcMainInvokeEvent, mapId: string, id: number[], type: Type) => {
     let provinceIds = Array.isArray(id) ? id : [id];
 
     const stateIds = await db
@@ -43,5 +39,5 @@ export const changeProvinceType = async (
         await db.update(states).set({ type }).where(inArray(states.id, stateIdsArr));
     }
 
-    return updatedProvinces;
+    return updatedProvinces as Omit<Province, "ethnicities" | "population">[];
 };

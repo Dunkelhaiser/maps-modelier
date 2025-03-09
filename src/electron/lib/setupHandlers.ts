@@ -1,4 +1,6 @@
-import { ipcMain } from "electron";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ipcMain, IpcMainInvokeEvent } from "electron";
+import { IpcChannels, IpcRequest } from "../../shared/types.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
@@ -19,44 +21,94 @@ import { addPopulation } from "./provinces/addPopulation.js";
 import { changeProvinceType } from "./provinces/changeProvinceType.js";
 import { extractProvinceShapes } from "./provinces/extractProvinceShapes.js";
 import { getAllProvinces } from "./provinces/getAllProvinces.js";
-import { getProvinceByColor } from "./provinces/getProvinceByColor.js";
-import { getProvinceById } from "./provinces/getProvinceById.js";
 import { addProvinces } from "./states/addProvinces.js";
 import { createState } from "./states/createState.js";
 import { deleteState } from "./states/deleteState.js";
 import { getAllStates } from "./states/getAllStates.js";
-import { getStateByProvinceId } from "./states/getStateByProvinceId.js";
 import { removeProvinces } from "./states/removeProvinces.js";
 import { renameState } from "./states/renameState.js";
 
+const handlers: HandlersType = {
+    mapImage: {
+        save: saveMapImage,
+        load: loadMapImage,
+    },
+    maps: {
+        getAll: getMaps,
+        create: createMap,
+        rename: renameMap,
+        delete: deleteMap,
+    },
+    provinces: {
+        getAll: getAllProvinces,
+        // getByColor: getProvinceByColor,
+        // getById: getProvinceById,
+        extractShapes: extractProvinceShapes,
+        changeType: changeProvinceType,
+        addPopulation,
+    },
+    states: {
+        getAll: getAllStates,
+        create: createState,
+        rename: renameState,
+        delete: deleteState,
+        // getByProvinceId: getStateByProvinceId,
+        addProvinces,
+        removeProvinces,
+    },
+    countries: {
+        getAll: getAllCountries,
+        create: createCountry,
+        update: updateCountry,
+        delete: deleteCountry,
+        addStates,
+        removeStates,
+    },
+    ethnicities: {
+        getAll: getAllEthnicities,
+        create: createEthnicity,
+        rename: renameEthnicity,
+        delete: deleteEthnicity,
+    },
+};
+
+type HandlerFunction<Args extends any[], Return> = (event: IpcMainInvokeEvent, ...args: Args) => Promise<Return>;
+
+type HandlersType = {
+    [D in keyof IpcChannels]: {
+        [C in keyof IpcChannels[D]]: HandlerFunction<
+            Parameters<Extract<IpcChannels[D][C], (...args: any[]) => any>>,
+            Awaited<ReturnType<Extract<IpcChannels[D][C], (...args: any[]) => any>>>
+        >;
+    };
+};
+
 export const setupHandlers = () => {
-    ipcMain.handle("saveMapImage", saveMapImage);
-    ipcMain.handle("loadMapImage", loadMapImage);
-    ipcMain.handle("getMaps", getMaps);
-    ipcMain.handle("createMap", createMap);
-    ipcMain.handle("deleteMap", deleteMap);
-    ipcMain.handle("renameMap", renameMap);
-    ipcMain.handle("getAllProvinces", getAllProvinces);
-    ipcMain.handle("getProvinceByColor", getProvinceByColor);
-    ipcMain.handle("getProvinceById", getProvinceById);
-    ipcMain.handle("extractProvinceShapes", extractProvinceShapes);
-    ipcMain.handle("changeProvinceType", changeProvinceType);
-    ipcMain.handle("getStateByProvinceId", getStateByProvinceId);
-    ipcMain.handle("getAllStates", getAllStates);
-    ipcMain.handle("createState", createState);
-    ipcMain.handle("addProvinces", addProvinces);
-    ipcMain.handle("removeProvinces", removeProvinces);
-    ipcMain.handle("renameState", renameState);
-    ipcMain.handle("deleteState", deleteState);
-    ipcMain.handle("createCountry", createCountry);
-    ipcMain.handle("deleteCountry", deleteCountry);
-    ipcMain.handle("getAllCountries", getAllCountries);
-    ipcMain.handle("addStates", addStates);
-    ipcMain.handle("removeStates", removeStates);
-    ipcMain.handle("updateCountry", updateCountry);
-    ipcMain.handle("getAllEthnicities", getAllEthnicities);
-    ipcMain.handle("deleteEthnicity", deleteEthnicity);
-    ipcMain.handle("renameEthnicity", renameEthnicity);
-    ipcMain.handle("createEthnicity", createEthnicity);
-    ipcMain.handle("addPopulation", addPopulation);
+    ipcMain.handle("ipc", async (event: IpcMainInvokeEvent, request: IpcRequest) => {
+        const { domain, command, args } = request;
+
+        if (!isValidDomain(domain) || !isValidCommand(domain, command)) {
+            throw new Error(`Invalid command: ${String(domain)}.${String(command)}`);
+        }
+
+        // eslint-disable-next-line no-useless-catch
+        try {
+            // @ts-expect-error - this is a valid call
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
+            return await handlers[domain][command](event, ...args);
+        } catch (error) {
+            throw error;
+        }
+    });
+};
+
+const isValidDomain = (key: string): key is keyof typeof handlers => {
+    return Object.prototype.hasOwnProperty.call(handlers, key);
+};
+
+const isValidCommand = (
+    domain: keyof typeof handlers,
+    key: string | number | symbol
+): key is keyof (typeof handlers)[typeof domain] => {
+    return Object.prototype.hasOwnProperty.call(handlers[domain], key);
 };

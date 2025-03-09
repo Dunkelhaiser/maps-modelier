@@ -37,7 +37,7 @@ export const createState = async (
             .values({
                 mapId,
                 name,
-                type: stateType,
+                type: stateType as "land" | "water",
             })
             .returning({
                 id: states.id,
@@ -55,6 +55,11 @@ export const createState = async (
             );
         }
 
-        return { ...createdState, provinces };
+        return {
+            ...createdState,
+            provinces: provinces ?? [],
+            ethnicities: [],
+            population: 0,
+        };
     });
 };
