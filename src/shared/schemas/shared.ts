@@ -104,3 +104,16 @@ export const nameSchema = zod.object({
 });
 
 export type NameInput = zod.infer<typeof nameSchema>;
+
+const getArticle = (word: string) => {
+    if (!word) return "a";
+
+    return /^[aeiou]/i.test(word.toLowerCase()) ? "an" : "a";
+};
+
+export const nameField = ({ field = "", min = 1, max = 50 }) =>
+    zod
+        .string()
+        .trim()
+        .min(min, { message: `Provide ${getArticle(field)} ${field} name` })
+        .max(max, { message: `The ${field} name should be less than ${max} characters` });
