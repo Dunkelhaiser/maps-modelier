@@ -2,8 +2,8 @@ import { MapCanvas } from "@screens/MapView/components/Map/Map";
 import UserInterface from "@screens/MapView/components/UserInterface/UserInterface";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
-import { ActiveMap } from "@utils/types";
 import { useHotkeys } from "react-hotkeys-hook";
+import { ActiveMap } from "src/shared/types";
 
 interface Props {
     activeMap: ActiveMap;

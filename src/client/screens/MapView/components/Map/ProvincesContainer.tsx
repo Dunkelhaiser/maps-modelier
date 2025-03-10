@@ -4,10 +4,10 @@ import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
-import { Country, Province as ProvinceType, State } from "@utils/types";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
 import { toast } from "sonner";
+import { Country, Province as ProvinceType, State } from "src/shared/types";
 import { MemoizedProvince } from "./Province";
 
 interface Props {

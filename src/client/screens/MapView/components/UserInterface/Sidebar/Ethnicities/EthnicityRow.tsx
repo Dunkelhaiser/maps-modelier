@@ -1,9 +1,9 @@
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { TableCell, TableRow } from "@ui/Table";
-import { Ethnicity } from "@utils/types";
 import { Edit } from "lucide-react";
 import { useState } from "react";
+import { Ethnicity } from "src/shared/types";
 import DeleteEthnicityDialog from "./DeleteEthnicityDialog";
 import EthnicityRowEdit from "./EthnicityRowEdit";
 

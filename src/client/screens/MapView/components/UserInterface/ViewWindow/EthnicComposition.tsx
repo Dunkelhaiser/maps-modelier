@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ui/Tooltip";
-import { EthnicityComposition } from "@utils/types";
+import { EthnicityComposition } from "src/shared/types";
 
 interface Props {
     totalPopulation: number;

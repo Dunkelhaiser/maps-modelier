@@ -1,7 +1,7 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { EthnicityPopulation } from "@utils/types";
 import { toast } from "sonner";
+import { EthnicityPopulation } from "src/shared/types";
 
 export const useAddPopulation = (mapId: string, provinceId: number) => {
     const queryClient = useQueryClient();

@@ -1,8 +1,8 @@
 import { useMapStore } from "@store/store";
-import { Map } from "@utils/types";
 import { MapIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Map } from "src/shared/types";
 import DeleteMapDialog from "./DeleteMapDialog";
 import RenameMapDialog from "./RenameMap/RenameMapDialog";
 import UploadMapImageDialog from "./UploadMapImage/UploadMapImageDialog";

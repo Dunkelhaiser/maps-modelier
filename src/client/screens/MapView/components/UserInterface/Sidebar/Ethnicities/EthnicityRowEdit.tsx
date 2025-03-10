@@ -5,10 +5,10 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { TableCell, TableRow } from "@ui/Table";
 import { NameInput, nameSchema } from "@utils/sharedSchemas";
-import { Ethnicity } from "@utils/types";
 import { Check, X } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { Ethnicity } from "src/shared/types";
 
 interface Props {
     mapId: string;

@@ -7,10 +7,10 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { ScrollArea } from "@ui/ScrollArea";
-import { EthnicityPopulation } from "@utils/types";
 import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { EthnicityPopulation } from "src/shared/types";
 import EthnicitiesSelect from "./EthnicitiesSelect";
 import { PopulationInput, populationSchema } from "./populationSchema";
 

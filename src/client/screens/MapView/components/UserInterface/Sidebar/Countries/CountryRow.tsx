@@ -1,6 +1,6 @@
 import { useMapStore } from "@store/store";
 import { TableCell, TableRow } from "@ui/Table";
-import { Country } from "@utils/types";
+import { Country } from "src/shared/types";
 
 interface Props {
     country: Country;

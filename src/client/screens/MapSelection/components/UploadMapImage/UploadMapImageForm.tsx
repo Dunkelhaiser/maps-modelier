@@ -3,8 +3,8 @@ import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
-import { Map } from "@utils/types";
 import { useForm } from "react-hook-form";
+import { Map } from "src/shared/types";
 import { UploadeMapImageInput, uploadMapImageSchema } from "./uploadMapImageSchema";
 
 interface Props {

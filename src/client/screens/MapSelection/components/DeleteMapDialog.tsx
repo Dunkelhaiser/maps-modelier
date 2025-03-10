@@ -9,8 +9,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@ui/Dialog";
-import { Map } from "@utils/types";
 import { Trash } from "lucide-react";
+import { Map } from "src/shared/types";
 
 interface Props {
     map: Map;

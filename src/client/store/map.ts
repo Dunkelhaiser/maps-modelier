@@ -1,4 +1,4 @@
-import { ActiveMap } from "@utils/types";
+import { ActiveMap } from "src/shared/types";
 import { StateCreator } from "zustand";
 import { initialProvincesSlice } from "./provinces";
 import { MapStore } from "./store";

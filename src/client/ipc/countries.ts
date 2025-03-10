@@ -1,7 +1,7 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CountryAttributes, DeepPartial } from "@utils/types";
 import { toast } from "sonner";
+import { CountryAttributes, DeepPartial } from "src/shared/types";
 
 export const useGetCountries = (mapId: string) => {
     return useQuery({

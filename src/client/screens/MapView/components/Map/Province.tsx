@@ -1,9 +1,9 @@
 import { Graphics } from "@pixi/react";
-import { Province as ProvinceType } from "@utils/types";
 import "@pixi/unsafe-eval";
 import "@pixi/events";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { memo, useCallback } from "react";
+import { Province as ProvinceType } from "src/shared/types";
 import type { Graphics as GraphicsType } from "pixi.js";
 
 interface ProvinceProps extends Omit<ProvinceType, "color" | "population" | "ethnicities"> {

@@ -3,10 +3,10 @@ import { useGetCountries } from "@ipc/countries";
 import { Container, Graphics } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
-import { Province, State } from "@utils/types";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
+import { Province, State } from "src/shared/types";
 
 interface Props {
     state: State;

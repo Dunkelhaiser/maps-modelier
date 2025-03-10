@@ -1,6 +1,6 @@
 import UploadMapImageForm from "@screens/MapSelection/components/UploadMapImage/UploadMapImageForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ui/Dialog";
-import { Map } from "@utils/types";
+import { Map } from "src/shared/types";
 
 interface Props {
     selectedMapForUpload: Map | null;

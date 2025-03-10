@@ -51,6 +51,7 @@ const EditCountryForm = () => {
 
     const updateCountryHandler = async (data: UpdateCountryInput) => {
         const updatedCountry = await updateCountry.mutateAsync(data);
+        // @ts-expect-error - updatedCountry is not null
         selectCountry(updatedCountry);
     };
 

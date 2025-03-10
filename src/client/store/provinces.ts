@@ -1,4 +1,4 @@
-import { Country, Province, State } from "@utils/types";
+import { Country, Province, State } from "src/shared/types";
 import { StateCreator } from "zustand";
 import { useSidebarStore } from "./sidebar";
 import { MapStore } from "./store";
