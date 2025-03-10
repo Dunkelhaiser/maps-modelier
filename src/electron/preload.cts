@@ -1,28 +1,11 @@
 const { contextBridge, ipcRenderer } = require("electron");
-import type { IpcRequest, IpcChannels } from "../shared/types.js" with { "resolution-mode": "import" };
-
-type ProvinceType = {
-    id: number;
-    color: string;
-    type: string;
-};
-
-interface EthnicityPopulation {
-    ethnicityId: number;
-    population: number;
-}
-
-interface CreateCountryAttributes {
-    name: string;
-    tag: string;
-    color?: string;
-    flag: string;
-    coatOfArms: string;
-    anthem: {
-        name: string;
-        url: string;
-    };
-}
+import type {
+    IpcRequest,
+    IpcChannels,
+    ProvinceType,
+    EthnicityPopulation,
+    CreateCountryAttributes,
+} from "../shared/types.js" with { "resolution-mode": "import" };
 
 const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
     domain: D,
