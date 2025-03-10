@@ -1,5 +1,5 @@
-import { imageSchema, nameSchema } from "@utils/sharedSchemas";
 import { z as zod } from "zod";
+import { imageSchema, nameSchema } from "../shared";
 
 export const createMapSchema = zod
     .object({

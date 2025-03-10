@@ -1,6 +1,6 @@
-import { CreateMapInput } from "@screens/MapSelection/components/CreateMap/createMapSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { CreateMapInput } from "src/shared/schemas/maps/createMap";
 
 export const useGetMaps = () => {
     return useQuery({

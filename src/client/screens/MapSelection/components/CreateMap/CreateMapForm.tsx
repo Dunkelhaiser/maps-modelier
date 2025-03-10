@@ -6,7 +6,7 @@ import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { useForm } from "react-hook-form";
-import { CreateMapInput, createMapSchema } from "./createMapSchema";
+import { CreateMapInput, createMapSchema } from "src/shared/schemas/maps/createMap";
 
 const CreateMapForm = () => {
     const setActiveMap = useMapStore((state) => state.setActiveMap);

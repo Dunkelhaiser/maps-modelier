@@ -4,10 +4,10 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { TableCell, TableRow } from "@ui/Table";
-import { NameInput, nameSchema } from "@utils/sharedSchemas";
 import { Check, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { NameInput, nameSchema } from "src/shared/schemas/shared";
 
 interface Props {
     mapId: string;

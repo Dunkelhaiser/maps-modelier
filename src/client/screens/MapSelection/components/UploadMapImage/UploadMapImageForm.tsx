@@ -4,8 +4,8 @@ import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { useForm } from "react-hook-form";
+import { UploadeMapImageInput, uploadMapImageSchema } from "src/shared/schemas/mapImage/upload";
 import { Map } from "src/shared/types";
-import { UploadeMapImageInput, uploadMapImageSchema } from "./uploadMapImageSchema";
 
 interface Props {
     selectedMapForUpload: Map | null;

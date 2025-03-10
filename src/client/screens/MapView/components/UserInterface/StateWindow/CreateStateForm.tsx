@@ -5,8 +5,8 @@ import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
-import { NameInput, nameSchema } from "@utils/sharedSchemas";
 import { useForm } from "react-hook-form";
+import { NameInput, nameSchema } from "src/shared/schemas/shared";
 
 const CreateStateForm = () => {
     const form = useForm<NameInput>({

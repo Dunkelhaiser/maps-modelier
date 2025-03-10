@@ -7,7 +7,7 @@ import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { useForm } from "react-hook-form";
-import { CreateCountryInput, createCountrySchema } from "./countrySchema";
+import { CreateCountryInput, createCountrySchema } from "src/shared/schemas/countries/country";
 
 const CreateCountryForm = () => {
     const activeMap = useActiveMap();

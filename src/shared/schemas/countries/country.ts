@@ -1,5 +1,5 @@
-import { audioSchema, imageSchema, nameSchema } from "@utils/sharedSchemas";
 import { z as zod } from "zod";
+import { audioSchema, imageSchema, nameSchema } from "../shared";
 
 export const updateCountrySchema = zod
     .object({

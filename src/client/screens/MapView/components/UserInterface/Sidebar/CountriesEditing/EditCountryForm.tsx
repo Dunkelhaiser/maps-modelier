@@ -9,7 +9,7 @@ import { Input } from "@ui/Input";
 import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { UpdateCountryInput, updateCountrySchema } from "./countrySchema";
+import { UpdateCountryInput, updateCountrySchema } from "src/shared/schemas/countries/country";
 
 const EditCountryForm = () => {
     const activeMap = useActiveMap();
@@ -51,7 +51,6 @@ const EditCountryForm = () => {
 
     const updateCountryHandler = async (data: UpdateCountryInput) => {
         const updatedCountry = await updateCountry.mutateAsync(data);
-        // @ts-expect-error - updatedCountry is not null
         selectCountry(updatedCountry);
     };
 
