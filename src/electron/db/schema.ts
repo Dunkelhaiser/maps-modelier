@@ -196,7 +196,7 @@ export const alliances = sqliteTable(
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
-        leader: text("leader").references(() => countries.tag, { onDelete: "set null" }),
+        leader: text("leader"),
         name: text("name").notNull(),
         type: text("type").notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
@@ -208,6 +208,11 @@ export const alliances = sqliteTable(
     },
     (table) => ({
         pk: primaryKey({ columns: [table.mapId, table.id], name: "alliances_pk" }),
+        leaderReference: foreignKey({
+            columns: [table.mapId, table.leader],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "leader_reference",
+        }).onDelete("set null"),
     })
 );
 
@@ -217,9 +222,7 @@ export const allianceMembers = sqliteTable(
         allianceId: integer("alliance_id")
             .notNull()
             .references(() => alliances.id, { onDelete: "cascade" }),
-        countryTag: text("country_tag")
-            .notNull()
-            .references(() => countries.tag, { onDelete: "cascade" }),
+        countryTag: text("country_tag").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
@@ -249,8 +252,8 @@ export const wars = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
-        aggressor: text("aggressor").references(() => countries.tag, { onDelete: "set null" }),
-        defender: text("defender").references(() => countries.tag, { onDelete: "set null" }),
+        aggressor: text("aggressor"),
+        defender: text("defender"),
         startedAt: integer("started_at", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
@@ -264,6 +267,16 @@ export const wars = sqliteTable(
     },
     (table) => ({
         pk: primaryKey({ columns: [table.mapId, table.id], name: "wars_pk" }),
+        aggressorReference: foreignKey({
+            columns: [table.mapId, table.aggressor],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "aggressor_reference",
+        }).onDelete("set null"),
+        defenderReference: foreignKey({
+            columns: [table.mapId, table.defender],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "defender_reference",
+        }).onDelete("set null"),
     })
 );
 
@@ -273,9 +286,7 @@ export const warSides = sqliteTable(
         id: integer("id")
             .notNull()
             .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM war_sides WHERE war_id = war_id)`),
-        warId: integer("war_id")
-            .notNull()
-            .references(() => wars.id, { onDelete: "cascade" }),
+        warId: integer("war_id").notNull(),
         side: text("side").notNull(),
         mapId: text("map_id")
             .notNull()
@@ -294,12 +305,8 @@ export const warSides = sqliteTable(
 export const warParticipants = sqliteTable(
     "war_participants",
     {
-        sideId: integer("side_id")
-            .notNull()
-            .references(() => warSides.id, { onDelete: "cascade" }),
-        countryTag: text("country_tag")
-            .notNull()
-            .references(() => countries.tag, { onDelete: "cascade" }),
+        sideId: integer("side_id").notNull(),
+        countryTag: text("country_tag").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),

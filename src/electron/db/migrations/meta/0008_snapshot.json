@@ -1,7 +1,7 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "904659a1-a149-417c-b5fb-c6b93e99261e",
+    "id": "08297245-1279-4669-b086-593cc5bed96d",
     "prevId": "0745947a-1b92-4763-b32f-168def23c0c8",
     "tables": {
         "alliance_members": {
@@ -37,15 +37,6 @@
                     "tableTo": "alliances",
                     "columnsFrom": ["alliance_id"],
                     "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                },
-                "alliance_members_country_tag_countries_tag_fk": {
-                    "name": "alliance_members_country_tag_countries_tag_fk",
-                    "tableFrom": "alliance_members",
-                    "tableTo": "countries",
-                    "columnsFrom": ["country_tag"],
-                    "columnsTo": ["tag"],
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 },
@@ -152,12 +143,12 @@
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 },
-                "alliances_leader_countries_tag_fk": {
-                    "name": "alliances_leader_countries_tag_fk",
+                "leader_reference": {
+                    "name": "leader_reference",
                     "tableFrom": "alliances",
                     "tableTo": "countries",
-                    "columnsFrom": ["leader"],
-                    "columnsTo": ["tag"],
+                    "columnsFrom": ["map_id", "leader"],
+                    "columnsTo": ["map_id", "tag"],
                     "onDelete": "set null",
                     "onUpdate": "no action"
                 }
@@ -736,24 +727,6 @@
             },
             "indexes": {},
             "foreignKeys": {
-                "war_participants_side_id_war_sides_id_fk": {
-                    "name": "war_participants_side_id_war_sides_id_fk",
-                    "tableFrom": "war_participants",
-                    "tableTo": "war_sides",
-                    "columnsFrom": ["side_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                },
-                "war_participants_country_tag_countries_tag_fk": {
-                    "name": "war_participants_country_tag_countries_tag_fk",
-                    "tableFrom": "war_participants",
-                    "tableTo": "countries",
-                    "columnsFrom": ["country_tag"],
-                    "columnsTo": ["tag"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                },
                 "war_participants_map_id_maps_id_fk": {
                     "name": "war_participants_map_id_maps_id_fk",
                     "tableFrom": "war_participants",
@@ -825,15 +798,6 @@
             },
             "indexes": {},
             "foreignKeys": {
-                "war_sides_war_id_wars_id_fk": {
-                    "name": "war_sides_war_id_wars_id_fk",
-                    "tableFrom": "war_sides",
-                    "tableTo": "wars",
-                    "columnsFrom": ["war_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                },
                 "war_sides_map_id_maps_id_fk": {
                     "name": "war_sides_map_id_maps_id_fk",
                     "tableFrom": "war_sides",
@@ -943,21 +907,21 @@
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 },
-                "wars_aggressor_countries_tag_fk": {
-                    "name": "wars_aggressor_countries_tag_fk",
+                "aggressor_reference": {
+                    "name": "aggressor_reference",
                     "tableFrom": "wars",
                     "tableTo": "countries",
-                    "columnsFrom": ["aggressor"],
-                    "columnsTo": ["tag"],
+                    "columnsFrom": ["map_id", "aggressor"],
+                    "columnsTo": ["map_id", "tag"],
                     "onDelete": "set null",
                     "onUpdate": "no action"
                 },
-                "wars_defender_countries_tag_fk": {
-                    "name": "wars_defender_countries_tag_fk",
+                "defender_reference": {
+                    "name": "defender_reference",
                     "tableFrom": "wars",
                     "tableTo": "countries",
-                    "columnsFrom": ["defender"],
-                    "columnsTo": ["tag"],
+                    "columnsFrom": ["map_id", "defender"],
+                    "columnsTo": ["map_id", "tag"],
                     "onDelete": "set null",
                     "onUpdate": "no action"
                 }
