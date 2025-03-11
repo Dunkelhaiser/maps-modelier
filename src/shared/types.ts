@@ -2,6 +2,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { maps, provinces } from "../electron/db/schema.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
+import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
 
 export type Map = InferSelectModel<typeof maps>;
 
@@ -112,11 +113,7 @@ export interface IpcChannels {
         getAll: (mapId: string, type: Type) => Promise<Province[]>;
         // getByColor: (mapId: string, color: string) => Promise<Province | null>;
         // getById: (mapId: string, id: number) => Promise<Province | null>;
-        changeType: (
-            mapId: string,
-            id: number[],
-            type: Type
-        ) => Promise<Omit<Province, "ethnicities" | "population">[]>;
+        changeType: (mapId: string, data: ChangeTypeInput) => Promise<Omit<Province, "ethnicities" | "population">[]>;
         addPopulation: (
             mapId: string,
             provinceId: number,
