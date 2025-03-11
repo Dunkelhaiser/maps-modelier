@@ -1,5 +1,6 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CreateStateInput } from "src/shared/schemas/states/createState";
 
 export const useGetStates = (mapId: string) => {
     return useQuery({
@@ -12,8 +13,7 @@ export const useCreateState = (mapId: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async ({ name, provinces }: { name: string; provinces?: number[] }) =>
-            await window.electron.states.create(mapId, name, provinces),
+        mutationFn: async (data: CreateStateInput) => await window.electron.states.create(mapId, data),
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({ selectedState: data });

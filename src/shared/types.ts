@@ -4,6 +4,7 @@ import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
 import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
 import { PopulationInput } from "./schemas/provinces/population.js";
+import { CreateStateInput } from "./schemas/states/createState.js";
 
 export type Map = InferSelectModel<typeof maps>;
 
@@ -120,7 +121,7 @@ export interface IpcChannels {
     states: {
         getAll: (mapId: string) => Promise<State[]>;
         // getByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
-        create: (mapId: string, name: string, provinces?: number[]) => Promise<State>;
+        create: (mapId: string, data: CreateStateInput) => Promise<State>;
         rename: (
             mapId: string,
             stateId: number,

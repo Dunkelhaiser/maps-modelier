@@ -6,11 +6,11 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { useForm } from "react-hook-form";
-import { StateInput, stateSchema } from "src/shared/schemas/states/state";
+import { StateNameInput, stateNameSchema } from "src/shared/schemas/states/state";
 
 const CreateStateForm = () => {
-    const form = useForm<StateInput>({
-        resolver: zodResolver(stateSchema),
+    const form = useForm<StateNameInput>({
+        resolver: zodResolver(stateNameSchema),
         defaultValues: {
             name: "",
         },
@@ -19,7 +19,7 @@ const CreateStateForm = () => {
     const selectedProvince = useMapStore((state) => state.selectedProvinces);
     const createState = useCreateState(activeMap.id);
 
-    const createStateHanlder = (data: StateInput) => {
+    const createStateHanlder = (data: StateNameInput) => {
         const selectedProvincesIds = selectedProvince.map((province) => province.id);
         createState.mutateAsync({ name: data.name, provinces: selectedProvincesIds });
     };

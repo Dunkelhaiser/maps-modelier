@@ -1,13 +1,11 @@
 import { and, eq, inArray } from "drizzle-orm";
+import { CreateStateInput, createStateSchema } from "../../../shared/schemas/states/createState.js";
 import { db } from "../../db/db.js";
 import { states, stateProvinces, provinces as provincesTable } from "../../db/schema.js";
 
-export const createState = async (
-    _: Electron.IpcMainInvokeEvent,
-    mapId: string,
-    name: string,
-    provinces?: number[]
-) => {
+export const createState = async (_: Electron.IpcMainInvokeEvent, mapId: string, data: CreateStateInput) => {
+    const { name, provinces } = await createStateSchema.parseAsync(data);
+
     return await db.transaction(async (tx) => {
         if (provinces) {
             await tx
