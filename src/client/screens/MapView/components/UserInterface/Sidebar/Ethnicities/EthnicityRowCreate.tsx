@@ -59,7 +59,7 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
     }, [form]);
 
     const createEthnicityHandler = async (data: EthnicityInput) => {
-        await createEthnicity.mutateAsync(data.name);
+        await createEthnicity.mutateAsync(data);
         stopCreating();
     };
 

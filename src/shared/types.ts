@@ -1,5 +1,6 @@
 import { InferSelectModel } from "drizzle-orm";
 import { maps, provinces } from "../electron/db/schema.js";
+import { EthnicityInput } from "./schemas/ethnicities/ethnicity.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
 import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
@@ -147,9 +148,9 @@ export interface IpcChannels {
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
-        create: (mapId: string, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;
-        delete: (mapId: string, id: number) => Promise<void>;
+        create: (mapId: string, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
         rename: (mapId: string, id: number, name: string) => Promise<Omit<Ethnicity, "totalNumber">>;
+        delete: (mapId: string, id: number) => Promise<void>;
     };
 }
 

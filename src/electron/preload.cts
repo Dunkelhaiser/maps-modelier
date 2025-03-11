@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+import type { EthnicityInput } from "../shared/schemas/ethnicities/ethnicity.js" with { "resolution-mode": "import" };
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
 import type { ChangeTypeInput } from "../shared/schemas/provinces/changeType.js" with { "resolution-mode": "import" };
@@ -66,7 +67,7 @@ const api = {
     },
     ethnicities: {
         getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),
-        create: (mapId: string, name: string) => invoke("ethnicities", "create", mapId, name),
+        create: (mapId: string, data: EthnicityInput) => invoke("ethnicities", "create", mapId, data),
         rename: (mapId: string, id: number, name: string) => invoke("ethnicities", "rename", mapId, id, name),
         delete: (mapId: string, id: number) => invoke("ethnicities", "delete", mapId, id),
     },
