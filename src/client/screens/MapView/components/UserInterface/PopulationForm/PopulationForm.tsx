@@ -54,6 +54,8 @@ const PopulationForm = ({ ethnicities }: Props) => {
         await addPopulation.mutateAsync(data.populations);
     };
 
+    const selectedEthnicities = form.watch("populations").map((p) => Number(p.ethnicityId));
+
     return (
         <div>
             <Form {...form}>
@@ -62,6 +64,10 @@ const PopulationForm = ({ ethnicities }: Props) => {
                     <ScrollArea viewportClassName="max-h-[50vh]">
                         <div className="space-y-4 py-1 pr-4">
                             {populationsField.map((populationField, index) => {
+                                const otherSelectedEthnicities = selectedEthnicities.filter(
+                                    (_, i) => i !== index && selectedEthnicities[i] !== 0
+                                );
+
                                 return (
                                     <div className="flex gap-2" key={populationField.id}>
                                         <FormField
@@ -73,6 +79,7 @@ const PopulationForm = ({ ethnicities }: Props) => {
                                                         <EthnicitiesSelect
                                                             onChange={field.onChange}
                                                             value={field.value}
+                                                            selectedEthnicities={otherSelectedEthnicities}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />

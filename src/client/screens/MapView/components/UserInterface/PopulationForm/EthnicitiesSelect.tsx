@@ -5,9 +5,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 interface Props {
     onChange: (value: string) => void;
     value: number;
+    selectedEthnicities: number[];
 }
 
-const EthnicitiesSelect = ({ onChange, value }: Props) => {
+const EthnicitiesSelect = ({ onChange, value, selectedEthnicities }: Props) => {
     const activeMap = useActiveMap();
     const ethnicities = useGetAllEthnicities(activeMap.id);
 
@@ -17,11 +18,13 @@ const EthnicitiesSelect = ({ onChange, value }: Props) => {
                 <SelectValue placeholder="Ethnicity" />
             </SelectTrigger>
             <SelectContent>
-                {ethnicities.data?.map((ethnicity) => (
-                    <SelectItem value={String(ethnicity.id)} key={ethnicity.id}>
-                        {ethnicity.name}
-                    </SelectItem>
-                ))}
+                {ethnicities.data
+                    ?.filter((ethnicity) => ethnicity.id === value || !selectedEthnicities.includes(ethnicity.id))
+                    .map((ethnicity) => (
+                        <SelectItem value={String(ethnicity.id)} key={ethnicity.id}>
+                            {ethnicity.name}
+                        </SelectItem>
+                    ))}
             </SelectContent>
         </Select>
     );
