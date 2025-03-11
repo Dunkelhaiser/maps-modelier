@@ -8,12 +8,12 @@ import { Input } from "@ui/Input";
 import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { NameInput, nameSchema } from "src/shared/schemas/shared";
+import { StateInput, stateSchema } from "src/shared/schemas/states/state";
 
 const RenameStateForm = () => {
     const selectedState = useMapStore((state) => state.selectedState)!;
-    const form = useForm<NameInput>({
-        resolver: zodResolver(nameSchema),
+    const form = useForm<StateInput>({
+        resolver: zodResolver(stateSchema),
         defaultValues: {
             name: selectedState.name,
         },
@@ -27,7 +27,7 @@ const RenameStateForm = () => {
     const renameState = useRenameState(activeMap.id, selectedState.id);
     const deleteState = useDeleteState(activeMap.id, selectedState.id);
 
-    const renameStateHanlder = (data: NameInput) => {
+    const renameStateHanlder = (data: StateInput) => {
         renameState.mutateAsync(data.name);
     };
 
