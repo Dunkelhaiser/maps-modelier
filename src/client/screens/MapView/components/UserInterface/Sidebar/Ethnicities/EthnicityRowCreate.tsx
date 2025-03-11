@@ -7,7 +7,7 @@ import { TableCell, TableRow } from "@ui/Table";
 import { Check, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { NameInput, nameSchema } from "src/shared/schemas/shared";
+import { EthnicityInput, ethnicitySchema } from "src/shared/schemas/ethnicities/ethnicity";
 
 interface Props {
     mapId: string;
@@ -47,8 +47,8 @@ interface PropsCreating {
 const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
     const createEthnicity = useCreateEthnicity(mapId);
 
-    const form = useForm<NameInput>({
-        resolver: zodResolver(nameSchema),
+    const form = useForm<EthnicityInput>({
+        resolver: zodResolver(ethnicitySchema),
         defaultValues: {
             name: "",
         },
@@ -58,7 +58,7 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
         form.setFocus("name");
     }, [form]);
 
-    const createEthnicityHandler = async (data: NameInput) => {
+    const createEthnicityHandler = async (data: EthnicityInput) => {
         await createEthnicity.mutateAsync(data.name);
         stopCreating();
     };
