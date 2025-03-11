@@ -115,11 +115,7 @@ export interface IpcChannels {
         // getByColor: (mapId: string, color: string) => Promise<Province | null>;
         // getById: (mapId: string, id: number) => Promise<Province | null>;
         changeType: (mapId: string, data: ChangeTypeInput) => Promise<Omit<Province, "ethnicities" | "population">[]>;
-        addPopulation: (
-            mapId: string,
-            provinceId: number,
-            ethnicityPopulation: PopulationInput
-        ) => Promise<Population[]>;
+        addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<Population[]>;
     };
     states: {
         getAll: (mapId: string) => Promise<State[]>;
