@@ -110,14 +110,14 @@ export interface IpcChannels {
         delete: (id: string) => Promise<void>;
     };
     provinces: {
-        getAll: (mapId: string, type: "land" | "water") => Promise<Province[]>;
+        getAll: (mapId: string, type: Type) => Promise<Province[]>;
         // getByColor: (mapId: string, color: string) => Promise<Province | null>;
         // getById: (mapId: string, id: number) => Promise<Province | null>;
         extractShapes: (imagePath: string, provinces: ProvinceType[]) => Promise<Record<string, Polygon | Polygon[]>>;
         changeType: (
             mapId: string,
             id: number[],
-            type: "land" | "water"
+            type: Type
         ) => Promise<Omit<Province, "ethnicities" | "population">[]>;
         addPopulation: (
             mapId: string,

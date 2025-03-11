@@ -7,6 +7,7 @@ import type {
     ProvinceType,
     EthnicityPopulation,
     CreateCountryAttributes,
+    Type,
 } from "../shared/types.js" with { "resolution-mode": "import" };
 
 const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
@@ -30,13 +31,12 @@ const api = {
         delete: (id: string) => invoke("maps", "delete", id),
     },
     provinces: {
-        getAll: (mapId: string, type: "land" | "water") => invoke("provinces", "getAll", mapId, type),
+        getAll: (mapId: string, type: Type) => invoke("provinces", "getAll", mapId, type),
         // getByColor: (mapId: string, color: string) => invoke("provinces", "getByColor", mapId, color),
         // getById: (mapId: string, id: number) => invoke("provinces", "getById", mapId, id),
         extractShapes: (imagePath: string, provinces: ProvinceType[]) =>
             invoke("provinces", "extractShapes", imagePath, provinces),
-        changeType: (mapId: string, id: number[], type: "land" | "water") =>
-            invoke("provinces", "changeType", mapId, id, type),
+        changeType: (mapId: string, id: number[], type: Type) => invoke("provinces", "changeType", mapId, id, type),
         addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: EthnicityPopulation[]) =>
             invoke("provinces", "addPopulation", mapId, provinceId, ethnicityPopulation),
     },
