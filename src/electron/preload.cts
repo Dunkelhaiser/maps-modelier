@@ -68,7 +68,7 @@ const api = {
     ethnicities: {
         getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),
         create: (mapId: string, data: EthnicityInput) => invoke("ethnicities", "create", mapId, data),
-        rename: (mapId: string, id: number, name: string) => invoke("ethnicities", "rename", mapId, id, name),
+        rename: (mapId: string, id: number, data: EthnicityInput) => invoke("ethnicities", "rename", mapId, id, data),
         delete: (mapId: string, id: number) => invoke("ethnicities", "delete", mapId, id),
     },
 };

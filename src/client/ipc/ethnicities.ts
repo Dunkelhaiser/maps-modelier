@@ -25,7 +25,7 @@ export const useRenameEthnicity = (mapId: string, id: number) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (name: string) => await window.electron.ethnicities.rename(mapId, id, name),
+        mutationFn: async (data: EthnicityInput) => await window.electron.ethnicities.rename(mapId, id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["ethnicities"] });
             toast.success("Ethnicity renamed successfully");

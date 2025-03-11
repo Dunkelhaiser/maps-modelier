@@ -36,7 +36,7 @@ const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
             return;
         }
 
-        await renameEthnicity.mutateAsync(data.name);
+        await renameEthnicity.mutateAsync(data);
         stopEditing();
     };
 
