@@ -19,7 +19,6 @@ import { getMaps } from "./maps/getMaps.js";
 import { renameMap } from "./maps/renameMap.js";
 import { addPopulation } from "./provinces/addPopulation.js";
 import { changeProvinceType } from "./provinces/changeProvinceType.js";
-import { extractProvinceShapes } from "./provinces/extractProvinceShapes.js";
 import { getAllProvinces } from "./provinces/getAllProvinces.js";
 import { addProvinces } from "./states/addProvinces.js";
 import { createState } from "./states/createState.js";
@@ -43,7 +42,6 @@ const handlers: HandlersType = {
         getAll: getAllProvinces,
         // getByColor: getProvinceByColor,
         // getById: getProvinceById,
-        extractShapes: extractProvinceShapes,
         changeType: changeProvinceType,
         addPopulation,
     },
