@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 import type { CreateCountryInput } from "../shared/schemas/countries/createCountry.js" with { "resolution-mode": "import" };
+import type { StatesAssignmentInput } from "../shared/schemas/countries/states.js" with { "resolution-mode": "import" };
 import type { UpdateCountryInput } from "../shared/schemas/countries/updateCountry.js" with { "resolution-mode": "import" };
 import type { EthnicityInput } from "../shared/schemas/ethnicities/ethnicity.js" with { "resolution-mode": "import" };
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
@@ -56,10 +57,8 @@ const api = {
         update: (mapId: string, countryTag: string, data: UpdateCountryInput) =>
             invoke("countries", "update", mapId, countryTag, data),
         delete: (mapId: string, tag: string) => invoke("countries", "delete", mapId, tag),
-        addStates: (mapId: string, countryTag: string, states: number[]) =>
-            invoke("countries", "addStates", mapId, countryTag, states),
-        removeStates: (mapId: string, countryTag: string, states: number[]) =>
-            invoke("countries", "removeStates", mapId, countryTag, states),
+        addStates: (mapId: string, data: StatesAssignmentInput) => invoke("countries", "addStates", mapId, data),
+        removeStates: (mapId: string, data: StatesAssignmentInput) => invoke("countries", "removeStates", mapId, data),
     },
     ethnicities: {
         getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),

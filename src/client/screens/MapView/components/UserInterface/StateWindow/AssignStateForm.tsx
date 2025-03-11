@@ -13,7 +13,7 @@ const AssignStateForm = () => {
     const assignState = useAddStates(activeMap.id);
 
     const assignStateHandler = (tag: string) => {
-        assignState.mutateAsync({ countryTag: tag, stateIds: [selectedState.id] });
+        assignState.mutateAsync({ countryTag: tag, states: [selectedState.id] });
     };
 
     return (

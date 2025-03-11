@@ -2,6 +2,7 @@ import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CreateCountryInput } from "src/shared/schemas/countries/createCountry";
+import { StatesAssignmentInput } from "src/shared/schemas/countries/states";
 import { UpdateCountryInput } from "src/shared/schemas/countries/updateCountry";
 
 export const useGetCountries = (mapId: string) => {
@@ -42,14 +43,13 @@ export const useAddStates = (mapId: string) => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
 
     return useMutation({
-        mutationFn: async ({ countryTag, stateIds }: { countryTag: string; stateIds: number[] }) =>
-            await window.electron.countries.addStates(mapId, countryTag, stateIds),
-        onSuccess: (_, { stateIds }) => {
+        mutationFn: async (data: StatesAssignmentInput) => await window.electron.countries.addStates(mapId, data),
+        onSuccess: (_, { states }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
             useMapStore.setState({
                 selectedCountry: selectedCountry && {
                     ...selectedCountry,
-                    states: [...new Set([...selectedCountry.states, ...stateIds])],
+                    states: [...new Set([...selectedCountry.states, ...states])],
                 },
             });
         },
@@ -61,14 +61,13 @@ export const useRemoveStates = (mapId: string) => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
 
     return useMutation({
-        mutationFn: async ({ countryTag, stateIds }: { countryTag: string; stateIds: number[] }) =>
-            await window.electron.countries.removeStates(mapId, countryTag, stateIds),
-        onSuccess: (_, { stateIds }) => {
+        mutationFn: async (data: StatesAssignmentInput) => await window.electron.countries.removeStates(mapId, data),
+        onSuccess: (_, { states }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
             useMapStore.setState({
                 selectedCountry: selectedCountry && {
                     ...selectedCountry,
-                    states: selectedCountry.states.filter((id) => !stateIds.includes(id)),
+                    states: selectedCountry.states.filter((id) => !states.includes(id)),
                 },
             });
         },

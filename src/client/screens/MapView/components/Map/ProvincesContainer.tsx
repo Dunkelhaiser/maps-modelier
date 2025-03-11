@@ -93,11 +93,11 @@ export const ProvincesContainer = memo(
                 return;
             }
 
-            addStates.mutate({ countryTag: tag, stateIds: [stateId] });
+            addStates.mutate({ countryTag: tag, states: [stateId] });
         };
 
         const removeStateFromCountry = async ({ tag }: Country, stateId: number) => {
-            removeStates.mutate({ countryTag: tag, stateIds: [stateId] });
+            removeStates.mutate({ countryTag: tag, states: [stateId] });
             const deselectState = selectedState?.id === stateId;
             if (deselectState)
                 useMapStore.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
