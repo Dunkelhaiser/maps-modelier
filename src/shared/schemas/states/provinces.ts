@@ -6,10 +6,10 @@ export const provincesSchema = zod.object({
 
 export type ProvincesInput = zod.infer<typeof provincesSchema>;
 
-export const provincesAssigmnetSchema = zod
+export const provincesAssignmetSchema = zod
     .object({
         stateId: zod.number(),
     })
     .merge(provincesSchema);
 
-export type ProvincesAssignmentInput = zod.infer<typeof provincesAssigmnetSchema>;
+export type ProvincesAssignmentInput = zod.infer<typeof provincesAssignmetSchema>;

@@ -1,5 +1,5 @@
 import { and, count, eq, inArray } from "drizzle-orm";
-import { ProvincesAssignmentInput, provincesAssigmnetSchema } from "../../../shared/schemas/states/provinces.js";
+import { ProvincesAssignmentInput, provincesAssignmetSchema } from "../../../shared/schemas/states/provinces.js";
 import { db } from "../../db/db.js";
 import { stateProvinces } from "../../db/schema.js";
 import { deleteState } from "./deleteState.js";
@@ -9,7 +9,7 @@ export const removeProvinces = async (
     mapId: string,
     data: ProvincesAssignmentInput
 ) => {
-    const { stateId, provinces } = await provincesAssigmnetSchema.parseAsync(data);
+    const { stateId, provinces } = await provincesAssignmetSchema.parseAsync(data);
 
     await db.transaction(async (tx) => {
         await tx

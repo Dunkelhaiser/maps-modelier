@@ -1,10 +1,10 @@
 import { and, eq, inArray, ne } from "drizzle-orm";
-import { ProvincesAssignmentInput, provincesAssigmnetSchema } from "../../../shared/schemas/states/provinces.js";
+import { ProvincesAssignmentInput, provincesAssignmetSchema } from "../../../shared/schemas/states/provinces.js";
 import { db } from "../../db/db.js";
 import { stateProvinces } from "../../db/schema.js";
 
 export const addProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: string, data: ProvincesAssignmentInput) => {
-    const { stateId, provinces } = await provincesAssigmnetSchema.parseAsync(data);
+    const { stateId, provinces } = await provincesAssignmetSchema.parseAsync(data);
 
     await db.transaction(async (tx) => {
         await tx
