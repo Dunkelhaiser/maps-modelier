@@ -95,16 +95,6 @@ export const audioSchema = <TOptional extends boolean = false>(
         optional,
     });
 
-export const nameSchema = zod.object({
-    name: zod
-        .string()
-        .trim()
-        .min(1, { message: "Provide a name" })
-        .max(50, { message: "The name should be less than 50 characters" }),
-});
-
-export type NameInput = zod.infer<typeof nameSchema>;
-
 const getArticle = (word: string) => {
     if (!word) return "a";
 
