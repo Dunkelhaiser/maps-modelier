@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
+import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
 import type {
     IpcRequest,
     IpcChannels,
@@ -25,7 +26,7 @@ const api = {
     maps: {
         getAll: () => invoke("maps", "getAll"),
         create: (data: CreateMapInput) => invoke("maps", "create", data),
-        rename: (id: string, name: string) => invoke("maps", "rename", id, name),
+        rename: (id: string, data: RenameMapInput) => invoke("maps", "rename", id, data),
         delete: (id: string) => invoke("maps", "delete", id),
     },
     provinces: {

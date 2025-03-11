@@ -24,7 +24,7 @@ const RenameMapForm = ({ map, closeDialog }: Props) => {
     });
 
     const renameMapHandler = async (data: RenameMapInput) => {
-        await renameMap.mutateAsync(data.name);
+        await renameMap.mutateAsync(data);
         closeDialog();
     };
 

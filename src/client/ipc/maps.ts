@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CreateMapInput } from "src/shared/schemas/maps/createMap";
+import { RenameMapInput } from "src/shared/schemas/maps/renameMap";
 
 export const useGetMaps = () => {
     return useQuery({
@@ -25,7 +26,7 @@ export const useRenameMap = (id: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (name: string) => await window.electron.maps.rename(id, name),
+        mutationFn: async (data: RenameMapInput) => await window.electron.maps.rename(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["maps"] });
             toast.success("Map renamed successfully");
