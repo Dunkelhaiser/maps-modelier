@@ -39,18 +39,6 @@ export interface State {
     ethnicities: EthnicityComposition[];
 }
 
-export interface CountryAttributes {
-    name: string;
-    tag: string;
-    color?: string;
-    flag: string;
-    coatOfArms: string;
-    anthem: {
-        name: string;
-        url: string;
-    };
-}
-
 export interface Country {
     tag: string;
     name: string;
@@ -72,38 +60,10 @@ export interface Ethnicity {
     totalNumber?: number;
 }
 
-export interface Population {
-    ethnicityId: number;
-    population: number;
-}
-
-export interface EthnicityPopulation {
-    ethnicityId: number;
-    population: number;
-}
-
-export type DeepPartial<T> = T extends object
-    ? {
-          [P in keyof T]?: DeepPartial<T[P]>;
-      }
-    : T;
-
 export interface ProvinceType {
     id: number;
     color: string;
     type: string;
-}
-
-export interface CreateCountryAttributes {
-    name: string;
-    tag: string;
-    color?: string;
-    flag: string;
-    coatOfArms: string;
-    anthem: {
-        name: string;
-        url: string;
-    };
 }
 
 export interface IpcChannels {
@@ -122,7 +82,7 @@ export interface IpcChannels {
         // getByColor: (mapId: string, color: string) => Promise<Province | null>;
         // getById: (mapId: string, id: number) => Promise<Province | null>;
         changeType: (mapId: string, data: ChangeTypeInput) => Promise<Omit<Province, "ethnicities" | "population">[]>;
-        addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<Population[]>;
+        addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<PopulationInput[]>;
     };
     states: {
         getAll: (mapId: string) => Promise<State[]>;

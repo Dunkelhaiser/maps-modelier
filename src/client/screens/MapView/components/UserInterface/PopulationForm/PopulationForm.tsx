@@ -10,12 +10,11 @@ import { ScrollArea } from "@ui/ScrollArea";
 import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { PopulationFormInput, populationFormSchema } from "src/shared/schemas/provinces/population";
-import { EthnicityPopulation } from "src/shared/types";
+import { PopulationFormInput, populationFormSchema, PopulationInput } from "src/shared/schemas/provinces/population";
 import EthnicitiesSelect from "./EthnicitiesSelect";
 
 interface Props {
-    ethnicities?: EthnicityPopulation[];
+    ethnicities?: PopulationInput;
 }
 
 const PopulationForm = ({ ethnicities }: Props) => {
