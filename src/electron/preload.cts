@@ -2,10 +2,10 @@ const { contextBridge, ipcRenderer } = require("electron");
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
 import type { ChangeTypeInput } from "../shared/schemas/provinces/changeType.js" with { "resolution-mode": "import" };
+import type { PopulationInput } from "../shared/schemas/provinces/population.js" with { "resolution-mode": "import" };
 import type {
     IpcRequest,
     IpcChannels,
-    EthnicityPopulation,
     CreateCountryAttributes,
     Type,
 } from "../shared/types.js" with { "resolution-mode": "import" };
@@ -35,7 +35,7 @@ const api = {
         // getByColor: (mapId: string, color: string) => invoke("provinces", "getByColor", mapId, color),
         // getById: (mapId: string, id: number) => invoke("provinces", "getById", mapId, id),
         changeType: (mapId: string, data: ChangeTypeInput) => invoke("provinces", "changeType", mapId, data),
-        addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: EthnicityPopulation[]) =>
+        addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: PopulationInput) =>
             invoke("provinces", "addPopulation", mapId, provinceId, ethnicityPopulation),
     },
     states: {

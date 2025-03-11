@@ -1,18 +1,16 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
+import { PopulationInput, populationSchema } from "../../../shared/schemas/provinces/population.js";
 import { db } from "../../db/db.js";
 import { provincePopulations } from "../../db/schema.js";
-
-interface EthnicityPopulation {
-    ethnicityId: number;
-    population: number;
-}
 
 export const addPopulation = async (
     _: Electron.IpcMainInvokeEvent,
     mapId: string,
     provinceId: number,
-    ethnicityPopulation: EthnicityPopulation[]
+    data: PopulationInput
 ) => {
+    const ethnicityPopulation = await populationSchema.parseAsync(data);
+
     const populations = await db.transaction(async (tx) => {
         const existingPopulations = await tx
             .select()

@@ -2,14 +2,15 @@ import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ChangeTypeInput } from "src/shared/schemas/provinces/changeType";
-import { EthnicityPopulation, Type } from "src/shared/types";
+import { PopulationInput } from "src/shared/schemas/provinces/population";
+import { Type } from "src/shared/types";
 
 export const useAddPopulation = (mapId: string, provinceId: number) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (ethnicitiesPopulation: EthnicityPopulation[]) => {
-            await window.electron.provinces.addPopulation(mapId, provinceId, ethnicitiesPopulation);
+        mutationFn: async (data: PopulationInput) => {
+            await window.electron.provinces.addPopulation(mapId, provinceId, data);
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "land"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
         },

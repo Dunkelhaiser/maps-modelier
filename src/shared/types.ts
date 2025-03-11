@@ -3,6 +3,7 @@ import { maps, provinces } from "../electron/db/schema.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
 import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
+import { PopulationInput } from "./schemas/provinces/population.js";
 
 export type Map = InferSelectModel<typeof maps>;
 
@@ -117,7 +118,7 @@ export interface IpcChannels {
         addPopulation: (
             mapId: string,
             provinceId: number,
-            ethnicityPopulation: EthnicityPopulation[]
+            ethnicityPopulation: PopulationInput
         ) => Promise<Population[]>;
     };
     states: {

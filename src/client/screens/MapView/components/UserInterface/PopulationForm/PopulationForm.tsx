@@ -10,7 +10,7 @@ import { ScrollArea } from "@ui/ScrollArea";
 import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { PopulationInput, populationSchema } from "src/shared/schemas/provinces/population";
+import { PopulationFormInput, populationFormSchema } from "src/shared/schemas/provinces/population";
 import { EthnicityPopulation } from "src/shared/types";
 import EthnicitiesSelect from "./EthnicitiesSelect";
 
@@ -30,8 +30,8 @@ const PopulationForm = ({ ethnicities }: Props) => {
         [ethnicities]
     );
 
-    const form = useForm<PopulationInput>({
-        resolver: zodResolver(populationSchema),
+    const form = useForm<PopulationFormInput>({
+        resolver: zodResolver(populationFormSchema),
         defaultValues,
     });
 
@@ -50,7 +50,7 @@ const PopulationForm = ({ ethnicities }: Props) => {
         name: "populations",
     });
 
-    const addPopulationHandler = async (data: PopulationInput) => {
+    const addPopulationHandler = async (data: PopulationFormInput) => {
         await addPopulation.mutateAsync(data.populations);
     };
 
