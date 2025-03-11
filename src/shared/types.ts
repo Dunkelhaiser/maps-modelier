@@ -1,6 +1,7 @@
 import { InferSelectModel } from "drizzle-orm";
 import { Polygon } from "pixi.js";
 import { maps, provinces } from "../electron/db/schema.js";
+import { CreateMapInput } from "./schemas/maps/createMap.js";
 
 export type Map = InferSelectModel<typeof maps>;
 
@@ -103,7 +104,7 @@ export interface IpcChannels {
     };
     maps: {
         getAll: () => Promise<Map[]>;
-        create: (name: string, imageData: string) => Promise<Map | null>;
+        create: (data: CreateMapInput) => Promise<Map | null>;
         delete: (id: string) => Promise<void>;
         rename: (id: string, name: string) => Promise<Map | null>;
     };

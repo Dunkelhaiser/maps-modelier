@@ -13,7 +13,7 @@ export const useCreateMap = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: CreateMapInput) => await window.electron.maps.create(data.name, data.provinces),
+        mutationFn: async (data: CreateMapInput) => await window.electron.maps.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["maps"] });
             toast.success("Map created successfully");

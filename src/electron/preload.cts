@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type {
     IpcRequest,
     IpcChannels,
@@ -23,7 +24,7 @@ const api = {
     },
     maps: {
         getAll: () => invoke("maps", "getAll"),
-        create: (name: string, imageData: string) => invoke("maps", "create", name, imageData),
+        create: (data: CreateMapInput) => invoke("maps", "create", data),
         rename: (id: string, name: string) => invoke("maps", "rename", id, name),
         delete: (id: string) => invoke("maps", "delete", id),
     },
