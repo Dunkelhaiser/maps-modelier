@@ -1,15 +1,12 @@
 import { getTableColumns } from "drizzle-orm";
-import { CreateCountryAttributes, EthnicityComposition } from "../../../shared/types.js";
+import { CreateCountryInput, createCountrySchema } from "../../../shared/schemas/countries/createCountry.js";
+import { EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { countries } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 
-export const createCountry = async (
-    _: Electron.IpcMainInvokeEvent,
-    mapId: string,
-    attributes: CreateCountryAttributes
-) => {
+export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: string, input: CreateCountryInput) => {
     const {
         mapId: mapIdCol,
         createdAt,
@@ -20,6 +17,7 @@ export const createCountry = async (
         coatOfArms: coatOfArmsCol,
         ...cols
     } = getTableColumns(countries);
+    const attributes = await createCountrySchema.parseAsync(input);
     const {
         anthem: { name: anthemName },
         ...data

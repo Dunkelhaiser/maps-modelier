@@ -1,6 +1,6 @@
 import path from "path";
 import { and, eq, getTableColumns } from "drizzle-orm";
-import { CreateCountryAttributes, DeepPartial } from "../../../shared/types.js";
+import { UpdateCountryInput, updateCountrySchema } from "../../../shared/schemas/countries/updateCountry.js";
 import { db } from "../../db/db.js";
 import { countries, countryStates } from "../../db/schema.js";
 import { deleteFile } from "../utils/deleteFile.js";
@@ -11,9 +11,10 @@ export const updateCountry = async (
     _: Electron.IpcMainInvokeEvent,
     mapId: string,
     countryTag: string,
-    attributes: DeepPartial<CreateCountryAttributes>
+    input: UpdateCountryInput
 ) => {
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(countries);
+    const attributes = await updateCountrySchema.parseAsync(input);
 
     const country = await db
         .select()
@@ -38,7 +39,7 @@ export const updateCountry = async (
         coatOfArms = await saveFile(attributes.coatOfArms, `coat_of_arms`, countryFolder);
     }
 
-    if (attributes.anthem?.url) {
+    if (attributes.anthem.url) {
         const anthemFile = path.basename(country[0].anthemPath);
         await deleteFile(anthemFile, countryFolder);
         anthem = await saveFile(attributes.anthem.url, `anthem`, countryFolder);
@@ -51,7 +52,7 @@ export const updateCountry = async (
             ...attributes,
             flag,
             coatOfArms,
-            anthemName: attributes.anthem?.name,
+            anthemName: attributes.anthem.name,
             anthemPath: anthem,
         })
         .where(and(eq(countries.tag, countryTag), eq(countries.mapId, mapId)))

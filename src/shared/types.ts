@@ -1,5 +1,7 @@
 import { InferSelectModel } from "drizzle-orm";
 import { maps, provinces } from "../electron/db/schema.js";
+import { CreateCountryInput } from "./schemas/countries/createCountry.js";
+import { UpdateCountryInput } from "./schemas/countries/updateCountry.js";
 import { EthnicityInput } from "./schemas/ethnicities/ethnicity.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
@@ -136,13 +138,13 @@ export interface IpcChannels {
     };
     countries: {
         getAll: (mapId: string) => Promise<Country[]>;
-        create: (mapId: string, attributes: CreateCountryAttributes) => Promise<Country>;
-        delete: (mapId: string, tag: string) => Promise<void>;
+        create: (mapId: string, data: CreateCountryInput) => Promise<Country>;
         update: (
             mapId: string,
-            countryTag: string,
-            attributes: DeepPartial<CreateCountryAttributes>
+            tag: string,
+            data: UpdateCountryInput
         ) => Promise<Omit<Country, "ethnicities" | "population" | "states">>;
+        delete: (mapId: string, tag: string) => Promise<void>;
         addStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
         removeStates: (mapId: string, countryTag: string, states: number[]) => Promise<void>;
     };

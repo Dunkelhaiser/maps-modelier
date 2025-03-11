@@ -11,7 +11,8 @@ export const createCountrySchema = zod.object({
     color: zod
         .string()
         .trim()
-        .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" }),
+        .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" })
+        .optional(),
     flag: imageSchema(),
     coatOfArms: imageSchema(),
     anthem: zod.object({

@@ -1,4 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
+import type { CreateCountryInput } from "../shared/schemas/countries/createCountry.js" with { "resolution-mode": "import" };
+import type { UpdateCountryInput } from "../shared/schemas/countries/updateCountry.js" with { "resolution-mode": "import" };
 import type { EthnicityInput } from "../shared/schemas/ethnicities/ethnicity.js" with { "resolution-mode": "import" };
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
@@ -7,12 +9,7 @@ import type { PopulationInput } from "../shared/schemas/provinces/population.js"
 import type { CreateStateInput } from "../shared/schemas/states/createState.js" with { "resolution-mode": "import" };
 import type { ProvincesAssignmentInput } from "../shared/schemas/states/provinces.js" with { "resolution-mode": "import" };
 import type { StateNameInput } from "../shared/schemas/states/state.js" with { "resolution-mode": "import" };
-import type {
-    IpcRequest,
-    IpcChannels,
-    CreateCountryAttributes,
-    Type,
-} from "../shared/types.js" with { "resolution-mode": "import" };
+import type { IpcRequest, IpcChannels, Type } from "../shared/types.js" with { "resolution-mode": "import" };
 
 const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
     domain: D,
@@ -55,10 +52,9 @@ const api = {
     },
     countries: {
         getAll: (mapId: string) => invoke("countries", "getAll", mapId),
-        create: (mapId: string, attributes: CreateCountryAttributes) =>
-            invoke("countries", "create", mapId, attributes),
-        update: (mapId: string, countryTag: string, attributes: Partial<CreateCountryAttributes>) =>
-            invoke("countries", "update", mapId, countryTag, attributes),
+        create: (mapId: string, data: CreateCountryInput) => invoke("countries", "create", mapId, data),
+        update: (mapId: string, countryTag: string, data: UpdateCountryInput) =>
+            invoke("countries", "update", mapId, countryTag, data),
         delete: (mapId: string, tag: string) => invoke("countries", "delete", mapId, tag),
         addStates: (mapId: string, countryTag: string, states: number[]) =>
             invoke("countries", "addStates", mapId, countryTag, states),
