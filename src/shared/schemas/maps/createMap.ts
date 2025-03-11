@@ -1,6 +1,6 @@
 import { z as zod } from "zod";
-import { imageSchema } from "../shared";
-import { mapName } from "./shared";
+import { imageSchema } from "../shared.js";
+import { mapName } from "./shared.js";
 
 export const createMapSchema = zod.object({
     name: mapName,

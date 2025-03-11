@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { audioSchema, imageSchema, nameField } from "../shared";
+import { audioSchema, imageSchema, nameField } from "../shared.js";
 
 export const createCountrySchema = zod.object({
     name: nameField({ field: "country", min: 1, max: 50 }),

@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { mapName } from "./shared";
+import { mapName } from "./shared.js";
 
 export const renameMapSchema = zod.object({
     name: mapName,
