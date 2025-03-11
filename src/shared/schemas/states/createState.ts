@@ -1,10 +1,7 @@
 import { z as zod } from "zod";
+import { provincesSchema } from "./provinces.js";
 import { stateNameSchema } from "./state.js";
 
-export const createStateSchema = zod
-    .object({
-        provinces: zod.array(zod.number()).optional(),
-    })
-    .merge(stateNameSchema);
+export const createStateSchema = stateNameSchema.merge(provincesSchema.partial());
 
 export type CreateStateInput = zod.infer<typeof createStateSchema>;

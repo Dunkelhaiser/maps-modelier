@@ -1,6 +1,7 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateStateInput } from "src/shared/schemas/states/createState";
+import { ProvincesAssignmentInput } from "src/shared/schemas/states/provinces";
 import { StateNameInput } from "src/shared/schemas/states/state";
 
 export const useGetStates = (mapId: string) => {
@@ -53,14 +54,13 @@ export const useAddProvinces = (mapId: string) => {
     const selectedState = useMapStore((state) => state.selectedState);
 
     return useMutation({
-        mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
-            await window.electron.states.addProvinces(mapId, stateId, provinceIds),
-        onSuccess: (_, { provinceIds }) => {
+        mutationFn: async (data: ProvincesAssignmentInput) => await window.electron.states.addProvinces(mapId, data),
+        onSuccess: (_, { provinces }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({
                 selectedState: selectedState && {
                     ...selectedState,
-                    provinces: [...new Set([...selectedState.provinces, ...provinceIds])],
+                    provinces: [...new Set([...selectedState.provinces, ...provinces])],
                 },
             });
         },
@@ -72,14 +72,13 @@ export const useRemoveProvinces = (mapId: string) => {
     const selectedState = useMapStore((state) => state.selectedState);
 
     return useMutation({
-        mutationFn: async ({ stateId, provinceIds }: { stateId: number; provinceIds: number[] }) =>
-            await window.electron.states.removeProvinces(mapId, stateId, provinceIds),
-        onSuccess: (_, { provinceIds }) => {
+        mutationFn: async (data: ProvincesAssignmentInput) => await window.electron.states.removeProvinces(mapId, data),
+        onSuccess: (_, { provinces }) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
             useMapStore.setState({
                 selectedState: selectedState && {
                     ...selectedState,
-                    provinces: selectedState.provinces.filter((id) => !provinceIds.includes(id)),
+                    provinces: selectedState.provinces.filter((id) => !provinces.includes(id)),
                 },
             });
         },

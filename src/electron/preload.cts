@@ -4,6 +4,7 @@ import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with {
 import type { ChangeTypeInput } from "../shared/schemas/provinces/changeType.js" with { "resolution-mode": "import" };
 import type { PopulationInput } from "../shared/schemas/provinces/population.js" with { "resolution-mode": "import" };
 import type { CreateStateInput } from "../shared/schemas/states/createState.js" with { "resolution-mode": "import" };
+import type { ProvincesAssignmentInput } from "../shared/schemas/states/provinces.js" with { "resolution-mode": "import" };
 import type { StateNameInput } from "../shared/schemas/states/state.js" with { "resolution-mode": "import" };
 import type {
     IpcRequest,
@@ -47,10 +48,9 @@ const api = {
         rename: (mapId: string, stateId: number, data: StateNameInput) =>
             invoke("states", "rename", mapId, stateId, data),
         delete: (mapId: string, stateId: number) => invoke("states", "delete", mapId, stateId),
-        addProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
-            invoke("states", "addProvinces", mapId, stateId, provinceIds),
-        removeProvinces: (mapId: string, stateId: number, provinceIds: number[]) =>
-            invoke("states", "removeProvinces", mapId, stateId, provinceIds),
+        addProvinces: (mapId: string, data: ProvincesAssignmentInput) => invoke("states", "addProvinces", mapId, data),
+        removeProvinces: (mapId: string, data: ProvincesAssignmentInput) =>
+            invoke("states", "removeProvinces", mapId, data),
     },
     countries: {
         getAll: (mapId: string) => invoke("countries", "getAll", mapId),

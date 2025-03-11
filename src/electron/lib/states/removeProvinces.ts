@@ -1,4 +1,5 @@
 import { and, count, eq, inArray } from "drizzle-orm";
+import { ProvincesAssignmentInput, provincesAssigmnetSchema } from "../../../shared/schemas/states/provinces.js";
 import { db } from "../../db/db.js";
 import { stateProvinces } from "../../db/schema.js";
 import { deleteState } from "./deleteState.js";
@@ -6,9 +7,10 @@ import { deleteState } from "./deleteState.js";
 export const removeProvinces = async (
     _: Electron.IpcMainInvokeEvent,
     mapId: string,
-    stateId: number,
-    provinces: number[]
+    data: ProvincesAssignmentInput
 ) => {
+    const { stateId, provinces } = await provincesAssigmnetSchema.parseAsync(data);
+
     await db.transaction(async (tx) => {
         await tx
             .delete(stateProvinces)
