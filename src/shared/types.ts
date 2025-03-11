@@ -1,5 +1,4 @@
 import { InferSelectModel } from "drizzle-orm";
-import { Polygon } from "pixi.js";
 import { maps, provinces } from "../electron/db/schema.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
@@ -113,7 +112,6 @@ export interface IpcChannels {
         getAll: (mapId: string, type: Type) => Promise<Province[]>;
         // getByColor: (mapId: string, color: string) => Promise<Province | null>;
         // getById: (mapId: string, id: number) => Promise<Province | null>;
-        extractShapes: (imagePath: string, provinces: ProvinceType[]) => Promise<Record<string, Polygon | Polygon[]>>;
         changeType: (
             mapId: string,
             id: number[],

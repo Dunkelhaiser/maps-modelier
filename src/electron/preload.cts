@@ -4,7 +4,6 @@ import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with {
 import type {
     IpcRequest,
     IpcChannels,
-    ProvinceType,
     EthnicityPopulation,
     CreateCountryAttributes,
     Type,
@@ -34,8 +33,6 @@ const api = {
         getAll: (mapId: string, type: Type) => invoke("provinces", "getAll", mapId, type),
         // getByColor: (mapId: string, color: string) => invoke("provinces", "getByColor", mapId, color),
         // getById: (mapId: string, id: number) => invoke("provinces", "getById", mapId, id),
-        extractShapes: (imagePath: string, provinces: ProvinceType[]) =>
-            invoke("provinces", "extractShapes", imagePath, provinces),
         changeType: (mapId: string, id: number[], type: Type) => invoke("provinces", "changeType", mapId, id, type),
         addPopulation: (mapId: string, provinceId: number, ethnicityPopulation: EthnicityPopulation[]) =>
             invoke("provinces", "addPopulation", mapId, provinceId, ethnicityPopulation),
