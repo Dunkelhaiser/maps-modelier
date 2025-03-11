@@ -219,9 +219,7 @@ export const alliances = sqliteTable(
 export const allianceMembers = sqliteTable(
     "alliance_members",
     {
-        allianceId: integer("alliance_id")
-            .notNull()
-            .references(() => alliances.id, { onDelete: "cascade" }),
+        allianceId: integer("alliance_id").notNull(),
         countryTag: text("country_tag").notNull(),
         mapId: text("map_id")
             .notNull()
@@ -306,6 +304,7 @@ export const warParticipants = sqliteTable(
     "war_participants",
     {
         sideId: integer("side_id").notNull(),
+        warId: integer("war_id").notNull(),
         countryTag: text("country_tag").notNull(),
         mapId: text("map_id")
             .notNull()
@@ -314,8 +313,8 @@ export const warParticipants = sqliteTable(
     (table) => ({
         pk: primaryKey({ columns: [table.mapId, table.sideId, table.countryTag], name: "war_participants_pk" }),
         warSidesReference: foreignKey({
-            columns: [table.mapId, table.sideId],
-            foreignColumns: [warSides.mapId, warSides.id],
+            columns: [table.mapId, table.warId, table.sideId],
+            foreignColumns: [warSides.mapId, warSides.warId, warSides.id],
             name: "war_sides_reference",
         }).onDelete("cascade"),
         countriesReference: foreignKey({

@@ -3,7 +3,6 @@ CREATE TABLE `alliance_members` (
 	`country_tag` text NOT NULL,
 	`map_id` text NOT NULL,
 	PRIMARY KEY(`map_id`, `alliance_id`, `country_tag`),
-	FOREIGN KEY (`alliance_id`) REFERENCES `alliances`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`map_id`) REFERENCES `maps`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`map_id`,`alliance_id`) REFERENCES `alliances`(`map_id`,`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`map_id`,`country_tag`) REFERENCES `countries`(`map_id`,`tag`) ON UPDATE no action ON DELETE cascade
@@ -24,11 +23,12 @@ CREATE TABLE `alliances` (
 --> statement-breakpoint
 CREATE TABLE `war_participants` (
 	`side_id` integer NOT NULL,
+	`war_id` integer NOT NULL,
 	`country_tag` text NOT NULL,
 	`map_id` text NOT NULL,
 	PRIMARY KEY(`map_id`, `side_id`, `country_tag`),
 	FOREIGN KEY (`map_id`) REFERENCES `maps`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`map_id`,`side_id`) REFERENCES `war_sides`(`map_id`,`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`map_id`,`war_id`,`side_id`) REFERENCES `war_sides`(`map_id`,`war_id`,`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`map_id`,`country_tag`) REFERENCES `countries`(`map_id`,`tag`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint

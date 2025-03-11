@@ -1,7 +1,7 @@
 {
     "version": "6",
     "dialect": "sqlite",
-    "id": "08297245-1279-4669-b086-593cc5bed96d",
+    "id": "4678110f-bc3e-4599-9732-298e5e39318b",
     "prevId": "0745947a-1b92-4763-b32f-168def23c0c8",
     "tables": {
         "alliance_members": {
@@ -31,15 +31,6 @@
             },
             "indexes": {},
             "foreignKeys": {
-                "alliance_members_alliance_id_alliances_id_fk": {
-                    "name": "alliance_members_alliance_id_alliances_id_fk",
-                    "tableFrom": "alliance_members",
-                    "tableTo": "alliances",
-                    "columnsFrom": ["alliance_id"],
-                    "columnsTo": ["id"],
-                    "onDelete": "cascade",
-                    "onUpdate": "no action"
-                },
                 "alliance_members_map_id_maps_id_fk": {
                     "name": "alliance_members_map_id_maps_id_fk",
                     "tableFrom": "alliance_members",
@@ -710,6 +701,13 @@
                     "notNull": true,
                     "autoincrement": false
                 },
+                "war_id": {
+                    "name": "war_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
                 "country_tag": {
                     "name": "country_tag",
                     "type": "text",
@@ -740,8 +738,8 @@
                     "name": "war_sides_reference",
                     "tableFrom": "war_participants",
                     "tableTo": "war_sides",
-                    "columnsFrom": ["map_id", "side_id"],
-                    "columnsTo": ["map_id", "id"],
+                    "columnsFrom": ["map_id", "war_id", "side_id"],
+                    "columnsTo": ["map_id", "war_id", "id"],
                     "onDelete": "cascade",
                     "onUpdate": "no action"
                 },
