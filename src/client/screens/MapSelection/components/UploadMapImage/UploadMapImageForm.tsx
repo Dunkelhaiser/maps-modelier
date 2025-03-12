@@ -5,10 +5,10 @@ import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { useForm } from "react-hook-form";
 import { UploadeMapImageInput, uploadMapImageSchema } from "src/shared/schemas/mapImage/upload";
-import { Map } from "src/shared/types";
+import { ActiveMap } from "src/shared/types";
 
 interface Props {
-    selectedMapForUpload: Map | null;
+    selectedMapForUpload: ActiveMap | null;
 }
 
 const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
@@ -25,7 +25,7 @@ const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
     const handleExistingMapImageUpload = async (data: UploadeMapImageInput) => {
         if (!selectedMapForUpload) return;
         await window.electron.mapImage.save(data.provinces, selectedMapForUpload.id);
-        setActiveMap({ ...selectedMapForUpload, imageUrl: data.provinces });
+        setActiveMap(selectedMapForUpload);
     };
 
     return (

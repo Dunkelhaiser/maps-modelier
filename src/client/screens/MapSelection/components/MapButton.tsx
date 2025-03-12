@@ -2,24 +2,23 @@ import { useMapStore } from "@store/store";
 import { MapIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Map } from "src/shared/types";
+import { ActiveMap } from "src/shared/types";
 import DeleteMapDialog from "./DeleteMapDialog";
 import RenameMapDialog from "./RenameMap/RenameMapDialog";
 import UploadMapImageDialog from "./UploadMapImage/UploadMapImageDialog";
 
 interface Props {
-    map: Map;
+    map: ActiveMap;
 }
 
 const MapButton = ({ map }: Props) => {
     const setActiveMap = useMapStore((state) => state.setActiveMap);
-    const [selectedMapForUpload, setSelectedMapForUpload] = useState<Map | null>(null);
+    const [selectedMapForUpload, setSelectedMapForUpload] = useState<ActiveMap | null>(null);
 
     const handleExistingMapSelect = async () => {
         if (map.imgPath) {
             try {
-                const imageUrl = await window.electron.mapImage.load(map.imgPath);
-                setActiveMap({ ...map, imageUrl });
+                setActiveMap(map);
             } catch (err) {
                 toast.error(`Failed to load map image: ${JSON.stringify(err)}`);
                 setSelectedMapForUpload(map);
