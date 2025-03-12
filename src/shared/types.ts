@@ -75,7 +75,7 @@ export interface Alliance {
     id: number;
     name: string;
     type: string;
-    leader: CountryBase | null;
+    leader: CountryBase;
     membersCount: number;
 }
 
