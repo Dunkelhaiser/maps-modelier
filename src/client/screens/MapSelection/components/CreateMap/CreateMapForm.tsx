@@ -24,7 +24,6 @@ const CreateMapForm = () => {
     const createMapHandler = async (data: CreateMapInput) => {
         const newMap = await createMap.mutateAsync(data);
         if (newMap) {
-            await window.electron.mapImage.save(data.provinces, newMap.id);
             setActiveMap(newMap);
             form.reset();
         }

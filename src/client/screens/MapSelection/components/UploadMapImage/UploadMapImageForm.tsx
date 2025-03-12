@@ -22,9 +22,9 @@ const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
     });
     const fileRef = form.register("provinces");
 
-    const handleExistingMapImageUpload = async (data: UploadeMapImageInput) => {
+    const handleExistingMapImageUpload = async () => {
         if (!selectedMapForUpload) return;
-        await window.electron.mapImage.save(data.provinces, selectedMapForUpload.id);
+        // await window.electron.mapImage.save(data.provinces, selectedMapForUpload.id);
         setActiveMap(selectedMapForUpload);
     };
 
