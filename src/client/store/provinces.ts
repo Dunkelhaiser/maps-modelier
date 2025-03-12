@@ -1,4 +1,4 @@
-import { Country, Province, State } from "src/shared/types";
+import { Alliance, Country, Province, State } from "src/shared/types";
 import { StateCreator } from "zustand";
 import { useSidebarStore } from "./sidebar";
 import { MapStore } from "./store";
@@ -8,15 +8,18 @@ export interface ProvincesSlice {
     selectedProvinces: Province[];
     selectedState: State | null;
     selectedCountry: Country | null;
+    selectedAlliance: Alliance | null;
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => void;
     deselectProvinces: () => void;
     selectCountry: (country: Country | null) => void;
+    selectAlliance: (alliance: Alliance | null) => void;
 }
 
 export const initialProvincesSlice = {
     selectedProvinces: [],
     selectedState: null,
     selectedCountry: null,
+    selectedAlliance: null,
 };
 
 export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice> = (set, get) => ({
@@ -68,6 +71,11 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
     selectCountry: (country) => {
         useSidebarStore.getState().openSidebar("countries");
         set({ selectedCountry: country });
+    },
+
+    selectAlliance: (alliance) => {
+        useSidebarStore.getState().openSidebar("alliances");
+        set({ selectedAlliance: alliance });
     },
 });
 

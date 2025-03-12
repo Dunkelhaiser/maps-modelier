@@ -1,9 +1,12 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useSidebarStore } from "@store/sidebar";
+import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
+import AllianceRowCreate from "./AllianceRowCreate";
 
 const Alliances = () => {
+    const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
     return (
@@ -17,10 +20,11 @@ const Alliances = () => {
                         <TableRow className="hover:bg-card">
                             <TableHead>Name</TableHead>
                             <TableHead>Type</TableHead>
+                            <TableHead>Members</TableHead>
                             <TableHead className="text-right">Leader</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody />
+                    <TableBody>{mode === "editing" && <AllianceRowCreate />}</TableBody>
                 </Table>
             </CardContent>
         </>
