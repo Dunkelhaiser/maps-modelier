@@ -1,6 +1,7 @@
-import { eq, sum } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { alliances, allianceMembers, countries } from "../../db/schema.js";
+import { loadFile } from "../utils/loadFile.js";
 
 export const getAllAlliances = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
     const alliancesArr = await db
@@ -14,12 +15,21 @@ export const getAllAlliances = async (_: Electron.IpcMainInvokeEvent, mapId: str
                 flag: countries.flag,
             },
             type: alliances.type,
-            membersCount: sum(allianceMembers.countryTag).mapWith(Number),
+            membersCount: count(allianceMembers.countryTag),
         })
         .from(alliances)
-        .innerJoin(allianceMembers, eq(alliances.id, allianceMembers.allianceId))
-        .innerJoin(countries, eq(alliances.leader, countries.tag))
-        .where(eq(alliances.mapId, mapId));
+        .innerJoin(countries, and(eq(alliances.leader, countries.tag), eq(countries.mapId, mapId)))
+        .leftJoin(allianceMembers, and(eq(alliances.id, allianceMembers.allianceId), eq(allianceMembers.mapId, mapId)))
+        .where(eq(alliances.mapId, mapId))
+        .groupBy(alliances.id);
 
-    return alliancesArr;
+    const alliancesWithLeaderFlags = await Promise.all(
+        alliancesArr.map(async (alliance) => {
+            const flag = await loadFile(alliance.leader.flag);
+            alliance.leader.flag = flag;
+            return alliance;
+        })
+    );
+
+    return alliancesWithLeaderFlags;
 };
