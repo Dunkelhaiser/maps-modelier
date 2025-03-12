@@ -1,6 +1,5 @@
 import { and, eq, getTableColumns } from "drizzle-orm";
 import { CreateAllianceInput, createAllianceSchema } from "../../../shared/schemas/alliances/createAlliance.js";
-import { CountryBase } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { alliances, countries, allianceMembers } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
@@ -17,23 +16,20 @@ export const createAlliance = async (_: Electron.IpcMainInvokeEvent, mapId: stri
         })
         .returning(cols);
 
-    let leaderData: CountryBase | null = null;
-    if (leader) {
-        [leaderData] = await db
-            .select()
-            .from(countries)
-            .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
+    const [leaderData] = await db
+        .select()
+        .from(countries)
+        .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
 
-        const flag = await loadFile(leaderData.flag);
+    const flag = await loadFile(leaderData.flag);
 
-        leaderData.flag = flag;
+    leaderData.flag = flag;
 
-        await db.insert(allianceMembers).values({
-            mapId,
-            allianceId: createdAlliance.id,
-            countryTag: leader,
-        });
-    }
+    await db.insert(allianceMembers).values({
+        mapId,
+        allianceId: createdAlliance.id,
+        countryTag: leader,
+    });
 
     return { ...createdAlliance, leader: leaderData };
 };
