@@ -18,7 +18,7 @@ const AllianceRow = ({ alliance }: Props) => {
                 <img
                     src={alliance.leader.flag}
                     alt={`${alliance.leader.name} flag`}
-                    className="aspect-[3/2] h-6 rounded-md object-cover"
+                    className="ml-auto aspect-[3/2] h-6 rounded-md object-cover"
                 />
                 <button className="absolute inset-0" type="button" onClick={selectAlliance} />
             </TableCell>
