@@ -1,13 +1,18 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
+import { useActiveMap } from "@hooks/useActiveMap";
+import { useGetAlliances } from "@ipc/alliances";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
+import AllianceRow from "./AllianceRow";
 import AllianceRowCreate from "./AllianceRowCreate";
 
 const Alliances = () => {
+    const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
+    const { data } = useGetAlliances(activeMap.id);
 
     return (
         <>
@@ -24,7 +29,10 @@ const Alliances = () => {
                             <TableHead className="text-right">Leader</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody>{mode === "editing" && <AllianceRowCreate />}</TableBody>
+                    <TableBody>
+                        {mode === "editing" && <AllianceRowCreate />}
+                        {data?.map((alliance) => <AllianceRow alliance={alliance} key={alliance.id} />)}
+                    </TableBody>
                 </Table>
             </CardContent>
         </>
