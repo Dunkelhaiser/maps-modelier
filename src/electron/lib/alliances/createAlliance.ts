@@ -31,5 +31,5 @@ export const createAlliance = async (_: Electron.IpcMainInvokeEvent, mapId: stri
         countryTag: leader,
     });
 
-    return { ...createdAlliance, leader: leaderData };
+    return { ...createdAlliance, leader: leaderData, membersCount: 1 };
 };

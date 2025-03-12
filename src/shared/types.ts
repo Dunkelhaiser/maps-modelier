@@ -76,6 +76,7 @@ export interface Alliance {
     name: string;
     type: string;
     leader: CountryBase | null;
+    membersCount: number;
 }
 
 export interface IpcChannels {
