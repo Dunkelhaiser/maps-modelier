@@ -23,7 +23,6 @@ export interface EthnicityComposition {
 }
 
 export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapId"> {
-    type: Type;
     population: number;
     ethnicities: EthnicityComposition[];
 }
