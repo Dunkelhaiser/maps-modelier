@@ -1,6 +1,7 @@
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { Card } from "@ui/Card";
+import Alliances from "./Alliances/Alliances";
 import Countries from "./Countries/Countries";
 import CountriesEditing from "./CountriesEditing/CountriesEditing";
 import Country from "./Country/Country";
@@ -20,6 +21,10 @@ const Sidebar = () => {
                 return <CountriesEditing />;
             }
             return <Countries />;
+        }
+
+        if (activeSidebar === "alliances") {
+            return <Alliances />;
         }
 
         return null;

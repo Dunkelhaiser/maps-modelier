@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { useMapStore } from "./store";
 
-export type Sidebar = "countries" | "ethnicities" | null;
+export type Sidebar = "countries" | "ethnicities" | "alliances" | null;
 
 export interface SidebarStore {
     activeSidebar: Sidebar;
