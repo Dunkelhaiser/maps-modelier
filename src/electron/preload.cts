@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+import type { CreateAllianceInput } from "../shared/schemas/alliances/createAlliance.js" with { "resolution-mode": "import" };
 import type { CreateCountryInput } from "../shared/schemas/countries/createCountry.js" with { "resolution-mode": "import" };
 import type { StatesAssignmentInput } from "../shared/schemas/countries/states.js" with { "resolution-mode": "import" };
 import type { UpdateCountryInput } from "../shared/schemas/countries/updateCountry.js" with { "resolution-mode": "import" };
@@ -61,6 +62,9 @@ const api = {
         create: (mapId: string, data: EthnicityInput) => invoke("ethnicities", "create", mapId, data),
         rename: (mapId: string, id: number, data: EthnicityInput) => invoke("ethnicities", "rename", mapId, id, data),
         delete: (mapId: string, id: number) => invoke("ethnicities", "delete", mapId, id),
+    },
+    alliances: {
+        create: (mapId: string, data: CreateAllianceInput) => invoke("alliances", "create", mapId, data),
     },
 };
 

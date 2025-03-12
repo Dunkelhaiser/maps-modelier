@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain, IpcMainInvokeEvent } from "electron";
 import { IpcChannels, IpcRequest } from "../../shared/types.js";
+import { createAlliance } from "./alliances/createAlliance.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
@@ -62,6 +63,9 @@ const handlers: HandlersType = {
         rename: renameEthnicity,
         delete: deleteEthnicity,
     },
+    alliances: {
+        create: createAlliance,
+    },
 };
 
 type HandlerFunction<Args extends any[], Return> = (event: IpcMainInvokeEvent, ...args: Args) => Promise<Return>;
@@ -86,7 +90,7 @@ export const setupHandlers = () => {
         // eslint-disable-next-line no-useless-catch
         try {
             // @ts-expect-error - this is a valid call
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
             return await handlers[domain][command](event, ...args);
         } catch (error) {
             throw error;

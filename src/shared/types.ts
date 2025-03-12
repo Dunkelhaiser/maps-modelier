@@ -1,5 +1,6 @@
 import { InferSelectModel } from "drizzle-orm";
 import { maps, provinces } from "../electron/db/schema.js";
+import { CreateAllianceInput } from "./schemas/alliances/createAlliance.js";
 import { CreateCountryInput } from "./schemas/countries/createCountry.js";
 import { StatesAssignmentInput } from "./schemas/countries/states.js";
 import { UpdateCountryInput } from "./schemas/countries/updateCountry.js";
@@ -51,6 +52,13 @@ export interface Country {
     ethnicities: EthnicityComposition[];
 }
 
+export interface CountryBase {
+    tag: string;
+    name: string;
+    color: string;
+    flag: string;
+}
+
 export interface Ethnicity {
     id: number;
     name: string;
@@ -61,6 +69,13 @@ export interface ProvinceBase {
     id: number;
     color: string;
     type: string;
+}
+
+export interface Alliance {
+    id: number;
+    name: string;
+    type: string;
+    leader: CountryBase | null;
 }
 
 export interface IpcChannels {
@@ -107,6 +122,9 @@ export interface IpcChannels {
         create: (mapId: string, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
         rename: (mapId: string, id: number, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
         delete: (mapId: string, id: number) => Promise<void>;
+    };
+    alliances: {
+        create: (mapId: string, data: CreateAllianceInput) => Promise<Alliance>;
     };
 }
 
