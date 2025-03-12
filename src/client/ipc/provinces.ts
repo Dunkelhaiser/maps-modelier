@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ChangeTypeInput } from "src/shared/schemas/provinces/changeType";
 import { PopulationInput } from "src/shared/schemas/provinces/population";
-import { Type } from "src/shared/types";
+import { ProvinceType } from "src/shared/types";
 
 export const useAddPopulation = (mapId: string, provinceId: number) => {
     const queryClient = useQueryClient();
@@ -20,7 +20,7 @@ export const useAddPopulation = (mapId: string, provinceId: number) => {
     });
 };
 
-export const useGetProvinces = (mapId: string, type: Type) => {
+export const useGetProvinces = (mapId: string, type: ProvinceType) => {
     return useQuery({
         queryKey: [mapId, "provinces", type],
         queryFn: async () => await window.electron.provinces.getAll(mapId, type),

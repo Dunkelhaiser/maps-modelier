@@ -10,7 +10,7 @@ import type { PopulationInput } from "../shared/schemas/provinces/population.js"
 import type { CreateStateInput } from "../shared/schemas/states/createState.js" with { "resolution-mode": "import" };
 import type { ProvincesAssignmentInput } from "../shared/schemas/states/provinces.js" with { "resolution-mode": "import" };
 import type { StateNameInput } from "../shared/schemas/states/state.js" with { "resolution-mode": "import" };
-import type { IpcRequest, IpcChannels, Type } from "../shared/types.js" with { "resolution-mode": "import" };
+import type { IpcRequest, IpcChannels, ProvinceType } from "../shared/types.js" with { "resolution-mode": "import" };
 
 const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
     domain: D,
@@ -33,7 +33,7 @@ const api = {
         delete: (id: string) => invoke("maps", "delete", id),
     },
     provinces: {
-        getAll: (mapId: string, type: Type) => invoke("provinces", "getAll", mapId, type),
+        getAll: (mapId: string, type: ProvinceType) => invoke("provinces", "getAll", mapId, type),
         // getByColor: (mapId: string, color: string) => invoke("provinces", "getByColor", mapId, color),
         // getById: (mapId: string, id: number) => invoke("provinces", "getById", mapId, id),
         changeType: (mapId: string, data: ChangeTypeInput) => invoke("provinces", "changeType", mapId, data),

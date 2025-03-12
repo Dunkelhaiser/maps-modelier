@@ -1,5 +1,5 @@
 import { and, eq, sql, sum } from "drizzle-orm";
-import { Type } from "../../../shared/types.js";
+import { ProvinceType } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { provinces, provincePopulations, ethnicities } from "../../db/schema.js";
 
@@ -9,7 +9,7 @@ interface Ethnicity {
     population: number;
 }
 
-export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: string, type?: Type) => {
+export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: string, type?: ProvinceType) => {
     const provincesArr = await db
         .select({
             id: provinces.id,

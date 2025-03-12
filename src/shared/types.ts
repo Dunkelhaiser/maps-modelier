@@ -14,7 +14,7 @@ import { StateNameInput } from "./schemas/states/state.js";
 
 export type MapType = InferSelectModel<typeof maps>;
 
-export type Type = "land" | "water";
+export type ProvinceType = "land" | "water";
 
 export interface EthnicityComposition {
     id: number;
@@ -30,7 +30,7 @@ export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapI
 export interface State {
     id: number;
     name: string;
-    type: Type;
+    type: ProvinceType;
     provinces: number[];
     population: number;
     ethnicities: EthnicityComposition[];
@@ -57,7 +57,7 @@ export interface Ethnicity {
     totalNumber?: number;
 }
 
-export interface ProvinceType {
+export interface ProvinceBase {
     id: number;
     color: string;
     type: string;
@@ -75,7 +75,7 @@ export interface IpcChannels {
         delete: (id: string) => Promise<void>;
     };
     provinces: {
-        getAll: (mapId: string, type: Type) => Promise<Province[]>;
+        getAll: (mapId: string, type: ProvinceType) => Promise<Province[]>;
         // getByColor: (mapId: string, color: string) => Promise<Province | null>;
         // getById: (mapId: string, id: number) => Promise<Province | null>;
         changeType: (mapId: string, data: ChangeTypeInput) => Promise<Omit<Province, "ethnicities" | "population">[]>;

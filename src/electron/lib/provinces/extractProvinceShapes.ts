@@ -1,12 +1,12 @@
 /* eslint-disable no-bitwise */
 import { createCanvas, ImageData, loadImage } from "@napi-rs/canvas";
 import { Polygon } from "pixi.js";
-import { ProvinceType } from "../../../shared/types.js";
+import { ProvinceBase } from "../../../shared/types.js";
 
 export const extractProvinceShapes = async (
     _: Electron.IpcMainInvokeEvent,
     imagePath: string,
-    provinces: ProvinceType[]
+    provinces: ProvinceBase[]
 ) => {
     const image = await loadImage(imagePath);
     const canvas = createCanvas(image.width, image.height);
