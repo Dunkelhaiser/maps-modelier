@@ -13,6 +13,7 @@ export interface ProvincesSlice {
     deselectProvinces: () => void;
     selectCountry: (country: Country | null) => void;
     selectAlliance: (alliance: Alliance | null) => void;
+    deselectAlliance: () => void;
 }
 
 export const initialProvincesSlice = {
@@ -77,6 +78,8 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
         useSidebarStore.getState().openSidebar("alliances");
         set({ selectedAlliance: alliance });
     },
+
+    deselectAlliance: () => set({ selectedAlliance: null }),
 });
 
 const findState = (provinceId: number, mapId?: string) => {

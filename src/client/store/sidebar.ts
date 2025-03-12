@@ -13,6 +13,7 @@ export const useSidebarStore = create<SidebarStore>()((set) => ({
     activeSidebar: null,
     openSidebar: (screen) => {
         useMapStore.getState().deselectProvinces();
+        useMapStore.getState().deselectAlliance();
         set({ activeSidebar: screen });
     },
     closeSidebar: () => set({ activeSidebar: null }),
