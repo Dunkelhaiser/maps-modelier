@@ -41,10 +41,35 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const height = windowHeight - 45.6;
 
     useEffect(() => {
-        const img = new Image();
-        img.src = activeMap.imageUrl;
-        img.onload = () => setMapDimensions({ width: img.width, height: img.height });
-    }, [activeMap.imageUrl]);
+        if (!landProvinces.data?.length && !waterProvinces.data?.length) return;
+
+        const allProvinces = [...(landProvinces.data ?? []), ...(waterProvinces.data ?? [])];
+
+        if (allProvinces.length === 0) return;
+
+        let minX = Infinity,
+            minY = Infinity,
+            maxX = -Infinity,
+            maxY = -Infinity;
+
+        allProvinces.forEach((province) => {
+            const shapes = Array.isArray(province.shape) ? province.shape : [province.shape];
+
+            shapes.forEach((shape) => {
+                for (let i = 0; i < shape.length; i += 2) {
+                    const x = shape[i];
+                    const y = shape[i + 1];
+
+                    minX = Math.min(minX, x);
+                    minY = Math.min(minY, y);
+                    maxX = Math.max(maxX, x);
+                    maxY = Math.max(maxY, y);
+                }
+            });
+        });
+
+        setMapDimensions({ width: Math.ceil(maxX - minX), height: Math.ceil(maxY - minY) });
+    }, [landProvinces.data, waterProvinces.data]);
 
     const getBaseScale = useCallback(() => {
         if (!mapDimensions) return 1;
