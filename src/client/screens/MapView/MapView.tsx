@@ -3,10 +3,10 @@ import UserInterface from "@screens/MapView/components/UserInterface/UserInterfa
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { useHotkeys } from "react-hotkeys-hook";
-import { ActiveMap } from "src/shared/types";
+import { MapType } from "src/shared/types";
 
 interface Props {
-    activeMap: ActiveMap;
+    activeMap: MapType;
 }
 
 const MapView = ({ activeMap }: Props) => {

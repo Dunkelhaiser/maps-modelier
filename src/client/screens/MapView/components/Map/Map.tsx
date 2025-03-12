@@ -5,7 +5,7 @@ import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActiveMap } from "src/shared/types";
+import { MapType } from "src/shared/types";
 import "@pixi/unsafe-eval";
 import { ProvincesContainer } from "./ProvincesContainer";
 import { MemoizedStateBorders } from "./StateBorders";
@@ -13,7 +13,7 @@ import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
 import { queryClient } from "@/main";
 
 interface MapRendererProps {
-    activeMap: ActiveMap;
+    activeMap: MapType;
 }
 
 interface Position {

@@ -2,18 +2,18 @@ import { useMapStore } from "@store/store";
 import { MapIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ActiveMap } from "src/shared/types";
+import { MapType } from "src/shared/types";
 import DeleteMapDialog from "./DeleteMapDialog";
 import RenameMapDialog from "./RenameMap/RenameMapDialog";
 import UploadMapImageDialog from "./UploadMapImage/UploadMapImageDialog";
 
 interface Props {
-    map: ActiveMap;
+    map: MapType;
 }
 
 const MapButton = ({ map }: Props) => {
     const setActiveMap = useMapStore((state) => state.setActiveMap);
-    const [selectedMapForUpload, setSelectedMapForUpload] = useState<ActiveMap | null>(null);
+    const [selectedMapForUpload, setSelectedMapForUpload] = useState<MapType | null>(null);
 
     const handleExistingMapSelect = async () => {
         if (map.imgPath) {

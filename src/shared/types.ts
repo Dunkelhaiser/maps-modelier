@@ -12,7 +12,7 @@ import { CreateStateInput } from "./schemas/states/createState.js";
 import { ProvincesAssignmentInput } from "./schemas/states/provinces.js";
 import { StateNameInput } from "./schemas/states/state.js";
 
-export type ActiveMap = InferSelectModel<typeof maps>;
+export type MapType = InferSelectModel<typeof maps>;
 
 export type Type = "land" | "water";
 
@@ -70,9 +70,9 @@ export interface IpcChannels {
         load: (imagePath: string) => Promise<string>;
     };
     maps: {
-        getAll: () => Promise<ActiveMap[]>;
-        create: (data: CreateMapInput) => Promise<ActiveMap | null>;
-        rename: (id: string, data: RenameMapInput) => Promise<ActiveMap | null>;
+        getAll: () => Promise<MapType[]>;
+        create: (data: CreateMapInput) => Promise<MapType | null>;
+        rename: (id: string, data: RenameMapInput) => Promise<MapType | null>;
         delete: (id: string) => Promise<void>;
     };
     provinces: {

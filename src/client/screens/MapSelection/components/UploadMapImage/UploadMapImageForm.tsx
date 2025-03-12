@@ -5,10 +5,10 @@ import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { useForm } from "react-hook-form";
 import { UploadeMapImageInput, uploadMapImageSchema } from "src/shared/schemas/mapImage/upload";
-import { ActiveMap } from "src/shared/types";
+import { MapType } from "src/shared/types";
 
 interface Props {
-    selectedMapForUpload: ActiveMap | null;
+    selectedMapForUpload: MapType | null;
 }
 
 const UploadMapImageForm = ({ selectedMapForUpload }: Props) => {
