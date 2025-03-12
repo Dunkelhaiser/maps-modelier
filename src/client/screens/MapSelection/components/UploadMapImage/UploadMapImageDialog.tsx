@@ -1,10 +1,10 @@
 import UploadMapImageForm from "@screens/MapSelection/components/UploadMapImage/UploadMapImageForm";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@ui/Dialog";
-import { Map } from "src/shared/types";
+import { MapType } from "src/shared/types";
 
 interface Props {
-    selectedMapForUpload: Map | null;
-    setSelectedMapForUpload: (map: Map | null) => void;
+    selectedMapForUpload: MapType | null;
+    setSelectedMapForUpload: (map: MapType | null) => void;
 }
 
 const UploadMapImageDialog = ({ selectedMapForUpload, setSelectedMapForUpload }: Props) => {

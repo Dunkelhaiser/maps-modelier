@@ -10,10 +10,10 @@ import {
     DialogTrigger,
 } from "@ui/Dialog";
 import { Trash } from "lucide-react";
-import { Map } from "src/shared/types";
+import { MapType } from "src/shared/types";
 
 interface Props {
-    map: Map;
+    map: MapType;
 }
 
 const DeleteMapDialog = ({ map }: Props) => {

@@ -6,10 +6,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@ui/Input";
 import { useForm } from "react-hook-form";
 import { RenameMapInput, renameMapSchema } from "src/shared/schemas/maps/renameMap";
-import { Map } from "src/shared/types";
+import { MapType } from "src/shared/types";
 
 interface Props {
-    map: Map;
+    map: MapType;
     closeDialog: () => void;
 }
 

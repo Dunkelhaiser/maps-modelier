@@ -3,10 +3,10 @@ import { Button } from "@ui/Button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@ui/Dialog";
 import { Edit } from "lucide-react";
 import { useState } from "react";
-import { Map } from "src/shared/types";
+import { MapType } from "src/shared/types";
 
 interface Props {
-    map: Map;
+    map: MapType;
 }
 
 const RenameMapDialog = ({ map }: Props) => {
