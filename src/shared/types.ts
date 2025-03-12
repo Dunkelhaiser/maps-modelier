@@ -126,6 +126,7 @@ export interface IpcChannels {
     };
     alliances: {
         create: (mapId: string, data: CreateAllianceInput) => Promise<Alliance>;
+        getAll: (mapId: string) => Promise<Alliance[]>;
     };
 }
 

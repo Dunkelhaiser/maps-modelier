@@ -65,6 +65,7 @@ const api = {
     },
     alliances: {
         create: (mapId: string, data: CreateAllianceInput) => invoke("alliances", "create", mapId, data),
+        getAll: (mapId: string) => invoke("alliances", "getAll", mapId),
     },
 };
 
