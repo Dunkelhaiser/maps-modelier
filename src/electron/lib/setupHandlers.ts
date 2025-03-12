@@ -11,8 +11,6 @@ import { createEthnicity } from "./ethnicities/createEthnicity.js";
 import { deleteEthnicity } from "./ethnicities/deleteEthnicity.js";
 import { getAllEthnicities } from "./ethnicities/getAllEthnicities.js";
 import { renameEthnicity } from "./ethnicities/renameEthnicity.js";
-import { loadMapImage } from "./mapImage/loadMapImage.js";
-import { saveMapImage } from "./mapImage/saveMapImage.js";
 import { createMap } from "./maps/createMap.js";
 import { deleteMap } from "./maps/deleteMap.js";
 import { getMaps } from "./maps/getMaps.js";
@@ -28,10 +26,6 @@ import { removeProvinces } from "./states/removeProvinces.js";
 import { renameState } from "./states/renameState.js";
 
 const handlers: HandlersType = {
-    mapImage: {
-        save: saveMapImage,
-        load: loadMapImage,
-    },
     maps: {
         getAll: getMaps,
         create: createMap,
@@ -92,7 +86,7 @@ export const setupHandlers = () => {
         // eslint-disable-next-line no-useless-catch
         try {
             // @ts-expect-error - this is a valid call
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return await handlers[domain][command](event, ...args);
         } catch (error) {
             throw error;

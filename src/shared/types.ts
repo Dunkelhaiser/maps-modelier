@@ -64,10 +64,6 @@ export interface ProvinceBase {
 }
 
 export interface IpcChannels {
-    mapImage: {
-        save: (imageData: string, mapId: string) => Promise<string>;
-        load: (imagePath: string) => Promise<string>;
-    };
     maps: {
         getAll: () => Promise<MapType[]>;
         create: (data: CreateMapInput) => Promise<MapType | null>;

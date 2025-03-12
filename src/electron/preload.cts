@@ -22,10 +22,6 @@ const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
 };
 
 const api = {
-    mapImage: {
-        save: (imageData: string, mapId: string) => invoke("mapImage", "save", imageData, mapId),
-        load: (imagePath: string) => invoke("mapImage", "load", imagePath),
-    },
     maps: {
         getAll: () => invoke("maps", "getAll"),
         create: (data: CreateMapInput) => invoke("maps", "create", data),
