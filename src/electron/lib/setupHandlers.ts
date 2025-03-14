@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ipcMain, IpcMainInvokeEvent } from "electron";
 import { IpcChannels, IpcRequest } from "../../shared/types.js";
+import { addMembers } from "./alliances/addMembers.js";
 import { createAlliance } from "./alliances/createAlliance.js";
 import { getAllAlliances } from "./alliances/getAllAlliances.js";
 import { updateAlliance } from "./alliances/updateAlliance.js";
@@ -69,6 +70,7 @@ const handlers: HandlersType = {
         create: createAlliance,
         getAll: getAllAlliances,
         update: updateAlliance,
+        addMembers,
     },
 };
 
