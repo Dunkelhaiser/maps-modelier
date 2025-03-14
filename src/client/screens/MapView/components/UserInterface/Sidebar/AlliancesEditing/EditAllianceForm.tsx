@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useUpdateAlliance } from "@ipc/alliances";
+import { useGetAlliance, useGetMembers, useUpdateAlliance } from "@ipc/alliances";
 import { useGetCountries } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -15,22 +15,24 @@ const EditAllianceForm = () => {
     const activeMap = useActiveMap();
     const selectAlliance = useMapStore((state) => state.selectAlliance);
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
+    const { data: alliance } = useGetAlliance(activeMap.id, selectedAlliance);
+    const { data: members } = useGetMembers(activeMap.id, selectedAlliance);
 
     const form = useForm<AllianceInput>({
         resolver: zodResolver(allianceSchema),
         defaultValues: {
-            name: selectedAlliance.name,
-            leader: selectedAlliance.leader.tag,
-            type: selectedAlliance.type as "economic" | "political" | "military",
+            name: alliance?.name,
+            leader: alliance?.leader.tag,
+            type: alliance?.type as "economic" | "political" | "military",
         },
     });
 
     const { data: countries } = useGetCountries(activeMap.id);
-    const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance.id);
+    const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance);
 
     const updateAllianceHandler = async (data: AllianceInput) => {
         const updatedAlliance = await updateAlliance.mutateAsync(data);
-        selectAlliance(updatedAlliance);
+        selectAlliance(updatedAlliance.id);
     };
 
     return (
@@ -108,7 +110,7 @@ const EditAllianceForm = () => {
                     <Button isLoading={form.formState.isSubmitting}>Save</Button>
                 </form>
             </Form>
-            <AddMembersForm />
+            <AddMembersForm members={members} leaderTag={alliance?.leader.tag} />
         </>
     );
 };

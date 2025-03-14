@@ -7,12 +7,7 @@ const AllianceRowCreate = () => {
     const selectAlliance = useMapStore((state) => state.selectAlliance);
 
     const createAllianceHandler = () => {
-        selectAlliance({
-            id: -1,
-            name: "",
-            type: "",
-            leader: null,
-        });
+        selectAlliance(-1);
     };
 
     return (

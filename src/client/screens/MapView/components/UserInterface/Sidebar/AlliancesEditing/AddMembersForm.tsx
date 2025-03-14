@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useAddMembers, useGetMembers } from "@ipc/alliances";
+import { useAddMembers } from "@ipc/alliances";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
@@ -10,20 +10,24 @@ import { X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { AddMembersFormInput, addMembersFormSchema, AddMembersInput } from "src/shared/schemas/alliances/addMembers";
+import { CountryBase } from "src/shared/types";
 import MembersSelect from "./MembersSelect";
 
-const AddMembersForm = () => {
+interface Props {
+    members?: CountryBase[];
+    leaderTag?: string;
+}
+
+const AddMembersForm = ({ members, leaderTag }: Props) => {
     const activeMap = useActiveMap();
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
-    const addMembers = useAddMembers(activeMap.id, selectedAlliance.id);
-
-    const { data: membersData } = useGetMembers(activeMap.id, selectedAlliance.id);
+    const addMembers = useAddMembers(activeMap.id, selectedAlliance);
 
     const defaultValues = useMemo(
         () => ({
-            members: membersData?.map((member) => ({ countryTag: member.tag })) ?? [],
+            members: members?.map((member) => ({ countryTag: member.tag })) ?? [],
         }),
-        [membersData]
+        [members]
     );
 
     const form = useForm<AddMembersFormInput>({
@@ -81,7 +85,7 @@ const AddMembersForm = () => {
                                             </FormItem>
                                         )}
                                     />
-                                    {memberField.countryTag !== selectedAlliance.leader.tag && (
+                                    {memberField.countryTag !== leaderTag && (
                                         <Button
                                             variant="ghost"
                                             aria-label="Remove"

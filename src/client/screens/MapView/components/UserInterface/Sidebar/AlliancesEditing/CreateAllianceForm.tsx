@@ -28,7 +28,7 @@ const CreateAllianceForm = () => {
 
     const createAllianceHandler = async (data: AllianceInput) => {
         const createdAlliance = await createAlliance.mutateAsync(data);
-        selectAlliance(createdAlliance);
+        selectAlliance(createdAlliance.id);
     };
 
     return (

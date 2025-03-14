@@ -13,11 +13,11 @@ const AlliancesEditing = () => {
         <>
             <CardHeaderWithClose onClick={closeSidebar}>
                 <CardTitle className="text-xl">
-                    {selectedAlliance?.id === -1 ? "Create Alliance" : "Edit Alliance"}
+                    {selectedAlliance === -1 ? "Create Alliance" : "Edit Alliance"}
                 </CardTitle>
             </CardHeaderWithClose>
             <CardContent className="flex h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] flex-col gap-2 overflow-auto">
-                {selectedAlliance?.id === -1 ? <CreateAllianceForm /> : <EditAllianceForm />}
+                {selectedAlliance === -1 ? <CreateAllianceForm /> : <EditAllianceForm />}
             </CardContent>
         </>
     );

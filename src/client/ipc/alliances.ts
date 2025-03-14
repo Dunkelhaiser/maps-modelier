@@ -22,6 +22,13 @@ export const useGetAlliances = (mapId: string) => {
     });
 };
 
+export const useGetAlliance = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "alliances", id],
+        queryFn: async () => await window.electron.alliances.get(mapId, id),
+    });
+};
+
 export const useUpdateAlliance = (mapId: string, id: number) => {
     const queryClient = useQueryClient();
 
@@ -29,8 +36,15 @@ export const useUpdateAlliance = (mapId: string, id: number) => {
         mutationFn: async (data: AllianceInput) => await window.electron.alliances.update(mapId, id, data),
         onSuccess: () => {
             toast.success("Alliance updated successfully");
-            queryClient.invalidateQueries({ queryKey: [mapId, "alliances"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "alliances", id] });
         },
+    });
+};
+
+export const useGetMembers = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "alliances", id, "members"],
+        queryFn: async () => await window.electron.alliances.getMembers(mapId, id),
     });
 };
 
@@ -41,14 +55,7 @@ export const useAddMembers = (mapId: string, id: number) => {
         mutationFn: async (data: AddMembersInput) => await window.electron.alliances.addMembers(mapId, id, data),
         onSuccess: () => {
             toast.success("Members added successfully");
-            queryClient.invalidateQueries({ queryKey: [mapId, "alliances"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "alliances", id, "members"] });
         },
-    });
-};
-
-export const useGetMembers = (mapId: string, id: number) => {
-    return useQuery({
-        queryKey: [mapId, "alliances", id, "members"],
-        queryFn: async () => await window.electron.alliances.getMembers(mapId, id),
     });
 };

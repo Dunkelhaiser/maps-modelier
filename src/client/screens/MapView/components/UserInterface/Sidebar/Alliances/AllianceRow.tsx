@@ -7,7 +7,7 @@ interface Props {
 }
 
 const AllianceRow = ({ alliance }: Props) => {
-    const selectAlliance = useMapStore((state) => state.selectAlliance).bind(null, alliance);
+    const selectAlliance = useMapStore((state) => state.selectAlliance).bind(null, alliance.id);
 
     return (
         <TableRow className="relative w-[9.25rem]">
