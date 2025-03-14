@@ -26,6 +26,10 @@ export const addMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
         const membersIdsToRemove = [...existingMembersTags].filter((tag) => !newMembersTags.has(tag));
 
         if (membersIdsToRemove.length > 0) {
+            if (alliance[0].leader && membersIdsToRemove.includes(alliance[0].leader)) {
+                throw new Error("Cannot remove alliance leader");
+            }
+
             await tx
                 .delete(allianceMembers)
                 .where(
