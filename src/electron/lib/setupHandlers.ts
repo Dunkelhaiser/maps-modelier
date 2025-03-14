@@ -4,6 +4,7 @@ import { IpcChannels, IpcRequest } from "../../shared/types.js";
 import { addMembers } from "./alliances/addMembers.js";
 import { createAlliance } from "./alliances/createAlliance.js";
 import { getAllAlliances } from "./alliances/getAllAlliances.js";
+import { getAlliance } from "./alliances/getAlliance.js";
 import { updateAlliance } from "./alliances/updateAlliance.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
@@ -71,6 +72,7 @@ const handlers: HandlersType = {
         getAll: getAllAlliances,
         update: updateAlliance,
         addMembers,
+        get: getAlliance,
     },
 };
 

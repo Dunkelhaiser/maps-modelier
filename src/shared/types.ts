@@ -130,6 +130,7 @@ export interface IpcChannels {
         getAll: (mapId: string) => Promise<Alliance[]>;
         update: (mapId: string, id: number, data: AllianceInput) => Promise<Alliance>;
         addMembers: (mapId: string, id: number, members: AddMembersInput) => Promise<void>;
+        get: (mapId: string, id: number) => Promise<Alliance>;
     };
 }
 

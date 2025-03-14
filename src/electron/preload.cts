@@ -70,6 +70,7 @@ const api = {
         update: (mapId: string, id: number, data: AllianceInput) => invoke("alliances", "update", mapId, id, data),
         addMembers: (mapId: string, id: number, members: AddMembersInput) =>
             invoke("alliances", "addMembers", mapId, id, members),
+        get: (mapId: string, id: number) => invoke("alliances", "get", mapId, id),
     },
 };
 
