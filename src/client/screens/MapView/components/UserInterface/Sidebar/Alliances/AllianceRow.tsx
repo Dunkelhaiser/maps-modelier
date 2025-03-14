@@ -12,7 +12,7 @@ const AllianceRow = ({ alliance }: Props) => {
     return (
         <TableRow className="relative w-[9.25rem]">
             <TableCell className="font-medium">{alliance.name}</TableCell>
-            <TableCell>{alliance.type}</TableCell>
+            <TableCell className="capitalize">{alliance.type}</TableCell>
             <TableCell>{alliance.membersCount.toLocaleString()}</TableCell>
             <TableCell className="font-medium">
                 <img
