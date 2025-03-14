@@ -5,6 +5,7 @@ import { addMembers } from "./alliances/addMembers.js";
 import { createAlliance } from "./alliances/createAlliance.js";
 import { getAllAlliances } from "./alliances/getAllAlliances.js";
 import { getAlliance } from "./alliances/getAlliance.js";
+import { getMembers } from "./alliances/getMembers.js";
 import { updateAlliance } from "./alliances/updateAlliance.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
@@ -73,6 +74,7 @@ const handlers: HandlersType = {
         update: updateAlliance,
         addMembers,
         get: getAlliance,
+        getMembers,
     },
 };
 
