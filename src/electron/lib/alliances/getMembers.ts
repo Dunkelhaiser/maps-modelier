@@ -1,16 +1,12 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../../db/db.js";
-import { alliances, allianceMembers, countries } from "../../db/schema.js";
+import { allianceMembers, countries } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
+import { checkAllianceExistence } from "./checkAllianceExistence.js";
 
 export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, id: number) => {
     const members = await db.transaction(async (tx) => {
-        const alliance = await tx
-            .select()
-            .from(alliances)
-            .where(and(eq(alliances.mapId, mapId), eq(alliances.id, id)));
-
-        if (alliance.length === 0) throw new Error("Alliance not found");
+        await checkAllianceExistence(mapId, id, tx);
 
         const membersArr = await tx
             .select()

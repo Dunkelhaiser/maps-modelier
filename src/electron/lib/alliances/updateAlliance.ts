@@ -3,6 +3,7 @@ import { AllianceInput, allianceSchema } from "../../../shared/schemas/alliances
 import { db } from "../../db/db.js";
 import { alliances, countries, allianceMembers } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
+import { checkAllianceExistence } from "./checkAllianceExistence.js";
 
 export const updateAlliance = async (
     _: Electron.IpcMainInvokeEvent,
@@ -13,12 +14,7 @@ export const updateAlliance = async (
     const { leader } = await allianceSchema.parseAsync(data);
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(alliances);
 
-    const alliance = await db
-        .select()
-        .from(alliances)
-        .where(and(eq(alliances.mapId, mapId), eq(alliances.id, id)));
-
-    if (alliance.length === 0) throw new Error("Alliance not found");
+    await checkAllianceExistence(mapId, id);
 
     const [updatedAlliance] = await db
         .update(alliances)
