@@ -13,6 +13,13 @@ export const updateAlliance = async (
     const { leader } = await allianceSchema.parseAsync(data);
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(alliances);
 
+    const alliance = await db
+        .select()
+        .from(alliances)
+        .where(and(eq(alliances.mapId, mapId), eq(alliances.id, id)));
+
+    if (alliance.length === 0) throw new Error("Alliance not found");
+
     const [updatedAlliance] = await db
         .update(alliances)
         .set({
