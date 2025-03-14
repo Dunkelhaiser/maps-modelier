@@ -21,9 +21,12 @@ export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
             })
             .from(countries)
             .where(
-                inArray(
-                    countries.tag,
-                    membersArr.map((member) => member.countryTag)
+                and(
+                    eq(countries.mapId, mapId),
+                    inArray(
+                        countries.tag,
+                        membersArr.map((member) => member.countryTag)
+                    )
                 )
             );
 
