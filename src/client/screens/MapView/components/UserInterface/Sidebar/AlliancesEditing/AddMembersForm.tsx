@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useAddMembers } from "@ipc/alliances";
+import { useAddMembers, useGetMembers } from "@ipc/alliances";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
@@ -12,20 +12,18 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { AddMembersFormInput, addMembersFormSchema, AddMembersInput } from "src/shared/schemas/alliances/addMembers";
 import MembersSelect from "./MembersSelect";
 
-interface Props {
-    members?: AddMembersInput;
-}
-
-const AddMembersForm = ({ members }: Props) => {
+const AddMembersForm = () => {
     const activeMap = useActiveMap();
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
     const addMembers = useAddMembers(activeMap.id, selectedAlliance.id);
 
+    const { data: membersData } = useGetMembers(activeMap.id, selectedAlliance.id);
+
     const defaultValues = useMemo(
         () => ({
-            members: members?.map((tag) => ({ countryTag: tag })) ?? [],
+            members: membersData?.map((member) => ({ countryTag: member.tag })) ?? [],
         }),
-        [members]
+        [membersData]
     );
 
     const form = useForm<AddMembersFormInput>({

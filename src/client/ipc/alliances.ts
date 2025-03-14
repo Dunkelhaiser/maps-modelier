@@ -45,3 +45,10 @@ export const useAddMembers = (mapId: string, id: number) => {
         },
     });
 };
+
+export const useGetMembers = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "alliances", id, "members"],
+        queryFn: async () => await window.electron.alliances.getMembers(mapId, id),
+    });
+};
