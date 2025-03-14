@@ -9,6 +9,7 @@ import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
+import AddMembersForm from "./AddMembersForm";
 
 const EditAllianceForm = () => {
     const activeMap = useActiveMap();
@@ -33,79 +34,82 @@ const EditAllianceForm = () => {
     };
 
     return (
-        <Form {...form}>
-            <form className="flex flex-col gap-4 py-4" onSubmit={form.handleSubmit(updateAllianceHandler)}>
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter alliance name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="grid grid-cols-2 gap-2">
+        <>
+            <Form {...form}>
+                <form className="flex flex-col gap-4 py-4" onSubmit={form.handleSubmit(updateAllianceHandler)}>
                     <FormField
                         control={form.control}
-                        name="type"
+                        name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Type</FormLabel>
+                                <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Alliance Type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="economic">Economic</SelectItem>
-                                            <SelectItem value="political">Political</SelectItem>
-                                            <SelectItem value="military">Military</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <Input placeholder="Enter alliance name" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="leader"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Leader</FormLabel>
-                                <FormControl>
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Leader" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {countries?.map((country) => (
-                                                <SelectItem key={country.tag} value={country.tag}>
-                                                    <div className="flex flex-row items-center gap-2">
-                                                        <img
-                                                            src={country.flag}
-                                                            alt={`${country.name} flag`}
-                                                            className="aspect-[3/2] h-4 rounded-sm object-cover"
-                                                        />
-                                                        {country.name}
-                                                    </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <Button isLoading={form.formState.isSubmitting}>Save</Button>
-            </form>
-        </Form>
+                    <div className="grid grid-cols-2 gap-2">
+                        <FormField
+                            control={form.control}
+                            name="type"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Type</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Alliance Type" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="economic">Economic</SelectItem>
+                                                <SelectItem value="political">Political</SelectItem>
+                                                <SelectItem value="military">Military</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="leader"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Leader</FormLabel>
+                                    <FormControl>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Leader" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {countries?.map((country) => (
+                                                    <SelectItem key={country.tag} value={country.tag}>
+                                                        <div className="flex flex-row items-center gap-2">
+                                                            <img
+                                                                src={country.flag}
+                                                                alt={`${country.name} flag`}
+                                                                className="aspect-[3/2] h-4 rounded-sm object-cover"
+                                                            />
+                                                            {country.name}
+                                                        </div>
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <Button isLoading={form.formState.isSubmitting}>Save</Button>
+                </form>
+            </Form>
+            <AddMembersForm />
+        </>
     );
 };
 export default EditAllianceForm;

@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
-import { AddMembersInput } from "../shared/schemas/alliances/addMembers.js";
+import type { AddMembersInput } from "../shared/schemas/alliances/addMembers.js" with { "resolution-mode": "import" };
 import type { AllianceInput } from "../shared/schemas/alliances/alliance.js" with { "resolution-mode": "import" };
 import type { CreateCountryInput } from "../shared/schemas/countries/createCountry.js" with { "resolution-mode": "import" };
 import type { StatesAssignmentInput } from "../shared/schemas/countries/states.js" with { "resolution-mode": "import" };
