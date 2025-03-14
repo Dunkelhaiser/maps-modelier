@@ -22,8 +22,8 @@ export const getAlliance = async (_: Electron.IpcMainInvokeEvent, mapId: string,
         .where(and(eq(alliances.mapId, mapId), eq(alliances.id, id)))
         .groupBy(alliances.id);
 
-    const alliance = allianceArr.length > 0 ? allianceArr[0] : null;
-    if (!alliance) throw new Error("Alliance not found");
+    if (allianceArr.length === 0) throw new Error("Alliance not found");
+    const [alliance] = allianceArr;
 
     const flag = await loadFile(alliance.leader.flag);
     alliance.leader.flag = flag;
