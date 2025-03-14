@@ -8,14 +8,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 import { useForm } from "react-hook-form";
-import { CreateAllianceInput, createAllianceSchema } from "src/shared/schemas/alliances/createAlliance";
+import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
 
 const CreateAllianceForm = () => {
     const activeMap = useActiveMap();
     const selectAlliance = useMapStore((state) => state.selectAlliance);
 
-    const form = useForm<CreateAllianceInput>({
-        resolver: zodResolver(createAllianceSchema),
+    const form = useForm<AllianceInput>({
+        resolver: zodResolver(allianceSchema),
         defaultValues: {
             name: "",
             leader: undefined,
@@ -26,7 +26,7 @@ const CreateAllianceForm = () => {
     const { data: countries } = useGetCountries(activeMap.id);
     const createAlliance = useCreateAlliance(activeMap.id);
 
-    const createAllianceHandler = async (data: CreateAllianceInput) => {
+    const createAllianceHandler = async (data: AllianceInput) => {
         const createdAlliance = await createAlliance.mutateAsync(data);
         selectAlliance(createdAlliance);
     };
