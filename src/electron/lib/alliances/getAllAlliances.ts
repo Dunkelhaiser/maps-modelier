@@ -11,7 +11,6 @@ export const getAllAlliances = async (_: Electron.IpcMainInvokeEvent, mapId: str
             leader: {
                 tag: countries.tag,
                 name: countries.name,
-                color: countries.color,
                 flag: countries.flag,
             },
             type: alliances.type,

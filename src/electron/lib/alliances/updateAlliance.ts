@@ -22,7 +22,11 @@ export const updateAlliance = async (
         .returning(cols);
 
     const [leaderData] = await db
-        .select()
+        .select({
+            tag: countries.tag,
+            name: countries.name,
+            flag: countries.flag,
+        })
         .from(countries)
         .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
 

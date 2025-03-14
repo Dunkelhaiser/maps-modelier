@@ -56,7 +56,6 @@ export interface Country {
 export interface CountryBase {
     tag: string;
     name: string;
-    color: string;
     flag: string;
 }
 
