@@ -1,6 +1,6 @@
 import { InferSelectModel } from "drizzle-orm";
 import { maps, provinces } from "../electron/db/schema.js";
-import { CreateAllianceInput } from "./schemas/alliances/createAlliance.js";
+import { AllianceInput } from "./schemas/alliances/alliance.js";
 import { CreateCountryInput } from "./schemas/countries/createCountry.js";
 import { StatesAssignmentInput } from "./schemas/countries/states.js";
 import { UpdateCountryInput } from "./schemas/countries/updateCountry.js";
@@ -125,8 +125,9 @@ export interface IpcChannels {
         delete: (mapId: string, id: number) => Promise<void>;
     };
     alliances: {
-        create: (mapId: string, data: CreateAllianceInput) => Promise<Alliance>;
+        create: (mapId: string, data: AllianceInput) => Promise<Alliance>;
         getAll: (mapId: string) => Promise<Alliance[]>;
+        update: (mapId: string, id: number, data: AllianceInput) => Promise<Alliance>;
     };
 }
 

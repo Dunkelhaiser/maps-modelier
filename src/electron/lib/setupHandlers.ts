@@ -3,6 +3,7 @@ import { ipcMain, IpcMainInvokeEvent } from "electron";
 import { IpcChannels, IpcRequest } from "../../shared/types.js";
 import { createAlliance } from "./alliances/createAlliance.js";
 import { getAllAlliances } from "./alliances/getAllAlliances.js";
+import { updateAlliance } from "./alliances/updateAlliance.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
@@ -67,6 +68,7 @@ const handlers: HandlersType = {
     alliances: {
         create: createAlliance,
         getAll: getAllAlliances,
+        update: updateAlliance,
     },
 };
 
