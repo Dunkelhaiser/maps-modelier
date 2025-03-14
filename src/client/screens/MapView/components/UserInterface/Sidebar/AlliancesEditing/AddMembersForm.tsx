@@ -81,14 +81,16 @@ const AddMembersForm = () => {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button
-                                        variant="ghost"
-                                        aria-label="Remove"
-                                        size="icon"
-                                        onClick={() => remove(index)}
-                                    >
-                                        <X />
-                                    </Button>
+                                    {memberField.countryTag !== selectedAlliance.leader.tag && (
+                                        <Button
+                                            variant="ghost"
+                                            aria-label="Remove"
+                                            size="icon"
+                                            onClick={() => remove(index)}
+                                        >
+                                            <X />
+                                        </Button>
+                                    )}
                                 </div>
                             );
                         })}
