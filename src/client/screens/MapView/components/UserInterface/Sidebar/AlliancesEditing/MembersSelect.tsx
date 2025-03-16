@@ -6,14 +6,15 @@ interface Props {
     onChange: (value: string) => void;
     value: string;
     selectedMembers: string[];
+    isLeader: boolean;
 }
 
-const MembersSelect = ({ onChange, value, selectedMembers }: Props) => {
+const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) => {
     const activeMap = useActiveMap();
     const countries = useGetCountries(activeMap.id);
 
     return (
-        <Select onValueChange={onChange} defaultValue={value}>
+        <Select onValueChange={onChange} defaultValue={value} disabled={isLeader}>
             <SelectTrigger className="w-40">
                 <SelectValue placeholder="Member" />
             </SelectTrigger>

@@ -79,6 +79,7 @@ const AddMembersForm = ({ members, leaderTag }: Props) => {
                                                         onChange={field.onChange}
                                                         value={field.value}
                                                         selectedMembers={otherSelectedMembers}
+                                                        isLeader={memberField.countryTag === leaderTag}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
