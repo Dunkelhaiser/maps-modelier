@@ -107,10 +107,13 @@ export const fileSchema = <TOptional extends boolean = false>({
                 });
             });
     }
-    return zod
-        .string()
+
+    const baseSchema = optional ? zod.string().optional() : zod.string();
+    return baseSchema
         .refine((value) => {
-            if (optional && !value) return true;
+            if (optional && (value === undefined || value === "")) return true;
+            if (!value) return false;
+
             return (
                 value.startsWith("data:") ||
                 fs
@@ -120,8 +123,12 @@ export const fileSchema = <TOptional extends boolean = false>({
             );
         })
         .transform(async (value) => {
-            if (optional && !value) {
+            if (optional && (value === undefined || value === "")) {
                 return undefined as TOptional extends true ? string | undefined : string;
+            }
+
+            if (!value) {
+                throw new Error("File value is required");
             }
 
             if (value.startsWith("data:")) {
