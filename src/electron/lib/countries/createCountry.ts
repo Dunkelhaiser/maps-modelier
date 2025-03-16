@@ -1,4 +1,4 @@
-import { getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { CreateCountryInput, createCountrySchema } from "../../../shared/schemas/countries/createCountry.js";
 import { db } from "../../db/db.js";
 import { countries, countryFlags, countryNames } from "../../db/schema.js";
@@ -13,6 +13,13 @@ export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: strin
     const countryFolder = ["media", mapId, attributes.tag];
 
     const flagPath = await saveFile(flagInput, "flag", countryFolder);
+
+    const existingCountry = await db
+        .select({ tag: countries.tag })
+        .from(countries)
+        .where(and(eq(countries.mapId, mapId), eq(countries.tag, attributes.tag)));
+
+    if (existingCountry.length) throw new Error(`Country with tag ${attributes.tag} already exists`);
 
     return await db.transaction(async (tx) => {
         const [createdCountry] = await tx
