@@ -1,7 +1,18 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
 import { EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
-import { countries, countryStates, states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
+import {
+    countries,
+    countryStates,
+    states,
+    stateProvinces,
+    provincePopulations,
+    ethnicities,
+    countryNames,
+    countryFlags,
+    countryCoatOfArms,
+    countryAnthems,
+} from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 
 export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
@@ -58,12 +69,12 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
         .with(ethnicityTotals, countryEthnicities)
         .select({
             tag: countries.tag,
-            name: countries.name,
+            name: countryNames.commonName,
             color: countries.color,
-            flag: countries.flag,
-            coatOfArms: countries.coatOfArms,
-            anthemName: countries.anthemName,
-            anthemPath: countries.anthemPath,
+            flag: countryFlags.path,
+            coatOfArms: countryCoatOfArms.path,
+            anthemName: countryAnthems.name,
+            anthemPath: countryAnthems.path,
             states: sql<string>`COALESCE(GROUP_CONCAT(${countryStates.stateId}), '')`,
             population: sql<number>`
                 COALESCE((
@@ -79,6 +90,22 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
             ethnicities: countryEthnicities.ethnicityData,
         })
         .from(countries)
+        .leftJoin(
+            countryNames,
+            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
+        )
+        .leftJoin(
+            countryFlags,
+            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
+        )
+        .leftJoin(
+            countryCoatOfArms,
+            and(eq(countryCoatOfArms.countryTag, countries.tag), eq(countryCoatOfArms.mapId, countries.mapId))
+        )
+        .leftJoin(
+            countryAnthems,
+            and(eq(countryAnthems.countryTag, countries.tag), eq(countryAnthems.mapId, countries.mapId))
+        )
         .leftJoin(countryStates, eq(countryStates.countryTag, countries.tag))
         .leftJoin(countryEthnicities, eq(countryEthnicities.countryTag, countries.tag))
         .where(eq(countries.mapId, mapId))
@@ -90,17 +117,18 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
             const { anthemName, anthemPath, flag, coatOfArms, ...countryData } = country;
 
             const [flagData, coatOfArmsData, anthemData] = await Promise.all([
-                loadFile(flag),
-                loadFile(coatOfArms),
-                loadFile(anthemPath),
+                loadFile(flag ?? ""),
+                loadFile(coatOfArms ?? ""),
+                loadFile(anthemPath ?? ""),
             ]);
 
             return {
                 ...countryData,
+                name: countryData.name!,
                 flag: flagData,
                 coatOfArms: coatOfArmsData,
                 anthem: {
-                    name: anthemName,
+                    name: anthemName!,
                     url: anthemData,
                 },
                 states: country.states ? country.states.split(",").map(Number) : [],

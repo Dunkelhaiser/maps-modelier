@@ -1,7 +1,7 @@
 import { and, count, eq, getTableColumns } from "drizzle-orm";
 import { AllianceInput, allianceSchema } from "../../../shared/schemas/alliances/alliance.js";
 import { db } from "../../db/db.js";
-import { alliances, countries, allianceMembers } from "../../db/schema.js";
+import { alliances, countries, allianceMembers, countryNames, countryFlags } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 import { checkAllianceExistence } from "./checkAllianceExistence.js";
 
@@ -27,13 +27,21 @@ export const updateAlliance = async (
     const [leaderData] = await db
         .select({
             tag: countries.tag,
-            name: countries.name,
-            flag: countries.flag,
+            name: countryNames.commonName,
+            flag: countryFlags.path,
         })
         .from(countries)
+        .leftJoin(
+            countryNames,
+            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
+        )
+        .leftJoin(
+            countryFlags,
+            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
+        )
         .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
 
-    const flag = await loadFile(leaderData.flag);
+    const flag = await loadFile(leaderData.flag ?? "");
 
     leaderData.flag = flag;
 

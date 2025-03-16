@@ -1,6 +1,6 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../../db/db.js";
-import { allianceMembers, countries } from "../../db/schema.js";
+import { allianceMembers, countries, countryNames, countryFlags } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 import { checkAllianceExistence } from "./checkAllianceExistence.js";
 
@@ -13,24 +13,26 @@ export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
             .from(allianceMembers)
             .where(and(eq(allianceMembers.mapId, mapId), eq(allianceMembers.allianceId, id)));
 
+        const memberTags = membersArr.map((member) => member.countryTag);
+
         const membersData = await tx
             .select({
                 tag: countries.tag,
-                name: countries.name,
-                flag: countries.flag,
+                name: countryNames.commonName,
+                flag: countryFlags.path,
             })
             .from(countries)
-            .where(
-                and(
-                    eq(countries.mapId, mapId),
-                    inArray(
-                        countries.tag,
-                        membersArr.map((member) => member.countryTag)
-                    )
-                )
-            );
+            .leftJoin(
+                countryNames,
+                and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
+            )
+            .leftJoin(
+                countryFlags,
+                and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
+            )
+            .where(and(eq(countries.mapId, mapId), inArray(countries.tag, memberTags)));
 
-        membersData.forEach(async (member) => (member.flag = await loadFile(member.flag)));
+        membersData.forEach(async (member) => (member.flag = await loadFile(member.flag ?? "")));
 
         return membersData;
     });

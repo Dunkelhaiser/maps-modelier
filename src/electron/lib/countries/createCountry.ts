@@ -2,55 +2,68 @@ import { getTableColumns } from "drizzle-orm";
 import { CreateCountryInput, createCountrySchema } from "../../../shared/schemas/countries/createCountry.js";
 import { EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
-import { countries } from "../../db/schema.js";
+import { countries, countryFlags, countryCoatOfArms, countryAnthems, countryNames } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 
 export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: string, input: CreateCountryInput) => {
-    const {
-        mapId: mapIdCol,
-        createdAt,
-        updatedAt,
-        anthemPath,
-        anthemName: anthemNameCol,
-        flag: flagCol,
-        coatOfArms: coatOfArmsCol,
-        ...cols
-    } = getTableColumns(countries);
     const attributes = await createCountrySchema.parseAsync(input);
-    const {
-        anthem: { name: anthemName },
-        ...data
-    } = attributes;
+    const { anthem, flag: flagInput, coatOfArms: coatOfArmsInput, name, ...countryData } = attributes;
+    const { mapId: mapIdCol, createdAt, updatedAt, ...countryCols } = getTableColumns(countries);
 
     const countryFolder = ["media", mapId, attributes.tag];
-    const flag = await saveFile(attributes.flag, "flag", countryFolder);
-    const coatOfArms = await saveFile(attributes.coatOfArms, "coat_of_arms", countryFolder);
-    const anthem = await saveFile(attributes.anthem.url, "anthem", countryFolder);
 
-    const [createdCountry] = await db
-        .insert(countries)
-        .values({
+    const flagPath = await saveFile(flagInput, "flag", countryFolder);
+    const coatOfArmsPath = await saveFile(coatOfArmsInput, "coat_of_arms", countryFolder);
+    const anthemPath = await saveFile(anthem.url, "anthem", countryFolder);
+
+    return await db.transaction(async (tx) => {
+        const [createdCountry] = await tx
+            .insert(countries)
+            .values({
+                mapId,
+                ...countryData,
+            })
+            .returning(countryCols);
+
+        await tx.insert(countryNames).values({
             mapId,
-            ...data,
-            flag,
-            coatOfArms,
-            anthemName,
-            anthemPath: anthem,
-        })
-        .returning(cols);
+            countryTag: attributes.tag,
+            commonName: name,
+        });
 
-    const flagData = await loadFile(flag);
-    const coatOfArmsData = await loadFile(coatOfArms);
-    const anthemData = await loadFile(anthem);
+        await tx.insert(countryFlags).values({
+            mapId,
+            countryTag: attributes.tag,
+            path: flagPath,
+        });
 
-    return {
-        ...createdCountry,
-        states: [] as number[],
-        population: 0,
-        ethnicities: [] as EthnicityComposition[],
-        flag: flagData,
-        coatOfArms: coatOfArmsData,
-        anthem: { name: anthemName, url: anthemData },
-    };
+        await tx.insert(countryCoatOfArms).values({
+            mapId,
+            countryTag: attributes.tag,
+            path: coatOfArmsPath,
+        });
+
+        await tx.insert(countryAnthems).values({
+            mapId,
+            countryTag: attributes.tag,
+            name: anthem.name,
+            path: anthemPath,
+        });
+
+        const flagData = await loadFile(flagPath);
+        const coatOfArmsData = await loadFile(coatOfArmsPath);
+        const anthemData = await loadFile(anthemPath);
+
+        return {
+            ...createdCountry,
+            name,
+            flag: flagData,
+            coatOfArms: coatOfArmsData,
+            anthem: { name: anthem.name, url: anthemData },
+            states: [] as number[],
+            population: 0,
+            ethnicities: [] as EthnicityComposition[],
+        };
+    });
 };
