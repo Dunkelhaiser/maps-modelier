@@ -1,5 +1,5 @@
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useAddStates, useGetCountries, useRemoveStates } from "@ipc/countries";
+import { useAddStates, useGetCountriesStates, useRemoveStates } from "@ipc/countries";
 import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
@@ -7,7 +7,7 @@ import { useMapStore } from "@store/store";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
 import { toast } from "sonner";
-import { Country, Province as ProvinceType, State } from "src/shared/types";
+import { Province as ProvinceType, State } from "src/shared/types";
 import { MemoizedProvince } from "./Province";
 
 interface Props {
@@ -25,7 +25,7 @@ export const ProvincesContainer = memo(
         const activeMap = useActiveMap();
         const mode = useMapStore((state) => state.mode);
         const activeSidebar = useSidebarStore((state) => state.activeSidebar);
-        const { data: countries } = useGetCountries(activeMap.id);
+        const { data: countries } = useGetCountriesStates(activeMap.id);
         const addProvinces = useAddProvinces(activeMap.id);
         const removeProvinces = useRemoveProvinces(activeMap.id);
         const addStates = useAddStates(activeMap.id);
@@ -43,10 +43,12 @@ export const ProvincesContainer = memo(
                 return false;
             }
 
-            const countryStates = states.filter((s) => selectedCountry.states.includes(s.id));
+            const country = countries?.find((c) => c.tag === selectedCountry);
+            if (!country) return false;
 
+            const countryStates = states.filter((s) => country.states.includes(s.id));
             return countryStates.some((s) => s.provinces.includes(id));
-        }, [activeSidebar, selectedCountry, selectedState, selectedProvinces, states, id]);
+        }, [activeSidebar, selectedCountry, selectedState, selectedProvinces.length, countries, states, id]);
 
         const countryColor = useMemo(() => {
             const state = states.find((s) => s.provinces.includes(id));
@@ -85,7 +87,7 @@ export const ProvincesContainer = memo(
             else addProvincesToState(state);
         };
 
-        const addStateToCountry = async ({ tag }: Country, stateId: number) => {
+        const addStateToCountry = async (tag: string, stateId: number) => {
             const stateToAdd = states.find((s) => s.id === stateId);
 
             if (stateToAdd?.type === "water") {
@@ -96,16 +98,19 @@ export const ProvincesContainer = memo(
             addStates.mutate({ countryTag: tag, states: [stateId] });
         };
 
-        const removeStateFromCountry = async ({ tag }: Country, stateId: number) => {
+        const removeStateFromCountry = async (tag: string, stateId: number) => {
             removeStates.mutate({ countryTag: tag, states: [stateId] });
             const deselectState = selectedState?.id === stateId;
             if (deselectState)
                 useMapStore.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
         };
 
-        const handleCountryEdit = async (country: Country, stateId: number) => {
-            if (country.states.includes(stateId)) removeStateFromCountry(country, stateId);
-            else addStateToCountry(country, stateId);
+        const handleCountryEdit = async (tag: string, stateId: number) => {
+            const country = countries?.find((c) => c.tag === tag);
+            if (!country) return;
+
+            if (country.states.includes(stateId)) removeStateFromCountry(tag, stateId);
+            else addStateToCountry(tag, stateId);
         };
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {

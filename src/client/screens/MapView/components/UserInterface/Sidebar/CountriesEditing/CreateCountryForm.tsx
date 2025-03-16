@@ -27,14 +27,7 @@ const CreateCountryForm = () => {
 
     const createCountryHandler = async (data: CreateCountryInput) => {
         const createdCountry = await createCountry.mutateAsync(data);
-        selectCountry({
-            ...createdCountry,
-            coatOfArms: "",
-            anthem: { name: "", url: "" },
-            states: [],
-            population: 0,
-            ethnicities: [],
-        });
+        selectCountry(createdCountry.tag);
     };
 
     return (

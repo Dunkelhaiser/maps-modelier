@@ -1,4 +1,4 @@
-import { Country, Province, State } from "src/shared/types";
+import { CountryStates, Province, State } from "src/shared/types";
 import { StateCreator } from "zustand";
 import { useSidebarStore } from "./sidebar";
 import { MapStore } from "./store";
@@ -7,11 +7,11 @@ import { queryClient } from "@/main";
 export interface ProvincesSlice {
     selectedProvinces: Province[];
     selectedState: State | null;
-    selectedCountry: Country | null;
+    selectedCountry: string | null;
     selectedAlliance: number | null;
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => void;
     deselectProvinces: () => void;
-    selectCountry: (country: Country | null) => void;
+    selectCountry: (tag: string | null) => void;
     selectAlliance: (alliance: number | null) => void;
     deselectAlliance: () => void;
 }
@@ -69,9 +69,9 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
             selectedCountry: null,
         }),
 
-    selectCountry: (country) => {
+    selectCountry: (tag) => {
         useSidebarStore.getState().openSidebar("countries");
-        set({ selectedCountry: country });
+        set({ selectedCountry: tag });
     },
 
     selectAlliance: (alliance) => {
@@ -88,6 +88,6 @@ const findState = (provinceId: number, mapId?: string) => {
 };
 
 const findCountry = (stateId: number, mapId?: string) => {
-    const [[, countries]] = queryClient.getQueriesData<Country[]>({ queryKey: [mapId, "countries"] });
-    return countries?.find((c) => c.states.includes(stateId)) ?? null;
+    const [[, countries]] = queryClient.getQueriesData<CountryStates[]>({ queryKey: [mapId, "countries_states"] });
+    return countries?.find((c) => c.states.includes(stateId))?.tag ?? null;
 };

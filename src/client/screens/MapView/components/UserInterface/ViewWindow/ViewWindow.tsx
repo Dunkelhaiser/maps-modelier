@@ -1,3 +1,5 @@
+import { useActiveMap } from "@hooks/useActiveMap";
+import { useGetCountryByTag } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
@@ -7,11 +9,14 @@ import { EthnicityComposition } from "src/shared/types";
 import EthnicComposition from "./EthnicComposition";
 
 const ViewWindow = () => {
+    const activeMap = useActiveMap();
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const selectedState = useMapStore((state) => state.selectedState);
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const selectCountry = useMapStore((state) => state.selectCountry).bind(null, selectedCountry);
+
+    const { data: country } = useGetCountryByTag(activeMap.id, selectedCountry);
 
     const areAllLandProvinces = selectedProvinces.every((province) => province.type === "land");
 
@@ -53,13 +58,13 @@ const ViewWindow = () => {
                 <CardContent className="space-y-4">
                     {selectedProvinces.length === 1 && (
                         <>
-                            {selectedCountry && (
+                            {country && (
                                 <div className="flex flex-col items-start gap-2">
                                     <Label>Owner</Label>
                                     <button type="button" onClick={selectCountry}>
                                         <img
-                                            src={selectedCountry.flag}
-                                            alt={`${selectedCountry.name} flag`}
+                                            src={country.flag}
+                                            alt={`${country.name} flag`}
                                             className="aspect-[3/2] h-8 rounded-md object-cover"
                                         />
                                     </button>

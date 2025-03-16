@@ -4,24 +4,7 @@ import { TableCell, TableRow } from "@ui/Table";
 import { Plus } from "lucide-react";
 
 const CountryRowCreate = () => {
-    const selectCountry = useMapStore((state) => state.selectCountry);
-
-    const createCountryHandler = () => {
-        selectCountry({
-            anthem: {
-                name: "",
-                url: "",
-            },
-            coatOfArms: "",
-            flag: "",
-            name: "",
-            population: 0,
-            states: [],
-            tag: "",
-            color: "",
-            ethnicities: [],
-        });
-    };
+    const createCountry = useMapStore((state) => state.selectCountry).bind(null, "create");
 
     return (
         <TableRow className="hover:bg-card">
@@ -34,7 +17,7 @@ const CountryRowCreate = () => {
                     className="size-6"
                     aria-label="Add"
                     type="button"
-                    onClick={createCountryHandler}
+                    onClick={createCountry}
                 >
                     <Plus className="!size-3.5" />
                 </Button>

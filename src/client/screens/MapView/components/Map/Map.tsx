@@ -1,5 +1,5 @@
 import { useWindowSize } from "@hooks/useWindowSize";
-import { useGetCountries } from "@ipc/countries";
+import { useGetCountriesStates } from "@ipc/countries";
 import { useGetProvinces } from "@ipc/provinces";
 import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
@@ -29,7 +29,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const landProvinces = useGetProvinces(activeMap.id, "land");
     const waterProvinces = useGetProvinces(activeMap.id, "water");
     const states = useGetStates(activeMap.id);
-    useGetCountries(activeMap.id);
+    useGetCountriesStates(activeMap.id);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
