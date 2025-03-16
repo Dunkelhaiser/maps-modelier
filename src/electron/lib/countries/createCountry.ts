@@ -10,16 +10,15 @@ export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: strin
     const { flag: flagInput, name, ...countryData } = attributes;
     const { mapId: mapIdCol, createdAt, updatedAt, ...countryCols } = getTableColumns(countries);
 
-    const countryFolder = ["media", mapId, attributes.tag];
-
-    const flagPath = await saveFile(flagInput, "flag", countryFolder);
-
     const existingCountry = await db
         .select({ tag: countries.tag })
         .from(countries)
         .where(and(eq(countries.mapId, mapId), eq(countries.tag, attributes.tag)));
 
     if (existingCountry.length) throw new Error(`Country with tag ${attributes.tag} already exists`);
+
+    const countryFolder = ["media", mapId, attributes.tag];
+    const flagPath = await saveFile(flagInput, "flag", countryFolder);
 
     return await db.transaction(async (tx) => {
         const [createdCountry] = await tx
