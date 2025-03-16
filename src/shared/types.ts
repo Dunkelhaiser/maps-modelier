@@ -79,6 +79,12 @@ export interface Alliance {
     membersCount: number;
 }
 
+export interface CountryStates {
+    tag: string;
+    color: string;
+    states: number[];
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -117,6 +123,7 @@ export interface IpcChannels {
         delete: (mapId: string, tag: string) => Promise<void>;
         addStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
         removeStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
+        getStates: (mapId: string) => Promise<CountryStates[]>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;

@@ -11,6 +11,7 @@ import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
 import { getAllCountries } from "./countries/getAllCountries.js";
+import { getCountriesStates } from "./countries/getCountriesStates.js";
 import { removeStates } from "./countries/removeStates.js";
 import { updateCountry } from "./countries/updateCountry.js";
 import { createEthnicity } from "./ethnicities/createEthnicity.js";
@@ -61,6 +62,7 @@ const handlers: HandlersType = {
         delete: deleteCountry,
         addStates,
         removeStates,
+        getStates: getCountriesStates,
     },
     ethnicities: {
         getAll: getAllEthnicities,
