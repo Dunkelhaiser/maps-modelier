@@ -18,23 +18,23 @@ const CreateCountryForm = () => {
             name: "",
             tag: "",
             color: "#39654a",
-            anthem: {
-                url: undefined,
-                name: "",
-            },
             flag: undefined,
-            coatOfArms: undefined,
         },
     });
     const flagRef = form.register("flag");
-    const coatOfArmsRef = form.register("coatOfArms");
-    const anthemRef = form.register("anthem.url");
 
     const createCountry = useCreateCountry(activeMap.id);
 
     const createCountryHandler = async (data: CreateCountryInput) => {
         const createdCountry = await createCountry.mutateAsync(data);
-        selectCountry(createdCountry);
+        selectCountry({
+            ...createdCountry,
+            coatOfArms: "",
+            anthem: { name: "", url: "" },
+            states: [],
+            population: 0,
+            ethnicities: [],
+        });
     };
 
     return (
@@ -66,51 +66,6 @@ const CreateCountryForm = () => {
                                         {...flagRef}
                                         accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                     />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="coatOfArms"
-                        render={() => (
-                            <FormItem>
-                                <FormLabel>Coat of arms</FormLabel>
-                                <FormControl>
-                                    <FileUpload
-                                        className="aspect-square h-36"
-                                        {...coatOfArmsRef}
-                                        accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-                <div className="flex flex-row gap-2">
-                    <FormField
-                        control={form.control}
-                        name="anthem.url"
-                        render={() => (
-                            <FormItem className="w-full grow">
-                                <FormLabel>Anthem</FormLabel>
-                                <FormControl>
-                                    <Input type="file" className="h-8" {...anthemRef} accept="audio/*" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="anthem.name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Anthem name</FormLabel>
-                                <FormControl>
-                                    <Input className="h-8" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

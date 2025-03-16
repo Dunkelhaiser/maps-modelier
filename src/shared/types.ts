@@ -108,7 +108,7 @@ export interface IpcChannels {
     };
     countries: {
         getAll: (mapId: string) => Promise<Country[]>;
-        create: (mapId: string, data: CreateCountryInput) => Promise<Country>;
+        create: (mapId: string, data: CreateCountryInput) => Promise<CountryBase & { color: string }>;
         update: (
             mapId: string,
             tag: string,
