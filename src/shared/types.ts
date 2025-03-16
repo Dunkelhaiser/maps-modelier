@@ -124,6 +124,7 @@ export interface IpcChannels {
         addStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
         removeStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
         getStates: (mapId: string) => Promise<CountryStates[]>;
+        getByTag: (mapId: string, tag: string) => Promise<Country>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;

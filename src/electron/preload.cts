@@ -58,6 +58,7 @@ const api = {
         addStates: (mapId: string, data: StatesAssignmentInput) => invoke("countries", "addStates", mapId, data),
         removeStates: (mapId: string, data: StatesAssignmentInput) => invoke("countries", "removeStates", mapId, data),
         getStates: (mapId: string) => invoke("countries", "getStates", mapId),
+        getByTag: (mapId: string, tag: string) => invoke("countries", "getByTag", mapId, tag),
     },
     ethnicities: {
         getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),

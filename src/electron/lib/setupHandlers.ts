@@ -12,6 +12,7 @@ import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
 import { getAllCountries } from "./countries/getAllCountries.js";
 import { getCountriesStates } from "./countries/getCountriesStates.js";
+import { getCountryByTag } from "./countries/getCountryByTag.js";
 import { removeStates } from "./countries/removeStates.js";
 import { updateCountry } from "./countries/updateCountry.js";
 import { createEthnicity } from "./ethnicities/createEthnicity.js";
@@ -63,6 +64,8 @@ const handlers: HandlersType = {
         addStates,
         removeStates,
         getStates: getCountriesStates,
+        // @ts-expect-error - this is a valid call
+        getByTag: getCountryByTag,
     },
     ethnicities: {
         getAll: getAllEthnicities,
