@@ -21,7 +21,6 @@ const EditCountryForm = () => {
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
         defaultValues: {
-            // name: country?.name.common,
             name: {
                 common: country?.name.common,
                 official: country?.name.official ?? "",
