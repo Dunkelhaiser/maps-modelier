@@ -1,6 +1,6 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useGetCountries } from "@ipc/countries";
+import { useGetCountriesTable } from "@ipc/countries";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
@@ -12,7 +12,7 @@ const Countries = () => {
     const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
-    const { data } = useGetCountries(activeMap.id);
+    const { data } = useGetCountriesTable(activeMap.id);
 
     return (
         <>

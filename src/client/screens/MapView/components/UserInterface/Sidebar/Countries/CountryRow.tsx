@@ -1,9 +1,9 @@
 import { useMapStore } from "@store/store";
 import { TableCell, TableRow } from "@ui/Table";
-import { Country } from "src/shared/types";
+import { CountryTable } from "src/shared/types";
 
 interface Props {
-    country: Country;
+    country: CountryTable;
 }
 
 const CountryRow = ({ country }: Props) => {

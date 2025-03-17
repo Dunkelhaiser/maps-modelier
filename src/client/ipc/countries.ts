@@ -4,13 +4,6 @@ import { CreateCountryInput } from "src/shared/schemas/countries/createCountry";
 import { StatesAssignmentInput } from "src/shared/schemas/countries/states";
 import { UpdateCountryInput } from "src/shared/schemas/countries/updateCountry";
 
-export const useGetCountries = (mapId: string) => {
-    return useQuery({
-        queryKey: [mapId, "countries"],
-        queryFn: async () => await window.electron.countries.getAll(mapId),
-    });
-};
-
 export const useCreateCountry = (mapId: string) => {
     const queryClient = useQueryClient();
 
@@ -88,5 +81,12 @@ export const useGetCountriesBase = (mapId: string) => {
     return useQuery({
         queryKey: [mapId, "countries_base"],
         queryFn: async () => await window.electron.countries.getBases(mapId),
+    });
+};
+
+export const useGetCountriesTable = (mapId: string) => {
+    return useQuery({
+        queryKey: [mapId, "countries"],
+        queryFn: async () => await window.electron.countries.getTable(mapId),
     });
 };

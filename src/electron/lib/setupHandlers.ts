@@ -10,9 +10,9 @@ import { updateAlliance } from "./alliances/updateAlliance.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
-import { getAllCountries } from "./countries/getAllCountries.js";
 import { getCountriesBase } from "./countries/getCountriesBase.js";
 import { getCountriesStates } from "./countries/getCountriesStates.js";
+import { getCountriesTable } from "./countries/getCountriesTable.js";
 import { getCountryByTag } from "./countries/getCountryByTag.js";
 import { removeStates } from "./countries/removeStates.js";
 import { updateCountry } from "./countries/updateCountry.js";
@@ -58,7 +58,7 @@ const handlers: HandlersType = {
         removeProvinces,
     },
     countries: {
-        getAll: getAllCountries,
+        getTable: getCountriesTable,
         create: createCountry,
         update: updateCountry,
         delete: deleteCountry,
@@ -107,7 +107,7 @@ export const setupHandlers = () => {
         // eslint-disable-next-line no-useless-catch
         try {
             // @ts-expect-error - this is a valid call
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
             return await handlers[domain][command](event, ...args);
         } catch (error) {
             throw error;

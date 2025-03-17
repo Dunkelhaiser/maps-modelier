@@ -85,6 +85,13 @@ export interface CountryStates {
     states: number[];
 }
 
+export interface CountryTable {
+    tag: string;
+    name: string;
+    flag: string;
+    population: number;
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -113,7 +120,6 @@ export interface IpcChannels {
         removeProvinces: (mapId: string, data: ProvincesAssignmentInput) => Promise<void>;
     };
     countries: {
-        getAll: (mapId: string) => Promise<Country[]>;
         create: (mapId: string, data: CreateCountryInput) => Promise<CountryBase & { color: string }>;
         update: (
             mapId: string,
@@ -126,6 +132,7 @@ export interface IpcChannels {
         getStates: (mapId: string) => Promise<CountryStates[]>;
         getByTag: (mapId: string, tag: string) => Promise<Country>;
         getBases: (mapId: string) => Promise<CountryBase[]>;
+        getTable: (mapId: string) => Promise<CountryTable[]>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
