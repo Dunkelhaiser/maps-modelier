@@ -21,7 +21,11 @@ const EditCountryForm = () => {
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
         defaultValues: {
-            name: country?.name.common,
+            // name: country?.name.common,
+            name: {
+                common: country?.name.common,
+                official: country?.name.official ?? "",
+            },
             tag: country?.tag,
             color: country?.color,
             anthem: {
@@ -38,7 +42,10 @@ const EditCountryForm = () => {
 
     useEffect(() => {
         form.reset({
-            name: country?.name.common,
+            name: {
+                common: country?.name.common,
+                official: country?.name.official ?? "",
+            },
             tag: country?.tag,
             color: country?.color,
             anthem: {
@@ -48,7 +55,7 @@ const EditCountryForm = () => {
             flag: undefined,
             coatOfArms: undefined,
         });
-    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.tag]);
+    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.name.official, country?.tag]);
 
     const updateCountry = useUpdateCountry(activeMap.id, selectedCountry);
 
@@ -66,19 +73,34 @@ const EditCountryForm = () => {
     return (
         <Form {...form}>
             <form className="flex flex-col gap-4 py-4" onSubmit={form.handleSubmit(updateCountryHandler)}>
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter country name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="flex flex-row gap-2">
+                    <FormField
+                        control={form.control}
+                        name="name.common"
+                        render={({ field }) => (
+                            <FormItem className="w-full grow">
+                                <FormLabel>Common name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter country common name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="name.official"
+                        render={({ field }) => (
+                            <FormItem className="w-full grow">
+                                <FormLabel>Official name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter country official name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <div className="flex flex-row gap-4">
                     <FormField
                         control={form.control}

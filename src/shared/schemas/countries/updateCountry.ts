@@ -2,7 +2,10 @@ import { z as zod } from "zod";
 import { audioSchema, imageSchema, nameField } from "../shared.js";
 
 export const updateCountrySchema = zod.object({
-    name: nameField({ field: "country", min: 1, max: 50 }),
+    name: zod.object({
+        common: nameField({ field: "common name", min: 1, max: 50 }),
+        official: nameField({ field: "official name", min: 0, max: 50 }),
+    }),
     tag: zod
         .string()
         .trim()

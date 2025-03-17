@@ -69,21 +69,21 @@ export const updateCountry = async (
             .where(and(eq(countries.tag, countryTag), eq(countries.mapId, mapId)))
             .returning(countryCols);
 
-        if (name) {
-            await tx
-                .insert(countryNames)
-                .values({
-                    mapId,
-                    countryTag,
-                    commonName: name,
-                })
-                .onConflictDoUpdate({
-                    target: [countryNames.mapId, countryNames.countryTag],
-                    set: {
-                        commonName: name,
-                    },
-                });
-        }
+        await tx
+            .insert(countryNames)
+            .values({
+                mapId,
+                countryTag,
+                commonName: name.common,
+                officialName: name.official.length > 0 ? name.official : null,
+            })
+            .onConflictDoUpdate({
+                target: [countryNames.mapId, countryNames.countryTag],
+                set: {
+                    commonName: name.common,
+                    officialName: name.official.length > 0 ? name.official : null,
+                },
+            });
 
         let flagPath = existingFlag ? existingFlag.path : "";
         if (flagInput) {
