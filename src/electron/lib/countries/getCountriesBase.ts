@@ -21,7 +21,7 @@ export const getCountriesBase = async (_: Electron.IpcMainInvokeEvent, mapId: st
         )
         .where(eq(countries.mapId, mapId))
         .groupBy(countries.tag)
-        .orderBy(countries.tag);
+        .orderBy(countryNames.commonName);
 
     const loadedCountries = await Promise.all(
         countriesArr.map(async (country) => ({

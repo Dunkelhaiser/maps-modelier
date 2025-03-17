@@ -110,7 +110,7 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
         .leftJoin(countryEthnicities, eq(countryEthnicities.countryTag, countries.tag))
         .where(eq(countries.mapId, mapId))
         .groupBy(countries.tag)
-        .orderBy(countries.tag);
+        .orderBy(countryNames.commonName);
 
     const loadedCountries = await Promise.all(
         countriesArr.map(async (country) => {
