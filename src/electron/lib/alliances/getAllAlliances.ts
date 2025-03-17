@@ -1,6 +1,6 @@
 import { and, count, eq } from "drizzle-orm";
 import { db } from "../../db/db.js";
-import { alliances, allianceMembers, countries } from "../../db/schema.js";
+import { alliances, allianceMembers, countries, countryNames, countryFlags } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 
 export const getAllAlliances = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
@@ -10,17 +10,19 @@ export const getAllAlliances = async (_: Electron.IpcMainInvokeEvent, mapId: str
             name: alliances.name,
             leader: {
                 tag: countries.tag,
-                name: countries.name,
-                flag: countries.flag,
+                name: countryNames.commonName,
+                flag: countryFlags.path,
             },
             type: alliances.type,
             membersCount: count(allianceMembers.countryTag),
         })
         .from(alliances)
         .innerJoin(countries, and(eq(alliances.leader, countries.tag), eq(countries.mapId, mapId)))
-        .leftJoin(allianceMembers, and(eq(alliances.id, allianceMembers.allianceId), eq(allianceMembers.mapId, mapId)))
+        .innerJoin(countryNames, and(eq(countries.tag, countryNames.countryTag), eq(countryNames.mapId, mapId)))
+        .innerJoin(countryFlags, and(eq(countries.tag, countryFlags.countryTag), eq(countryFlags.mapId, mapId)))
+        .innerJoin(allianceMembers, and(eq(alliances.id, allianceMembers.allianceId), eq(allianceMembers.mapId, mapId)))
         .where(eq(alliances.mapId, mapId))
-        .groupBy(alliances.id);
+        .groupBy(alliances.id, countries.tag, countryNames.commonName, countryFlags.path);
 
     const alliancesWithLeaderFlags = await Promise.all(
         alliancesArr.map(async (alliance) => {

@@ -1,10 +1,21 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
 import { EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
-import { countries, countryStates, states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
+import {
+    countries,
+    countryStates,
+    states,
+    stateProvinces,
+    provincePopulations,
+    ethnicities,
+    countryNames,
+    countryFlags,
+    countryCoatOfArms,
+    countryAnthems,
+} from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 
-export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
+export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: string, tag: string) => {
     const ethnicityTotals = db.$with("ethnicity_totals").as(
         db
             .select({
@@ -31,7 +42,7 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
                     eq(ethnicities.mapId, provincePopulations.mapId)
                 )
             )
-            .where(eq(countries.mapId, mapId))
+            .where(and(eq(countries.mapId, mapId), eq(countries.tag, tag)))
             .groupBy(countries.tag, ethnicities.id, ethnicities.name)
             .orderBy(desc(sum(provincePopulations.population)))
     );
@@ -41,30 +52,30 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
             .select({
                 countryTag: ethnicityTotals.countryTag,
                 ethnicityData: sql<string>`
-                json_group_array(
-                    json_object(
-                        'id', ${ethnicityTotals.ethnicityId},
-                        'name', ${ethnicityTotals.ethnicityName},
-                        'population', ${ethnicityTotals.totalPopulation}
-                    )
-                ) FILTER (WHERE ${ethnicityTotals.ethnicityId} IS NOT NULL AND ${ethnicityTotals.totalPopulation} > 0)
-            `.as("ethnicity_data"),
+            json_group_array(
+                json_object(
+                    'id', ${ethnicityTotals.ethnicityId},
+                    'name', ${ethnicityTotals.ethnicityName},
+                    'population', ${ethnicityTotals.totalPopulation}
+                )
+            ) FILTER (WHERE ${ethnicityTotals.ethnicityId} IS NOT NULL AND ${ethnicityTotals.totalPopulation} > 0)
+        `.as("ethnicity_data"),
             })
             .from(ethnicityTotals)
             .groupBy(ethnicityTotals.countryTag)
     );
 
-    const countriesArr = await db
+    const countryArr = await db
         .with(ethnicityTotals, countryEthnicities)
         .select({
             tag: countries.tag,
-            name: countries.name,
+            commonName: countryNames.commonName,
+            officialName: countryNames.officialName,
             color: countries.color,
-            flag: countries.flag,
-            coatOfArms: countries.coatOfArms,
-            anthemName: countries.anthemName,
-            anthemPath: countries.anthemPath,
-            states: sql<string>`COALESCE(GROUP_CONCAT(${countryStates.stateId}), '')`,
+            flag: countryFlags.path,
+            coatOfArms: countryCoatOfArms.path,
+            anthemName: countryAnthems.name,
+            anthemPath: countryAnthems.path,
             population: sql<number>`
                 COALESCE((
                     SELECT SUM(${provincePopulations.population})
@@ -79,35 +90,42 @@ export const getAllCountries = async (_: Electron.IpcMainInvokeEvent, mapId: str
             ethnicities: countryEthnicities.ethnicityData,
         })
         .from(countries)
-        .leftJoin(countryStates, eq(countryStates.countryTag, countries.tag))
+        .innerJoin(
+            countryNames,
+            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
+        )
+        .innerJoin(
+            countryFlags,
+            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
+        )
+        .leftJoin(
+            countryCoatOfArms,
+            and(eq(countryCoatOfArms.countryTag, countries.tag), eq(countryCoatOfArms.mapId, countries.mapId))
+        )
+        .leftJoin(
+            countryAnthems,
+            and(eq(countryAnthems.countryTag, countries.tag), eq(countryAnthems.mapId, countries.mapId))
+        )
         .leftJoin(countryEthnicities, eq(countryEthnicities.countryTag, countries.tag))
-        .where(eq(countries.mapId, mapId))
+        .where(and(eq(countries.mapId, mapId), eq(countries.tag, tag)))
         .groupBy(countries.tag)
         .orderBy(countries.tag);
 
-    const loadedCountries = await Promise.all(
-        countriesArr.map(async (country) => {
-            const { anthemName, anthemPath, flag, coatOfArms, ...countryData } = country;
+    if (countryArr.length === 0) throw new Error("Country not found");
 
-            const [flagData, coatOfArmsData, anthemData] = await Promise.all([
-                loadFile(flag),
-                loadFile(coatOfArms),
-                loadFile(anthemPath),
-            ]);
+    const [country] = countryArr;
+    const { anthemName, anthemPath, flag, coatOfArms, commonName, officialName, ...countryData } = country;
 
-            return {
-                ...countryData,
-                flag: flagData,
-                coatOfArms: coatOfArmsData,
-                anthem: {
-                    name: anthemName,
-                    url: anthemData,
-                },
-                states: country.states ? country.states.split(",").map(Number) : [],
-                ethnicities: JSON.parse(country.ethnicities as unknown as string) as EthnicityComposition[],
-            };
-        })
-    );
+    const flagData = await loadFile(flag);
+    const coatOfArmsData = coatOfArms ? await loadFile(coatOfArms) : undefined;
+    const anthemData = anthemPath ? await loadFile(anthemPath) : undefined;
 
-    return loadedCountries;
+    return {
+        ...countryData,
+        name: { common: commonName, official: officialName },
+        flag: flagData,
+        coatOfArms: coatOfArmsData,
+        anthem: anthemData && anthemName ? { name: anthemName, url: anthemData } : undefined,
+        ethnicities: JSON.parse(country.ethnicities as unknown as string) as EthnicityComposition[],
+    };
 };

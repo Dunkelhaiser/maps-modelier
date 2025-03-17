@@ -1,5 +1,5 @@
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useGetCountries } from "@ipc/countries";
+import { useGetCountriesStates } from "@ipc/countries";
 import { Container, Graphics } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
@@ -19,7 +19,7 @@ const StateBorders = ({ state, provinces }: Props) => {
     const selectedProvinces = useMapStore((store) => store.selectedProvinces);
     const activeSidebar = useSidebarStore((store) => store.activeSidebar);
     const activeMap = useActiveMap();
-    const { data: countries } = useGetCountries(activeMap.id);
+    const { data: countries } = useGetCountriesStates(activeMap.id);
 
     const isSelected = selectedState?.id === state.id;
 
@@ -27,8 +27,10 @@ const StateBorders = ({ state, provinces }: Props) => {
         if (activeSidebar !== "countries" || !selectedCountry || selectedState || selectedProvinces.length > 0) {
             return false;
         }
-        return selectedCountry.states.includes(state.id);
-    }, [activeSidebar, selectedCountry, selectedState, selectedProvinces, state.id]);
+
+        const country = countries?.find((c) => c.tag === selectedCountry);
+        return country?.states.includes(state.id) ?? false;
+    }, [activeSidebar, selectedCountry, selectedState, selectedProvinces, state.id, countries]);
 
     const countryColor = useMemo(() => {
         const country = countries?.find((c) => c.states.includes(state.id));

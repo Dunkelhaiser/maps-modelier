@@ -50,13 +50,16 @@ const api = {
             invoke("states", "removeProvinces", mapId, data),
     },
     countries: {
-        getAll: (mapId: string) => invoke("countries", "getAll", mapId),
         create: (mapId: string, data: CreateCountryInput) => invoke("countries", "create", mapId, data),
         update: (mapId: string, countryTag: string, data: UpdateCountryInput) =>
             invoke("countries", "update", mapId, countryTag, data),
         delete: (mapId: string, tag: string) => invoke("countries", "delete", mapId, tag),
         addStates: (mapId: string, data: StatesAssignmentInput) => invoke("countries", "addStates", mapId, data),
         removeStates: (mapId: string, data: StatesAssignmentInput) => invoke("countries", "removeStates", mapId, data),
+        getStates: (mapId: string) => invoke("countries", "getStates", mapId),
+        getByTag: (mapId: string, tag: string) => invoke("countries", "getByTag", mapId, tag),
+        getBases: (mapId: string) => invoke("countries", "getBases", mapId),
+        getTable: (mapId: string) => invoke("countries", "getTable", mapId),
     },
     ethnicities: {
         getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),

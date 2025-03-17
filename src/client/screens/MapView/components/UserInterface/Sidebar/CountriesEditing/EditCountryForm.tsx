@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useDeleteCountry, useUpdateCountry } from "@ipc/countries";
+import { useDeleteCountry, useGetCountryByTag, useUpdateCountry } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
@@ -15,15 +15,21 @@ const EditCountryForm = () => {
     const activeMap = useActiveMap();
     const selectedCountry = useMapStore((state) => state.selectedCountry)!;
     const selectCountry = useMapStore((state) => state.selectCountry);
+
+    const { data: country } = useGetCountryByTag(activeMap.id, selectedCountry);
+
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
         defaultValues: {
-            name: selectedCountry.name,
-            tag: selectedCountry.tag,
-            color: selectedCountry.color,
+            name: {
+                common: country?.name.common,
+                official: country?.name.official ?? "",
+            },
+            tag: country?.tag,
+            color: country?.color,
             anthem: {
                 url: undefined,
-                name: selectedCountry.anthem.name,
+                name: country?.anthem?.name ?? "",
             },
             flag: undefined,
             coatOfArms: undefined,
@@ -35,26 +41,28 @@ const EditCountryForm = () => {
 
     useEffect(() => {
         form.reset({
-            name: selectedCountry.name,
-            tag: selectedCountry.tag,
-            color: selectedCountry.color,
+            name: {
+                common: country?.name.common,
+                official: country?.name.official ?? "",
+            },
+            tag: country?.tag,
+            color: country?.color,
             anthem: {
                 url: undefined,
-                name: selectedCountry.anthem.name,
+                name: country?.anthem?.name ?? "",
             },
             flag: undefined,
             coatOfArms: undefined,
         });
-    }, [form, selectedCountry.anthem.name, selectedCountry.color, selectedCountry.name, selectedCountry.tag]);
+    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.name.official, country?.tag]);
 
-    const updateCountry = useUpdateCountry(activeMap.id, selectedCountry.tag);
+    const updateCountry = useUpdateCountry(activeMap.id, selectedCountry);
 
     const updateCountryHandler = async (data: UpdateCountryInput) => {
-        const updatedCountry = await updateCountry.mutateAsync(data);
-        selectCountry(updatedCountry);
+        await updateCountry.mutateAsync(data);
     };
 
-    const deleteCountry = useDeleteCountry(activeMap.id, selectedCountry.tag);
+    const deleteCountry = useDeleteCountry(activeMap.id, selectedCountry);
 
     const deleteCountryHandler = async () => {
         await deleteCountry.mutateAsync();
@@ -64,19 +72,34 @@ const EditCountryForm = () => {
     return (
         <Form {...form}>
             <form className="flex flex-col gap-4 py-4" onSubmit={form.handleSubmit(updateCountryHandler)}>
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter country name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="flex flex-row gap-2">
+                    <FormField
+                        control={form.control}
+                        name="name.common"
+                        render={({ field }) => (
+                            <FormItem className="w-full grow">
+                                <FormLabel>Common name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter country common name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="name.official"
+                        render={({ field }) => (
+                            <FormItem className="w-full grow">
+                                <FormLabel>Official name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter country official name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <div className="flex flex-row gap-4">
                     <FormField
                         control={form.control}
@@ -87,7 +110,7 @@ const EditCountryForm = () => {
                                 <FormControl>
                                     <FileUpload
                                         className="aspect-[3/2] h-36"
-                                        defaultImg={selectedCountry.flag}
+                                        defaultImg={country?.flag}
                                         {...flagRef}
                                         accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                     />
@@ -105,7 +128,7 @@ const EditCountryForm = () => {
                                 <FormControl>
                                     <FileUpload
                                         className="aspect-square h-36"
-                                        defaultImg={selectedCountry.coatOfArms}
+                                        defaultImg={country?.coatOfArms}
                                         {...coatOfArmsRef}
                                         accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                     />

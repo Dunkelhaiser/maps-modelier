@@ -1,12 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAlliance, useGetMembers, useUpdateAlliance } from "@ipc/alliances";
-import { useGetCountries } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
 import AddMembersForm from "./AddMembersForm";
@@ -27,7 +27,14 @@ const EditAllianceForm = () => {
         },
     });
 
-    const { data: countries } = useGetCountries(activeMap.id);
+    useEffect(() => {
+        form.reset({
+            name: alliance?.name,
+            leader: alliance?.leader.tag,
+            type: alliance?.type as "economic" | "political" | "military",
+        });
+    }, [form, alliance?.name, alliance?.leader.tag, alliance?.type]);
+
     const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance);
 
     const updateAllianceHandler = async (data: AllianceInput) => {
@@ -87,7 +94,7 @@ const EditAllianceForm = () => {
                                                 <SelectValue placeholder="Leader" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {countries?.map((country) => (
+                                                {members?.map((country) => (
                                                     <SelectItem key={country.tag} value={country.tag}>
                                                         <div className="flex flex-row items-center gap-2">
                                                             <img

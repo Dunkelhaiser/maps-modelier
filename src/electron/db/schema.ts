@@ -141,12 +141,7 @@ export const countries = sqliteTable(
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
-        name: text("name").notNull(),
         color: text("color").notNull().default("#39654a"),
-        flag: text("flag").notNull(),
-        coatOfArms: text("coat_of_arms").notNull(),
-        anthemName: text("anthem_name").notNull(),
-        anthemPath: text("anthem_path").notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
@@ -156,6 +151,116 @@ export const countries = sqliteTable(
     },
     (table) => ({
         pk: primaryKey({ columns: [table.mapId, table.tag], name: "countries_pk" }),
+    })
+);
+
+export const countryNames = sqliteTable(
+    "country_names",
+    {
+        countryTag: text("country_tag").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        commonName: text("common_name").notNull(),
+        officialName: text("official_name"),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_names_pk" }),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryTag],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "country_names_countries_reference",
+        })
+            .onDelete("cascade")
+            .onUpdate("cascade"),
+    })
+);
+
+export const countryFlags = sqliteTable(
+    "country_flags",
+    {
+        countryTag: text("country_tag").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        path: text("path").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_flags_pk" }),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryTag],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "country_flags_countries_reference",
+        })
+            .onDelete("cascade")
+            .onUpdate("cascade"),
+    })
+);
+
+export const countryCoatOfArms = sqliteTable(
+    "country_coat_of_arms",
+    {
+        countryTag: text("country_tag").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        path: text("path").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_coat_of_arms_pk" }),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryTag],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "country_coat_of_arms_countries_reference",
+        })
+            .onDelete("cascade")
+            .onUpdate("cascade"),
+    })
+);
+
+export const countryAnthems = sqliteTable(
+    "country_anthems",
+    {
+        countryTag: text("country_tag").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        name: text("name").notNull(),
+        path: text("path").notNull(),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_anthems_pk" }),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryTag],
+            foreignColumns: [countries.mapId, countries.tag],
+            name: "country_anthems_countries_reference",
+        })
+            .onDelete("cascade")
+            .onUpdate("cascade"),
     })
 );
 

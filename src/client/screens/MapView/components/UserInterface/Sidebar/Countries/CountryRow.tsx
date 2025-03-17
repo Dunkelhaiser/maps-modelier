@@ -1,13 +1,13 @@
 import { useMapStore } from "@store/store";
 import { TableCell, TableRow } from "@ui/Table";
-import { Country } from "src/shared/types";
+import { CountryTable } from "src/shared/types";
 
 interface Props {
-    country: Country;
+    country: CountryTable;
 }
 
 const CountryRow = ({ country }: Props) => {
-    const selectCountry = useMapStore((state) => state.selectCountry).bind(null, country);
+    const selectCountry = useMapStore((state) => state.selectCountry).bind(null, country.tag);
 
     return (
         <TableRow className="relative w-[9.25rem]">

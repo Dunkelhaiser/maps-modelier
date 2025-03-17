@@ -40,15 +40,17 @@ export interface State {
 
 export interface Country {
     tag: string;
-    name: string;
+    name: {
+        common: string;
+        official: string | null;
+    };
     color: string;
     flag: string;
-    coatOfArms: string;
-    anthem: {
+    coatOfArms?: string;
+    anthem?: {
         name: string;
         url: string;
     };
-    states: number[];
     population: number;
     ethnicities: EthnicityComposition[];
 }
@@ -79,6 +81,19 @@ export interface Alliance {
     membersCount: number;
 }
 
+export interface CountryStates {
+    tag: string;
+    color: string;
+    states: number[];
+}
+
+export interface CountryTable {
+    tag: string;
+    name: string;
+    flag: string;
+    population: number;
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -107,8 +122,7 @@ export interface IpcChannels {
         removeProvinces: (mapId: string, data: ProvincesAssignmentInput) => Promise<void>;
     };
     countries: {
-        getAll: (mapId: string) => Promise<Country[]>;
-        create: (mapId: string, data: CreateCountryInput) => Promise<Country>;
+        create: (mapId: string, data: CreateCountryInput) => Promise<CountryBase & { color: string }>;
         update: (
             mapId: string,
             tag: string,
@@ -117,6 +131,10 @@ export interface IpcChannels {
         delete: (mapId: string, tag: string) => Promise<void>;
         addStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
         removeStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
+        getStates: (mapId: string) => Promise<CountryStates[]>;
+        getByTag: (mapId: string, tag: string) => Promise<Country>;
+        getBases: (mapId: string) => Promise<CountryBase[]>;
+        getTable: (mapId: string) => Promise<CountryTable[]>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
