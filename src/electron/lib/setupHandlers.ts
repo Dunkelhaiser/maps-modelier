@@ -80,7 +80,6 @@ const handlers: HandlersType = {
         getAll: getAllAlliances,
         update: updateAlliance,
         addMembers,
-        // @ts-expect-error - this is a valid call
         get: getAlliance,
         getMembers,
     },
