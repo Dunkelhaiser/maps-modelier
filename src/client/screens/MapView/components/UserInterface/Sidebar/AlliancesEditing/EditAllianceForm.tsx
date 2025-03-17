@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAlliance, useGetMembers, useUpdateAlliance } from "@ipc/alliances";
-import { useGetCountriesBase } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -36,7 +35,6 @@ const EditAllianceForm = () => {
         });
     }, [form, alliance?.name, alliance?.leader.tag, alliance?.type]);
 
-    const { data: countries } = useGetCountriesBase(activeMap.id);
     const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance);
 
     const updateAllianceHandler = async (data: AllianceInput) => {
@@ -96,7 +94,7 @@ const EditAllianceForm = () => {
                                                 <SelectValue placeholder="Leader" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {countries?.map((country) => (
+                                                {members?.map((country) => (
                                                     <SelectItem key={country.tag} value={country.tag}>
                                                         <div className="flex flex-row items-center gap-2">
                                                             <img
