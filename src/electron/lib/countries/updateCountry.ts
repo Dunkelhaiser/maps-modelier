@@ -133,29 +133,29 @@ export const updateCountry = async (
         }
 
         let anthemPath = existingAnthem ? existingAnthem.path : "";
-        if (anthemInput.url) {
+        if (anthemInput.url && anthemInput.name) {
             if (existingAnthem) {
                 const anthemFile = path.basename(existingAnthem.path);
                 await deleteFile(anthemFile, countryFolder);
             }
             anthemPath = await saveFile(anthemInput.url, "anthem", countryFolder);
-        }
 
-        await tx
-            .insert(countryAnthems)
-            .values({
-                mapId,
-                countryTag,
-                name: anthemInput.name,
-                path: anthemPath,
-            })
-            .onConflictDoUpdate({
-                target: [countryAnthems.mapId, countryAnthems.countryTag],
-                set: {
+            await tx
+                .insert(countryAnthems)
+                .values({
+                    mapId,
+                    countryTag,
                     name: anthemInput.name,
                     path: anthemPath,
-                },
-            });
+                })
+                .onConflictDoUpdate({
+                    target: [countryAnthems.mapId, countryAnthems.countryTag],
+                    set: {
+                        name: anthemInput.name,
+                        path: anthemPath,
+                    },
+                });
+        }
 
         const states = await tx
             .select()
