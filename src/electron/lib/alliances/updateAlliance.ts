@@ -31,18 +31,17 @@ export const updateAlliance = async (
             flag: countryFlags.path,
         })
         .from(countries)
-        .leftJoin(
+        .innerJoin(
             countryNames,
             and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
         )
-        .leftJoin(
+        .innerJoin(
             countryFlags,
             and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
         )
         .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
 
-    const flag = await loadFile(leaderData.flag ?? "");
-
+    const flag = await loadFile(leaderData.flag);
     leaderData.flag = flag;
 
     const [membersCount] = await db
