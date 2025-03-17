@@ -1,5 +1,5 @@
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useGetCountries } from "@ipc/countries";
+import { useGetCountriesBase } from "@ipc/countries";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) => {
     const activeMap = useActiveMap();
-    const countries = useGetCountries(activeMap.id);
+    const countries = useGetCountriesBase(activeMap.id);
 
     return (
         <Select onValueChange={onChange} defaultValue={value} disabled={isLeader}>

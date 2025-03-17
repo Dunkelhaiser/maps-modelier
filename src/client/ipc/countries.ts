@@ -83,3 +83,10 @@ export const useGetCountryByTag = (mapId: string, tag: string | null) => {
         enabled: Boolean(tag),
     });
 };
+
+export const useGetCountriesBase = (mapId: string) => {
+    return useQuery({
+        queryKey: [mapId, "countries_base"],
+        queryFn: async () => await window.electron.countries.getBases(mapId),
+    });
+};

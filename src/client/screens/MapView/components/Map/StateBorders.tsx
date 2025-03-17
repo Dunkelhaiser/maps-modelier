@@ -1,5 +1,5 @@
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useGetCountriesStates } from "@ipc/countries"; // Changed from useGetCountries
+import { useGetCountriesStates } from "@ipc/countries";
 import { Container, Graphics } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";

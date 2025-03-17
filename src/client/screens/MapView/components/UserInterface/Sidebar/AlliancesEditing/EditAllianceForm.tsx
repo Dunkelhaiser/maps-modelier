@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAlliance, useGetMembers, useUpdateAlliance } from "@ipc/alliances";
-import { useGetCountries } from "@ipc/countries";
+import { useGetCountriesBase } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -27,7 +27,7 @@ const EditAllianceForm = () => {
         },
     });
 
-    const { data: countries } = useGetCountries(activeMap.id);
+    const { data: countries } = useGetCountriesBase(activeMap.id);
     const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance);
 
     const updateAllianceHandler = async (data: AllianceInput) => {
