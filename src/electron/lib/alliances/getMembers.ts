@@ -22,19 +22,24 @@ export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
                 flag: countryFlags.path,
             })
             .from(countries)
-            .leftJoin(
+            .innerJoin(
                 countryNames,
                 and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
             )
-            .leftJoin(
+            .innerJoin(
                 countryFlags,
                 and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
             )
             .where(and(eq(countries.mapId, mapId), inArray(countries.tag, memberTags)));
 
-        membersData.forEach(async (member) => (member.flag = await loadFile(member.flag ?? "")));
+        const loadedMembers = await Promise.all(
+            membersData.map(async (member) => ({
+                ...member,
+                flag: await loadFile(member.flag),
+            }))
+        );
 
-        return membersData;
+        return loadedMembers;
     });
 
     return members;
