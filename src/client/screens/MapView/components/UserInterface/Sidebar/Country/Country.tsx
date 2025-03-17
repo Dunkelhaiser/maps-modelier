@@ -21,7 +21,7 @@ const Country = () => {
                 <img src={country?.flag} alt="Flag" className="rounded-md" />
                 <img src={country?.coatOfArms} alt="Coat of arms" />
                 <audio controls>
-                    <source src={country?.anthem.url} />
+                    <source src={country?.anthem?.url} />
                 </audio>
             </CardContent>
         </>

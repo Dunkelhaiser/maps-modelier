@@ -75,7 +75,6 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
             coatOfArms: countryCoatOfArms.path,
             anthemName: countryAnthems.name,
             anthemPath: countryAnthems.path,
-            states: sql<string>`COALESCE(GROUP_CONCAT(${countryStates.stateId}), '')`,
             population: sql<number>`
                 COALESCE((
                     SELECT SUM(${provincePopulations.population})
@@ -90,11 +89,11 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
             ethnicities: countryEthnicities.ethnicityData,
         })
         .from(countries)
-        .leftJoin(
+        .innerJoin(
             countryNames,
             and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
         )
-        .leftJoin(
+        .innerJoin(
             countryFlags,
             and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
         )
@@ -106,7 +105,6 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
             countryAnthems,
             and(eq(countryAnthems.countryTag, countries.tag), eq(countryAnthems.mapId, countries.mapId))
         )
-        .leftJoin(countryStates, eq(countryStates.countryTag, countries.tag))
         .leftJoin(countryEthnicities, eq(countryEthnicities.countryTag, countries.tag))
         .where(and(eq(countries.mapId, mapId), eq(countries.tag, tag)))
         .groupBy(countries.tag)
@@ -117,21 +115,15 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
     const [country] = countryArr;
     const { anthemName, anthemPath, flag, coatOfArms, ...countryData } = country;
 
-    const [flagData, coatOfArmsData, anthemData] = await Promise.all([
-        loadFile(flag ?? ""),
-        loadFile(coatOfArms ?? ""),
-        loadFile(anthemPath ?? ""),
-    ]);
+    const flagData = await loadFile(flag);
+    const coatOfArmsData = coatOfArms ? await loadFile(coatOfArms) : undefined;
+    const anthemData = anthemPath ? await loadFile(anthemPath) : undefined;
 
     return {
         ...countryData,
-        name: countryData.name!,
         flag: flagData,
         coatOfArms: coatOfArmsData,
-        anthem: {
-            name: anthemName,
-            url: anthemData,
-        },
+        anthem: anthemData && anthemName ? { name: anthemName, url: anthemData } : undefined,
         ethnicities: JSON.parse(country.ethnicities as unknown as string) as EthnicityComposition[],
     };
 };

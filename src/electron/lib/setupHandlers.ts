@@ -65,7 +65,6 @@ const handlers: HandlersType = {
         addStates,
         removeStates,
         getStates: getCountriesStates,
-        // @ts-expect-error - this is a valid call
         getByTag: getCountryByTag,
         getBases: getCountriesBase,
     },

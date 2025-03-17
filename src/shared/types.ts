@@ -43,12 +43,11 @@ export interface Country {
     name: string;
     color: string;
     flag: string;
-    coatOfArms: string;
-    anthem: {
+    coatOfArms?: string;
+    anthem?: {
         name: string;
         url: string;
     };
-    states: number[];
     population: number;
     ethnicities: EthnicityComposition[];
 }

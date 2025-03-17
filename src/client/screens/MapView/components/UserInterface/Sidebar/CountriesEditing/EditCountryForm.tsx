@@ -26,7 +26,7 @@ const EditCountryForm = () => {
             color: country?.color,
             anthem: {
                 url: undefined,
-                name: country?.anthem.name ?? "",
+                name: country?.anthem?.name ?? "",
             },
             flag: undefined,
             coatOfArms: undefined,
@@ -43,12 +43,12 @@ const EditCountryForm = () => {
             color: country?.color,
             anthem: {
                 url: undefined,
-                name: country?.anthem.name ?? "",
+                name: country?.anthem?.name ?? "",
             },
             flag: undefined,
             coatOfArms: undefined,
         });
-    }, [form, country?.anthem.name, country?.color, country?.name, country?.tag]);
+    }, [form, country?.anthem?.name, country?.color, country?.name, country?.tag]);
 
     const updateCountry = useUpdateCountry(activeMap.id, selectedCountry);
 
