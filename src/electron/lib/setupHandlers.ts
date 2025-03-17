@@ -77,7 +77,6 @@ const handlers: HandlersType = {
     },
     alliances: {
         create: createAlliance,
-        // @ts-expect-error - this is a valid call
         getAll: getAllAlliances,
         // @ts-expect-error - this is a valid call
         update: updateAlliance,

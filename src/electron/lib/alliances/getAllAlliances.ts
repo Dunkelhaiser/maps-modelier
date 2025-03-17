@@ -18,15 +18,15 @@ export const getAllAlliances = async (_: Electron.IpcMainInvokeEvent, mapId: str
         })
         .from(alliances)
         .innerJoin(countries, and(eq(alliances.leader, countries.tag), eq(countries.mapId, mapId)))
-        .leftJoin(countryNames, and(eq(countries.tag, countryNames.countryTag), eq(countryNames.mapId, mapId)))
-        .leftJoin(countryFlags, and(eq(countries.tag, countryFlags.countryTag), eq(countryFlags.mapId, mapId)))
-        .leftJoin(allianceMembers, and(eq(alliances.id, allianceMembers.allianceId), eq(allianceMembers.mapId, mapId)))
+        .innerJoin(countryNames, and(eq(countries.tag, countryNames.countryTag), eq(countryNames.mapId, mapId)))
+        .innerJoin(countryFlags, and(eq(countries.tag, countryFlags.countryTag), eq(countryFlags.mapId, mapId)))
+        .innerJoin(allianceMembers, and(eq(alliances.id, allianceMembers.allianceId), eq(allianceMembers.mapId, mapId)))
         .where(eq(alliances.mapId, mapId))
         .groupBy(alliances.id, countries.tag, countryNames.commonName, countryFlags.path);
 
     const alliancesWithLeaderFlags = await Promise.all(
         alliancesArr.map(async (alliance) => {
-            const flag = await loadFile(alliance.leader.flag ?? "");
+            const flag = await loadFile(alliance.leader.flag);
             alliance.leader.flag = flag;
             return alliance;
         })
