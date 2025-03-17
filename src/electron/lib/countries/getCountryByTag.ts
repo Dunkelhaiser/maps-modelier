@@ -69,7 +69,8 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
         .with(ethnicityTotals, countryEthnicities)
         .select({
             tag: countries.tag,
-            name: countryNames.commonName,
+            commonName: countryNames.commonName,
+            officialName: countryNames.officialName,
             color: countries.color,
             flag: countryFlags.path,
             coatOfArms: countryCoatOfArms.path,
@@ -113,7 +114,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
     if (countryArr.length === 0) throw new Error("Country not found");
 
     const [country] = countryArr;
-    const { anthemName, anthemPath, flag, coatOfArms, ...countryData } = country;
+    const { anthemName, anthemPath, flag, coatOfArms, commonName, officialName, ...countryData } = country;
 
     const flagData = await loadFile(flag);
     const coatOfArmsData = coatOfArms ? await loadFile(coatOfArms) : undefined;
@@ -121,6 +122,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
 
     return {
         ...countryData,
+        name: { common: commonName, official: officialName },
         flag: flagData,
         coatOfArms: coatOfArmsData,
         anthem: anthemData && anthemName ? { name: anthemName, url: anthemData } : undefined,

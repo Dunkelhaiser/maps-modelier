@@ -40,7 +40,10 @@ export interface State {
 
 export interface Country {
     tag: string;
-    name: string;
+    name: {
+        common: string;
+        official: string | null;
+    };
     color: string;
     flag: string;
     coatOfArms?: string;

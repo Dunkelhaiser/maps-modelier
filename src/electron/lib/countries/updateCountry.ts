@@ -162,13 +162,24 @@ export const updateCountry = async (
             .from(countryStates)
             .where(and(eq(countryStates.countryTag, countryTag), eq(countryStates.mapId, mapId)));
 
+        const names = await tx
+            .select({
+                commonName: countryNames.commonName,
+                officialName: countryNames.officialName,
+            })
+            .from(countryNames)
+            .where(and(eq(countryNames.countryTag, countryTag), eq(countryNames.mapId, mapId)));
+
         const flagData = await loadFile(flagPath);
         const coatOfArmsData = await loadFile(coatOfArmsPath);
         const anthemData = await loadFile(anthemPath);
 
         return {
             ...updatedCountry,
-            name,
+            name: {
+                common: names[0].commonName,
+                official: names[0].officialName,
+            },
             states: states.map((state) => state.stateId),
             flag: flagData,
             coatOfArms: coatOfArmsData,

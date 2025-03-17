@@ -21,7 +21,7 @@ const EditCountryForm = () => {
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
         defaultValues: {
-            name: country?.name,
+            name: country?.name.common,
             tag: country?.tag,
             color: country?.color,
             anthem: {
@@ -38,7 +38,7 @@ const EditCountryForm = () => {
 
     useEffect(() => {
         form.reset({
-            name: country?.name,
+            name: country?.name.common,
             tag: country?.tag,
             color: country?.color,
             anthem: {
@@ -48,7 +48,7 @@ const EditCountryForm = () => {
             flag: undefined,
             coatOfArms: undefined,
         });
-    }, [form, country?.anthem?.name, country?.color, country?.name, country?.tag]);
+    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.tag]);
 
     const updateCountry = useUpdateCountry(activeMap.id, selectedCountry);
 
