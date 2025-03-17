@@ -16,6 +16,21 @@ export const updateAlliance = async (
 
     await checkAllianceExistence(mapId, id);
 
+    const leaderExists = await db
+        .select({
+            count: count(allianceMembers.countryTag),
+        })
+        .from(allianceMembers)
+        .where(
+            and(
+                eq(allianceMembers.mapId, mapId),
+                eq(allianceMembers.allianceId, id),
+                eq(allianceMembers.countryTag, leader)
+            )
+        );
+
+    if (leaderExists.length === 0) throw new Error("New leader must be part of alliance");
+
     const [updatedAlliance] = await db
         .update(alliances)
         .set({
