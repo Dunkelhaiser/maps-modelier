@@ -7,6 +7,7 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
 import AddMembersForm from "./AddMembersForm";
@@ -26,6 +27,14 @@ const EditAllianceForm = () => {
             type: alliance?.type as "economic" | "political" | "military",
         },
     });
+
+    useEffect(() => {
+        form.reset({
+            name: alliance?.name,
+            leader: alliance?.leader.tag,
+            type: alliance?.type as "economic" | "political" | "military",
+        });
+    }, [form, alliance?.name, alliance?.leader.tag, alliance?.type]);
 
     const { data: countries } = useGetCountriesBase(activeMap.id);
     const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance);
