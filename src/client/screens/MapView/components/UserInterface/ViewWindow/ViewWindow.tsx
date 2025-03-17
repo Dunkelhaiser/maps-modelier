@@ -64,7 +64,7 @@ const ViewWindow = () => {
                                     <button type="button" onClick={selectCountry}>
                                         <img
                                             src={country.flag}
-                                            alt={`${country.name} flag`}
+                                            alt={`${country.name.common} flag`}
                                             className="aspect-[3/2] h-8 rounded-md object-cover"
                                         />
                                     </button>
