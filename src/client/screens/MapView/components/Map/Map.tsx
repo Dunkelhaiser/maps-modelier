@@ -1,7 +1,7 @@
 import { useWindowSize } from "@hooks/useWindowSize";
 import { useGetCountriesStates, usePrefetchCountries } from "@ipc/countries";
 import { useGetProvinces } from "@ipc/provinces";
-import { useGetStates } from "@ipc/states";
+import { useGetStates, usePrefetchStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -30,6 +30,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const states = useGetStates(activeMap);
     useGetCountriesStates(activeMap);
     usePrefetchCountries(activeMap);
+    usePrefetchStates(activeMap);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);

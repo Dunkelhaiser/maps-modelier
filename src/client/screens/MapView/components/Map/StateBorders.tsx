@@ -21,7 +21,7 @@ const StateBorders = ({ state, provinces }: Props) => {
     const activeMap = useActiveMap();
     const { data: countries } = useGetCountriesStates(activeMap);
 
-    const isSelected = selectedState?.id === state.id;
+    const isSelected = selectedState === state.id;
 
     const isInSelectedCountry = useMemo(() => {
         if (activeSidebar !== "countries" || !selectedCountry || selectedState || selectedProvinces.length > 0) {

@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useDeleteState, useRenameState } from "@ipc/states";
+import { useDeleteState, useGetStateById, useRenameState } from "@ipc/states";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -11,21 +11,23 @@ import { useForm } from "react-hook-form";
 import { StateNameInput, stateNameSchema } from "src/shared/schemas/states/state";
 
 const RenameStateForm = () => {
+    const activeMap = useActiveMap();
     const selectedState = useMapStore((state) => state.selectedState)!;
+    const { data: state } = useGetStateById(activeMap, selectedState);
+
     const form = useForm<StateNameInput>({
         resolver: zodResolver(stateNameSchema),
         defaultValues: {
-            name: selectedState.name,
+            name: state?.name,
         },
     });
 
     useEffect(() => {
-        form.reset({ name: selectedState.name });
-    }, [form, selectedState.name]);
+        form.reset({ name: state?.name });
+    }, [form, state?.name]);
 
-    const activeMap = useActiveMap();
-    const renameState = useRenameState(activeMap, selectedState.id);
-    const deleteState = useDeleteState(activeMap, selectedState.id);
+    const renameState = useRenameState(activeMap, selectedState);
+    const deleteState = useDeleteState(activeMap, selectedState);
 
     const renameStateHanlder = (data: StateNameInput) => {
         renameState.mutateAsync(data);

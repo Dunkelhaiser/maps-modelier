@@ -1,6 +1,6 @@
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useAddStates, useGetCountriesStates, useRemoveStates } from "@ipc/countries";
-import { useAddProvinces, useRemoveProvinces } from "@ipc/states";
+import { useAddProvinces, useGetStateById, useRemoveProvinces } from "@ipc/states";
 import { Container } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
@@ -26,6 +26,7 @@ export const ProvincesContainer = memo(
         const mode = useMapStore((state) => state.mode);
         const activeSidebar = useSidebarStore((state) => state.activeSidebar);
         const { data: countries } = useGetCountriesStates(activeMap);
+        const { data: stateData } = useGetStateById(activeMap, selectedState);
         const addProvinces = useAddProvinces(activeMap);
         const removeProvinces = useRemoveProvinces(activeMap);
         const addStates = useAddStates(activeMap);
@@ -36,7 +37,7 @@ export const ProvincesContainer = memo(
             [selectedProvinces, id]
         );
 
-        const isInSelectedState = useMemo(() => selectedState?.provinces.includes(id) ?? false, [selectedState, id]);
+        const isInSelectedState = useMemo(() => stateData?.provinces.includes(id) ?? false, [stateData, id]);
 
         const isInSelectedCountry = useMemo(() => {
             if (activeSidebar !== "countries" || !selectedCountry || selectedState || selectedProvinces.length > 0) {
@@ -61,9 +62,11 @@ export const ProvincesContainer = memo(
             return undefined;
         }, [id, states, countries]);
 
-        const addProvincesToState = async ({ id: stateId, provinces }: State) => {
+        const addProvincesToState = async (stateId: number) => {
             const selectedStateType =
-                provinces.length > 0 ? (selectedProvinces.find((p) => provinces.includes(p.id))?.type ?? type) : null;
+                stateData && stateData.provinces.length > 0
+                    ? (selectedProvinces.find((p) => stateData.provinces.includes(p.id))?.type ?? type)
+                    : null;
 
             if (selectedStateType && type !== selectedStateType) {
                 toast.error(`Cannot add ${type} provinces to a state with ${selectedStateType} provinces`);
@@ -73,7 +76,7 @@ export const ProvincesContainer = memo(
             addProvinces.mutate({ stateId, provinces: [id] });
         };
 
-        const removeProvincesFromState = async ({ id: stateId }: State) => {
+        const removeProvincesFromState = async (stateId: number) => {
             removeProvinces.mutate({ stateId, provinces: [id] });
             const remainingSelectedProvinces = selectedProvinces.filter((p) => p.id !== id);
             useMapStore.setState({
@@ -82,8 +85,8 @@ export const ProvincesContainer = memo(
             });
         };
 
-        const handleStateEdit = async (state: State) => {
-            if (state.provinces.includes(id)) removeProvincesFromState(state);
+        const handleStateEdit = async (state: number) => {
+            if (stateData?.provinces.includes(id)) removeProvincesFromState(state);
             else addProvincesToState(state);
         };
 
@@ -100,7 +103,7 @@ export const ProvincesContainer = memo(
 
         const removeStateFromCountry = async (tag: string, stateId: number) => {
             removeStates.mutate({ countryTag: tag, states: [stateId] });
-            const deselectState = selectedState?.id === stateId;
+            const deselectState = selectedState === stateId;
             if (deselectState)
                 useMapStore.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
         };

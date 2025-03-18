@@ -38,16 +38,14 @@ export const useChangeProvinceType = (mapId: string) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "land"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "provinces", "water"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "states"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "states", selectedState] });
             const { provinceIds, type } = data;
-            if (type === "water") queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
 
             const updatedSelectedProvinces = selectedProvinces.map((province) =>
                 provinceIds.includes(province.id) ? { ...province, type } : province
             );
 
-            const updatedSelectedState = selectedState && { ...selectedState, type };
-
-            useMapStore.setState({ selectedProvinces: updatedSelectedProvinces, selectedState: updatedSelectedState });
+            useMapStore.setState({ selectedProvinces: updatedSelectedProvinces });
         },
     });
 };

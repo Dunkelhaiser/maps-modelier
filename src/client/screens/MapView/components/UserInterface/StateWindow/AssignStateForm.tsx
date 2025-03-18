@@ -10,11 +10,11 @@ const AssignStateForm = () => {
     const selectedState = useMapStore((state) => state.selectedState)!;
     const { data: countries } = useGetCountriesBase(activeMap);
     const { data: countriesStates } = useGetCountriesStates(activeMap);
-    const stateCountry = countriesStates?.find((country) => country.states.includes(selectedState.id));
+    const stateCountry = countriesStates?.find((country) => country.states.includes(selectedState));
     const assignState = useAddStates(activeMap);
 
     const assignStateHandler = (tag: string) => {
-        assignState.mutateAsync({ countryTag: tag, states: [selectedState.id] });
+        assignState.mutateAsync({ countryTag: tag, states: [selectedState] });
     };
 
     return (

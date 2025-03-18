@@ -6,7 +6,7 @@ import { queryClient } from "@/main";
 
 export interface ProvincesSlice {
     selectedProvinces: Province[];
-    selectedState: State | null;
+    selectedState: number | null;
     selectedCountry: string | null;
     selectedAlliance: number | null;
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => void;
@@ -32,7 +32,7 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
 
         if (isRightClick) {
             const selectedState = findState(province.id, get().activeMap);
-            const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap) : null;
+            const selectedCountry = selectedState ? findCountry(selectedState, get().activeMap) : null;
 
             selectCountry(selectedCountry);
             return;
@@ -52,7 +52,7 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
             }
         } else {
             const selectedState = findState(province.id, get().activeMap);
-            const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap) : null;
+            const selectedCountry = selectedState ? findCountry(selectedState, get().activeMap) : null;
 
             set({
                 selectedProvinces: [province],
@@ -84,7 +84,7 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
 
 const findState = (provinceId: number, mapId?: string | null) => {
     const [[, states]] = queryClient.getQueriesData<State[]>({ queryKey: [mapId, "states"] });
-    return states?.find((s) => s.provinces.includes(provinceId)) ?? null;
+    return states?.find((s) => s.provinces.includes(provinceId))?.id ?? null;
 };
 
 const findCountry = (stateId: number, mapId?: string | null) => {

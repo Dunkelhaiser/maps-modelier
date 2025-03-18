@@ -1,5 +1,6 @@
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetCountryByTag } from "@ipc/countries";
+import { useGetStateById } from "@ipc/states";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
@@ -17,6 +18,7 @@ const ViewWindow = () => {
     const selectCountry = useMapStore((state) => state.selectCountry).bind(null, selectedCountry);
 
     const { data: country } = useGetCountryByTag(activeMap, selectedCountry);
+    const { data: state } = useGetStateById(activeMap, selectedState);
 
     const areAllLandProvinces = selectedProvinces.every((province) => province.type === "land");
 
@@ -42,7 +44,7 @@ const ViewWindow = () => {
         <Card>
             <CardHeader className="flex flex-row items-center justify-between gap-12">
                 <CardTitle>
-                    {selectedProvinces.length > 1 ? `${selectedProvinces.length} Provinces` : selectedState?.name}
+                    {selectedProvinces.length > 1 ? `${selectedProvinces.length} Provinces` : state?.name}
                 </CardTitle>
                 <Button
                     variant="ghost"
@@ -77,13 +79,15 @@ const ViewWindow = () => {
                                     ethnicities={selectedProvinces[0].ethnicities}
                                 />
                             </div>
-                            <div>
-                                <Label>State Population</Label>
-                                <EthnicComposition
-                                    totalPopulation={selectedState!.population}
-                                    ethnicities={selectedState!.ethnicities}
-                                />
-                            </div>
+                            {state && (
+                                <div>
+                                    <Label>State Population</Label>
+                                    <EthnicComposition
+                                        totalPopulation={state.population}
+                                        ethnicities={state.ethnicities}
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
                     {selectedProvinces.length > 1 && (
