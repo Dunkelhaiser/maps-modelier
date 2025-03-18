@@ -29,6 +29,7 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
                         'name', ${ethnicities.name},
                         'population', ${provincePopulations.population}
                     )
+                    ORDER BY ${provincePopulations.population} DESC
                 )
             `.as("ethnicities"),
         })

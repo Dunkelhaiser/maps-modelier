@@ -44,6 +44,7 @@ export const getAllStates = async (_: Electron.IpcMainInvokeEvent, mapId: string
                         'name', ${ethnicityTotals.ethnicityName},
                         'population', ${ethnicityTotals.totalPopulation}
                     )
+                    ORDER BY ${ethnicityTotals.totalPopulation} DESC
                 ) FILTER (WHERE ${ethnicityTotals.ethnicityId} IS NOT NULL AND ${ethnicityTotals.totalPopulation} > 0)
             `.as("ethnicity_data"),
             })
