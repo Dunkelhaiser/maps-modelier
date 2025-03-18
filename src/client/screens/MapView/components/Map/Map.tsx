@@ -1,7 +1,7 @@
+import { usePrefetchData } from "@hooks/usePrefetchData";
 import { useWindowSize } from "@hooks/useWindowSize";
-import { useGetCountriesStates, usePrefetchCountries } from "@ipc/countries";
 import { useGetProvinces } from "@ipc/provinces";
-import { useGetStates, usePrefetchStates } from "@ipc/states";
+import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -25,12 +25,11 @@ const MAX_SCALE_MULTIPLIER = 4;
 const ZOOM_SPEED = 0.1;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
+    usePrefetchData(activeMap);
     const landProvinces = useGetProvinces(activeMap, "land");
     const waterProvinces = useGetProvinces(activeMap, "water");
     const states = useGetStates(activeMap);
-    useGetCountriesStates(activeMap);
-    usePrefetchCountries(activeMap);
-    usePrefetchStates(activeMap);
+
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);

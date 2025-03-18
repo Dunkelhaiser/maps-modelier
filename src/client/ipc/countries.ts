@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { toast } from "sonner";
 import { CreateCountryInput } from "src/shared/schemas/countries/createCountry";
 import { StatesAssignmentInput } from "src/shared/schemas/countries/states";
@@ -90,23 +89,4 @@ export const useGetCountriesTable = (mapId: string) => {
         queryKey: [mapId, "countries"],
         queryFn: async () => await window.electron.countries.getTable(mapId),
     });
-};
-
-export const usePrefetchCountries = (mapId: string) => {
-    const queryClient = useQueryClient();
-
-    const { data: countriesTable, isSuccess: isTableLoaded } = useGetCountriesTable(mapId);
-
-    useEffect(() => {
-        if (isTableLoaded && countriesTable.length > 0) {
-            countriesTable.forEach((country) => {
-                queryClient.prefetchQuery({
-                    queryKey: [mapId, "countries", country.tag],
-                    queryFn: async () => await window.electron.countries.getByTag(mapId, country.tag),
-                });
-            });
-        }
-    }, [isTableLoaded, countriesTable, mapId, queryClient]);
-
-    return { isLoaded: isTableLoaded };
 };

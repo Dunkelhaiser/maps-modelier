@@ -1,6 +1,5 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { CreateStateInput } from "src/shared/schemas/states/createState";
 import { ProvincesAssignmentInput } from "src/shared/schemas/states/provinces";
 import { StateNameInput } from "src/shared/schemas/states/state";
@@ -82,23 +81,4 @@ export const useRemoveProvinces = (mapId: string) => {
             queryClient.invalidateQueries({ queryKey: [mapId, "states", selectedState] });
         },
     });
-};
-
-export const usePrefetchStates = (mapId: string) => {
-    const queryClient = useQueryClient();
-
-    const { data: statesArr, isSuccess: isLoaded } = useGetStates(mapId);
-
-    useEffect(() => {
-        if (isLoaded && statesArr.length > 0) {
-            statesArr.forEach((state) => {
-                queryClient.prefetchQuery({
-                    queryKey: [mapId, "states", state.id],
-                    queryFn: async () => await window.electron.states.getById(mapId, state.id),
-                });
-            });
-        }
-    }, [isLoaded, statesArr, mapId, queryClient]);
-
-    return { isLoaded };
 };
