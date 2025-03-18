@@ -24,7 +24,7 @@ const CreateMapForm = () => {
     const createMapHandler = async (data: CreateMapInput) => {
         const newMap = await createMap.mutateAsync(data);
         if (newMap) {
-            setActiveMap(newMap);
+            setActiveMap(newMap.id);
             form.reset();
         }
     };

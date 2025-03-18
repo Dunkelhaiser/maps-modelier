@@ -12,7 +12,7 @@ const Alliances = () => {
     const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
-    const { data } = useGetAlliances(activeMap.id);
+    const { data } = useGetAlliances(activeMap);
 
     return (
         <>

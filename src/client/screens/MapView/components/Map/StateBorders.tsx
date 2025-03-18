@@ -19,7 +19,7 @@ const StateBorders = ({ state, provinces }: Props) => {
     const selectedProvinces = useMapStore((store) => store.selectedProvinces);
     const activeSidebar = useSidebarStore((store) => store.activeSidebar);
     const activeMap = useActiveMap();
-    const { data: countries } = useGetCountriesStates(activeMap.id);
+    const { data: countries } = useGetCountriesStates(activeMap);
 
     const isSelected = selectedState?.id === state.id;
 

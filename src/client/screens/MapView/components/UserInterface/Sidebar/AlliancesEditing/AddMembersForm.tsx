@@ -21,7 +21,7 @@ interface Props {
 const AddMembersForm = ({ members, leaderTag }: Props) => {
     const activeMap = useActiveMap();
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
-    const addMembers = useAddMembers(activeMap.id, selectedAlliance);
+    const addMembers = useAddMembers(activeMap, selectedAlliance);
 
     const defaultValues = useMemo(
         () => ({

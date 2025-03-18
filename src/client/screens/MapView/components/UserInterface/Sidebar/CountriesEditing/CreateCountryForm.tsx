@@ -23,7 +23,7 @@ const CreateCountryForm = () => {
     });
     const flagRef = form.register("flag");
 
-    const createCountry = useCreateCountry(activeMap.id);
+    const createCountry = useCreateCountry(activeMap);
 
     const createCountryHandler = async (data: CreateCountryInput) => {
         const createdCountry = await createCountry.mutateAsync(data);

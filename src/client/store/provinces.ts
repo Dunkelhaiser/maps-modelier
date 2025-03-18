@@ -31,8 +31,8 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
         const { selectCountry } = get();
 
         if (isRightClick) {
-            const selectedState = findState(province.id, get().activeMap?.id);
-            const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap?.id) : null;
+            const selectedState = findState(province.id, get().activeMap);
+            const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap) : null;
 
             selectCountry(selectedCountry);
             return;
@@ -51,8 +51,8 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
                 set({ selectedProvinces: [...selectedProvinces, province] });
             }
         } else {
-            const selectedState = findState(province.id, get().activeMap?.id);
-            const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap?.id) : null;
+            const selectedState = findState(province.id, get().activeMap);
+            const selectedCountry = selectedState ? findCountry(selectedState.id, get().activeMap) : null;
 
             set({
                 selectedProvinces: [province],
@@ -82,12 +82,12 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
     deselectAlliance: () => set({ selectedAlliance: null }),
 });
 
-const findState = (provinceId: number, mapId?: string) => {
+const findState = (provinceId: number, mapId?: string | null) => {
     const [[, states]] = queryClient.getQueriesData<State[]>({ queryKey: [mapId, "states"] });
     return states?.find((s) => s.provinces.includes(provinceId)) ?? null;
 };
 
-const findCountry = (stateId: number, mapId?: string) => {
+const findCountry = (stateId: number, mapId?: string | null) => {
     const [[, countries]] = queryClient.getQueriesData<CountryStates[]>({ queryKey: [mapId, "countries_states"] });
     return countries?.find((c) => c.states.includes(stateId))?.tag ?? null;
 };

@@ -12,7 +12,7 @@ const Countries = () => {
     const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
-    const { data } = useGetCountriesTable(activeMap.id);
+    const { data } = useGetCountriesTable(activeMap);
 
     return (
         <>

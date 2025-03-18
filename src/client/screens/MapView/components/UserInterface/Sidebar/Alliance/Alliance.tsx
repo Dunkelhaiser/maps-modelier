@@ -10,7 +10,7 @@ const Alliance = () => {
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
-    const { data: alliance } = useGetAlliance(activeMap.id, selectedAlliance);
+    const { data: alliance } = useGetAlliance(activeMap, selectedAlliance);
 
     return (
         <>

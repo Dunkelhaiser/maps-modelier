@@ -5,7 +5,6 @@ import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { MapType } from "src/shared/types";
 import "@pixi/unsafe-eval";
 import { ProvincesContainer } from "./ProvincesContainer";
 import { MemoizedStateBorders } from "./StateBorders";
@@ -13,7 +12,7 @@ import type { FederatedPointerEvent, FederatedWheelEvent } from "@pixi/events";
 import { queryClient } from "@/main";
 
 interface MapRendererProps {
-    activeMap: MapType;
+    activeMap: string;
 }
 
 interface Position {
@@ -26,11 +25,11 @@ const MAX_SCALE_MULTIPLIER = 4;
 const ZOOM_SPEED = 0.1;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
-    const landProvinces = useGetProvinces(activeMap.id, "land");
-    const waterProvinces = useGetProvinces(activeMap.id, "water");
-    const states = useGetStates(activeMap.id);
-    useGetCountriesStates(activeMap.id);
-    usePrefetchCountries(activeMap.id);
+    const landProvinces = useGetProvinces(activeMap, "land");
+    const waterProvinces = useGetProvinces(activeMap, "water");
+    const states = useGetStates(activeMap);
+    useGetCountriesStates(activeMap);
+    usePrefetchCountries(activeMap);
     const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number } | null>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);

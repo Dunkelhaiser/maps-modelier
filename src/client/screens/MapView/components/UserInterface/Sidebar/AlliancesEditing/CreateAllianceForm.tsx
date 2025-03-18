@@ -23,8 +23,8 @@ const CreateAllianceForm = () => {
         },
     });
 
-    const { data: countries } = useGetCountriesBase(activeMap.id);
-    const createAlliance = useCreateAlliance(activeMap.id);
+    const { data: countries } = useGetCountriesBase(activeMap);
+    const createAlliance = useCreateAlliance(activeMap);
 
     const createAllianceHandler = async (data: AllianceInput) => {
         const createdAlliance = await createAlliance.mutateAsync(data);

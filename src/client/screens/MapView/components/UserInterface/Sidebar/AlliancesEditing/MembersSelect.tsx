@@ -11,7 +11,7 @@ interface Props {
 
 const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) => {
     const activeMap = useActiveMap();
-    const countries = useGetCountriesBase(activeMap.id);
+    const countries = useGetCountriesBase(activeMap);
 
     return (
         <Select onValueChange={onChange} defaultValue={value} disabled={isLeader}>

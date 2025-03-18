@@ -20,7 +20,7 @@ interface Props {
 const PopulationForm = ({ ethnicities }: Props) => {
     const activeMap = useActiveMap();
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
-    const addPopulation = useAddPopulation(activeMap.id, selectedProvinces[0].id);
+    const addPopulation = useAddPopulation(activeMap, selectedProvinces[0].id);
 
     const defaultValues = useMemo(
         () => ({

@@ -10,7 +10,7 @@ const Country = () => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
-    const { data: country } = useGetCountryByTag(activeMap.id, selectedCountry);
+    const { data: country } = useGetCountryByTag(activeMap, selectedCountry);
 
     return (
         <>

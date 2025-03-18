@@ -24,8 +24,8 @@ const RenameStateForm = () => {
     }, [form, selectedState.name]);
 
     const activeMap = useActiveMap();
-    const renameState = useRenameState(activeMap.id, selectedState.id);
-    const deleteState = useDeleteState(activeMap.id, selectedState.id);
+    const renameState = useRenameState(activeMap, selectedState.id);
+    const deleteState = useDeleteState(activeMap, selectedState.id);
 
     const renameStateHanlder = (data: StateNameInput) => {
         renameState.mutateAsync(data);

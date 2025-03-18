@@ -16,7 +16,7 @@ const EditCountryForm = () => {
     const selectedCountry = useMapStore((state) => state.selectedCountry)!;
     const selectCountry = useMapStore((state) => state.selectCountry);
 
-    const { data: country } = useGetCountryByTag(activeMap.id, selectedCountry);
+    const { data: country } = useGetCountryByTag(activeMap, selectedCountry);
 
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
@@ -56,13 +56,13 @@ const EditCountryForm = () => {
         });
     }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.name.official, country?.tag]);
 
-    const updateCountry = useUpdateCountry(activeMap.id, selectedCountry);
+    const updateCountry = useUpdateCountry(activeMap, selectedCountry);
 
     const updateCountryHandler = async (data: UpdateCountryInput) => {
         await updateCountry.mutateAsync(data);
     };
 
-    const deleteCountry = useDeleteCountry(activeMap.id, selectedCountry);
+    const deleteCountry = useDeleteCountry(activeMap, selectedCountry);
 
     const deleteCountryHandler = async () => {
         await deleteCountry.mutateAsync();

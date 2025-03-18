@@ -8,10 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const AssignStateForm = () => {
     const activeMap = useActiveMap();
     const selectedState = useMapStore((state) => state.selectedState)!;
-    const { data: countries } = useGetCountriesBase(activeMap.id);
-    const { data: countriesStates } = useGetCountriesStates(activeMap.id);
+    const { data: countries } = useGetCountriesBase(activeMap);
+    const { data: countriesStates } = useGetCountriesStates(activeMap);
     const stateCountry = countriesStates?.find((country) => country.states.includes(selectedState.id));
-    const assignState = useAddStates(activeMap.id);
+    const assignState = useAddStates(activeMap);
 
     const assignStateHandler = (tag: string) => {
         assignState.mutateAsync({ countryTag: tag, states: [selectedState.id] });

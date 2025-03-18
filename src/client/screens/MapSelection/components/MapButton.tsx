@@ -15,7 +15,7 @@ const MapButton = ({ map }: Props) => {
     const [selectedMapForUpload, setSelectedMapForUpload] = useState<MapType | null>(null);
 
     const handleExistingMapSelect = async () => {
-        setActiveMap(map);
+        setActiveMap(map.id);
     };
 
     return (

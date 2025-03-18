@@ -25,11 +25,11 @@ export const ProvincesContainer = memo(
         const activeMap = useActiveMap();
         const mode = useMapStore((state) => state.mode);
         const activeSidebar = useSidebarStore((state) => state.activeSidebar);
-        const { data: countries } = useGetCountriesStates(activeMap.id);
-        const addProvinces = useAddProvinces(activeMap.id);
-        const removeProvinces = useRemoveProvinces(activeMap.id);
-        const addStates = useAddStates(activeMap.id);
-        const removeStates = useRemoveStates(activeMap.id);
+        const { data: countries } = useGetCountriesStates(activeMap);
+        const addProvinces = useAddProvinces(activeMap);
+        const removeProvinces = useRemoveProvinces(activeMap);
+        const addStates = useAddStates(activeMap);
+        const removeStates = useRemoveStates(activeMap);
 
         const isSelected = useMemo(
             () => selectedProvinces.some((selectedProvince) => selectedProvince.id === id),

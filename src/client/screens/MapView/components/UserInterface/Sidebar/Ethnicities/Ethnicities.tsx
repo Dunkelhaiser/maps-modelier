@@ -12,7 +12,7 @@ const Ethnicities = () => {
     const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
-    const { data } = useGetAllEthnicities(activeMap.id);
+    const { data } = useGetAllEthnicities(activeMap);
 
     return (
         <>
@@ -29,9 +29,9 @@ const Ethnicities = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {mode !== "viewing" && <EthnicityRowCreate mapId={activeMap.id} />}
+                        {mode !== "viewing" && <EthnicityRowCreate mapId={activeMap} />}
                         {data?.map((ethnicity) => (
-                            <EthnicityRow ethnicity={ethnicity} mapId={activeMap.id} key={ethnicity.id} />
+                            <EthnicityRow ethnicity={ethnicity} mapId={activeMap} key={ethnicity.id} />
                         ))}
                     </TableBody>
                 </Table>

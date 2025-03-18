@@ -17,7 +17,7 @@ const CreateStateForm = () => {
     });
     const activeMap = useActiveMap();
     const selectedProvince = useMapStore((state) => state.selectedProvinces);
-    const createState = useCreateState(activeMap.id);
+    const createState = useCreateState(activeMap);
 
     const createStateHanlder = (data: StateNameInput) => {
         const selectedProvincesIds = selectedProvince.map((province) => province.id);

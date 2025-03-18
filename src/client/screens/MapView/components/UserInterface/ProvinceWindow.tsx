@@ -16,7 +16,7 @@ const ProvinceWindow = ({ className }: Props) => {
     const selectedProvinces = useMapStore((state) => state.selectedProvinces);
     const deselectProvinces = useMapStore((state) => state.deselectProvinces);
     const activeMap = useActiveMap();
-    const changeProvinceType = useChangeProvinceType(activeMap.id);
+    const changeProvinceType = useChangeProvinceType(activeMap);
 
     if (selectedProvinces.length === 0) return null;
 

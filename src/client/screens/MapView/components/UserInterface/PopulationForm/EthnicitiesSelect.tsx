@@ -10,7 +10,7 @@ interface Props {
 
 const EthnicitiesSelect = ({ onChange, value, selectedEthnicities }: Props) => {
     const activeMap = useActiveMap();
-    const ethnicities = useGetAllEthnicities(activeMap.id);
+    const ethnicities = useGetAllEthnicities(activeMap);
 
     return (
         <Select onValueChange={onChange} defaultValue={String(value)}>

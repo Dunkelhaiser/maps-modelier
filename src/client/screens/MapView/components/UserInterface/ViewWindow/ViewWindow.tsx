@@ -16,7 +16,7 @@ const ViewWindow = () => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const selectCountry = useMapStore((state) => state.selectCountry).bind(null, selectedCountry);
 
-    const { data: country } = useGetCountryByTag(activeMap.id, selectedCountry);
+    const { data: country } = useGetCountryByTag(activeMap, selectedCountry);
 
     const areAllLandProvinces = selectedProvinces.every((province) => province.type === "land");
 

@@ -15,8 +15,8 @@ const EditAllianceForm = () => {
     const activeMap = useActiveMap();
     const selectAlliance = useMapStore((state) => state.selectAlliance);
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
-    const { data: alliance } = useGetAlliance(activeMap.id, selectedAlliance);
-    const { data: members } = useGetMembers(activeMap.id, selectedAlliance);
+    const { data: alliance } = useGetAlliance(activeMap, selectedAlliance);
+    const { data: members } = useGetMembers(activeMap, selectedAlliance);
 
     const form = useForm<AllianceInput>({
         resolver: zodResolver(allianceSchema),
@@ -35,7 +35,7 @@ const EditAllianceForm = () => {
         });
     }, [form, alliance?.name, alliance?.leader.tag, alliance?.type]);
 
-    const updateAlliance = useUpdateAlliance(activeMap.id, selectedAlliance);
+    const updateAlliance = useUpdateAlliance(activeMap, selectedAlliance);
 
     const updateAllianceHandler = async (data: AllianceInput) => {
         const updatedAlliance = await updateAlliance.mutateAsync(data);
