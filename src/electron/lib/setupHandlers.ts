@@ -31,6 +31,7 @@ import { addProvinces } from "./states/addProvinces.js";
 import { createState } from "./states/createState.js";
 import { deleteState } from "./states/deleteState.js";
 import { getAllStates } from "./states/getAllStates.js";
+import { getStateById } from "./states/getStateById.js";
 import { removeProvinces } from "./states/removeProvinces.js";
 import { renameState } from "./states/renameState.js";
 
@@ -50,6 +51,7 @@ const handlers: HandlersType = {
     },
     states: {
         getAll: getAllStates,
+        getById: getStateById,
         create: createState,
         rename: renameState,
         delete: deleteState,

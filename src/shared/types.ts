@@ -29,6 +29,12 @@ export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapI
     ethnicities: EthnicityComposition[];
 }
 
+export interface StateBase {
+    id: number;
+    name: string;
+    type: ProvinceType;
+}
+
 export interface State {
     id: number;
     name: string;
@@ -111,6 +117,7 @@ export interface IpcChannels {
     states: {
         getAll: (mapId: string) => Promise<State[]>;
         // getByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
+        getById: (mapId: string, id: number) => Promise<State>;
         create: (mapId: string, data: CreateStateInput) => Promise<State>;
         rename: (
             mapId: string,

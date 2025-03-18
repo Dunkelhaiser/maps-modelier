@@ -41,6 +41,7 @@ const api = {
     states: {
         getAll: (mapId: string) => invoke("states", "getAll", mapId),
         // getByProvinceId: (mapId: string, provinceId: number) => invoke("states", "getByProvinceId", mapId, provinceId),
+        getById: (mapId: string, id: number) => invoke("states", "getById", mapId, id),
         create: (mapId: string, data: CreateStateInput) => invoke("states", "create", mapId, data),
         rename: (mapId: string, stateId: number, data: StateNameInput) =>
             invoke("states", "rename", mapId, stateId, data),
