@@ -33,6 +33,7 @@ export interface StateBase {
     id: number;
     name: string;
     type: ProvinceType;
+    provinces: number[];
 }
 
 export interface State {
@@ -115,7 +116,7 @@ export interface IpcChannels {
         addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<PopulationInput>;
     };
     states: {
-        getAll: (mapId: string) => Promise<State[]>;
+        getAll: (mapId: string) => Promise<StateBase[]>;
         // getByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
         getById: (mapId: string, id: number) => Promise<State>;
         create: (mapId: string, data: CreateStateInput) => Promise<State>;

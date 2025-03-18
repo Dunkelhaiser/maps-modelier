@@ -6,10 +6,10 @@ import { useMapStore } from "@store/store";
 import { brightenColor, darkenColor } from "@utils/utils";
 import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
-import { Province, State } from "src/shared/types";
+import { Province, StateBase } from "src/shared/types";
 
 interface Props {
-    state: State;
+    state: StateBase;
     provinces: Province[];
 }
 

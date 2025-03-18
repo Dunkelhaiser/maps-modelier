@@ -7,12 +7,12 @@ import { useMapStore } from "@store/store";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
 import { toast } from "sonner";
-import { Province as ProvinceType, State } from "src/shared/types";
+import { Province as ProvinceType, StateBase } from "src/shared/types";
 import { MemoizedProvince } from "./Province";
 
 interface Props {
     province: ProvinceType;
-    states: State[];
+    states: StateBase[];
 }
 
 export const ProvincesContainer = memo(
