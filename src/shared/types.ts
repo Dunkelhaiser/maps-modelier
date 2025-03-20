@@ -18,15 +18,9 @@ export type MapType = InferSelectModel<typeof maps>;
 
 export type ProvinceType = "land" | "water";
 
-export interface EthnicityComposition {
-    id: number;
-    name: string;
-    population: number;
-}
-
 export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapId"> {
     population: number;
-    ethnicities: EthnicityComposition[];
+    ethnicities: Ethnicity[];
 }
 
 export interface StateBase {
@@ -42,7 +36,7 @@ export interface State {
     type: ProvinceType;
     provinces: number[];
     population: number;
-    ethnicities: EthnicityComposition[];
+    ethnicities: Ethnicity[];
 }
 
 export interface Country {
@@ -59,7 +53,7 @@ export interface Country {
         url: string;
     };
     population: number;
-    ethnicities: EthnicityComposition[];
+    ethnicities: Ethnicity[];
     alliances: CountryAlliance[];
 }
 
@@ -79,7 +73,7 @@ export interface Ethnicity {
     id: number;
     name: string;
     color: string;
-    totalNumber?: number;
+    population: number;
 }
 
 export interface ProvinceBase {
@@ -154,8 +148,8 @@ export interface IpcChannels {
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
-        create: (mapId: string, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
-        update: (mapId: string, id: number, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
+        create: (mapId: string, data: EthnicityInput) => Promise<Omit<Ethnicity, "population">>;
+        update: (mapId: string, id: number, data: EthnicityInput) => Promise<Omit<Ethnicity, "population">>;
         delete: (mapId: string, id: number) => Promise<void>;
     };
     alliances: {

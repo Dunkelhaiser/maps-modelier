@@ -94,7 +94,7 @@ const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
                     </form>
                 </Form>
             </TableCell>
-            <TableCell className="text-right">{ethnicity.totalNumber?.toLocaleString() ?? 0}</TableCell>
+            <TableCell className="text-right">{ethnicity.population.toLocaleString()}</TableCell>
             <TableCell className="space-x-1 text-right">
                 <Button
                     size="icon"

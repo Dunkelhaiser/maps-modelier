@@ -22,7 +22,7 @@ const EthnicityRow = ({ mapId, ethnicity }: Props) => {
                 <div className="mr-2 size-5 rounded-full" style={{ backgroundColor: ethnicity.color }} />
             </TableCell>
             <TableCell className="font-medium">{ethnicity.name}</TableCell>
-            <TableCell className="text-right">{ethnicity.totalNumber?.toLocaleString() ?? 0}</TableCell>
+            <TableCell className="text-right">{ethnicity.population.toLocaleString()}</TableCell>
             {mode !== "viewing" && (
                 <TableCell className="space-x-1 text-right">
                     <Button

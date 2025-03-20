@@ -1,9 +1,9 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ui/Tooltip";
-import { EthnicityComposition } from "src/shared/types";
+import { Ethnicity } from "src/shared/types";
 
 interface Props {
     totalPopulation: number;
-    ethnicities: EthnicityComposition[];
+    ethnicities: Ethnicity[];
 }
 
 const EthnicComposition = ({ totalPopulation, ethnicities }: Props) => {

@@ -1,5 +1,5 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
-import { CountryAlliance, EthnicityComposition } from "../../../shared/types.js";
+import { CountryAlliance, Ethnicity } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import {
     countries,
@@ -24,6 +24,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
                 countryTag: countries.tag,
                 ethnicityId: ethnicities.id,
                 ethnicityName: ethnicities.name,
+                ethnicityColor: ethnicities.color,
                 totalPopulation: sum(provincePopulations.population).as("total_population"),
             })
             .from(countries)
@@ -58,6 +59,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
                 json_object(
                     'id', ${ethnicityTotals.ethnicityId},
                     'name', ${ethnicityTotals.ethnicityName},
+                    'color', ${ethnicityTotals.ethnicityColor},
                     'population', ${ethnicityTotals.totalPopulation}
                 )
                 ORDER BY ${ethnicityTotals.totalPopulation} DESC
@@ -154,7 +156,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
         flag: flagData,
         coatOfArms: coatOfArmsData,
         anthem: anthemData && anthemName ? { name: anthemName, url: anthemData } : undefined,
-        ethnicities: JSON.parse(country.ethnicities as unknown as string) as EthnicityComposition[],
+        ethnicities: JSON.parse(country.ethnicities as unknown as string) as Ethnicity[],
         alliances: JSON.parse(country.alliances as unknown as string) as CountryAlliance[],
     };
 };

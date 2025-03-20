@@ -6,7 +6,7 @@ import { Button } from "@ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@ui/Card";
 import { Label } from "@ui/Label";
 import { X } from "lucide-react";
-import { EthnicityComposition } from "src/shared/types";
+import { Ethnicity } from "src/shared/types";
 import EthnicComposition from "./EthnicComposition";
 
 const ViewWindow = () => {
@@ -23,13 +23,14 @@ const ViewWindow = () => {
     const areAllLandProvinces = selectedProvinces.every((province) => province.type === "land");
 
     const calculateMergedEthnicities = () => {
-        const merged = new Map<number, EthnicityComposition>();
+        const merged = new Map<number, Ethnicity>();
 
         selectedProvinces.forEach((province) => {
             province.ethnicities.forEach((ethnicity) => {
                 const current = merged.get(ethnicity.id) ?? {
                     id: ethnicity.id,
                     name: ethnicity.name,
+                    color: ethnicity.color,
                     population: 0,
                 };
                 current.population += ethnicity.population;

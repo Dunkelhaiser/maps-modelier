@@ -1,5 +1,5 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
-import { EthnicityComposition } from "../../../shared/types.js";
+import { Ethnicity } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { states, stateProvinces, provincePopulations, ethnicities } from "../../db/schema.js";
 
@@ -82,6 +82,6 @@ export const getStateById = async (_: Electron.IpcMainInvokeEvent, mapId: string
     return {
         ...state,
         provinces: state.provinces ? state.provinces.split(",").map(Number) : [],
-        ethnicities: JSON.parse(state.ethnicities as unknown as string) as EthnicityComposition[],
+        ethnicities: JSON.parse(state.ethnicities as unknown as string) as Ethnicity[],
     };
 };

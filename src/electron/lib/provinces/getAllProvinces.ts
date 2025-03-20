@@ -1,13 +1,7 @@
 import { and, eq, sql, sum } from "drizzle-orm";
-import { ProvinceType } from "../../../shared/types.js";
+import { Ethnicity, ProvinceType } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { provinces, provincePopulations, ethnicities } from "../../db/schema.js";
-
-interface Ethnicity {
-    id: number;
-    name: string;
-    population: number;
-}
 
 export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: string, type?: ProvinceType) => {
     const provincesArr = await db
@@ -27,6 +21,7 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
                     json_object(
                         'id', ${ethnicities.id},
                         'name', ${ethnicities.name},
+                        'color', ${ethnicities.color},
                         'population', ${provincePopulations.population}
                     )
                     ORDER BY ${provincePopulations.population} DESC
@@ -45,11 +40,8 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
 
     return provincesArr.map((province) => ({
         ...province,
-        ethnicities: (
-            JSON.parse(province.ethnicities as unknown as string) as (
-                | Ethnicity
-                | { id: null; name: string; population: number }
-            )[]
-        ).filter((e) => e.id !== null),
+        ethnicities: (JSON.parse(province.ethnicities as unknown as string) as (Ethnicity | { id: null })[]).filter(
+            (e) => e.id !== null
+        ),
     }));
 };
