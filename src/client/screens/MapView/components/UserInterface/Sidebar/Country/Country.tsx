@@ -4,7 +4,8 @@ import { useGetCountryByTag } from "@ipc/countries";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
-import { Users, Music } from "lucide-react";
+import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "@ui/Table";
+import { Users } from "lucide-react";
 import { AllianceTag } from "./AllianceTag";
 import { EthnicityBar } from "./EthnicityBar";
 
@@ -58,10 +59,7 @@ const Country = () => {
 
                     {country.anthem && (
                         <div>
-                            <div className="flex items-center gap-1 text-xs font-medium text-slate-500">
-                                <Music size={14} />
-                                <p>National Anthem: {country.anthem.name}</p>
-                            </div>
+                            <p className="text-xs font-medium text-slate-500">National Anthem: {country.anthem.name}</p>
                             <audio controls className="mt-1 w-full">
                                 <source src={country.anthem.url} />
                             </audio>
@@ -85,38 +83,32 @@ const Country = () => {
                         <EthnicityBar ethnicities={country.ethnicities} />
                     </div>
 
-                    <div className="mt-3 max-h-40 overflow-y-auto rounded-md border border-slate-200">
-                        <table className="w-full border-collapse text-sm">
-                            <thead className="bg-slate-50">
-                                <tr>
-                                    <th className="border-b border-slate-200 p-2 text-left">Ethnicity</th>
-                                    <th className="border-b border-slate-200 p-2 text-right">Population</th>
-                                    <th className="border-b border-slate-200 p-2 text-right">Percentage</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {country.ethnicities
-                                    .sort((a, b) => b.population - a.population)
-                                    .map((ethnicity) => (
-                                        <tr key={ethnicity.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                            <td className="p-2">
-                                                <div className="flex items-center gap-2">
-                                                    <div
-                                                        className="size-3 rounded-full"
-                                                        style={{ backgroundColor: ethnicity.color }}
-                                                    />
-                                                    {ethnicity.name}
-                                                </div>
-                                            </td>
-                                            <td className="p-2 text-right">{ethnicity.population.toLocaleString()}</td>
-                                            <td className="p-2 text-right">
-                                                {((ethnicity.population / country.population) * 100).toFixed(2)}%
-                                            </td>
-                                        </tr>
-                                    ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <Table className="mt-3 max-h-40">
+                        <TableHeader>
+                            <TableHead>Ethnicity</TableHead>
+                            <TableHead className="text-right">Population</TableHead>
+                            <TableHead className="text-right">Percentage</TableHead>
+                        </TableHeader>
+                        <TableBody>
+                            {country.ethnicities.map((ethnicity) => (
+                                <TableRow key={ethnicity.id}>
+                                    <TableCell className="flex items-center gap-2">
+                                        <div
+                                            className="size-3 rounded-full"
+                                            style={{ backgroundColor: ethnicity.color }}
+                                        />
+                                        {ethnicity.name}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {ethnicity.population.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {((ethnicity.population / country.population) * 100).toFixed(2)}%
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </div>
 
                 {country.alliances.length > 0 && (
