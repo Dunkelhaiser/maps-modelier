@@ -127,7 +127,7 @@ const EditCountryForm = () => {
                                 <FormLabel>Coat of arms</FormLabel>
                                 <FormControl>
                                     <FileUpload
-                                        className="aspect-square h-36"
+                                        className="aspect-square h-36 object-contain"
                                         defaultImg={country?.coatOfArms}
                                         {...coatOfArmsRef}
                                         accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
