@@ -11,11 +11,13 @@ export const AllianceTag = ({ alliance }: Props) => {
     return (
         <button
             type="button"
-            className="flex items-center gap-1 rounded-md bg-sky-100 px-2 py-1 text-sm text-sky-800"
+            className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-sm text-muted-foreground"
             onClick={selectAlliance}
         >
             <span>{alliance.name}</span>
-            <span className="rounded-full bg-sky-200 px-1.5 py-0.5 text-xs font-medium">{alliance.type}</span>
+            <span className="rounded-full bg-muted-foreground/15 px-1.5 py-0.5 text-xs font-medium">
+                {alliance.type}
+            </span>
         </button>
     );
 };

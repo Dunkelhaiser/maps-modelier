@@ -10,8 +10,8 @@ Table.displayName = "Table";
 
 const TableHeader = forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
     ({ className, ...props }, ref) => (
-        <thead ref={ref} className={cn("bg-slate-50 [&_tr]:border-b", className)} {...props}>
-            <TableRow className="hover:bg-slate-50">{props.children}</TableRow>
+        <thead ref={ref} className={cn("bg-muted [&_tr]:border-b", className)} {...props}>
+            <TableRow className="hover:bg-muted">{props.children}</TableRow>
         </thead>
     )
 );

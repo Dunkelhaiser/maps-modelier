@@ -33,8 +33,8 @@ const Country = () => {
                 <div className="flex flex-col gap-3">
                     <div className="flex gap-3">
                         <div className="flex-1">
-                            <p className="mb-1 text-xs font-medium text-slate-500">Flag</p>
-                            <div className="overflow-hidden rounded-md border border-slate-200">
+                            <p className="mb-1 text-xs font-medium text-muted-foreground">Flag</p>
+                            <div className="overflow-hidden rounded-md border border-border">
                                 <img
                                     src={country.flag}
                                     alt={`Flag of ${country.name.common}`}
@@ -44,8 +44,8 @@ const Country = () => {
                         </div>
 
                         <div className="flex-1">
-                            <p className="mb-1 text-xs font-medium text-slate-500">Coat of Arms</p>
-                            <div className="aspect-square h-32 overflow-hidden rounded-md border border-slate-200 bg-slate-50">
+                            <p className="mb-1 text-xs font-medium text-muted-foreground">Coat of Arms</p>
+                            <div className="aspect-square h-32 overflow-hidden rounded-md border border-border bg-muted/50">
                                 {country.coatOfArms && (
                                     <img
                                         src={country.coatOfArms}
@@ -59,7 +59,9 @@ const Country = () => {
 
                     {country.anthem && (
                         <div>
-                            <p className="text-xs font-medium text-slate-500">National Anthem: {country.anthem.name}</p>
+                            <p className="text-xs font-medium text-muted-foreground">
+                                National Anthem: {country.anthem.name}
+                            </p>
                             <audio controls className="mt-1 w-full">
                                 <source src={country.anthem.url} />
                             </audio>
@@ -71,12 +73,12 @@ const Country = () => {
                     <h3 className="mb-2 text-lg font-semibold">Demographics</h3>
 
                     <div className="space-y-4">
-                        <div className="flex items-center gap-2 rounded-md bg-slate-100 p-3 shadow-sm">
-                            <div className="rounded-full bg-slate-200 p-2">
-                                <Users size={16} className="text-slate-600" />
+                        <div className="flex items-center gap-2 rounded-md bg-muted p-3 shadow-sm">
+                            <div className="rounded-full bg-muted-foreground/10 p-2">
+                                <Users size={16} className="text-muted-foreground" />
                             </div>
                             <div>
-                                <p className="text-xs text-slate-500">Population</p>
+                                <p className="text-xs text-muted-foreground">Population</p>
                                 <p className="font-medium">{country.population.toLocaleString()}</p>
                             </div>
                         </div>
