@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { TableCell, TableRow } from "@ui/Table";
 import { Check, Plus, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { EthnicityInput, ethnicitySchema } from "src/shared/schemas/ethnicities/ethnicity";
 
@@ -18,6 +18,7 @@ const EthnicityRowCreate = ({ mapId }: Props) => {
 
     return !isCreating ? (
         <TableRow className="hover:bg-card">
+            <TableCell className="" />
             <TableCell className="w-[9.25rem] font-medium" />
             <TableCell className="text-right" />
             <TableCell className="text-right">
@@ -51,8 +52,11 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
         resolver: zodResolver(ethnicitySchema),
         defaultValues: {
             name: "",
+            color: "#39654a",
         },
     });
+
+    const colorPickerRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         form.setFocus("name");
@@ -65,13 +69,38 @@ const EthnicityRowCreating = ({ mapId, stopCreating }: PropsCreating) => {
 
     return (
         <TableRow>
+            <TableCell>
+                <button
+                    type="button"
+                    style={{
+                        backgroundColor: form.watch("color"),
+                        width: "1.25rem",
+                        height: "1.25rem",
+                        borderRadius: "50%",
+                        display: "block",
+                    }}
+                    onClick={() => colorPickerRef.current?.click()}
+                />
+            </TableCell>
             <TableCell className="w-[9.25rem] font-medium">
                 <Form {...form}>
                     <form
                         id="createForm"
-                        className="grid max-w-[8.5rem] gap-4"
+                        className="max-w-[8.5rem]"
                         onSubmit={form.handleSubmit(createEthnicityHandler)}
                     >
+                        <FormField
+                            control={form.control}
+                            name="color"
+                            render={({ field }) => (
+                                <FormItem className="invisible size-0">
+                                    <FormControl>
+                                        <Input type="color" {...field} ref={colorPickerRef} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="name"

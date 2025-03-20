@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRenameEthnicity } from "@ipc/ethnicities";
+import { useUpdateEthnicity } from "@ipc/ethnicities";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { TableCell, TableRow } from "@ui/Table";
 import { Check, X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { EthnicityInput, ethnicitySchema } from "src/shared/schemas/ethnicities/ethnicity";
 import { Ethnicity } from "src/shared/types";
@@ -17,38 +17,62 @@ interface Props {
 }
 
 const EthnicityRowEdit = ({ mapId, ethnicity, stopEditing }: Props) => {
-    const renameEthnicity = useRenameEthnicity(mapId, ethnicity.id);
+    const editEthnicity = useUpdateEthnicity(mapId, ethnicity.id);
 
     const form = useForm<EthnicityInput>({
         resolver: zodResolver(ethnicitySchema),
         defaultValues: {
             name: ethnicity.name,
+            color: ethnicity.color,
         },
     });
+
+    const colorPickerRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         form.setFocus("name");
     }, [form]);
 
-    const renameEthnicityHandler = async (data: EthnicityInput) => {
-        if (data.name === ethnicity.name) {
+    const editEthnicityHandler = async (data: EthnicityInput) => {
+        if (data.name === ethnicity.name && data.color === ethnicity.color) {
             stopEditing();
             return;
         }
 
-        await renameEthnicity.mutateAsync(data);
+        await editEthnicity.mutateAsync(data);
         stopEditing();
     };
 
     return (
         <TableRow>
+            <TableCell>
+                <button
+                    type="button"
+                    style={{
+                        backgroundColor: form.watch("color"),
+                        width: "1.25rem",
+                        height: "1.25rem",
+                        borderRadius: "50%",
+                        display: "block",
+                    }}
+                    onClick={() => colorPickerRef.current?.click()}
+                />
+            </TableCell>
             <TableCell className="w-[9.25rem] font-medium">
                 <Form {...form}>
-                    <form
-                        id="renameForm"
-                        className="grid max-w-[8.5rem] gap-4"
-                        onSubmit={form.handleSubmit(renameEthnicityHandler)}
-                    >
+                    <form id="renameForm" className="max-w-[8.5rem]" onSubmit={form.handleSubmit(editEthnicityHandler)}>
+                        <FormField
+                            control={form.control}
+                            name="color"
+                            render={({ field }) => (
+                                <FormItem className="invisible size-0">
+                                    <FormControl>
+                                        <Input type="color" {...field} ref={colorPickerRef} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={form.control}
                             name="name"

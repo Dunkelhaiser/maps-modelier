@@ -47,6 +47,7 @@ export const ethnicities = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
+        color: text("color").notNull().default("#39654a"),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),

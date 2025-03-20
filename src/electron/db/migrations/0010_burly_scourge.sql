@@ -1,0 +1,1 @@
+ALTER TABLE `ethnicities` ADD `color` text DEFAULT '#39654a' NOT NULL;

@@ -18,6 +18,9 @@ const EthnicityRow = ({ mapId, ethnicity }: Props) => {
 
     return !isEditing ? (
         <TableRow className="w-[9.25rem]">
+            <TableCell className="font-medium">
+                <div className="mr-2 size-5 rounded-full" style={{ backgroundColor: ethnicity.color }} />
+            </TableCell>
             <TableCell className="font-medium">{ethnicity.name}</TableCell>
             <TableCell className="text-right">{ethnicity.totalNumber?.toLocaleString() ?? 0}</TableCell>
             {mode !== "viewing" && (

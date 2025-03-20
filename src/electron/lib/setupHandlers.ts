@@ -73,7 +73,7 @@ const handlers: HandlersType = {
     ethnicities: {
         getAll: getAllEthnicities,
         create: createEthnicity,
-        rename: renameEthnicity,
+        update: renameEthnicity,
         delete: deleteEthnicity,
     },
     alliances: {

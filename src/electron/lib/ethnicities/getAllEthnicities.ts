@@ -7,6 +7,7 @@ export const getAllEthnicities = async (_: Electron.IpcMainInvokeEvent, mapId: s
         .select({
             id: ethnicities.id,
             name: ethnicities.name,
+            color: ethnicities.color,
             totalNumber: sum(provincePopulations.population).mapWith(Number),
         })
         .from(ethnicities)

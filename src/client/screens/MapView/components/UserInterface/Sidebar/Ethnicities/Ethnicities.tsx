@@ -23,6 +23,7 @@ const Ethnicities = () => {
                 <Table>
                     <TableHeader>
                         <TableRow className="hover:bg-card">
+                            <TableHead className="w-0" />
                             <TableHead>Name</TableHead>
                             <TableHead className="text-right">Total Number</TableHead>
                             {mode !== "viewing" && <TableHead className="text-right">Actions</TableHead>}

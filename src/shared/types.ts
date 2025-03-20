@@ -78,6 +78,7 @@ export interface CountryBase {
 export interface Ethnicity {
     id: number;
     name: string;
+    color: string;
     totalNumber?: number;
 }
 
@@ -154,7 +155,7 @@ export interface IpcChannels {
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
         create: (mapId: string, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
-        rename: (mapId: string, id: number, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
+        update: (mapId: string, id: number, data: EthnicityInput) => Promise<Omit<Ethnicity, "totalNumber">>;
         delete: (mapId: string, id: number) => Promise<void>;
     };
     alliances: {

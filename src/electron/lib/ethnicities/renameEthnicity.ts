@@ -9,15 +9,16 @@ export const renameEthnicity = async (
     id: number,
     data: EthnicityInput
 ) => {
-    const { name } = await ethnicitySchema.parseAsync(data);
+    const parsedData = await ethnicitySchema.parseAsync(data);
 
     const [updatedEthnicity] = await db
         .update(ethnicities)
-        .set({ name })
+        .set(parsedData)
         .where(and(eq(ethnicities.id, id), eq(ethnicities.mapId, mapId)))
         .returning({
             id: ethnicities.id,
             name: ethnicities.name,
+            color: ethnicities.color,
         });
 
     return updatedEthnicity;
