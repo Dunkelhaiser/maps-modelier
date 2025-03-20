@@ -4,7 +4,7 @@ import { useGetAlliances } from "@ipc/alliances";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@ui/Table";
+import { Table, TableBody, TableHead, TableHeader } from "@ui/Table";
 import AllianceRow from "./AllianceRow";
 import AllianceRowCreate from "./AllianceRowCreate";
 
@@ -22,12 +22,10 @@ const Alliances = () => {
             <CardContent className="flex h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] flex-col gap-2 overflow-auto">
                 <Table>
                     <TableHeader>
-                        <TableRow className="hover:bg-card">
-                            <TableHead>Name</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead>Members</TableHead>
-                            <TableHead className="text-right">Leader</TableHead>
-                        </TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Members</TableHead>
+                        <TableHead className="text-right">Leader</TableHead>
                     </TableHeader>
                     <TableBody>
                         {mode === "editing" && <AllianceRowCreate />}
