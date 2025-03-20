@@ -1,4 +1,4 @@
-import { and, eq, sum } from "drizzle-orm";
+import { and, eq, sql, sum } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import { ethnicities, provincePopulations } from "../../db/schema.js";
 
@@ -8,7 +8,7 @@ export const getAllEthnicities = async (_: Electron.IpcMainInvokeEvent, mapId: s
             id: ethnicities.id,
             name: ethnicities.name,
             color: ethnicities.color,
-            population: sum(provincePopulations.population).mapWith(Number),
+            population: sql<number>`COALESCE(${sum(provincePopulations.population)}, 0)`.mapWith(Number),
         })
         .from(ethnicities)
         .leftJoin(
