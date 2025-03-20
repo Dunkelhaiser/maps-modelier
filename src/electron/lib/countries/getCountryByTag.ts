@@ -1,5 +1,5 @@
 import { and, desc, eq, sql, sum } from "drizzle-orm";
-import { EthnicityComposition } from "../../../shared/types.js";
+import { CountryAlliance, EthnicityComposition } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import {
     countries,
@@ -12,6 +12,8 @@ import {
     countryFlags,
     countryCoatOfArms,
     countryAnthems,
+    alliances,
+    allianceMembers,
 } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 
@@ -66,8 +68,31 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
             .groupBy(ethnicityTotals.countryTag)
     );
 
+    const countryAlliances = db.$with("country_alliances").as(
+        db
+            .select({
+                countryTag: allianceMembers.countryTag,
+                allianceData: sql<string>`
+            json_group_array(
+                json_object(
+                    'id', ${alliances.id},
+                    'name', ${alliances.name},
+                    'type', ${alliances.type}
+                )
+            ) FILTER (WHERE ${alliances.id} IS NOT NULL)
+        `.as("alliance_data"),
+            })
+            .from(allianceMembers)
+            .leftJoin(
+                alliances,
+                and(eq(alliances.id, allianceMembers.allianceId), eq(alliances.mapId, allianceMembers.mapId))
+            )
+            .where(and(eq(allianceMembers.mapId, mapId), eq(allianceMembers.countryTag, tag)))
+            .groupBy(allianceMembers.countryTag)
+    );
+
     const countryArr = await db
-        .with(ethnicityTotals, countryEthnicities)
+        .with(ethnicityTotals, countryEthnicities, countryAlliances)
         .select({
             tag: countries.tag,
             commonName: countryNames.commonName,
@@ -89,6 +114,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
                 ), 0)
             `.mapWith(Number),
             ethnicities: countryEthnicities.ethnicityData,
+            alliances: countryAlliances.allianceData,
         })
         .from(countries)
         .innerJoin(
@@ -108,6 +134,7 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
             and(eq(countryAnthems.countryTag, countries.tag), eq(countryAnthems.mapId, countries.mapId))
         )
         .leftJoin(countryEthnicities, eq(countryEthnicities.countryTag, countries.tag))
+        .leftJoin(countryAlliances, eq(countryAlliances.countryTag, countries.tag))
         .where(and(eq(countries.mapId, mapId), eq(countries.tag, tag)))
         .groupBy(countries.tag)
         .orderBy(countries.tag);
@@ -128,5 +155,6 @@ export const getCountryByTag = async (_: Electron.IpcMainInvokeEvent, mapId: str
         coatOfArms: coatOfArmsData,
         anthem: anthemData && anthemName ? { name: anthemName, url: anthemData } : undefined,
         ethnicities: JSON.parse(country.ethnicities as unknown as string) as EthnicityComposition[],
+        alliances: JSON.parse(country.alliances as unknown as string) as CountryAlliance[],
     };
 };

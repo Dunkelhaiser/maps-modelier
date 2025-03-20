@@ -60,6 +60,13 @@ export interface Country {
     };
     population: number;
     ethnicities: EthnicityComposition[];
+    alliances: CountryAlliance[];
+}
+
+export interface CountryAlliance {
+    id: number;
+    name: string;
+    type: string;
 }
 
 export interface CountryBase {
@@ -135,7 +142,7 @@ export interface IpcChannels {
             mapId: string,
             tag: string,
             data: UpdateCountryInput
-        ) => Promise<Omit<Country, "ethnicities" | "population" | "states">>;
+        ) => Promise<Omit<Country, "ethnicities" | "population" | "states" | "alliances">>;
         delete: (mapId: string, tag: string) => Promise<void>;
         addStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
         removeStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
