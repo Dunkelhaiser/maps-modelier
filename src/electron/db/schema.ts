@@ -138,7 +138,9 @@ export const stateProvinces = sqliteTable(
 export const countries = sqliteTable(
     "countries",
     {
-        tag: text("tag").notNull(),
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM countries WHERE map_id = map_id)`),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
@@ -151,14 +153,14 @@ export const countries = sqliteTable(
             .default(sql`(unixepoch())`),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.tag], name: "countries_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "countries_pk" }),
     })
 );
 
 export const countryNames = sqliteTable(
     "country_names",
     {
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
@@ -172,10 +174,10 @@ export const countryNames = sqliteTable(
             .default(sql`(unixepoch())`),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_names_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.countryId], name: "country_names_pk" }),
         countriesReference: foreignKey({
-            columns: [table.mapId, table.countryTag],
-            foreignColumns: [countries.mapId, countries.tag],
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
             name: "country_names_countries_reference",
         })
             .onDelete("cascade")
@@ -186,7 +188,7 @@ export const countryNames = sqliteTable(
 export const countryFlags = sqliteTable(
     "country_flags",
     {
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
@@ -199,10 +201,10 @@ export const countryFlags = sqliteTable(
             .default(sql`(unixepoch())`),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_flags_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.countryId], name: "country_flags_pk" }),
         countriesReference: foreignKey({
-            columns: [table.mapId, table.countryTag],
-            foreignColumns: [countries.mapId, countries.tag],
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
             name: "country_flags_countries_reference",
         })
             .onDelete("cascade")
@@ -213,7 +215,7 @@ export const countryFlags = sqliteTable(
 export const countryCoatOfArms = sqliteTable(
     "country_coat_of_arms",
     {
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
@@ -226,10 +228,10 @@ export const countryCoatOfArms = sqliteTable(
             .default(sql`(unixepoch())`),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_coat_of_arms_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.countryId], name: "country_coat_of_arms_pk" }),
         countriesReference: foreignKey({
-            columns: [table.mapId, table.countryTag],
-            foreignColumns: [countries.mapId, countries.tag],
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
             name: "country_coat_of_arms_countries_reference",
         })
             .onDelete("cascade")
@@ -240,7 +242,7 @@ export const countryCoatOfArms = sqliteTable(
 export const countryAnthems = sqliteTable(
     "country_anthems",
     {
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
@@ -254,10 +256,10 @@ export const countryAnthems = sqliteTable(
             .default(sql`(unixepoch())`),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.countryTag], name: "country_anthems_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.countryId], name: "country_anthems_pk" }),
         countriesReference: foreignKey({
-            columns: [table.mapId, table.countryTag],
-            foreignColumns: [countries.mapId, countries.tag],
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
             name: "country_anthems_countries_reference",
         })
             .onDelete("cascade")
@@ -268,7 +270,7 @@ export const countryAnthems = sqliteTable(
 export const countryStates = sqliteTable(
     "country_states",
     {
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         stateId: integer("state_id").notNull(),
         mapId: text("map_id")
             .notNull()
@@ -276,15 +278,15 @@ export const countryStates = sqliteTable(
     },
     (table) => {
         return {
-            pk: primaryKey({ columns: [table.mapId, table.countryTag, table.stateId], name: "country_states_pk" }),
+            pk: primaryKey({ columns: [table.mapId, table.countryId, table.stateId], name: "country_states_pk" }),
             statesReference: foreignKey({
                 columns: [table.mapId, table.stateId],
                 foreignColumns: [states.mapId, states.id],
                 name: "states_reference",
             }).onDelete("cascade"),
             countriesReference: foreignKey({
-                columns: [table.mapId, table.countryTag],
-                foreignColumns: [countries.mapId, countries.tag],
+                columns: [table.mapId, table.countryId],
+                foreignColumns: [countries.mapId, countries.id],
                 name: "countries_reference",
             })
                 .onDelete("cascade")
@@ -302,7 +304,7 @@ export const alliances = sqliteTable(
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
-        leader: text("leader"),
+        leader: integer("leader"),
         name: text("name").notNull(),
         type: text("type").notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
@@ -316,7 +318,7 @@ export const alliances = sqliteTable(
         pk: primaryKey({ columns: [table.mapId, table.id], name: "alliances_pk" }),
         leaderReference: foreignKey({
             columns: [table.mapId, table.leader],
-            foreignColumns: [countries.mapId, countries.tag],
+            foreignColumns: [countries.mapId, countries.id],
             name: "leader_reference",
         }).onDelete("set null"),
     })
@@ -326,21 +328,21 @@ export const allianceMembers = sqliteTable(
     "alliance_members",
     {
         allianceId: integer("alliance_id").notNull(),
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.allianceId, table.countryTag], name: "alliance_members_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.allianceId, table.countryId], name: "alliance_members_pk" }),
         alliancesReference: foreignKey({
             columns: [table.mapId, table.allianceId],
             foreignColumns: [alliances.mapId, alliances.id],
             name: "alliances_reference",
         }).onDelete("cascade"),
         countriesReference: foreignKey({
-            columns: [table.mapId, table.countryTag],
-            foreignColumns: [countries.mapId, countries.tag],
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
             name: "countries_reference",
         }).onDelete("cascade"),
     })
@@ -356,8 +358,8 @@ export const wars = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
-        aggressor: text("aggressor"),
-        defender: text("defender"),
+        aggressor: integer("aggressor"),
+        defender: integer("defender"),
         startedAt: integer("started_at", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
@@ -373,12 +375,12 @@ export const wars = sqliteTable(
         pk: primaryKey({ columns: [table.mapId, table.id], name: "wars_pk" }),
         aggressorReference: foreignKey({
             columns: [table.mapId, table.aggressor],
-            foreignColumns: [countries.mapId, countries.tag],
+            foreignColumns: [countries.mapId, countries.id],
             name: "aggressor_reference",
         }).onDelete("set null"),
         defenderReference: foreignKey({
             columns: [table.mapId, table.defender],
-            foreignColumns: [countries.mapId, countries.tag],
+            foreignColumns: [countries.mapId, countries.id],
             name: "defender_reference",
         }).onDelete("set null"),
     })
@@ -411,21 +413,21 @@ export const warParticipants = sqliteTable(
     {
         sideId: integer("side_id").notNull(),
         warId: integer("war_id").notNull(),
-        countryTag: text("country_tag").notNull(),
+        countryId: integer("country_id").notNull(),
         mapId: text("map_id")
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
     },
     (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.sideId, table.countryTag], name: "war_participants_pk" }),
+        pk: primaryKey({ columns: [table.mapId, table.sideId, table.countryId], name: "war_participants_pk" }),
         warSidesReference: foreignKey({
             columns: [table.mapId, table.warId, table.sideId],
             foreignColumns: [warSides.mapId, warSides.warId, warSides.id],
             name: "war_sides_reference",
         }).onDelete("cascade"),
         countriesReference: foreignKey({
-            columns: [table.mapId, table.countryTag],
-            foreignColumns: [countries.mapId, countries.tag],
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
             name: "countries_reference",
         }).onDelete("cascade"),
     })

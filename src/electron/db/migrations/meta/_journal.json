@@ -78,6 +78,13 @@
             "when": 1742467494462,
             "tag": "0010_burly_scourge",
             "breakpoints": true
+        },
+        {
+            "idx": 11,
+            "version": "6",
+            "when": 1742571899433,
+            "tag": "0011_blue_professor_monster",
+            "breakpoints": true
         }
     ]
 }
