@@ -25,7 +25,10 @@ const Country = () => {
             <CardHeaderWithClose onClick={closeSidebar}>
                 <div className="flex items-center gap-2">
                     <div className="size-6 rounded-full" style={{ backgroundColor: country.color }} />
-                    <CardTitle className="text-xl">{country.name.official ?? country.name.common}</CardTitle>
+                    <CardTitle className="text-xl">{country.name.common}</CardTitle>
+                    {country.name.official && (
+                        <p className="text-sm font-medium text-muted-foreground">({country.name.official})</p>
+                    )}
                 </div>
             </CardHeaderWithClose>
 
