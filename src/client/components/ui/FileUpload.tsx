@@ -1,13 +1,18 @@
 import { Input, InputProps } from "@ui/Input";
 import { cn } from "@utils/utils";
 import { CloudUpload } from "lucide-react";
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, useEffect } from "react";
 
 const FileUpload = forwardRef<
     HTMLInputElement,
     InputProps & { defaultImg?: string; object?: "cover" | "contain" | "fill" | "none" | "scale-down" }
 >(({ defaultImg, object, ...props }, ref) => {
     const [image, setImage] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (defaultImg) setImage(defaultImg);
+        else setImage(null);
+    }, [defaultImg, ref]);
 
     return (
         <label

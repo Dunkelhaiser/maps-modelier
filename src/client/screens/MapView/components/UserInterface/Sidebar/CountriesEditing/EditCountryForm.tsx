@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useDeleteCountry, useGetCountryById, useUpdateCountry } from "@ipc/countries";
@@ -40,6 +41,14 @@ const EditCountryForm = () => {
     const colorPickerRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
+        const flagInput = document.querySelector('input[name="flag"]') as HTMLInputElement;
+        const coatOfArmsInput = document.querySelector('input[name="coatOfArms"]') as HTMLInputElement;
+        const anthemInput = document.querySelector('input[name="anthem.url"]') as HTMLInputElement;
+
+        flagInput.value = "";
+        coatOfArmsInput.value = "";
+        anthemInput.value = "";
+
         form.reset({
             name: {
                 common: country?.name.common,
