@@ -7,7 +7,7 @@ interface Props {
 }
 
 const CountryRow = ({ country }: Props) => {
-    const selectCountry = useMapStore((state) => state.selectCountry).bind(null, country.tag);
+    const selectCountry = useMapStore((state) => state.selectCountry).bind(null, country.id);
 
     return (
         <TableRow className="relative w-[9.25rem]">

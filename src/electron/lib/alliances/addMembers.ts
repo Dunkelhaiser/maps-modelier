@@ -17,9 +17,9 @@ export const addMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
             .from(allianceMembers)
             .where(and(eq(allianceMembers.mapId, mapId), eq(allianceMembers.allianceId, id)));
 
-        const existingMembersTags = new Set(existingMembers.map((m) => m.countryTag));
-        const newMembersTags = new Set(members);
-        const membersIdsToRemove = [...existingMembersTags].filter((tag) => !newMembersTags.has(tag));
+        const existingMembersIds = new Set(existingMembers.map((m) => m.countryId));
+        const newMembersIds = new Set(members);
+        const membersIdsToRemove = [...existingMembersIds].filter((countryId) => !newMembersIds.has(countryId));
 
         if (membersIdsToRemove.length > 0) {
             if (alliance.leader && membersIdsToRemove.includes(alliance.leader)) {
@@ -32,14 +32,14 @@ export const addMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
                     and(
                         eq(allianceMembers.mapId, mapId),
                         eq(allianceMembers.allianceId, id),
-                        inArray(allianceMembers.countryTag, membersIdsToRemove)
+                        inArray(allianceMembers.countryId, membersIdsToRemove)
                     )
                 );
         }
 
         await tx
             .insert(allianceMembers)
-            .values(members.map((tag) => ({ mapId, allianceId: id, countryTag: tag })))
+            .values(members.map((countryId) => ({ mapId, allianceId: id, countryId })))
             .onConflictDoNothing();
     });
 };

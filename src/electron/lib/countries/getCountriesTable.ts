@@ -14,7 +14,7 @@ import { loadFile } from "../utils/loadFile.js";
 export const getCountriesTable = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
     const countriesArr = await db
         .select({
-            tag: countries.tag,
+            id: countries.id,
             name: countryNames.commonName,
             flag: countryFlags.path,
             population: sql<number>`
@@ -24,22 +24,16 @@ export const getCountriesTable = async (_: Electron.IpcMainInvokeEvent, mapId: s
                     JOIN ${stateProvinces} ON ${stateProvinces.provinceId} = ${provincePopulations.provinceId}
                     JOIN ${states} ON ${states.id} = ${stateProvinces.stateId}
                     JOIN ${countryStates} ON ${countryStates.stateId} = ${states.id}
-                    WHERE ${countryStates.countryTag} = ${countries.tag}
+                    WHERE ${countryStates.countryId} = ${countries.id}
                     AND ${provincePopulations.mapId} = ${countries.mapId}
                 ), 0)
             `.mapWith(Number),
         })
         .from(countries)
-        .innerJoin(
-            countryNames,
-            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
-        )
-        .innerJoin(
-            countryFlags,
-            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
-        )
+        .innerJoin(countryNames, and(eq(countryNames.countryId, countries.id), eq(countryNames.mapId, countries.mapId)))
+        .innerJoin(countryFlags, and(eq(countryFlags.countryId, countries.id), eq(countryFlags.mapId, countries.mapId)))
         .where(eq(countries.mapId, mapId))
-        .groupBy(countries.tag)
+        .groupBy(countries.id)
         .orderBy(countryNames.commonName);
 
     const loadedCountries = await Promise.all(

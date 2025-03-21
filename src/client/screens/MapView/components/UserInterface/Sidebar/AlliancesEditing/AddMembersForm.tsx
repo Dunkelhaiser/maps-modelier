@@ -15,17 +15,17 @@ import MembersSelect from "./MembersSelect";
 
 interface Props {
     members?: CountryBase[];
-    leaderTag?: string;
+    leaderId?: number;
 }
 
-const AddMembersForm = ({ members, leaderTag }: Props) => {
+const AddMembersForm = ({ members, leaderId }: Props) => {
     const activeMap = useActiveMap();
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
     const addMembers = useAddMembers(activeMap, selectedAlliance);
 
     const defaultValues = useMemo(
         () => ({
-            members: members?.map((member) => ({ countryTag: member.tag })) ?? [],
+            members: members?.map((member) => ({ countryId: member.id })) ?? [],
         }),
         [members]
     );
@@ -51,10 +51,10 @@ const AddMembersForm = ({ members, leaderTag }: Props) => {
     });
 
     const addMembersHandler = async (data: AddMembersFormInput) => {
-        await addMembers.mutateAsync(data.members.map((m) => m.countryTag) as AddMembersInput);
+        await addMembers.mutateAsync(data.members.map((m) => m.countryId) as AddMembersInput);
     };
 
-    const selectedMembers = form.watch("members").map((m) => m.countryTag);
+    const selectedMembers = form.watch("members").map((m) => Number(m.countryId));
 
     return (
         <Form {...form}>
@@ -64,14 +64,14 @@ const AddMembersForm = ({ members, leaderTag }: Props) => {
                     <div className="space-y-4 py-1 pr-4">
                         {membersField.map((memberField, index) => {
                             const otherSelectedMembers = selectedMembers.filter(
-                                (_, i) => i !== index && selectedMembers[i] !== ""
+                                (_, i) => i !== index && selectedMembers[i] !== -1
                             );
 
                             return (
                                 <div className="flex gap-2" key={memberField.id}>
                                     <FormField
                                         control={form.control}
-                                        name={`members.${index}.countryTag`}
+                                        name={`members.${index}.countryId`}
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
@@ -79,14 +79,14 @@ const AddMembersForm = ({ members, leaderTag }: Props) => {
                                                         onChange={field.onChange}
                                                         value={field.value}
                                                         selectedMembers={otherSelectedMembers}
-                                                        isLeader={memberField.countryTag === leaderTag}
+                                                        isLeader={memberField.countryId === leaderId}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                    {memberField.countryTag !== leaderTag && (
+                                    {memberField.countryId !== leaderId && (
                                         <Button
                                             variant="ghost"
                                             aria-label="Remove"
@@ -103,7 +103,7 @@ const AddMembersForm = ({ members, leaderTag }: Props) => {
                 </ScrollArea>
 
                 <div className="flex gap-2">
-                    <Button type="button" onClick={() => append({ countryTag: "" })}>
+                    <Button type="button" onClick={() => append({ countryId: -1 })}>
                         Add Member
                     </Button>
                     <Button isLoading={form.formState.isSubmitting} disabled={isFormUnchanged}>

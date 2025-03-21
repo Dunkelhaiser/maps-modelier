@@ -6,21 +6,15 @@ import { loadFile } from "../utils/loadFile.js";
 export const getCountriesBase = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
     const countriesArr = await db
         .select({
-            tag: countries.tag,
+            id: countries.id,
             name: countryNames.commonName,
             flag: countryFlags.path,
         })
         .from(countries)
-        .innerJoin(
-            countryNames,
-            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
-        )
-        .innerJoin(
-            countryFlags,
-            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
-        )
+        .innerJoin(countryNames, and(eq(countryNames.countryId, countries.id), eq(countryNames.mapId, countries.mapId)))
+        .innerJoin(countryFlags, and(eq(countryFlags.countryId, countries.id), eq(countryFlags.mapId, countries.mapId)))
         .where(eq(countries.mapId, mapId))
-        .groupBy(countries.tag)
+        .groupBy(countries.id)
         .orderBy(countryNames.commonName);
 
     const loadedCountries = await Promise.all(

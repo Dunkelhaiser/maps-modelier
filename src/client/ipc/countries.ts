@@ -16,11 +16,11 @@ export const useCreateCountry = (mapId: string) => {
     });
 };
 
-export const useUpdateCountry = (mapId: string, tag: string) => {
+export const useUpdateCountry = (mapId: string, id: number) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: UpdateCountryInput) => await window.electron.countries.update(mapId, tag, data),
+        mutationFn: async (data: UpdateCountryInput) => await window.electron.countries.update(mapId, id, data),
         onSuccess: () => {
             toast.success("Country updated successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, "countries_states"] });
@@ -50,11 +50,11 @@ export const useRemoveStates = (mapId: string) => {
     });
 };
 
-export const useDeleteCountry = (mapId: string, tag: string) => {
+export const useDeleteCountry = (mapId: string, id: number) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async () => await window.electron.countries.delete(mapId, tag),
+        mutationFn: async () => await window.electron.countries.delete(mapId, id),
         onSuccess: () => {
             toast.success("Country deleted successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
@@ -69,11 +69,11 @@ export const useGetCountriesStates = (mapId: string) => {
     });
 };
 
-export const useGetCountryByTag = (mapId: string, tag: string | null) => {
+export const useGetCountryById = (mapId: string, id: number | null) => {
     return useQuery({
-        queryKey: [mapId, "countries", tag],
-        queryFn: async () => (tag ? await window.electron.countries.getByTag(mapId, tag) : null),
-        enabled: Boolean(tag),
+        queryKey: [mapId, "countries", id],
+        queryFn: async () => (id ? await window.electron.countries.getById(mapId, id) : null),
+        enabled: id !== null,
     });
 };
 

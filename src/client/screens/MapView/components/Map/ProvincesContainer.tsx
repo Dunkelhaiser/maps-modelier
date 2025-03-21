@@ -44,7 +44,7 @@ export const ProvincesContainer = memo(
                 return false;
             }
 
-            const country = countries?.find((c) => c.tag === selectedCountry);
+            const country = countries?.find((c) => c.id === selectedCountry);
             if (!country) return false;
 
             const countryStates = states.filter((s) => country.states.includes(s.id));
@@ -90,7 +90,7 @@ export const ProvincesContainer = memo(
             else addProvincesToState(state);
         };
 
-        const addStateToCountry = async (tag: string, stateId: number) => {
+        const addStateToCountry = async (countryId: number, stateId: number) => {
             const stateToAdd = states.find((s) => s.id === stateId);
 
             if (stateToAdd?.type === "water") {
@@ -98,22 +98,22 @@ export const ProvincesContainer = memo(
                 return;
             }
 
-            addStates.mutate({ countryTag: tag, states: [stateId] });
+            addStates.mutate({ countryId, states: [stateId] });
         };
 
-        const removeStateFromCountry = async (tag: string, stateId: number) => {
-            removeStates.mutate({ countryTag: tag, states: [stateId] });
+        const removeStateFromCountry = async (countryId: number, stateId: number) => {
+            removeStates.mutate({ countryId, states: [stateId] });
             const deselectState = selectedState === stateId;
             if (deselectState)
                 useMapStore.setState({ selectedState: null, selectedCountry: null, selectedProvinces: [] });
         };
 
-        const handleCountryEdit = async (tag: string, stateId: number) => {
-            const country = countries?.find((c) => c.tag === tag);
+        const handleCountryEdit = async (countryId: number, stateId: number) => {
+            const country = countries?.find((c) => c.id === countryId);
             if (!country) return;
 
-            if (country.states.includes(stateId)) removeStateFromCountry(tag, stateId);
-            else addStateToCountry(tag, stateId);
+            if (country.states.includes(stateId)) removeStateFromCountry(countryId, stateId);
+            else addStateToCountry(countryId, stateId);
         };
 
         const handleProvinceClick = (event: FederatedMouseEvent) => {

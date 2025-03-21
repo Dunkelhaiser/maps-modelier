@@ -1,7 +1,7 @@
 import { z as zod } from "zod";
 
 export const statesAssignmetSchema = zod.object({
-    countryTag: zod.string().trim().length(3),
+    countryId: zod.number(),
     states: zod.array(zod.number()),
 });
 

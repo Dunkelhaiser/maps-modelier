@@ -13,24 +13,24 @@ export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
             .from(allianceMembers)
             .where(and(eq(allianceMembers.mapId, mapId), eq(allianceMembers.allianceId, id)));
 
-        const memberTags = membersArr.map((member) => member.countryTag);
+        const memberIds = membersArr.map((member) => member.countryId);
 
         const membersData = await tx
             .select({
-                tag: countries.tag,
+                id: countries.id,
                 name: countryNames.commonName,
                 flag: countryFlags.path,
             })
             .from(countries)
             .innerJoin(
                 countryNames,
-                and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
+                and(eq(countryNames.countryId, countries.id), eq(countryNames.mapId, countries.mapId))
             )
             .innerJoin(
                 countryFlags,
-                and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
+                and(eq(countryFlags.countryId, countries.id), eq(countryFlags.mapId, countries.mapId))
             )
-            .where(and(eq(countries.mapId, mapId), inArray(countries.tag, memberTags)));
+            .where(and(eq(countries.mapId, mapId), inArray(countries.id, memberIds)));
 
         const loadedMembers = await Promise.all(
             membersData.map(async (member) => ({

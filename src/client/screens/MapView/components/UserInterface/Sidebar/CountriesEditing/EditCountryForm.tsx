@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useDeleteCountry, useGetCountryByTag, useUpdateCountry } from "@ipc/countries";
+import { useDeleteCountry, useGetCountryById, useUpdateCountry } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
@@ -16,7 +16,7 @@ const EditCountryForm = () => {
     const selectedCountry = useMapStore((state) => state.selectedCountry)!;
     const selectCountry = useMapStore((state) => state.selectCountry);
 
-    const { data: country } = useGetCountryByTag(activeMap, selectedCountry);
+    const { data: country } = useGetCountryById(activeMap, selectedCountry);
 
     const form = useForm<UpdateCountryInput>({
         resolver: zodResolver(updateCountrySchema),
@@ -25,7 +25,6 @@ const EditCountryForm = () => {
                 common: country?.name.common,
                 official: country?.name.official ?? "",
             },
-            tag: country?.tag,
             color: country?.color,
             anthem: {
                 url: undefined,
@@ -46,7 +45,6 @@ const EditCountryForm = () => {
                 common: country?.name.common,
                 official: country?.name.official ?? "",
             },
-            tag: country?.tag,
             color: country?.color,
             anthem: {
                 url: undefined,
@@ -55,7 +53,7 @@ const EditCountryForm = () => {
             flag: undefined,
             coatOfArms: undefined,
         });
-    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.name.official, country?.tag]);
+    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.name.official]);
 
     const updateCountry = useUpdateCountry(activeMap, selectedCountry);
 
@@ -123,20 +121,6 @@ const EditCountryForm = () => {
                             )}
                         />
                     </div>
-
-                    <FormField
-                        control={form.control}
-                        name="tag"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tag</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter country tag" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
                 </div>
 
                 <div className="mt-2 flex flex-col gap-3">

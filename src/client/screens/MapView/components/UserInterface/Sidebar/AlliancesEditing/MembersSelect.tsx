@@ -4,8 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface Props {
     onChange: (value: string) => void;
-    value: string;
-    selectedMembers: string[];
+    value: number;
+    selectedMembers: number[];
     isLeader: boolean;
 }
 
@@ -14,15 +14,15 @@ const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) =>
     const countries = useGetCountriesBase(activeMap);
 
     return (
-        <Select onValueChange={onChange} defaultValue={value} disabled={isLeader}>
+        <Select onValueChange={onChange} defaultValue={String(value)} disabled={isLeader}>
             <SelectTrigger className="w-40">
                 <SelectValue placeholder="Member" />
             </SelectTrigger>
             <SelectContent>
                 {countries.data
-                    ?.filter((country) => country.tag === value || !selectedMembers.includes(country.tag))
+                    ?.filter((country) => country.id === value || !selectedMembers.includes(country.id))
                     .map((country) => (
-                        <SelectItem value={country.tag} key={country.tag}>
+                        <SelectItem value={String(country.id)} key={country.id}>
                             <div className="flex flex-row items-center gap-2">
                                 <img
                                     src={country.flag}

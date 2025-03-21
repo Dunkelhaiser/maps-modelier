@@ -77,13 +77,13 @@ const CreateAllianceForm = () => {
                             <FormItem>
                                 <FormLabel>Leader</FormLabel>
                                 <FormControl>
-                                    <Select onValueChange={field.onChange} value={field.value}>
+                                    <Select onValueChange={field.onChange} value={String(field.value)}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Leader" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {countries?.map((country) => (
-                                                <SelectItem key={country.tag} value={country.tag}>
+                                                <SelectItem key={country.id} value={String(country.id)}>
                                                     <div className="flex flex-row items-center gap-2">
                                                         <img
                                                             src={country.flag}

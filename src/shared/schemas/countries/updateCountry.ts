@@ -6,11 +6,6 @@ export const updateCountrySchema = zod.object({
         common: nameField({ field: "common name", min: 1, max: 50 }),
         official: nameField({ field: "official name", min: 0, max: 50 }),
     }),
-    tag: zod
-        .string()
-        .trim()
-        .toUpperCase()
-        .regex(/^[A-Z]{3}$/, { message: "Enter valid tag" }),
     color: zod
         .string()
         .trim()

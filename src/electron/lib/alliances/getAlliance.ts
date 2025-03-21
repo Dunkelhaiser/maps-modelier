@@ -9,20 +9,20 @@ export const getAlliance = async (_: Electron.IpcMainInvokeEvent, mapId: string,
             id: alliances.id,
             name: alliances.name,
             leader: {
-                tag: countries.tag,
+                id: countries.id,
                 name: countryNames.commonName,
                 flag: countryFlags.path,
             },
             type: alliances.type,
-            membersCount: count(allianceMembers.countryTag),
+            membersCount: count(allianceMembers.countryId),
         })
         .from(alliances)
-        .innerJoin(countries, and(eq(alliances.leader, countries.tag), eq(countries.mapId, mapId)))
-        .innerJoin(countryNames, and(eq(countries.tag, countryNames.countryTag), eq(countryNames.mapId, mapId)))
-        .innerJoin(countryFlags, and(eq(countries.tag, countryFlags.countryTag), eq(countryFlags.mapId, mapId)))
+        .innerJoin(countries, and(eq(alliances.leader, countries.id), eq(countries.mapId, mapId)))
+        .innerJoin(countryNames, and(eq(countries.id, countryNames.countryId), eq(countryNames.mapId, mapId)))
+        .innerJoin(countryFlags, and(eq(countries.id, countryFlags.countryId), eq(countryFlags.mapId, mapId)))
         .innerJoin(allianceMembers, and(eq(alliances.id, allianceMembers.allianceId), eq(allianceMembers.mapId, mapId)))
         .where(and(eq(alliances.mapId, mapId), eq(alliances.id, id)))
-        .groupBy(alliances.id, countries.tag, countryNames.commonName, countryFlags.path);
+        .groupBy(alliances.id, countries.id, countryNames.commonName, countryFlags.path);
 
     if (allianceArr.length === 0) throw new Error("Alliance not found");
     const [alliance] = allianceArr;

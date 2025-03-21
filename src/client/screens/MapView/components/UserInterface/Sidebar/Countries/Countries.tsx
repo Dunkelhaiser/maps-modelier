@@ -28,7 +28,7 @@ const Countries = () => {
                     </TableHeader>
                     <TableBody>
                         {mode === "editing" && <CountryRowCreate />}
-                        {data?.map((country) => <CountryRow country={country} key={country.tag} />)}
+                        {data?.map((country) => <CountryRow country={country} key={country.id} />)}
                     </TableBody>
                 </Table>
             </CardContent>

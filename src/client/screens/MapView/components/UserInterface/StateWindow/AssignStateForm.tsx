@@ -13,20 +13,20 @@ const AssignStateForm = () => {
     const stateCountry = countriesStates?.find((country) => country.states.includes(selectedState));
     const assignState = useAddStates(activeMap);
 
-    const assignStateHandler = (tag: string) => {
-        assignState.mutateAsync({ countryTag: tag, states: [selectedState] });
+    const assignStateHandler = (countryId: string) => {
+        assignState.mutateAsync({ countryId: Number(countryId), states: [selectedState] });
     };
 
     return (
         <FormItem>
             <Label>Owner</Label>
-            <Select onValueChange={assignStateHandler} value={stateCountry?.tag}>
+            <Select onValueChange={assignStateHandler} value={String(stateCountry?.id)}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="State Owner" />
                 </SelectTrigger>
                 <SelectContent>
                     {countries?.map((country) => (
-                        <SelectItem key={country.tag} value={country.tag}>
+                        <SelectItem key={country.id} value={String(country.id)}>
                             <div className="flex flex-row items-center gap-2">
                                 <img
                                     src={country.flag}

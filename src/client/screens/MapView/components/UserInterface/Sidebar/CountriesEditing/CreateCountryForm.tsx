@@ -16,7 +16,6 @@ const CreateCountryForm = () => {
         resolver: zodResolver(createCountrySchema),
         defaultValues: {
             name: "",
-            tag: "",
             color: "#39654a",
             flag: undefined,
         },
@@ -27,7 +26,7 @@ const CreateCountryForm = () => {
 
     const createCountryHandler = async (data: CreateCountryInput) => {
         const createdCountry = await createCountry.mutateAsync(data);
-        selectCountry(createdCountry.tag);
+        selectCountry(createdCountry.id);
     };
 
     return (
@@ -65,34 +64,19 @@ const CreateCountryForm = () => {
                         )}
                     />
                 </div>
-                <div className="flex flex-row gap-2">
-                    <FormField
-                        control={form.control}
-                        name="tag"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Tag</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter country tag" className="h-8" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="color"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Color</FormLabel>
-                                <FormControl>
-                                    <Input type="color" className="h-8 w-12" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                <FormField
+                    control={form.control}
+                    name="color"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Color</FormLabel>
+                            <FormControl>
+                                <Input type="color" className="h-8 w-12" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <Button isLoading={form.formState.isSubmitting}>Create Country</Button>
             </form>
         </Form>

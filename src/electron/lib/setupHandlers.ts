@@ -13,7 +13,7 @@ import { deleteCountry } from "./countries/deleteCountry.js";
 import { getCountriesBase } from "./countries/getCountriesBase.js";
 import { getCountriesStates } from "./countries/getCountriesStates.js";
 import { getCountriesTable } from "./countries/getCountriesTable.js";
-import { getCountryByTag } from "./countries/getCountryByTag.js";
+import { getCountryById } from "./countries/getCountryById.js";
 import { removeStates } from "./countries/removeStates.js";
 import { updateCountry } from "./countries/updateCountry.js";
 import { createEthnicity } from "./ethnicities/createEthnicity.js";
@@ -67,7 +67,7 @@ const handlers: HandlersType = {
         addStates,
         removeStates,
         getStates: getCountriesStates,
-        getByTag: getCountryByTag,
+        getById: getCountryById,
         getBases: getCountriesBase,
     },
     ethnicities: {

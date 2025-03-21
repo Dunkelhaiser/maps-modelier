@@ -1,5 +1,5 @@
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useGetCountryByTag } from "@ipc/countries";
+import { useGetCountryById } from "@ipc/countries";
 import { useGetStateById } from "@ipc/states";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
@@ -17,7 +17,7 @@ const ViewWindow = () => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const selectCountry = useMapStore((state) => state.selectCountry).bind(null, selectedCountry);
 
-    const { data: country } = useGetCountryByTag(activeMap, selectedCountry);
+    const { data: country } = useGetCountryById(activeMap, selectedCountry);
     const { data: state } = useGetStateById(activeMap, selectedState);
 
     const areAllLandProvinces = selectedProvinces.every((province) => province.type === "land");

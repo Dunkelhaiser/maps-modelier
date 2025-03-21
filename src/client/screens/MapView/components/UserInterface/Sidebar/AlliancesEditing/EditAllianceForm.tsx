@@ -22,7 +22,7 @@ const EditAllianceForm = () => {
         resolver: zodResolver(allianceSchema),
         defaultValues: {
             name: alliance?.name,
-            leader: alliance?.leader.tag,
+            leader: alliance?.leader.id,
             type: alliance?.type as "economic" | "political" | "military",
         },
     });
@@ -30,10 +30,10 @@ const EditAllianceForm = () => {
     useEffect(() => {
         form.reset({
             name: alliance?.name,
-            leader: alliance?.leader.tag,
+            leader: alliance?.leader.id,
             type: alliance?.type as "economic" | "political" | "military",
         });
-    }, [form, alliance?.name, alliance?.leader.tag, alliance?.type]);
+    }, [form, alliance?.name, alliance?.leader.id, alliance?.type]);
 
     const updateAlliance = useUpdateAlliance(activeMap, selectedAlliance);
 
@@ -89,13 +89,13 @@ const EditAllianceForm = () => {
                                 <FormItem>
                                     <FormLabel>Leader</FormLabel>
                                     <FormControl>
-                                        <Select onValueChange={field.onChange} value={field.value}>
+                                        <Select onValueChange={field.onChange} value={String(field.value)}>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Leader" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {members?.map((country) => (
-                                                    <SelectItem key={country.tag} value={country.tag}>
+                                                    <SelectItem key={country.id} value={String(country.id)}>
                                                         <div className="flex flex-row items-center gap-2">
                                                             <img
                                                                 src={country.flag}
@@ -117,7 +117,7 @@ const EditAllianceForm = () => {
                     <Button isLoading={form.formState.isSubmitting}>Save</Button>
                 </form>
             </Form>
-            <AddMembersForm members={members} leaderTag={alliance?.leader.tag} />
+            <AddMembersForm members={members} leaderId={alliance?.leader.id} />
         </>
     );
 };

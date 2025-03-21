@@ -29,8 +29,8 @@ export const usePrefetchData = (mapId: string) => {
         if (isCountriesLoaded && countriesArr.length > 0) {
             countriesArr.forEach((country) => {
                 queryClient.prefetchQuery({
-                    queryKey: [mapId, "countries", country.tag],
-                    queryFn: async () => await window.electron.countries.getByTag(mapId, country.tag),
+                    queryKey: [mapId, "countries", country.id],
+                    queryFn: async () => await window.electron.countries.getById(mapId, country.id),
                 });
             });
         }

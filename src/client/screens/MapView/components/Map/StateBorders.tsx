@@ -28,7 +28,7 @@ const StateBorders = ({ state, provinces }: Props) => {
             return false;
         }
 
-        const country = countries?.find((c) => c.tag === selectedCountry);
+        const country = countries?.find((c) => c.id === selectedCountry);
         return country?.states.includes(state.id) ?? false;
     }, [activeSidebar, selectedCountry, selectedState, selectedProvinces, state.id, countries]);
 

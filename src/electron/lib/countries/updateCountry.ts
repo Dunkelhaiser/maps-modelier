@@ -17,7 +17,7 @@ import { saveFile } from "../utils/saveFile.js";
 export const updateCountry = async (
     _: Electron.IpcMainInvokeEvent,
     mapId: string,
-    countryTag: string,
+    id: number,
     input: UpdateCountryInput
 ) => {
     const { mapId: mapIdCol, createdAt, updatedAt, ...countryCols } = getTableColumns(countries);
@@ -26,23 +26,23 @@ export const updateCountry = async (
     const existingCountry = await db
         .select()
         .from(countries)
-        .where(and(eq(countries.tag, countryTag), eq(countries.mapId, mapId)));
+        .where(and(eq(countries.id, id), eq(countries.mapId, mapId)));
 
-    if (existingCountry.length === 0) throw new Error(`Country with tag ${countryTag} not found`);
+    if (existingCountry.length === 0) throw new Error(`Country not found`);
 
     const existingFlagArr = await db
         .select({
             path: countryFlags.path,
         })
         .from(countryFlags)
-        .where(and(eq(countryFlags.countryTag, countryTag), eq(countryFlags.mapId, mapId)));
+        .where(and(eq(countryFlags.countryId, id), eq(countryFlags.mapId, mapId)));
 
     const existingCoatOfArmsArr = await db
         .select({
             path: countryCoatOfArms.path,
         })
         .from(countryCoatOfArms)
-        .where(and(eq(countryCoatOfArms.countryTag, countryTag), eq(countryCoatOfArms.mapId, mapId)));
+        .where(and(eq(countryCoatOfArms.countryId, id), eq(countryCoatOfArms.mapId, mapId)));
 
     const existingAnthemArr = await db
         .select({
@@ -50,13 +50,13 @@ export const updateCountry = async (
             path: countryAnthems.path,
         })
         .from(countryAnthems)
-        .where(and(eq(countryAnthems.countryTag, countryTag), eq(countryAnthems.mapId, mapId)));
+        .where(and(eq(countryAnthems.countryId, id), eq(countryAnthems.mapId, mapId)));
 
     const existingFlag = existingFlagArr.length === 0 ? null : existingFlagArr[0];
     const existingCoatOfArms = existingCoatOfArmsArr.length === 0 ? null : existingCoatOfArmsArr[0];
     const existingAnthem = existingAnthemArr.length === 0 ? null : existingAnthemArr[0];
 
-    const countryFolder = ["media", mapId, countryTag];
+    const countryFolder = ["media", mapId, `${id}`];
 
     const { name, flag: flagInput, coatOfArms: coatOfArmsInput, anthem: anthemInput, ...countryData } = attributes;
 
@@ -66,19 +66,19 @@ export const updateCountry = async (
             .set({
                 ...countryData,
             })
-            .where(and(eq(countries.tag, countryTag), eq(countries.mapId, mapId)))
+            .where(and(eq(countries.id, id), eq(countries.mapId, mapId)))
             .returning(countryCols);
 
         await tx
             .insert(countryNames)
             .values({
                 mapId,
-                countryTag,
+                countryId: id,
                 commonName: name.common,
                 officialName: name.official.length > 0 ? name.official : null,
             })
             .onConflictDoUpdate({
-                target: [countryNames.mapId, countryNames.countryTag],
+                target: [countryNames.mapId, countryNames.countryId],
                 set: {
                     commonName: name.common,
                     officialName: name.official.length > 0 ? name.official : null,
@@ -98,11 +98,11 @@ export const updateCountry = async (
                 .insert(countryFlags)
                 .values({
                     mapId,
-                    countryTag,
+                    countryId: id,
                     path: flagPath,
                 })
                 .onConflictDoUpdate({
-                    target: [countryFlags.mapId, countryFlags.countryTag],
+                    target: [countryFlags.mapId, countryFlags.countryId],
                     set: {
                         path: flagPath,
                     },
@@ -121,11 +121,11 @@ export const updateCountry = async (
                 .insert(countryCoatOfArms)
                 .values({
                     mapId,
-                    countryTag,
+                    countryId: id,
                     path: coatOfArmsPath,
                 })
                 .onConflictDoUpdate({
-                    target: [countryCoatOfArms.mapId, countryCoatOfArms.countryTag],
+                    target: [countryCoatOfArms.mapId, countryCoatOfArms.countryId],
                     set: {
                         path: coatOfArmsPath,
                     },
@@ -144,12 +144,12 @@ export const updateCountry = async (
                 .insert(countryAnthems)
                 .values({
                     mapId,
-                    countryTag,
+                    countryId: id,
                     name: anthemInput.name,
                     path: anthemPath,
                 })
                 .onConflictDoUpdate({
-                    target: [countryAnthems.mapId, countryAnthems.countryTag],
+                    target: [countryAnthems.mapId, countryAnthems.countryId],
                     set: {
                         name: anthemInput.name,
                         path: anthemPath,
@@ -160,7 +160,7 @@ export const updateCountry = async (
         const states = await tx
             .select()
             .from(countryStates)
-            .where(and(eq(countryStates.countryTag, countryTag), eq(countryStates.mapId, mapId)));
+            .where(and(eq(countryStates.countryId, id), eq(countryStates.mapId, mapId)));
 
         const names = await tx
             .select({
@@ -168,7 +168,7 @@ export const updateCountry = async (
                 officialName: countryNames.officialName,
             })
             .from(countryNames)
-            .where(and(eq(countryNames.countryTag, countryTag), eq(countryNames.mapId, mapId)));
+            .where(and(eq(countryNames.countryId, id), eq(countryNames.mapId, mapId)));
 
         const flagData = await loadFile(flagPath);
         const coatOfArmsData = await loadFile(coatOfArmsPath);

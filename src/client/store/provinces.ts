@@ -7,11 +7,11 @@ import { queryClient } from "@/main";
 export interface ProvincesSlice {
     selectedProvinces: Province[];
     selectedState: number | null;
-    selectedCountry: string | null;
+    selectedCountry: number | null;
     selectedAlliance: number | null;
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => void;
     deselectProvinces: () => void;
-    selectCountry: (tag: string | null) => void;
+    selectCountry: (id: number | null) => void;
     selectAlliance: (alliance: number | null) => void;
     deselectAlliance: () => void;
 }
@@ -69,9 +69,9 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
             selectedCountry: null,
         }),
 
-    selectCountry: (tag) => {
+    selectCountry: (id) => {
         useSidebarStore.getState().openSidebar("countries");
-        set({ selectedCountry: tag });
+        set({ selectedCountry: id });
     },
 
     selectAlliance: (alliance) => {
@@ -89,5 +89,5 @@ const findState = (provinceId: number, mapId?: string | null) => {
 
 const findCountry = (stateId: number, mapId?: string | null) => {
     const [[, countries]] = queryClient.getQueriesData<CountryStates[]>({ queryKey: [mapId, "countries_states"] });
-    return countries?.find((c) => c.states.includes(stateId))?.tag ?? null;
+    return countries?.find((c) => c.states.includes(stateId))?.id ?? null;
 };

@@ -18,14 +18,14 @@ export const updateAlliance = async (
 
     const leaderExists = await db
         .select({
-            count: count(allianceMembers.countryTag),
+            count: count(allianceMembers.countryId),
         })
         .from(allianceMembers)
         .where(
             and(
                 eq(allianceMembers.mapId, mapId),
                 eq(allianceMembers.allianceId, id),
-                eq(allianceMembers.countryTag, leader)
+                eq(allianceMembers.countryId, leader)
             )
         );
 
@@ -41,27 +41,21 @@ export const updateAlliance = async (
 
     const [leaderData] = await db
         .select({
-            tag: countries.tag,
+            id: countries.id,
             name: countryNames.commonName,
             flag: countryFlags.path,
         })
         .from(countries)
-        .innerJoin(
-            countryNames,
-            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
-        )
-        .innerJoin(
-            countryFlags,
-            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
-        )
-        .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
+        .innerJoin(countryNames, and(eq(countryNames.countryId, countries.id), eq(countryNames.mapId, countries.mapId)))
+        .innerJoin(countryFlags, and(eq(countryFlags.countryId, countries.id), eq(countryFlags.mapId, countries.mapId)))
+        .where(and(eq(countries.mapId, mapId), eq(countries.id, leader)));
 
     const flag = await loadFile(leaderData.flag);
     leaderData.flag = flag;
 
     const [membersCount] = await db
         .select({
-            count: count(allianceMembers.countryTag),
+            count: count(allianceMembers.countryId),
         })
         .from(allianceMembers)
         .where(and(eq(allianceMembers.mapId, mapId), eq(allianceMembers.allianceId, id)));

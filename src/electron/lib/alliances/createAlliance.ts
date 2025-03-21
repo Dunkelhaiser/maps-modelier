@@ -18,20 +18,14 @@ export const createAlliance = async (_: Electron.IpcMainInvokeEvent, mapId: stri
 
     const [leaderData] = await db
         .select({
-            tag: countries.tag,
+            id: countries.id,
             name: countryNames.commonName,
             flag: countryFlags.path,
         })
         .from(countries)
-        .innerJoin(
-            countryNames,
-            and(eq(countryNames.countryTag, countries.tag), eq(countryNames.mapId, countries.mapId))
-        )
-        .innerJoin(
-            countryFlags,
-            and(eq(countryFlags.countryTag, countries.tag), eq(countryFlags.mapId, countries.mapId))
-        )
-        .where(and(eq(countries.mapId, mapId), eq(countries.tag, leader)));
+        .innerJoin(countryNames, and(eq(countryNames.countryId, countries.id), eq(countryNames.mapId, countries.mapId)))
+        .innerJoin(countryFlags, and(eq(countryFlags.countryId, countries.id), eq(countryFlags.mapId, countries.mapId)))
+        .where(and(eq(countries.mapId, mapId), eq(countries.id, leader)));
 
     const flag = await loadFile(leaderData.flag);
 
@@ -40,13 +34,13 @@ export const createAlliance = async (_: Electron.IpcMainInvokeEvent, mapId: stri
     await db.insert(allianceMembers).values({
         mapId,
         allianceId: createdAlliance.id,
-        countryTag: leader,
+        countryId: leader,
     });
 
     return {
         ...createdAlliance,
         leader: {
-            tag: leaderData.tag,
+            id: leaderData.id,
             name: leaderData.name,
             flag: leaderData.flag,
         },
