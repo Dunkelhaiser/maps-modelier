@@ -75,6 +75,7 @@ const api = {
             invoke("alliances", "addMembers", mapId, id, members),
         get: (mapId: string, id: number) => invoke("alliances", "get", mapId, id),
         getMembers: (mapId: string, id: number) => invoke("alliances", "getMembers", mapId, id),
+        delete: (mapId: string, id: number) => invoke("alliances", "delete", mapId, id),
     },
 };
 

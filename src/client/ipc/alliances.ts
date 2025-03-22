@@ -59,3 +59,15 @@ export const useAddMembers = (mapId: string, id: number) => {
         },
     });
 };
+
+export const useDeleteAlliance = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => await window.electron.alliances.delete(mapId, id),
+        onSuccess: () => {
+            toast.success("Alliance deleted successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, "alliances"] });
+        },
+    });
+};
