@@ -30,7 +30,8 @@ export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
                 countryFlags,
                 and(eq(countryFlags.countryId, countries.id), eq(countryFlags.mapId, countries.mapId))
             )
-            .where(and(eq(countries.mapId, mapId), inArray(countries.id, memberIds)));
+            .where(and(eq(countries.mapId, mapId), inArray(countries.id, memberIds)))
+            .orderBy(countryNames.commonName);
 
         const loadedMembers = await Promise.all(
             membersData.map(async (member) => ({
