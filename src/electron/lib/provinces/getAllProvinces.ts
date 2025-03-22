@@ -29,11 +29,11 @@ export const getAllProvinces = async (_: Electron.IpcMainInvokeEvent, mapId: str
             `.as("ethnicities"),
         })
         .from(provinces)
-        .leftJoin(provincePopulations, eq(provinces.id, provincePopulations.provinceId))
         .leftJoin(
-            ethnicities,
-            and(eq(ethnicities.id, provincePopulations.ethnicityId), eq(ethnicities.mapId, provincePopulations.mapId))
+            provincePopulations,
+            and(eq(provinces.id, provincePopulations.provinceId), eq(provincePopulations.mapId, mapId))
         )
+        .leftJoin(ethnicities, and(eq(ethnicities.id, provincePopulations.ethnicityId), eq(ethnicities.mapId, mapId)))
         .where(and(eq(provinces.mapId, mapId), type ? eq(provinces.type, type) : undefined))
         .orderBy(provinces.id)
         .groupBy(provinces.id);
