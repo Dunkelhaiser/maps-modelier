@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useDeleteCountry, useGetCountryById, useUpdateCountry } from "@ipc/countries";
@@ -41,13 +40,16 @@ const EditCountryForm = () => {
     const colorPickerRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        const flagInput = document.querySelector('input[name="flag"]') as HTMLInputElement;
-        const coatOfArmsInput = document.querySelector('input[name="coatOfArms"]') as HTMLInputElement;
-        const anthemInput = document.querySelector('input[name="anthem.url"]') as HTMLInputElement;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        const flagInput = document.querySelector('input[name="flag"]') as HTMLInputElement | null;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        const coatOfArmsInput = document.querySelector('input[name="coatOfArms"]') as HTMLInputElement | null;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        const anthemInput = document.querySelector('input[name="anthem.url"]') as HTMLInputElement | null;
 
-        flagInput.value = "";
-        coatOfArmsInput.value = "";
-        anthemInput.value = "";
+        if (flagInput) flagInput.value = "";
+        if (coatOfArmsInput) coatOfArmsInput.value = "";
+        if (anthemInput) anthemInput.value = "";
 
         form.reset({
             name: {
