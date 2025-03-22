@@ -14,14 +14,14 @@ const CountriesEditing = () => {
         <>
             <CardHeaderWithClose onClick={closeSidebar}>
                 <div className="flex items-center gap-2">
-                    {selectedCountry !== "create" && <Pencil size={18} className="text-primary" />}
+                    {selectedCountry !== -1 && <Pencil size={18} className="text-primary" />}
                     <CardTitle className="text-xl">
-                        {selectedCountry === "create" ? "Create Country" : "Edit Country"}
+                        {selectedCountry === -1 ? "Create Country" : "Edit Country"}
                     </CardTitle>
                 </div>
             </CardHeaderWithClose>
             <CardContent className="h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] overflow-auto">
-                {selectedCountry === "create" ? <CreateCountryForm /> : <EditCountryForm />}
+                {selectedCountry === -1 ? <CreateCountryForm /> : <EditCountryForm />}
             </CardContent>
         </>
     );

@@ -4,7 +4,7 @@ import { TableCell, TableRow } from "@ui/Table";
 import { Plus } from "lucide-react";
 
 const CountryRowCreate = () => {
-    const createCountry = useMapStore((state) => state.selectCountry).bind(null, "create");
+    const createCountry = useMapStore((state) => state.selectCountry).bind(null, -1);
 
     return (
         <TableRow className="hover:bg-card">
