@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { ScrollArea } from "@ui/ScrollArea";
-import { X } from "lucide-react";
+import { Plus, Save, X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { PopulationFormInput, populationFormSchema, PopulationInput } from "src/shared/schemas/provinces/population";
@@ -113,13 +113,20 @@ const PopulationForm = ({ ethnicities }: Props) => {
 
                     <div className="flex gap-2">
                         <Button
+                            className="flex-1 gap-2"
                             type="button"
                             onClick={() => append({ ethnicityId: 0, population: 0 })}
                             disabled={populationsField.length >= 10}
                         >
+                            <Plus />
                             Add Ethnicity
                         </Button>
-                        <Button isLoading={form.formState.isSubmitting} disabled={isFormUnchanged}>
+                        <Button
+                            className="flex-1 gap-2"
+                            isLoading={form.formState.isSubmitting}
+                            disabled={isFormUnchanged}
+                        >
+                            <Save />
                             Save
                         </Button>
                     </div>

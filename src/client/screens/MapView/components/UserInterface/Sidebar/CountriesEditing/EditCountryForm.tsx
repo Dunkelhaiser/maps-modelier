@@ -211,7 +211,7 @@ const EditCountryForm = () => {
 
                 <div className="mt-6 flex gap-2">
                     <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
-                        <Save size={16} />
+                        <Save />
                         Save Changes
                     </Button>
 
@@ -222,7 +222,7 @@ const EditCountryForm = () => {
                         onClick={deleteCountryHandler}
                         isLoading={deleteCountry.isPending}
                     >
-                        <Trash size={16} />
+                        <Trash />
                     </Button>
                 </div>
             </form>

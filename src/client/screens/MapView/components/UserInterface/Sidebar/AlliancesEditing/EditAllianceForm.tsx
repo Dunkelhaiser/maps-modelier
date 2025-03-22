@@ -6,6 +6,7 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
+import { Save } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
@@ -114,7 +115,10 @@ const EditAllianceForm = () => {
                             )}
                         />
                     </div>
-                    <Button isLoading={form.formState.isSubmitting}>Save</Button>
+                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
+                        <Save />
+                        Save Changes
+                    </Button>
                 </form>
             </Form>
             <AddMembersForm members={members} leaderId={alliance?.leader.id} />

@@ -6,7 +6,7 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Label } from "@ui/Label";
 import { ScrollArea } from "@ui/ScrollArea";
-import { X } from "lucide-react";
+import { Plus, Save, X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { AddMembersFormInput, addMembersFormSchema, AddMembersInput } from "src/shared/schemas/alliances/addMembers";
@@ -103,11 +103,13 @@ const AddMembersForm = ({ members, leaderId }: Props) => {
                 </ScrollArea>
 
                 <div className="flex gap-2">
-                    <Button type="button" onClick={() => append({ countryId: -1 })}>
+                    <Button type="button" onClick={() => append({ countryId: -1 })} className="flex-1 gap-2">
+                        <Plus />
                         Add Member
                     </Button>
-                    <Button isLoading={form.formState.isSubmitting} disabled={isFormUnchanged}>
-                        Save
+                    <Button isLoading={form.formState.isSubmitting} disabled={isFormUnchanged} className="flex-1 gap-2">
+                        <Save />
+                        Save Changes
                     </Button>
                 </div>
             </form>

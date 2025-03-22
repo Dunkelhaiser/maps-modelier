@@ -5,7 +5,7 @@ import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
-import { Trash } from "lucide-react";
+import { Save, Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { StateNameInput, stateNameSchema } from "src/shared/schemas/states/state";
@@ -50,7 +50,10 @@ const RenameStateForm = () => {
                     )}
                 />
                 <div className="flex flex-row justify-between gap-4">
-                    <Button isLoading={form.formState.isSubmitting}>Rename State</Button>
+                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
+                        <Save />
+                        Rename State
+                    </Button>
                     <Button
                         type="button"
                         variant="destructive"
