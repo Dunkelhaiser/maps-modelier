@@ -1,20 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useDeleteCountry, useGetCountryById, useUpdateCountry } from "@ipc/countries";
+import { useGetCountryById, useUpdateCountry } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
-import { Trash, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateCountryInput, updateCountrySchema } from "src/shared/schemas/countries/updateCountry";
+import DeleteCountryDialog from "./DeleteCountryDialog";
 
 const EditCountryForm = () => {
     const activeMap = useActiveMap();
     const selectedCountry = useMapStore((state) => state.selectedCountry)!;
-    const selectCountry = useMapStore((state) => state.selectCountry);
 
     const { data: country } = useGetCountryById(activeMap, selectedCountry);
 
@@ -65,13 +65,6 @@ const EditCountryForm = () => {
 
     const updateCountryHandler = async (data: UpdateCountryInput) => {
         await updateCountry.mutateAsync(data);
-    };
-
-    const deleteCountry = useDeleteCountry(activeMap, selectedCountry);
-
-    const deleteCountryHandler = async () => {
-        await deleteCountry.mutateAsync();
-        selectCountry(null);
     };
 
     if (!country) {
@@ -210,15 +203,7 @@ const EditCountryForm = () => {
                         Save Changes
                     </Button>
 
-                    <Button
-                        type="button"
-                        variant="destructive"
-                        aria-label="Delete Country"
-                        onClick={deleteCountryHandler}
-                        isLoading={deleteCountry.isPending}
-                    >
-                        <Trash />
-                    </Button>
+                    <DeleteCountryDialog mapId={activeMap} id={selectedCountry} />
                 </div>
             </form>
         </Form>
