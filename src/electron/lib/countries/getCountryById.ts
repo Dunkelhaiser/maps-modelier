@@ -46,7 +46,7 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
                 )
             )
             .where(and(eq(countries.mapId, mapId), eq(countries.id, id)))
-            .groupBy(countries.id, ethnicities.id, ethnicities.name)
+            .groupBy(countries.id, ethnicities.id, ethnicities.name, ethnicities.color)
             .orderBy(desc(sum(provincePopulations.population)))
     );
 
