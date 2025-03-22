@@ -7,7 +7,8 @@ interface Props {
 }
 
 export const EthnicityBar = ({ ethnicities }: Props) => {
-    const [hoveredEthnicityId, setHoveredEthnicityId] = useState<number | null>(null);
+    // ! This is a workaround before the ethnicities ids being country id issue is resolved
+    const [hoveredEthnicityId, setHoveredEthnicityId] = useState<string | null>(null);
 
     const totalPopulation = ethnicities.reduce((sum, ethnicity) => sum + ethnicity.population, 0);
 
@@ -43,10 +44,10 @@ export const EthnicityBar = ({ ethnicities }: Props) => {
                 <div className="flex h-4 w-full overflow-hidden rounded-full">
                     {displayEthnicities.map((ethnicity) => {
                         const percentage = (ethnicity.population / totalPopulation) * 100;
-                        const isHovered = hoveredEthnicityId === ethnicity.id;
+                        const isHovered = hoveredEthnicityId === ethnicity.name;
 
                         return (
-                            <Tooltip key={ethnicity.id} delayDuration={0} open={isHovered}>
+                            <Tooltip key={ethnicity.name} delayDuration={0} open={isHovered}>
                                 <TooltipTrigger asChild>
                                     <div
                                         className="h-full transition-all duration-200"
@@ -56,7 +57,7 @@ export const EthnicityBar = ({ ethnicities }: Props) => {
                                             opacity: hoveredEthnicityId === null || isHovered ? 1 : 0.7,
                                             cursor: "pointer",
                                         }}
-                                        onMouseEnter={() => setHoveredEthnicityId(ethnicity.id)}
+                                        onMouseEnter={() => setHoveredEthnicityId(ethnicity.name)}
                                         onMouseLeave={() => setHoveredEthnicityId(null)}
                                     />
                                 </TooltipTrigger>

@@ -96,7 +96,8 @@ const Country = () => {
                         </TableHeader>
                         <TableBody>
                             {country.ethnicities.map((ethnicity) => (
-                                <TableRow key={ethnicity.id}>
+                                // ! This is a workaround before the ethnicities ids being country id issue is resolved
+                                <TableRow key={ethnicity.name}>
                                     <TableCell className="flex items-center gap-2">
                                         <div
                                             className="size-3 rounded-full"
