@@ -1,16 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useDeleteAlliance, useGetAlliance, useGetMembers, useUpdateAlliance } from "@ipc/alliances";
+import { useGetAlliance, useGetMembers, useUpdateAlliance } from "@ipc/alliances";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
-import { Save, Trash } from "lucide-react";
+import { Save } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
 import AddMembersForm from "./AddMembersForm";
+import DeleteAllianceDialog from "./DeleteCountryDialog";
 
 const EditAllianceForm = () => {
     const activeMap = useActiveMap();
@@ -44,13 +45,6 @@ const EditAllianceForm = () => {
     const updateAllianceHandler = async (data: AllianceInput) => {
         const updatedAlliance = await updateAlliance.mutateAsync(data);
         selectAlliance(updatedAlliance.id);
-    };
-
-    const deleteAlliance = useDeleteAlliance(activeMap, selectedAlliance);
-
-    const deleteAllianceHandler = async () => {
-        await deleteAlliance.mutateAsync();
-        selectAlliance(null);
     };
 
     return (
@@ -134,15 +128,7 @@ const EditAllianceForm = () => {
                             <Save />
                             Save Changes
                         </Button>
-                        <Button
-                            type="button"
-                            variant="destructive"
-                            aria-label="Delete Country"
-                            onClick={deleteAllianceHandler}
-                            isLoading={deleteAlliance.isPending}
-                        >
-                            <Trash />
-                        </Button>
+                        <DeleteAllianceDialog mapId={activeMap} id={selectedAlliance} />
                     </div>
                 </form>
             </Form>
