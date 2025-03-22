@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 import { Save } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
 import AddMembersForm from "./AddMembersForm";
@@ -19,22 +19,25 @@ const EditAllianceForm = () => {
     const { data: alliance } = useGetAlliance(activeMap, selectedAlliance);
     const { data: members } = useGetMembers(activeMap, selectedAlliance);
 
+    const defaultValues = useMemo(
+        () => ({
+            name: alliance?.name,
+            leader: alliance?.leader.id,
+            type: alliance?.type as "economic" | "political" | "military",
+        }),
+        [alliance?.name, alliance?.leader.id, alliance?.type]
+    );
+
     const form = useForm<AllianceInput>({
         resolver: zodResolver(allianceSchema),
-        defaultValues: {
-            name: alliance?.name,
-            leader: alliance?.leader.id,
-            type: alliance?.type as "economic" | "political" | "military",
-        },
+        defaultValues,
     });
 
+    const isFormUnchanged = JSON.stringify(defaultValues) === JSON.stringify(form.getValues());
+
     useEffect(() => {
-        form.reset({
-            name: alliance?.name,
-            leader: alliance?.leader.id,
-            type: alliance?.type as "economic" | "political" | "military",
-        });
-    }, [form, alliance?.name, alliance?.leader.id, alliance?.type]);
+        form.reset(defaultValues);
+    }, [form, defaultValues]);
 
     const updateAlliance = useUpdateAlliance(activeMap, selectedAlliance);
 
@@ -115,7 +118,7 @@ const EditAllianceForm = () => {
                             )}
                         />
                     </div>
-                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
+                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2" disabled={isFormUnchanged}>
                         <Save />
                         Save Changes
                     </Button>

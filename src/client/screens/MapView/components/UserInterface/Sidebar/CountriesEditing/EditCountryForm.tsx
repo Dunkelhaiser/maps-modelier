@@ -7,7 +7,7 @@ import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Trash, Save } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { UpdateCountryInput, updateCountrySchema } from "src/shared/schemas/countries/updateCountry";
 
@@ -18,26 +18,33 @@ const EditCountryForm = () => {
 
     const { data: country } = useGetCountryById(activeMap, selectedCountry);
 
-    const form = useForm<UpdateCountryInput>({
-        resolver: zodResolver(updateCountrySchema),
-        defaultValues: {
+    const defaultValues = useMemo(
+        () => ({
             name: {
                 common: country?.name.common,
                 official: country?.name.official ?? "",
             },
             color: country?.color,
             anthem: {
-                url: undefined,
+                url: "",
                 name: country?.anthem?.name ?? "",
             },
-            flag: undefined,
-            coatOfArms: undefined,
-        },
+            flag: "",
+            coatOfArms: "",
+        }),
+        [country?.anthem?.name, country?.color, country?.name.common, country?.name.official]
+    );
+
+    const form = useForm<UpdateCountryInput>({
+        resolver: zodResolver(updateCountrySchema),
+        defaultValues,
     });
     const flagRef = form.register("flag");
     const coatOfArmsRef = form.register("coatOfArms");
     const anthemRef = form.register("anthem.url");
     const colorPickerRef = useRef<HTMLInputElement>(null);
+
+    const isFormUnchanged = JSON.stringify(defaultValues) === JSON.stringify(form.getValues());
 
     useEffect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -51,20 +58,8 @@ const EditCountryForm = () => {
         if (coatOfArmsInput) coatOfArmsInput.value = "";
         if (anthemInput) anthemInput.value = "";
 
-        form.reset({
-            name: {
-                common: country?.name.common,
-                official: country?.name.official ?? "",
-            },
-            color: country?.color,
-            anthem: {
-                url: undefined,
-                name: country?.anthem?.name ?? "",
-            },
-            flag: undefined,
-            coatOfArms: undefined,
-        });
-    }, [form, country?.anthem?.name, country?.color, country?.name.common, country?.name.official]);
+        form.reset(defaultValues);
+    }, [defaultValues, form]);
 
     const updateCountry = useUpdateCountry(activeMap, selectedCountry);
 
@@ -210,7 +205,7 @@ const EditCountryForm = () => {
                 </div>
 
                 <div className="mt-6 flex gap-2">
-                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
+                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2" disabled={isFormUnchanged}>
                         <Save />
                         Save Changes
                     </Button>

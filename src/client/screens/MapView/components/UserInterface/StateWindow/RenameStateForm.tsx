@@ -6,7 +6,7 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Save, Trash } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { StateNameInput, stateNameSchema } from "src/shared/schemas/states/state";
 
@@ -15,12 +15,19 @@ const RenameStateForm = () => {
     const selectedState = useMapStore((state) => state.selectedState)!;
     const { data: state } = useGetStateById(activeMap, selectedState);
 
+    const defaultValues = useMemo(
+        () => ({
+            name: state?.name,
+        }),
+        [state?.name]
+    );
+
     const form = useForm<StateNameInput>({
         resolver: zodResolver(stateNameSchema),
-        defaultValues: {
-            name: state?.name,
-        },
+        defaultValues,
     });
+
+    const isFormUnchanged = JSON.stringify(defaultValues) === JSON.stringify(form.getValues());
 
     useEffect(() => {
         form.reset({ name: state?.name });
@@ -50,7 +57,7 @@ const RenameStateForm = () => {
                     )}
                 />
                 <div className="flex flex-row justify-between gap-4">
-                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
+                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2" disabled={isFormUnchanged}>
                         <Save />
                         Rename State
                     </Button>
