@@ -65,7 +65,7 @@ const Country = () => {
                             <p className="text-xs font-medium text-muted-foreground">
                                 National Anthem: {country.anthem.name}
                             </p>
-                            <audio controls className="mt-1 w-full">
+                            <audio controls className="mt-1 w-full" key={`anthem-${selectedCountry}`}>
                                 <source src={country.anthem.url} />
                             </audio>
                         </div>
