@@ -5,14 +5,18 @@ import { forwardRef, useState, useEffect } from "react";
 
 const FileUpload = forwardRef<
     HTMLInputElement,
-    InputProps & { defaultImg?: string; object?: "cover" | "contain" | "fill" | "none" | "scale-down" }
->(({ defaultImg, object, ...props }, ref) => {
+    InputProps & {
+        defaultImg?: string;
+        object?: "cover" | "contain" | "fill" | "none" | "scale-down";
+        resetKey?: string | number;
+    }
+>(({ defaultImg, object, resetKey, ...props }, ref) => {
     const [image, setImage] = useState<string | null>(null);
 
     useEffect(() => {
         if (defaultImg) setImage(defaultImg);
         else setImage(null);
-    }, [defaultImg, ref]);
+    }, [defaultImg, resetKey]);
 
     return (
         <label

@@ -146,6 +146,7 @@ const EditCountryForm = () => {
                                         <FileUpload
                                             className="h-32 w-auto"
                                             defaultImg={country.flag}
+                                            resetKey={selectedCountry}
                                             {...flagRef}
                                             accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                         />
@@ -166,6 +167,7 @@ const EditCountryForm = () => {
                                             className="aspect-square h-32 w-auto"
                                             object="contain"
                                             defaultImg={country.coatOfArms}
+                                            resetKey={selectedCountry}
                                             {...coatOfArmsRef}
                                             accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                         />
@@ -206,69 +208,6 @@ const EditCountryForm = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* <div className="mt-4">
-                    <h3 className="mb-2 text-lg font-semibold">Demographics (View Only)</h3>
-
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 rounded-md bg-muted p-3 shadow-sm">
-                            <div className="rounded-full bg-muted-foreground/10 p-2">
-                                <Users size={16} className="text-muted-foreground" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground">Population</p>
-                                <p className="font-medium">{country.population.toLocaleString()}</p>
-                            </div>
-                        </div>
-                        <EthnicityBar ethnicities={country.ethnicities} />
-                    </div>
-
-                    <Table className="mt-3 max-h-40">
-                        <TableHeader>
-                            <TableHead>Ethnicity</TableHead>
-                            <TableHead className="text-right">Population</TableHead>
-                            <TableHead className="text-right">Percentage</TableHead>
-                        </TableHeader>
-                        <TableBody>
-                            {country.ethnicities.map((ethnicity) => (
-                                <TableRow key={ethnicity.id}>
-                                    <TableCell className="flex items-center gap-2">
-                                        <div
-                                            className="size-3 rounded-full"
-                                            style={{ backgroundColor: ethnicity.color }}
-                                        />
-                                        {ethnicity.name}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        {ethnicity.population.toLocaleString()}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        {((ethnicity.population / country.population) * 100).toFixed(2)}%
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-
-                {country.alliances.length > 0 && (
-                    <div className="mt-4">
-                        <h3 className="mb-2 text-lg font-semibold">Alliances (View Only)</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {country.alliances.map((alliance) => (
-                                <div
-                                    key={alliance.id}
-                                    className="flex items-center gap-1 rounded-md bg-muted px-2 py-1 text-sm text-muted-foreground"
-                                >
-                                    <span>{alliance.name}</span>
-                                    <span className="rounded-full bg-muted-foreground/15 px-1.5 py-0.5 text-xs font-medium">
-                                        {alliance.type}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )} */}
 
                 <div className="mt-6 flex gap-2">
                     <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2">
