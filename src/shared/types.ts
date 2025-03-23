@@ -13,6 +13,7 @@ import { PopulationInput } from "./schemas/provinces/population.js";
 import { CreateStateInput } from "./schemas/states/createState.js";
 import { ProvincesAssignmentInput } from "./schemas/states/provinces.js";
 import { StateNameInput } from "./schemas/states/state.js";
+import { AddParticipantsInput } from "./schemas/wars/addParticipants.js";
 import { WarInput } from "./schemas/wars/war.js";
 
 export type MapType = InferSelectModel<typeof maps>;
@@ -193,6 +194,7 @@ export interface IpcChannels {
         getAll: (mapId: string) => Promise<WarTable[]>;
         get: (mapId: string, id: number) => Promise<WarBase>;
         getParticipants: (mapId: string, id: number) => Promise<WarParticipants>;
+        addParticipants: (mapId: string, id: number, participants: AddParticipantsInput) => Promise<void>;
     };
 }
 
