@@ -8,13 +8,16 @@ import Countries from "./Countries/Countries";
 import CountriesEditing from "./CountriesEditing/CountriesEditing";
 import Country from "./Country/Country";
 import Ethnicities from "./Ethnicities/Ethnicities";
+import War from "./War/War";
 import Wars from "./Wars/Wars";
+import WarsEditing from "./WarsEditing/WarsEditing";
 
 const Sidebar = () => {
     const activeSidebar = useSidebarStore((state) => state.activeSidebar);
     const mode = useMapStore((state) => state.mode);
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const selectedAlliance = useMapStore((state) => state.selectedAlliance);
+    const selectedWar = useMapStore((state) => state.selectedWar);
 
     const renderSidebarContent = () => {
         if (activeSidebar === "ethnicities") return <Ethnicities />;
@@ -36,6 +39,10 @@ const Sidebar = () => {
         }
 
         if (activeSidebar === "wars") {
+            if (selectedWar) {
+                if (mode === "viewing") return <War />;
+                return <WarsEditing />;
+            }
             return <Wars />;
         }
 
