@@ -8,6 +8,7 @@ import Countries from "./Countries/Countries";
 import CountriesEditing from "./CountriesEditing/CountriesEditing";
 import Country from "./Country/Country";
 import Ethnicities from "./Ethnicities/Ethnicities";
+import Wars from "./Wars/Wars";
 
 const Sidebar = () => {
     const activeSidebar = useSidebarStore((state) => state.activeSidebar);
@@ -32,6 +33,10 @@ const Sidebar = () => {
                 return <AlliancesEditing />;
             }
             return <Alliances />;
+        }
+
+        if (activeSidebar === "wars") {
+            return <Wars />;
         }
 
         return null;

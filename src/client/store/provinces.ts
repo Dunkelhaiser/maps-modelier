@@ -9,10 +9,12 @@ export interface ProvincesSlice {
     selectedState: number | null;
     selectedCountry: number | null;
     selectedAlliance: number | null;
+    selectedWar: number | null;
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => void;
     deselectProvinces: () => void;
     selectCountry: (id: number | null) => void;
     selectAlliance: (alliance: number | null) => void;
+    selectWar: (war: number | null) => void;
     deselectAlliance: () => void;
 }
 
@@ -21,6 +23,7 @@ export const initialProvincesSlice = {
     selectedState: null,
     selectedCountry: null,
     selectedAlliance: null,
+    selectedWar: null,
 };
 
 export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice> = (set, get) => ({
@@ -80,6 +83,13 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
     },
 
     deselectAlliance: () => set({ selectedAlliance: null }),
+
+    selectWar: (war) => {
+        useSidebarStore.getState().openSidebar("wars");
+        set({ selectedWar: war });
+    },
+
+    deselectWar: () => set({ selectedWar: null }),
 });
 
 const findState = (provinceId: number, mapId?: string | null) => {
