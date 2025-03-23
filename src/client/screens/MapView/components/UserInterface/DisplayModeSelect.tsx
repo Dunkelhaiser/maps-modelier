@@ -13,6 +13,7 @@ const DisplayModeSelect = () => {
             <SelectContent>
                 <SelectItem value="countries">Countries</SelectItem>
                 <SelectItem value="ethnicities">Ethnicities</SelectItem>
+                <SelectItem value="population">Population</SelectItem>
             </SelectContent>
         </Select>
     );

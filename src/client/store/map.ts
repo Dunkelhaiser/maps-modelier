@@ -3,7 +3,7 @@ import { initialProvincesSlice } from "./provinces";
 import { MapStore } from "./store";
 
 export type Mode = "viewing" | "editing";
-export type DisplayMode = "countries" | "ethnicities";
+export type DisplayMode = "countries" | "ethnicities" | "population";
 
 export interface MapSlice {
     mode: Mode;

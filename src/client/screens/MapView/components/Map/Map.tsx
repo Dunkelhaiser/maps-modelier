@@ -4,6 +4,7 @@ import { useGetProvinces } from "@ipc/provinces";
 import { useGetStates } from "@ipc/states";
 import { Container, Stage } from "@pixi/react";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { updatePopulationRange } from "@utils/populationHeatmap";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "@pixi/unsafe-eval";
 import { ProvincesContainer } from "./ProvincesContainer";
@@ -69,6 +70,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
         });
 
         setMapDimensions({ width: Math.ceil(maxX - minX), height: Math.ceil(maxY - minY) });
+        updatePopulationRange(allProvinces);
     }, [landProvinces.data, waterProvinces.data]);
 
     const getBaseScale = useCallback(() => {

@@ -4,6 +4,7 @@ import { useAddProvinces, useGetStateById, useRemoveProvinces } from "@ipc/state
 import { Container } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
+import { getPopulationColor } from "@utils/populationHeatmap";
 import { FederatedMouseEvent } from "pixi.js";
 import { memo, useMemo } from "react";
 import { toast } from "sonner";
@@ -53,11 +54,16 @@ export const ProvincesContainer = memo(
         }, [activeSidebar, selectedCountry, selectedState, selectedProvinces.length, countries, states, id]);
 
         const color = useMemo(() => {
+            if (province.type === "water") return undefined;
             if (displayMode === "ethnicities") {
                 if (province.ethnicities.length > 0) {
                     return province.ethnicities[0].color;
                 }
                 return undefined;
+            }
+
+            if (displayMode === "population") {
+                return getPopulationColor(province.population);
             }
 
             const state = states.find((s) => s.provinces.includes(id));
@@ -66,7 +72,7 @@ export const ProvincesContainer = memo(
                 return country?.color;
             }
             return undefined;
-        }, [id, states, countries, province.ethnicities, displayMode]);
+        }, [province.type, province.ethnicities, province.population, displayMode, states, id, countries]);
 
         const addProvincesToState = async (stateId: number) => {
             const selectedStateType =
