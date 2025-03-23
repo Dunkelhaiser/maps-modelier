@@ -82,6 +82,7 @@ const api = {
         create: (mapId: string, data: WarInput) => invoke("wars", "create", mapId, data),
         update: (mapId: string, id: number, data: WarInput) => invoke("wars", "update", mapId, id, data),
         getAll: (mapId: string) => invoke("wars", "getAll", mapId),
+        get: (mapId: string, id: number) => invoke("wars", "get", mapId, id),
     },
 };
 

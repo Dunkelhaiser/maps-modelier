@@ -186,6 +186,7 @@ export interface IpcChannels {
         create: (mapId: string, data: WarInput) => Promise<WarBase>;
         update: (mapId: string, id: number, data: WarInput) => Promise<WarBase>;
         getAll: (mapId: string) => Promise<WarTable[]>;
+        get: (mapId: string, id: number) => Promise<WarBase>;
     };
 }
 
