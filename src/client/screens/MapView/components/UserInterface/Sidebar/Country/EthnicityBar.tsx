@@ -50,7 +50,7 @@ export const EthnicityBar = ({ ethnicities }: Props) => {
                             <Tooltip key={ethnicity.name} delayDuration={0} open={isHovered}>
                                 <TooltipTrigger asChild>
                                     <div
-                                        className="h-full transition-all duration-200"
+                                        className="h-full transition-colors duration-200"
                                         style={{
                                             width: `${Math.max(0.5, percentage)}%`,
                                             backgroundColor: ethnicity.color,
