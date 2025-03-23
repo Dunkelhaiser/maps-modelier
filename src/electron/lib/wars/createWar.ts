@@ -10,6 +10,9 @@ export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data:
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(wars);
 
     return db.transaction(async (tx) => {
+        const defenderData = await getCountryBase(mapId, data.defender);
+        const attackerData = await getCountryBase(mapId, data.aggressor);
+
         const [war] = await tx
             .insert(wars)
             .values({
@@ -49,9 +52,6 @@ export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data:
             countryId: data.defender,
             mapId,
         });
-
-        const defenderData = await getCountryBase(mapId, data.defender);
-        const attackerData = await getCountryBase(mapId, data.aggressor);
 
         return {
             ...war,
