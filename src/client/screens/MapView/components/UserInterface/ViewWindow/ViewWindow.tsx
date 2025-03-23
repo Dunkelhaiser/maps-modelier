@@ -38,7 +38,7 @@ const ViewWindow = () => {
             });
         });
 
-        return Array.from(merged.values());
+        return Array.from(merged.values()).sort((a, b) => b.population - a.population);
     };
 
     return (
