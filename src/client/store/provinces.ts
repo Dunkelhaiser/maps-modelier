@@ -16,6 +16,7 @@ export interface ProvincesSlice {
     selectAlliance: (alliance: number | null) => void;
     selectWar: (war: number | null) => void;
     deselectAlliance: () => void;
+    deselectWar: () => void;
 }
 
 export const initialProvincesSlice = {
