@@ -7,6 +7,7 @@ import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
+import { formatLocalDateTime } from "@utils/utils";
 import { Save } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -23,8 +24,8 @@ const EditWarForm = () => {
             name: war?.name,
             aggressor: war?.aggressor.id,
             defender: war?.defender.id,
-            startedAt: war?.startedAt.toISOString().slice(0, 16) as unknown as Date,
-            endedAt: (war?.endedAt?.toISOString().slice(0, 16) as unknown as Date | null) ?? undefined,
+            startedAt: formatLocalDateTime(war?.startedAt) as unknown as Date,
+            endedAt: (formatLocalDateTime(war?.endedAt) as unknown as Date | null) ?? undefined,
         }),
         [war?.name, war?.aggressor.id, war?.defender.id, war?.startedAt, war?.endedAt]
     );
