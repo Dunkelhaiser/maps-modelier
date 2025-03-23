@@ -1,11 +1,11 @@
-import { getTableColumns } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { WarInput, warSchema } from "../../../shared/schemas/wars/war.js";
 import { db } from "../../db/db.js";
 import { wars, warSides, warParticipants } from "../../db/schema.js";
 import { getCountryBase } from "../countries/getCountryBase.js";
 
-export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data: WarInput) => {
+export const updateWar = async (_event: IpcMainInvokeEvent, mapId: string, id: number, data: WarInput) => {
     const validatedData = await warSchema.parseAsync(data);
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(wars);
 
@@ -14,30 +14,20 @@ export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data:
         const attackerData = await getCountryBase(mapId, data.aggressor);
 
         const [war] = await tx
-            .insert(wars)
-            .values({
-                mapId,
-                ...validatedData,
-            })
+            .update(wars)
+            .set(validatedData)
+            .where(and(eq(wars.mapId, mapId), eq(wars.id, id)))
             .returning(cols);
 
         const [attackerSide] = await tx
-            .insert(warSides)
-            .values({
-                warId: war.id,
-                side: "attacker",
-                mapId,
-            })
-            .returning();
+            .select({ id: warSides.id })
+            .from(warSides)
+            .where(and(eq(warSides.warId, war.id), eq(warSides.side, "attacker"), eq(warSides.mapId, mapId)));
 
         const [defenderSide] = await tx
-            .insert(warSides)
-            .values({
-                warId: war.id,
-                side: "defender",
-                mapId,
-            })
-            .returning();
+            .select({ id: warSides.id })
+            .from(warSides)
+            .where(and(eq(warSides.warId, war.id), eq(warSides.side, "defender"), eq(warSides.mapId, mapId)));
 
         await tx.insert(warParticipants).values({
             sideId: attackerSide.id,
