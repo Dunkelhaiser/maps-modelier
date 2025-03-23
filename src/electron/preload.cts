@@ -12,6 +12,7 @@ import type { PopulationInput } from "../shared/schemas/provinces/population.js"
 import type { CreateStateInput } from "../shared/schemas/states/createState.js" with { "resolution-mode": "import" };
 import type { ProvincesAssignmentInput } from "../shared/schemas/states/provinces.js" with { "resolution-mode": "import" };
 import type { StateNameInput } from "../shared/schemas/states/state.js" with { "resolution-mode": "import" };
+import type { CreateWarInput } from "../shared/schemas/wars/createWar.js" with { "resolution-mode": "import" };
 import type { IpcRequest, IpcChannels, ProvinceType } from "../shared/types.js" with { "resolution-mode": "import" };
 
 const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
@@ -76,6 +77,9 @@ const api = {
         get: (mapId: string, id: number) => invoke("alliances", "get", mapId, id),
         getMembers: (mapId: string, id: number) => invoke("alliances", "getMembers", mapId, id),
         delete: (mapId: string, id: number) => invoke("alliances", "delete", mapId, id),
+    },
+    wars: {
+        create: (mapId: string, data: CreateWarInput) => invoke("wars", "create", mapId, data),
     },
 };
 
