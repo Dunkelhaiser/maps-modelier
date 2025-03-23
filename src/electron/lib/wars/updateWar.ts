@@ -29,19 +29,25 @@ export const updateWar = async (_event: IpcMainInvokeEvent, mapId: string, id: n
             .from(warSides)
             .where(and(eq(warSides.warId, war.id), eq(warSides.side, "defender"), eq(warSides.mapId, mapId)));
 
-        await tx.insert(warParticipants).values({
-            sideId: attackerSide.id,
-            warId: war.id,
-            countryId: data.aggressor,
-            mapId,
-        });
+        await tx
+            .insert(warParticipants)
+            .values({
+                sideId: attackerSide.id,
+                warId: war.id,
+                countryId: data.aggressor,
+                mapId,
+            })
+            .onConflictDoNothing();
 
-        await tx.insert(warParticipants).values({
-            sideId: defenderSide.id,
-            warId: war.id,
-            countryId: data.defender,
-            mapId,
-        });
+        await tx
+            .insert(warParticipants)
+            .values({
+                sideId: defenderSide.id,
+                warId: war.id,
+                countryId: data.defender,
+                mapId,
+            })
+            .onConflictDoNothing();
 
         return {
             ...war,
