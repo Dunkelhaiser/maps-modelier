@@ -358,8 +358,8 @@ export const wars = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         name: text("name").notNull(),
-        aggressor: integer("aggressor"),
-        defender: integer("defender"),
+        aggressor: integer("aggressor").notNull(),
+        defender: integer("defender").notNull(),
         startedAt: integer("started_at", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),

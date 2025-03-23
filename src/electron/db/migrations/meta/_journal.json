@@ -85,6 +85,13 @@
             "when": 1742571899433,
             "tag": "0011_blue_professor_monster",
             "breakpoints": true
+        },
+        {
+            "idx": 12,
+            "version": "6",
+            "when": 1742755552300,
+            "tag": "0012_thick_maximus",
+            "breakpoints": true
         }
     ]
 }
