@@ -24,6 +24,7 @@ export const ProvincesContainer = memo(
         const selectProvince = useMapStore((state) => state.selectProvince);
         const activeMap = useActiveMap();
         const mode = useMapStore((state) => state.mode);
+        const displayMode = useMapStore((state) => state.displayMode);
         const activeSidebar = useSidebarStore((state) => state.activeSidebar);
         const { data: countries } = useGetCountriesStates(activeMap);
         const { data: stateData } = useGetStateById(activeMap, selectedState);
@@ -51,16 +52,21 @@ export const ProvincesContainer = memo(
             return countryStates.some((s) => s.provinces.includes(id));
         }, [activeSidebar, selectedCountry, selectedState, selectedProvinces.length, countries, states, id]);
 
-        const countryColor = useMemo(() => {
-            const state = states.find((s) => s.provinces.includes(id));
+        const color = useMemo(() => {
+            if (displayMode === "ethnicities") {
+                if (province.ethnicities.length > 0) {
+                    return province.ethnicities[0].color;
+                }
+                return undefined;
+            }
 
+            const state = states.find((s) => s.provinces.includes(id));
             if (state) {
                 const country = countries?.find((c) => c.states.includes(state.id));
                 return country?.color;
             }
-
             return undefined;
-        }, [id, states, countries]);
+        }, [id, states, countries, province.ethnicities, displayMode]);
 
         const addProvincesToState = async (stateId: number) => {
             const selectedStateType =
@@ -142,7 +148,7 @@ export const ProvincesContainer = memo(
                     id={id}
                     shape={shape}
                     type={type}
-                    countryColor={countryColor}
+                    color={color}
                     isSelected={isSelected}
                     isInSelectedState={isInSelectedState}
                     isInSelectedCountry={isInSelectedCountry}

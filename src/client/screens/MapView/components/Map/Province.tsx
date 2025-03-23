@@ -7,27 +7,19 @@ import { Province as ProvinceType } from "src/shared/types";
 import type { Graphics as GraphicsType } from "pixi.js";
 
 interface ProvinceProps extends Omit<ProvinceType, "color" | "population" | "ethnicities"> {
-    countryColor?: string;
+    color?: string;
     isSelected: boolean;
     isInSelectedState: boolean;
     isInSelectedCountry: boolean;
 }
 
-const Province = ({
-    id,
-    shape,
-    type,
-    countryColor,
-    isSelected,
-    isInSelectedState,
-    isInSelectedCountry,
-}: ProvinceProps) => {
+const Province = ({ id, shape, type, color, isSelected, isInSelectedState, isInSelectedCountry }: ProvinceProps) => {
     const drawRegion = useCallback(
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
 
             const unassignedFillColor = type === "land" ? 0x39654a : 0x517478;
-            const fillColor = countryColor ? parseInt(countryColor.replace("#", "0x"), 16) : unassignedFillColor;
+            const fillColor = color ? parseInt(color.replace("#", "0x"), 16) : unassignedFillColor;
 
             const borderColor = darkenColor(fillColor, isSelected || isInSelectedCountry ? 0.2 : 0.4);
 
@@ -51,7 +43,7 @@ const Province = ({
             g.drawPolygon(regionShape);
             g.endFill();
         },
-        [type, countryColor, isSelected, isInSelectedState, isInSelectedCountry]
+        [type, color, isSelected, isInSelectedState, isInSelectedCountry]
     );
 
     const shapes = Array.isArray(shape) ? shape : [shape];
@@ -66,7 +58,7 @@ export const MemoizedProvince = memo(Province, (prevProps, nextProps) => {
         prevProps.id === nextProps.id &&
         prevProps.type === nextProps.type &&
         prevProps.shape === nextProps.shape &&
-        prevProps.countryColor === nextProps.countryColor &&
+        prevProps.color === nextProps.color &&
         prevProps.isSelected === nextProps.isSelected &&
         prevProps.isInSelectedState === nextProps.isInSelectedState &&
         prevProps.isInSelectedCountry === nextProps.isInSelectedCountry

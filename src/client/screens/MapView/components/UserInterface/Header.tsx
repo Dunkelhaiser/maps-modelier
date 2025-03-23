@@ -8,6 +8,7 @@ import {
 } from "@ui/DropdownMenu";
 import { Settings } from "lucide-react";
 import CloseMapBtn from "./CloseMapBtn";
+import DisplayModeSelect from "./DisplayModeSelect";
 import Menu from "./Menu";
 import ModeSelect from "./ModeSelect";
 
@@ -25,7 +26,10 @@ const Header = () => {
                 <DropdownMenuContent>
                     <DropdownMenuLabel>Settings</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <ModeSelect />
+                    <div className="space-y-2">
+                        <ModeSelect />
+                        <DisplayModeSelect />
+                    </div>
                 </DropdownMenuContent>
             </DropdownMenu>
         </header>
