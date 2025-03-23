@@ -113,6 +113,17 @@ export interface WarBase {
     endedAt: Date | null;
 }
 
+export interface WarSide {
+    id: number;
+    name: string;
+    participantCount: number;
+}
+
+export interface WarTable extends WarBase {
+    totalParticipants: number;
+    sides: WarSide[];
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -174,6 +185,7 @@ export interface IpcChannels {
     wars: {
         create: (mapId: string, data: WarInput) => Promise<WarBase>;
         update: (mapId: string, id: number, data: WarInput) => Promise<WarBase>;
+        getAll: (mapId: string) => Promise<WarTable[]>;
     };
 }
 
