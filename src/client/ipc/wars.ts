@@ -9,6 +9,13 @@ export const useGetWars = (mapId: string) => {
     });
 };
 
+export const useGetWar = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "wars", id],
+        queryFn: async () => await window.electron.wars.get(mapId, id),
+    });
+};
+
 export const useCreateWar = (mapId: string) => {
     const queryClient = useQueryClient();
 
@@ -17,6 +24,19 @@ export const useCreateWar = (mapId: string) => {
         onSuccess: () => {
             toast.success("War created successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, "wars"] });
+        },
+    });
+};
+
+export const useUpdateWar = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: WarInput) => await window.electron.wars.update(mapId, id, data),
+        onSuccess: () => {
+            toast.success("War updated successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, "wars"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "wars", id] });
         },
     });
 };
