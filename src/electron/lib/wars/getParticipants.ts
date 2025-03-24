@@ -35,6 +35,12 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
 
             const participantCountryIds = participants.map((p) => p.countryId);
 
+            const countriesBase = await Promise.all(
+                participants.map(async (participant) => {
+                    return await getCountryBase(mapId, participant.countryId);
+                })
+            );
+
             const militaryAlliances = await db
                 .select({
                     id: alliances.id,
@@ -53,40 +59,44 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                 .where(and(eq(alliances.mapId, mapId), eq(alliances.type, "military")))
                 .groupBy(alliances.id);
 
-            const countriesWithAlliances = await Promise.all(
-                participants.map(async (participant) => {
-                    const country = await getCountryBase(mapId, participant.countryId);
-
-                    const allianceMembership = await db
-                        .select({
-                            allianceId: allianceMembers.allianceId,
-                        })
-                        .from(allianceMembers)
-                        .innerJoin(
-                            alliances,
-                            and(
-                                eq(alliances.mapId, allianceMembers.mapId),
-                                eq(alliances.id, allianceMembers.allianceId),
-                                eq(alliances.type, "military")
-                            )
-                        )
-                        .where(
-                            and(eq(allianceMembers.mapId, mapId), eq(allianceMembers.countryId, participant.countryId))
-                        );
-
-                    return {
-                        ...country,
-                        allianceId: allianceMembership.length > 0 ? allianceMembership[0].allianceId : null,
-                    };
+            const allianceMemberships = await db
+                .select({
+                    countryId: allianceMembers.countryId,
+                    allianceId: allianceMembers.allianceId,
                 })
-            );
+                .from(allianceMembers)
+                .innerJoin(
+                    alliances,
+                    and(
+                        eq(alliances.mapId, allianceMembers.mapId),
+                        eq(alliances.id, allianceMembers.allianceId),
+                        eq(alliances.type, "military")
+                    )
+                )
+                .where(
+                    and(eq(allianceMembers.mapId, mapId), inArray(allianceMembers.countryId, participantCountryIds))
+                );
+
+            const countryAlliancesMap = new Map<number, number[]>();
+            for (const membership of allianceMemberships) {
+                if (!countryAlliancesMap.has(membership.countryId)) {
+                    countryAlliancesMap.set(membership.countryId, []);
+                }
+                countryAlliancesMap.get(membership.countryId)!.push(membership.allianceId);
+            }
 
             const groupedParticipants: WarParticipantGroup[] = [];
 
             for (const alliance of militaryAlliances) {
-                const allianceCountries = countriesWithAlliances.filter(
-                    (country) => country.allianceId === alliance.id
-                );
+                const allianceCountries = countriesBase
+                    .filter((country) => {
+                        const allianceIds = countryAlliancesMap.get(country.id);
+                        return allianceIds?.includes(alliance.id);
+                    })
+                    .map((country) => ({
+                        ...country,
+                        allianceId: alliance.id,
+                    }));
 
                 if (allianceCountries.length > 0) {
                     const nonParticipatingMemberIds = await db
@@ -123,7 +133,13 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                 }
             }
 
-            const nonAlliedCountries = countriesWithAlliances.filter((country) => country.allianceId === null);
+            const nonAlliedCountries = countriesBase
+                .filter((country) => !countryAlliancesMap.has(country.id))
+                .map((country) => ({
+                    ...country,
+                    allianceId: null,
+                }));
+
             if (nonAlliedCountries.length > 0) {
                 groupedParticipants.push({
                     id: null,
@@ -135,19 +151,23 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                 });
             }
 
+            const uniqueParticipantCount = participantCountryIds.length;
+
             return {
                 id: side.id,
                 name: side.side,
-                participantCount: countriesWithAlliances.length,
+                participantCount: uniqueParticipantCount,
                 allianceGroups: groupedParticipants,
                 totalGroups: groupedParticipants.length,
             };
         })
     );
 
+    const totalUniqueParticipants = sidesWithParticipants.reduce((total, side) => total + side.participantCount, 0);
+
     return {
         sides: sidesWithParticipants,
-        totalParticipants: sidesWithParticipants.reduce((total, side) => total + side.participantCount, 0),
+        totalParticipants: totalUniqueParticipants,
         totalGroups: sidesWithParticipants.reduce((total, side) => total + side.totalGroups, 0),
     };
 };
