@@ -139,8 +139,7 @@ const War = () => {
                                             <>
                                                 <span className="text-sm font-medium">Independent Countries</span>
                                                 <span className="text-xs text-muted-foreground">
-                                                    ({group.participantCount}{" "}
-                                                    {group.participantCount === 1 ? "country" : "countries"})
+                                                    {group.participantCount} participanting
                                                 </span>
                                             </>
                                         )}
