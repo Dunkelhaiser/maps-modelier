@@ -127,9 +127,13 @@ const War = () => {
                                                     {group.name}
                                                 </button>
                                                 <span className="text-xs text-muted-foreground">
-                                                    ({group.participantCount}{" "}
-                                                    {group.participantCount === 1 ? "member" : "members"})
+                                                    {group.participantCount} participanting
                                                 </span>
+                                                {group.nonParticipatingCountries.length > 0 && (
+                                                    <span className="text-xs text-muted-foreground">
+                                                        • {group.nonParticipatingCountries.length} non-participating
+                                                    </span>
+                                                )}
                                             </>
                                         ) : (
                                             <>
@@ -146,7 +150,7 @@ const War = () => {
                                         <TableHeader>
                                             <TableHead className="w-14">Flag</TableHead>
                                             <TableHead>Country</TableHead>
-                                            {group.id !== null && <TableHead className="w-24" />}
+                                            {group.id !== null && <TableHead className="text-right">Status</TableHead>}
                                         </TableHeader>
                                         <TableBody>
                                             {group.countries.map((participant) => (
@@ -157,6 +161,20 @@ const War = () => {
                                                     showAllianceRole={group.id !== null}
                                                 />
                                             ))}
+
+                                            {group.nonParticipatingCountries.length > 0 && (
+                                                <>
+                                                    {group.nonParticipatingCountries.map((participant) => (
+                                                        <WarParticipantRow
+                                                            key={participant.id}
+                                                            participant={participant}
+                                                            isAllianceLeader={participant.id === group.leader}
+                                                            showAllianceRole={group.id !== null}
+                                                            isParticipating={false}
+                                                        />
+                                                    ))}
+                                                </>
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </div>
