@@ -27,20 +27,28 @@ const AddParticipantsForm = () => {
         return primaryParticipants.includes(id);
     };
 
-    const defaultValues = useMemo(
-        () => ({
-            participants:
-                participants?.sides.flatMap((side) =>
-                    side.allianceGroups.flatMap((group) =>
-                        group.countries.map((country) => ({
+    const defaultValues = useMemo(() => {
+        if (!participants) return { participants: [] };
+
+        const uniqueParticipants = new Map();
+
+        participants.sides.forEach((side) => {
+            side.allianceGroups.forEach((group) => {
+                group.countries.forEach((country) => {
+                    if (!uniqueParticipants.has(country.id)) {
+                        uniqueParticipants.set(country.id, {
                             countryId: country.id,
                             sideId: side.id,
-                        }))
-                    )
-                ) ?? [],
-        }),
-        [participants]
-    );
+                        });
+                    }
+                });
+            });
+        });
+
+        return {
+            participants: Array.from(uniqueParticipants.values()),
+        };
+    }, [participants]);
 
     const form = useForm<AddParticipantsFormInput>({
         resolver: zodResolver(addParticipantsFormSchema),
