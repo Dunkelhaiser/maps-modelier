@@ -120,14 +120,28 @@ export interface WarSide {
     participantCount: number;
 }
 
+export interface WarParticipantGroup {
+    id: number | null;
+    name: string;
+    leader: number | null;
+    countries: (CountryBase & { allianceId?: number | null })[];
+    participantCount: number;
+}
+
+export interface WarSideWithGroups extends WarSide {
+    allianceGroups: WarParticipantGroup[];
+    totalGroups: number;
+}
+
 export interface WarTable extends WarBase {
     totalParticipants: number;
     sides: WarSide[];
 }
 
 export interface WarParticipants {
-    sides: (WarSide & { participants: CountryBase[] })[];
+    sides: WarSideWithGroups[];
     totalParticipants: number;
+    totalGroups: number;
 }
 
 export interface IpcChannels {

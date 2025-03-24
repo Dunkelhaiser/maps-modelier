@@ -4,8 +4,9 @@ import { useGetWar, useGetParticipants } from "@ipc/wars";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
+import { Separator } from "@ui/Separator";
 import { Table, TableBody, TableHead, TableHeader } from "@ui/Table";
-import { Flag, Timer, Users } from "lucide-react";
+import { Flag, Timer, Users, Shield } from "lucide-react";
 import WarParticipantRow from "./WarParticipantRow";
 
 const War = () => {
@@ -13,6 +14,7 @@ const War = () => {
     const selectedWar = useMapStore((state) => state.selectedWar)!;
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
     const selectCountry = useMapStore((state) => state.selectCountry);
+    const selectAlliance = useMapStore((state) => state.selectAlliance);
 
     const { data: war } = useGetWar(activeMap, selectedWar);
     const { data: participants } = useGetParticipants(activeMap, selectedWar);
@@ -35,7 +37,7 @@ const War = () => {
                     <div className="flex flex-col gap-3 rounded-md bg-muted p-3 shadow-sm">
                         <div className="flex items-center gap-3">
                             <div className="rounded-full bg-muted-foreground/10 p-2">
-                                <Flag size={16} className="text-red-500" />
+                                <Flag className="size-4 text-red-500" />
                             </div>
                             <div className="flex-1">
                                 <p className="text-xs text-muted-foreground">Aggressor</p>
@@ -56,7 +58,7 @@ const War = () => {
 
                         <div className="flex items-center gap-3">
                             <div className="rounded-full bg-muted-foreground/10 p-2">
-                                <Flag size={16} className="text-blue-500" />
+                                <Flag className="size-4 text-blue-500" />
                             </div>
                             <div className="flex-1">
                                 <p className="text-xs text-muted-foreground">Defender</p>
@@ -78,7 +80,7 @@ const War = () => {
 
                     <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
                         <div className="rounded-full bg-muted-foreground/10 p-2">
-                            <Timer size={16} className="text-muted-foreground" />
+                            <Timer className="size-4 text-muted-foreground" />
                         </div>
                         <div>
                             <p className="text-xs text-muted-foreground">Duration</p>
@@ -90,7 +92,7 @@ const War = () => {
 
                     <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
                         <div className="rounded-full bg-muted-foreground/10 p-2">
-                            <Users size={16} className="text-muted-foreground" />
+                            <Users size={16} className="size-4 text-muted-foreground" />
                         </div>
                         <div>
                             <p className="text-xs text-muted-foreground">Total Participants</p>
@@ -102,8 +104,8 @@ const War = () => {
                 <div className="mt-2">
                     <h3 className="mb-2 text-lg font-semibold">Participants</h3>
 
-                    {participants.sides.map((side) => (
-                        <div key={side.id} className="mb-4">
+                    {participants.sides.map((side, index) => (
+                        <div key={side.id} className="mb-6">
                             <div className="mb-2 flex items-center justify-between">
                                 <h4 className="font-medium capitalize">{side.name}</h4>
                                 <span className="text-sm text-muted-foreground">
@@ -111,17 +113,55 @@ const War = () => {
                                 </span>
                             </div>
 
-                            <Table>
-                                <TableHeader>
-                                    <TableHead className="w-14">Flag</TableHead>
-                                    <TableHead>Country</TableHead>
-                                </TableHeader>
-                                <TableBody>
-                                    {side.participants.map((participant) => (
-                                        <WarParticipantRow key={participant.id} participant={participant} />
-                                    ))}
-                                </TableBody>
-                            </Table>
+                            {side.allianceGroups.map((group) => (
+                                <div key={group.id ?? "independent"} className="mb-4">
+                                    <div className="mb-2 flex items-center gap-2">
+                                        {group.id !== null ? (
+                                            <>
+                                                <Shield className="size-4" />
+                                                <button
+                                                    type="button"
+                                                    className="text-sm font-medium"
+                                                    onClick={() => selectAlliance(group.id)}
+                                                >
+                                                    {group.name}
+                                                </button>
+                                                <span className="text-xs text-muted-foreground">
+                                                    ({group.participantCount}{" "}
+                                                    {group.participantCount === 1 ? "member" : "members"})
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="text-sm font-medium">Independent Countries</span>
+                                                <span className="text-xs text-muted-foreground">
+                                                    ({group.participantCount}{" "}
+                                                    {group.participantCount === 1 ? "country" : "countries"})
+                                                </span>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    <Table>
+                                        <TableHeader>
+                                            <TableHead className="w-14">Flag</TableHead>
+                                            <TableHead>Country</TableHead>
+                                            {group.id !== null && <TableHead className="w-24" />}
+                                        </TableHeader>
+                                        <TableBody>
+                                            {group.countries.map((participant) => (
+                                                <WarParticipantRow
+                                                    key={participant.id}
+                                                    participant={participant}
+                                                    isAllianceLeader={participant.id === group.leader}
+                                                    showAllianceRole={group.id !== null}
+                                                />
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            ))}
+                            {index < participants.sides.length - 1 && <Separator className="my-6" />}
                         </div>
                     ))}
                 </div>

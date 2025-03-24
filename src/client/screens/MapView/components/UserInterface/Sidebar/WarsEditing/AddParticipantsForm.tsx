@@ -31,10 +31,12 @@ const AddParticipantsForm = () => {
         () => ({
             participants:
                 participants?.sides.flatMap((side) =>
-                    side.participants.map((participant) => ({
-                        countryId: participant.id,
-                        sideId: side.id,
-                    }))
+                    side.allianceGroups.flatMap((group) =>
+                        group.countries.map((country) => ({
+                            countryId: country.id,
+                            sideId: side.id,
+                        }))
+                    )
                 ) ?? [],
         }),
         [participants]
