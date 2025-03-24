@@ -125,6 +125,7 @@ export interface WarParticipantGroup {
     name: string;
     leader: number | null;
     countries: (CountryBase & { allianceId?: number | null })[];
+    nonParticipatingCountries: (CountryBase & { allianceId?: number | null })[];
     participantCount: number;
 }
 

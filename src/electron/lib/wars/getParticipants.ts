@@ -1,4 +1,4 @@
-import { eq, and, inArray } from "drizzle-orm";
+import { eq, and, inArray, not } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { WarParticipantGroup } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
@@ -33,6 +33,8 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                     )
                 );
 
+            const participantCountryIds = participants.map((p) => p.countryId);
+
             const militaryAlliances = await db
                 .select({
                     id: alliances.id,
@@ -45,10 +47,7 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                     and(
                         eq(allianceMembers.mapId, alliances.mapId),
                         eq(allianceMembers.allianceId, alliances.id),
-                        inArray(
-                            allianceMembers.countryId,
-                            participants.map((p) => p.countryId)
-                        )
+                        inArray(allianceMembers.countryId, participantCountryIds)
                     )
                 )
                 .where(and(eq(alliances.mapId, mapId), eq(alliances.type, "military")))
@@ -90,11 +89,35 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                 );
 
                 if (allianceCountries.length > 0) {
+                    const nonParticipatingMemberIds = await db
+                        .select({
+                            countryId: allianceMembers.countryId,
+                        })
+                        .from(allianceMembers)
+                        .where(
+                            and(
+                                eq(allianceMembers.mapId, mapId),
+                                eq(allianceMembers.allianceId, alliance.id),
+                                not(inArray(allianceMembers.countryId, participantCountryIds))
+                            )
+                        );
+
+                    const nonParticipatingCountries = await Promise.all(
+                        nonParticipatingMemberIds.map(async (member) => {
+                            const country = await getCountryBase(mapId, member.countryId);
+                            return {
+                                ...country,
+                                allianceId: alliance.id,
+                            };
+                        })
+                    );
+
                     groupedParticipants.push({
                         id: alliance.id,
                         name: alliance.name,
                         leader: alliance.leader,
                         countries: allianceCountries,
+                        nonParticipatingCountries,
                         participantCount: allianceCountries.length,
                     });
                 }
@@ -107,6 +130,7 @@ export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string,
                     name: "Independent Countries",
                     leader: null as number | null,
                     countries: nonAlliedCountries,
+                    nonParticipatingCountries: [],
                     participantCount: nonAlliedCountries.length,
                 });
             }
