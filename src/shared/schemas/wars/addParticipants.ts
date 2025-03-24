@@ -8,3 +8,9 @@ const participantSchema = zod.object({
 export const addParticipantsSchema = zod.array(participantSchema);
 
 export type AddParticipantsInput = zod.infer<typeof addParticipantsSchema>;
+
+export const addParticipantsFormSchema = zod.object({
+    participants: addParticipantsSchema,
+});
+
+export type AddParticipantsFormInput = zod.infer<typeof addParticipantsFormSchema>;
