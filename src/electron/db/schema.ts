@@ -498,3 +498,40 @@ export const headsOfState = sqliteTable(
         }).onDelete("cascade"),
     })
 );
+
+export const headsOfGovernment = sqliteTable(
+    "heads_of_government",
+    {
+        countryId: integer("country_id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        politicianId: integer("politician_id").notNull(),
+        title: text("title").notNull(),
+        startDate: integer("start_date", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        endDate: integer("end_date", { mode: "timestamp" }),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.countryId], name: "heads_of_government_pk" }),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
+            name: "heads_of_government_countries_reference",
+        })
+            .onDelete("cascade")
+            .onUpdate("cascade"),
+        politicianReference: foreignKey({
+            columns: [table.mapId, table.politicianId],
+            foreignColumns: [politicians.mapId, politicians.id],
+            name: "head_of_government_politician_reference",
+        }).onDelete("cascade"),
+    })
+);
