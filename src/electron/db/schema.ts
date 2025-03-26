@@ -628,3 +628,33 @@ export const partyIdeologies = sqliteTable(
         }).onDelete("cascade"),
     })
 );
+
+export const partyMembers = sqliteTable(
+    "party_members",
+    {
+        partyId: integer("party_id").notNull(),
+        politicianId: integer("politician_id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.partyId, table.politicianId], name: "party_members_pk" }),
+        partyReference: foreignKey({
+            columns: [table.mapId, table.partyId],
+            foreignColumns: [politicalParties.mapId, politicalParties.id],
+            name: "party_members_party_reference",
+        }).onDelete("cascade"),
+        politicianReference: foreignKey({
+            columns: [table.mapId, table.politicianId],
+            foreignColumns: [politicians.mapId, politicians.id],
+            name: "party_members_politician_reference",
+        }).onDelete("cascade"),
+    })
+);
