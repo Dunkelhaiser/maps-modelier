@@ -13,6 +13,7 @@ import { useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { WarInput, warSchema } from "src/shared/schemas/wars/war";
 import AddParticipantsForm from "./AddParticipantsForm";
+import DeleteWarDialog from "./DeleteWarDialog";
 
 const EditWarForm = () => {
     const activeMap = useActiveMap();
@@ -179,10 +180,17 @@ const EditWarForm = () => {
                             )}
                         />
                     </div>
-                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2" disabled={isFormUnchanged}>
-                        <Save />
-                        Save Changes
-                    </Button>
+                    <div className="mt-6 flex gap-2">
+                        <Button
+                            isLoading={form.formState.isSubmitting}
+                            className="flex-1 gap-2"
+                            disabled={isFormUnchanged}
+                        >
+                            <Save />
+                            Save Changes
+                        </Button>
+                        <DeleteWarDialog mapId={activeMap} id={selectedWar} />
+                    </div>
                 </form>
             </Form>
             <AddParticipantsForm />

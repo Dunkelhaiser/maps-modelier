@@ -60,3 +60,15 @@ export const useUpdateWar = (mapId: string, id: number) => {
         },
     });
 };
+
+export const useDeleteWar = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async () => await window.electron.wars.delete(mapId, id),
+        onSuccess: () => {
+            toast.success("War deleted successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, "wars"] });
+        },
+    });
+};
