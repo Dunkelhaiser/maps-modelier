@@ -8,6 +8,7 @@ import { UpdateCountryInput } from "./schemas/countries/updateCountry.js";
 import { EthnicityInput } from "./schemas/ethnicities/ethnicity.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
+import { PoliticianInput } from "./schemas/politics/politician.js";
 import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
 import { PopulationInput } from "./schemas/provinces/population.js";
 import { CreateStateInput } from "./schemas/states/createState.js";
@@ -145,6 +146,12 @@ export interface WarParticipants {
     totalGroups: number;
 }
 
+export interface Politician {
+    id: number;
+    name: string;
+    portrait?: string;
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -210,6 +217,9 @@ export interface IpcChannels {
         get: (mapId: string, id: number) => Promise<WarBase>;
         getParticipants: (mapId: string, id: number) => Promise<WarParticipants>;
         addParticipants: (mapId: string, id: number, participants: AddParticipantsInput) => Promise<void>;
+    };
+    politicians: {
+        create: (mapId: string, countryId: number, input: PoliticianInput) => Promise<Politician>;
     };
 }
 

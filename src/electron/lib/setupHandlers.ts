@@ -25,6 +25,7 @@ import { createMap } from "./maps/createMap.js";
 import { deleteMap } from "./maps/deleteMap.js";
 import { getMaps } from "./maps/getMaps.js";
 import { renameMap } from "./maps/renameMap.js";
+import { createPolitician } from "./politics/createPolitician.js";
 import { addPopulation } from "./provinces/addPopulation.js";
 import { changeProvinceType } from "./provinces/changeProvinceType.js";
 import { getAllProvinces } from "./provinces/getAllProvinces.js";
@@ -99,6 +100,9 @@ const handlers: HandlersType = {
         get: getWar,
         getParticipants,
         addParticipants,
+    },
+    politicians: {
+        create: createPolitician,
     },
 };
 
