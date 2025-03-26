@@ -217,6 +217,7 @@ export interface IpcChannels {
         get: (mapId: string, id: number) => Promise<WarBase>;
         getParticipants: (mapId: string, id: number) => Promise<WarParticipants>;
         addParticipants: (mapId: string, id: number, participants: AddParticipantsInput) => Promise<void>;
+        delete: (mapId: string, id: number) => Promise<void>;
     };
     politicians: {
         create: (mapId: string, countryId: number, input: PoliticianInput) => Promise<Politician>;

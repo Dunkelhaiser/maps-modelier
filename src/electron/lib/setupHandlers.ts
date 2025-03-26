@@ -38,6 +38,7 @@ import { removeProvinces } from "./states/removeProvinces.js";
 import { renameState } from "./states/renameState.js";
 import { addParticipants } from "./wars/addParticipants.js";
 import { createWar } from "./wars/createWar.js";
+import { deleteWar } from "./wars/deleteWar.js";
 import { getAllWars } from "./wars/getAllWars.js";
 import { getParticipants } from "./wars/getParticipants.js";
 import { getWar } from "./wars/getWar.js";
@@ -100,6 +101,7 @@ const handlers: HandlersType = {
         get: getWar,
         getParticipants,
         addParticipants,
+        delete: deleteWar,
     },
     politicians: {
         create: createPolitician,
