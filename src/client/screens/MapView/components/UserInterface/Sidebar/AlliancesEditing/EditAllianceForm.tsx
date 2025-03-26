@@ -11,7 +11,7 @@ import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { AllianceInput, allianceSchema } from "src/shared/schemas/alliances/alliance";
 import AddMembersForm from "./AddMembersForm";
-import DeleteAllianceDialog from "./DeleteCountryDialog";
+import DeleteAllianceDialog from "./DeleteAllianceDialog";
 
 const EditAllianceForm = () => {
     const activeMap = useActiveMap();
