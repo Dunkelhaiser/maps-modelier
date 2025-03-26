@@ -221,6 +221,7 @@ export interface IpcChannels {
     };
     politicians: {
         create: (mapId: string, countryId: number, input: PoliticianInput) => Promise<Politician>;
+        update: (mapId: string, id: number, data: PoliticianInput) => Promise<Politician>;
         delete: (mapId: string, id: number) => Promise<void>;
     };
 }
