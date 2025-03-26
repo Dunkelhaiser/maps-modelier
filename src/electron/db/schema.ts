@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { foreignKey, integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const maps = sqliteTable("maps", {
@@ -532,6 +532,99 @@ export const headsOfGovernment = sqliteTable(
             columns: [table.mapId, table.politicianId],
             foreignColumns: [politicians.mapId, politicians.id],
             name: "head_of_government_politician_reference",
+        }).onDelete("cascade"),
+    })
+);
+
+export const ideologies = sqliteTable(
+    "ideologies",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM ideologies WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        name: text("name").notNull(),
+        color: text("color").notNull().default("#808080"),
+        parentId: integer("parent_id"),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "ideologies_pk" }),
+    })
+);
+
+export const ideologiesRelations = relations(ideologies, ({ one }) => ({
+    parent: one(ideologies, {
+        fields: [ideologies.mapId, ideologies.parentId],
+        references: [ideologies.mapId, ideologies.id],
+        relationName: "ideology_parent",
+    }),
+}));
+
+export const politicalParties = sqliteTable(
+    "political_parties",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM political_parties WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        countryId: integer("country_id").notNull(),
+        name: text("name").notNull(),
+        color: text("color").notNull().default("#808080"),
+        leaderId: integer("leader_id"),
+        foundedAt: integer("founded_at", { mode: "timestamp" }),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "political_parties_pk" }),
+        leaderReference: foreignKey({
+            columns: [table.mapId, table.leaderId],
+            foreignColumns: [politicians.mapId, politicians.id],
+            name: "party_leader_reference",
+        }).onDelete("set null"),
+        countryReference: foreignKey({
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
+            name: "party_country_reference",
+        }).onDelete("cascade"),
+    })
+);
+
+export const partyIdeologies = sqliteTable(
+    "party_ideologies",
+    {
+        partyId: integer("party_id").notNull(),
+        ideologyId: integer("ideology_id").notNull(),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        isPrimary: integer("is_primary", { mode: "boolean" }).notNull().default(false),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.partyId, table.ideologyId], name: "party_ideologies_pk" }),
+        partyReference: foreignKey({
+            columns: [table.mapId, table.partyId],
+            foreignColumns: [politicalParties.mapId, politicalParties.id],
+            name: "ideology_party_reference",
+        }).onDelete("cascade"),
+        ideologyReference: foreignKey({
+            columns: [table.mapId, table.ideologyId],
+            foreignColumns: [ideologies.mapId, ideologies.id],
+            name: "party_ideology_reference",
         }).onDelete("cascade"),
     })
 );
