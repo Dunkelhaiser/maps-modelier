@@ -432,3 +432,32 @@ export const warParticipants = sqliteTable(
         }).onDelete("cascade"),
     })
 );
+
+export const politicians = sqliteTable(
+    "politicians",
+    {
+        id: integer("id")
+            .notNull()
+            .$defaultFn(() => sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM politicians WHERE map_id = map_id)`),
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        countryId: integer("country_id").notNull(),
+        name: text("name").notNull(),
+        portrait: text("portrait"),
+        createdAt: integer("createdAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+        updatedAt: integer("updatedAt", { mode: "timestamp" })
+            .notNull()
+            .default(sql`(unixepoch())`),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.mapId, table.id], name: "politicians_pk" }),
+        countryReference: foreignKey({
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
+            name: "politician_country_reference",
+        }).onDelete("cascade"),
+    })
+);

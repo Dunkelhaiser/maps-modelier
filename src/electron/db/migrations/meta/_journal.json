@@ -92,6 +92,13 @@
             "when": 1742755552300,
             "tag": "0012_thick_maximus",
             "breakpoints": true
+        },
+        {
+            "idx": 13,
+            "version": "6",
+            "when": 1743009940574,
+            "tag": "0013_panoramic_karma",
+            "breakpoints": true
         }
     ]
 }
