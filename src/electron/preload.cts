@@ -95,6 +95,7 @@ const api = {
             invoke("politicians", "create", mapId, countryId, data),
         update: (mapId: string, id: number, data: PoliticianInput) => invoke("politicians", "update", mapId, id, data),
         delete: (mapId: string, id: number) => invoke("politicians", "delete", mapId, id),
+        getAll: (mapId: string, countryId: number) => invoke("politicians", "getAll", mapId, countryId),
     },
 };
 

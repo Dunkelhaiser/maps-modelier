@@ -149,7 +149,17 @@ export interface WarParticipants {
 export interface Politician {
     id: number;
     name: string;
-    portrait?: string;
+    portrait: string | null;
+}
+
+export interface PoliticalParty {
+    id: number;
+    name: string;
+    color: string;
+}
+
+export interface PoliticianWithParty extends Politician {
+    party: PoliticalParty | null;
 }
 
 export interface IpcChannels {
@@ -223,6 +233,7 @@ export interface IpcChannels {
         create: (mapId: string, countryId: number, input: PoliticianInput) => Promise<Politician>;
         update: (mapId: string, id: number, data: PoliticianInput) => Promise<Politician>;
         delete: (mapId: string, id: number) => Promise<void>;
+        getAll: (mapId: string, countryId: number) => Promise<PoliticianWithParty[]>;
     };
 }
 

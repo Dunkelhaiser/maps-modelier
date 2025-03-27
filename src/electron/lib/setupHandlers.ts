@@ -27,6 +27,7 @@ import { getMaps } from "./maps/getMaps.js";
 import { renameMap } from "./maps/renameMap.js";
 import { createPolitician } from "./politicians/createPolitician.js";
 import { deletePolitician } from "./politicians/deletePolitician.js";
+import { getAllPoliticians } from "./politicians/getAllPoliticians.js";
 import { updatePolitician } from "./politicians/updatePolitician.js";
 import { addPopulation } from "./provinces/addPopulation.js";
 import { changeProvinceType } from "./provinces/changeProvinceType.js";
@@ -109,6 +110,7 @@ const handlers: HandlersType = {
         create: createPolitician,
         update: updatePolitician,
         delete: deletePolitician,
+        getAll: getAllPoliticians,
     },
 };
 
