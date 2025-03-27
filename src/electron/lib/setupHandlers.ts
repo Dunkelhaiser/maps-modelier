@@ -21,6 +21,7 @@ import { createEthnicity } from "./ethnicities/createEthnicity.js";
 import { deleteEthnicity } from "./ethnicities/deleteEthnicity.js";
 import { getAllEthnicities } from "./ethnicities/getAllEthnicities.js";
 import { renameEthnicity } from "./ethnicities/renameEthnicity.js";
+import { createIdeology } from "./ideologies/createIdeology.js";
 import { createMap } from "./maps/createMap.js";
 import { deleteMap } from "./maps/deleteMap.js";
 import { getMaps } from "./maps/getMaps.js";
@@ -113,6 +114,9 @@ const handlers: HandlersType = {
         delete: deletePolitician,
         getAll: getAllPoliticians,
         get: getPolitician,
+    },
+    ideologies: {
+        create: createIdeology,
     },
 };
 

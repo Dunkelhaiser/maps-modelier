@@ -5,6 +5,7 @@ import type { CreateCountryInput } from "../shared/schemas/countries/createCount
 import type { StatesAssignmentInput } from "../shared/schemas/countries/states.js" with { "resolution-mode": "import" };
 import type { UpdateCountryInput } from "../shared/schemas/countries/updateCountry.js" with { "resolution-mode": "import" };
 import type { EthnicityInput } from "../shared/schemas/ethnicities/ethnicity.js" with { "resolution-mode": "import" };
+import type { IdeologyInput } from "../shared/schemas/ideologies/ideology.js" with { "resolution-mode": "import" };
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
 import type { PoliticianInput } from "../shared/schemas/politics/politician.js" with { "resolution-mode": "import" };
@@ -97,6 +98,9 @@ const api = {
         delete: (mapId: string, id: number) => invoke("politicians", "delete", mapId, id),
         getAll: (mapId: string, countryId: number) => invoke("politicians", "getAll", mapId, countryId),
         get: (mapId: string, politicianId: number) => invoke("politicians", "get", mapId, politicianId),
+    },
+    ideologies: {
+        create: (mapId: string, data: IdeologyInput) => invoke("ideologies", "create", mapId, data),
     },
 };
 
