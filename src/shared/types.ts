@@ -9,6 +9,7 @@ import { EthnicityInput } from "./schemas/ethnicities/ethnicity.js";
 import { IdeologyInput } from "./schemas/ideologies/ideology.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
+import { PartyInput } from "./schemas/parties/party.js";
 import { PoliticianInput } from "./schemas/politics/politician.js";
 import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
 import { PopulationInput } from "./schemas/provinces/population.js";
@@ -169,6 +170,10 @@ export interface Ideology {
     color: string;
 }
 
+export interface IdRes {
+    id: number;
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -248,6 +253,9 @@ export interface IpcChannels {
         update: (mapId: string, id: number, data: IdeologyInput) => Promise<Ideology>;
         delete: (mapId: string, id: number) => Promise<void>;
         getAll: (mapId: string) => Promise<Ideology[]>;
+    };
+    parties: {
+        create: (mapId: string, countryId: number, data: PartyInput) => Promise<IdRes>;
     };
 }
 
