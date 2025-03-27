@@ -1,7 +1,7 @@
 import { useSidebarStore } from "@store/sidebar";
 import { ToggleGroup, ToggleGroupItem } from "@ui/ToggleGroup";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ui/Tooltip";
-import { Handshake, Map, Swords, UsersRound } from "lucide-react";
+import { Earth, Handshake, Map, Swords, UsersRound } from "lucide-react";
 
 const Menu = () => {
     const openSidebar = useSidebarStore((state) => state.openSidebar);
@@ -49,6 +49,16 @@ const Menu = () => {
                     </TooltipTrigger>
                     <TooltipContent>
                         <p>Wars</p>
+                    </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <ToggleGroupItem value="ideologies" aria-label="Ideologies">
+                            <Earth />
+                        </ToggleGroupItem>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Ideologies</p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>

@@ -8,6 +8,7 @@ import Countries from "./Countries/Countries";
 import CountriesEditing from "./CountriesEditing/CountriesEditing";
 import Country from "./Country/Country";
 import Ethnicities from "./Ethnicities/Ethnicities";
+import Ideologies from "./Ideologies/Ideologies";
 import War from "./War/War";
 import Wars from "./Wars/Wars";
 import WarsEditing from "./WarsEditing/WarsEditing";
@@ -45,6 +46,8 @@ const Sidebar = () => {
             }
             return <Wars />;
         }
+
+        if (activeSidebar === "ideologies") return <Ideologies />;
 
         return null;
     };
