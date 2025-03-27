@@ -23,6 +23,7 @@ import { getAllEthnicities } from "./ethnicities/getAllEthnicities.js";
 import { renameEthnicity } from "./ethnicities/renameEthnicity.js";
 import { createIdeology } from "./ideologies/createIdeology.js";
 import { deleteIdeology } from "./ideologies/deleteIdeology.js";
+import { getAllIdeologies } from "./ideologies/getAllIdeologies.js";
 import { updateIdeology } from "./ideologies/updateIdeology.js";
 import { createMap } from "./maps/createMap.js";
 import { deleteMap } from "./maps/deleteMap.js";
@@ -121,6 +122,7 @@ const handlers: HandlersType = {
         create: createIdeology,
         update: updateIdeology,
         delete: deleteIdeology,
+        getAll: getAllIdeologies,
     },
 };
 
