@@ -102,6 +102,7 @@ const api = {
     ideologies: {
         create: (mapId: string, data: IdeologyInput) => invoke("ideologies", "create", mapId, data),
         update: (mapId: string, id: number, data: IdeologyInput) => invoke("ideologies", "update", mapId, id, data),
+        delete: (mapId: string, id: number) => invoke("ideologies", "delete", mapId, id),
     },
 };
 

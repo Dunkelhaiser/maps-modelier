@@ -246,6 +246,7 @@ export interface IpcChannels {
     ideologies: {
         create: (mapId: string, data: IdeologyInput) => Promise<Ideology>;
         update: (mapId: string, id: number, data: IdeologyInput) => Promise<Ideology>;
+        delete: (mapId: string, id: number) => Promise<void>;
     };
 }
 
