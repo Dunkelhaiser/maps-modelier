@@ -256,6 +256,7 @@ export interface IpcChannels {
     };
     parties: {
         create: (mapId: string, countryId: number, data: PartyInput) => Promise<IdRes>;
+        delete: (mapId: string, id: number) => Promise<void>;
     };
 }
 
