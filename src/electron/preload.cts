@@ -110,6 +110,7 @@ const api = {
         create: (mapId: string, countryId: number, data: PartyInput) =>
             invoke("parties", "create", mapId, countryId, data),
         delete: (mapId: string, id: number) => invoke("parties", "delete", mapId, id),
+        getAll: (mapId: string, countryId: number) => invoke("parties", "getAll", mapId, countryId),
     },
 };
 

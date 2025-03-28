@@ -161,6 +161,12 @@ export interface PoliticalParty {
     acronym: string | null;
 }
 
+export interface PoliticalPartyTable extends PoliticalParty {
+    membersCount: number;
+    primaryIdeology: Ideology | null;
+    foundedAt: Date | null;
+}
+
 export interface PoliticianWithParty extends Politician {
     party: PoliticalParty | null;
 }
@@ -258,6 +264,7 @@ export interface IpcChannels {
     parties: {
         create: (mapId: string, countryId: number, data: PartyInput) => Promise<IdRes>;
         delete: (mapId: string, id: number) => Promise<void>;
+        getAll: (mapId: string, countryId: number) => Promise<PoliticalPartyTable[]>;
     };
 }
 
