@@ -21,7 +21,7 @@ export const useCreateParty = (mapId: string, countryId: number) => {
     });
 };
 
-export const useDeleteParties = (mapId: string, id: number) => {
+export const useDeleteParty = (mapId: string, id: number) => {
     return useMutation({
         mutationFn: async () => await window.electron.parties.delete(mapId, id),
         onSuccess: () => {
