@@ -1,3 +1,4 @@
+import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { PoliticianInput } from "src/shared/schemas/politics/politician";
@@ -41,10 +42,14 @@ export const useUpdatePolitician = (mapId: string, id: number) => {
 };
 
 export const useDeletePolitician = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+    const selectedCountry = useMapStore((state) => state.selectedCountry);
+
     return useMutation({
         mutationFn: async () => await window.electron.politicians.delete(mapId, id),
         onSuccess: () => {
             toast.success("Politician deleted successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, selectedCountry, "politicians"] });
         },
     });
 };

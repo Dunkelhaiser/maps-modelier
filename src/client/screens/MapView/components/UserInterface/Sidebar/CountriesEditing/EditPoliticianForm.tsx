@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { PoliticianInput, politicianSchema } from "src/shared/schemas/politics/politician";
 import { Politician } from "src/shared/types";
+import DeletePoliticianDialog from "./DeletePoliticianDialog";
 
 interface Props {
     politician: Politician;
@@ -84,6 +85,7 @@ const EditPoliticianForm = ({ politician }: Props) => {
                             >
                                 <Save className="size-4" /> Save
                             </Button>
+                            <DeletePoliticianDialog mapId={activeMap} id={politician.id} />
                         </div>
                     </CardContent>
                 </form>
