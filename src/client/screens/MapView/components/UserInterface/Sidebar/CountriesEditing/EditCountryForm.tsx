@@ -3,6 +3,7 @@ import { useGetCountryById } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Tabs, TabsList, TabsTrigger } from "@ui/Tabs";
 import EditAttributesForm from "./EditAttributesForm";
+import EditPoliticsForm from "./EditPoliticsForm";
 
 const EditCountryForm = () => {
     const activeMap = useActiveMap();
@@ -18,8 +19,10 @@ const EditCountryForm = () => {
         <Tabs defaultValue="attributes">
             <TabsList>
                 <TabsTrigger value="attributes">Attributes</TabsTrigger>
+                <TabsTrigger value="politics">Politics</TabsTrigger>
             </TabsList>
             <EditAttributesForm />
+            <EditPoliticsForm />
         </Tabs>
     );
 };
