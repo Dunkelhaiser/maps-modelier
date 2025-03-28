@@ -26,7 +26,7 @@ const PoliticiansTab = ({ politicians }: Props) => {
                         <p className="text-sm font-medium">{politician.name}</p>
                         {politician.party && (
                             <p className="w-fit rounded-md bg-muted px-2 py-1 text-sm font-medium text-muted-foreground">
-                                {politician.party.name}
+                                {politician.party.acronym ?? politician.party.name}
                             </p>
                         )}
                     </CardContent>
