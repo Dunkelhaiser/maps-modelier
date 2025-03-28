@@ -12,7 +12,8 @@ export const getAllPoliticians = async (_: Electron.IpcMainInvokeEvent, mapId: s
             portrait: politicians.portrait,
         })
         .from(politicians)
-        .where(and(eq(politicians.mapId, mapId), eq(politicians.countryId, countryId)));
+        .where(and(eq(politicians.mapId, mapId), eq(politicians.countryId, countryId)))
+        .orderBy(politicians.name);
 
     const politicianIds = politiciansList.map((p) => p.id);
 
