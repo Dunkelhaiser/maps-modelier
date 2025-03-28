@@ -31,12 +31,14 @@ export const useGetPolitician = (mapId: string, id: number) => {
 
 export const useUpdatePolitician = (mapId: string, id: number) => {
     const queryClient = useQueryClient();
+    const selectedCountry = useMapStore((state) => state.selectedCountry);
 
     return useMutation({
         mutationFn: async (data: PoliticianInput) => await window.electron.politicians.update(mapId, id, data),
         onSuccess: () => {
             toast.success("Politician updated successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, "politicians", id] });
+            queryClient.invalidateQueries({ queryKey: [mapId, selectedCountry, "politicians"] });
         },
     });
 };

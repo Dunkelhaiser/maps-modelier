@@ -23,7 +23,7 @@ const EditPoliticianForm = ({ politician }: Props) => {
             name: politician.name,
             portrait: "",
         }),
-        [politician]
+        [politician.name]
     );
 
     const form = useForm<PoliticianInput>({
