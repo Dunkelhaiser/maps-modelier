@@ -25,12 +25,18 @@ export const updatePolitician = async (
 
     const politicianFolder = ["media", mapId, `${existingPolitician[0].countryId}`, "politicians", `${id}`];
 
+    let portraitPath: string | null = null;
     if (parsedData.portrait) {
         if (existingPolitician[0].portrait) {
             const portraitFile = path.basename(existingPolitician[0].portrait);
             await deleteFile(portraitFile, politicianFolder);
         }
-        await saveFile(parsedData.portrait, "portrait", politicianFolder);
+        portraitPath = await saveFile(parsedData.portrait, "portrait", politicianFolder);
+
+        await db
+            .update(politicians)
+            .set({ portrait: portraitPath })
+            .where(and(eq(politicians.id, id), eq(politicians.mapId, mapId)));
     }
 
     const [updatedPolitician] = await db
@@ -39,7 +45,7 @@ export const updatePolitician = async (
         .where(and(eq(politicians.id, id), eq(politicians.mapId, mapId)))
         .returning(cols);
 
-    const portraitData = await loadFile(parsedData.portrait ?? "");
+    const portraitData = await loadFile(portraitPath ?? "");
 
     return {
         ...updatedPolitician,
