@@ -7,7 +7,7 @@ import { useState } from "react";
 import CreatePoliticianForm from "./CreatePoliticianForm";
 import EditPoliticianForm from "./EditPoliticianForm";
 
-const EditPoliticsForm = () => {
+const EditPoliticiansForm = () => {
     const [isCreating, setIsCreating] = useState(false);
 
     const activeMap = useActiveMap();
@@ -15,7 +15,7 @@ const EditPoliticsForm = () => {
     const { data: politicians } = useGetPoliticians(activeMap, selectedCountry);
 
     return (
-        <TabsContent value="politics" className="grid grid-cols-2 gap-4">
+        <TabsContent value="politicians" className="grid grid-cols-2 gap-4">
             {isCreating ? (
                 <CreatePoliticianForm stopCreating={() => setIsCreating(false)} />
             ) : (
@@ -34,4 +34,4 @@ const EditPoliticsForm = () => {
         </TabsContent>
     );
 };
-export default EditPoliticsForm;
+export default EditPoliticiansForm;
