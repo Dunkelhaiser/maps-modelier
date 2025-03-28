@@ -1,43 +1,49 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useCreatePolitician } from "@ipc/politicians";
-import { useMapStore } from "@store/store";
+import { useUpdatePolitician } from "@ipc/politicians";
 import { Button } from "@ui/Button";
 import { Card, CardContent } from "@ui/Card";
 import FileUpload from "@ui/FileUpload";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
-import { Save, X } from "lucide-react";
+import { Save } from "lucide-react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { PoliticianInput, politicianSchema } from "src/shared/schemas/politics/politician";
+import { Politician } from "src/shared/types";
 
 interface Props {
-    stopCreating: () => void;
+    politician: Politician;
 }
 
-const CreatePoliticianForm = ({ stopCreating }: Props) => {
+const EditPoliticianForm = ({ politician }: Props) => {
+    const defaultValues = useMemo(
+        () => ({
+            name: politician.name,
+            portrait: "",
+        }),
+        [politician]
+    );
+
     const form = useForm<PoliticianInput>({
         resolver: zodResolver(politicianSchema),
-        defaultValues: {
-            name: "",
-            portrait: "",
-        },
+        defaultValues,
     });
     const portraitRef = form.register("portrait");
 
     const activeMap = useActiveMap();
-    const selectedCountry = useMapStore((state) => state.selectedCountry)!;
-    const createPolitician = useCreatePolitician(activeMap, selectedCountry);
+    const updatePolitician = useUpdatePolitician(activeMap, politician.id);
 
-    const createPoliticianHandler = async (data: PoliticianInput) => {
-        await createPolitician.mutateAsync(data);
-        stopCreating();
+    const isFormUnchanged = JSON.stringify(defaultValues) === JSON.stringify(form.getValues());
+
+    const updatePoliticianHandler = async (data: PoliticianInput) => {
+        await updatePolitician.mutateAsync(data);
     };
 
     return (
         <Card>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(createPoliticianHandler)}>
+                <form onSubmit={form.handleSubmit(updatePoliticianHandler)}>
                     <FormField
                         control={form.control}
                         name="portrait"
@@ -46,6 +52,8 @@ const CreatePoliticianForm = ({ stopCreating }: Props) => {
                                 <FormControl>
                                     <FileUpload
                                         className="aspect-[3_/_4] w-full"
+                                        defaultImg={politician.portrait ?? ""}
+                                        resetKey={politician.id}
                                         {...portraitRef}
                                         accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                     />
@@ -69,11 +77,12 @@ const CreatePoliticianForm = ({ stopCreating }: Props) => {
                             )}
                         />
                         <div className="flex gap-2">
-                            <Button className="flex-1" isLoading={form.formState.isSubmitting}>
+                            <Button
+                                className="flex-1"
+                                isLoading={form.formState.isSubmitting}
+                                disabled={isFormUnchanged}
+                            >
                                 <Save className="size-4" /> Save
-                            </Button>
-                            <Button type="button" aria-label="Cancel" onClick={stopCreating} variant="ghost">
-                                <X className="size-4" />
                             </Button>
                         </div>
                     </CardContent>
@@ -82,4 +91,4 @@ const CreatePoliticianForm = ({ stopCreating }: Props) => {
         </Card>
     );
 };
-export default CreatePoliticianForm;
+export default EditPoliticianForm;
