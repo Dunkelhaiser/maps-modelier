@@ -20,9 +20,10 @@ export const getAllPoliticians = async (_: Electron.IpcMainInvokeEvent, mapId: s
     const partyMemberships = await db
         .select({
             politicianId: partyMembers.politicianId,
-            partyId: politicalParties.id,
-            partyName: politicalParties.name,
-            partyColor: politicalParties.color,
+            id: politicalParties.id,
+            name: politicalParties.name,
+            acronym: politicalParties.acronym,
+            color: politicalParties.color,
         })
         .from(partyMembers)
         .innerJoin(
@@ -34,9 +35,10 @@ export const getAllPoliticians = async (_: Electron.IpcMainInvokeEvent, mapId: s
     const politicianToPartyMap = new Map<number, PoliticalParty>();
     partyMemberships.forEach((membership) => {
         politicianToPartyMap.set(membership.politicianId, {
-            id: membership.partyId,
-            name: membership.partyName,
-            color: membership.partyColor,
+            id: membership.id,
+            name: membership.name,
+            acronym: membership.acronym,
+            color: membership.color,
         });
     });
 

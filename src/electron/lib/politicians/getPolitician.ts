@@ -21,6 +21,7 @@ export const getPolitician = async (_: Electron.IpcMainInvokeEvent, mapId: strin
         .select({
             id: politicalParties.id,
             name: politicalParties.name,
+            acronym: politicalParties.acronym,
             color: politicalParties.color,
         })
         .from(partyMembers)

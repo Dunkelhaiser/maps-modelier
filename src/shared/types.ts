@@ -158,6 +158,7 @@ export interface PoliticalParty {
     id: number;
     name: string;
     color: string;
+    acronym: string | null;
 }
 
 export interface PoliticianWithParty extends Politician {

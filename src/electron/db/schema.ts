@@ -579,6 +579,7 @@ export const politicalParties = sqliteTable(
             .references(() => maps.id, { onDelete: "cascade" }),
         countryId: integer("country_id").notNull(),
         name: text("name").notNull(),
+        acronym: text("acronym"),
         color: text("color").notNull().default("#808080"),
         leaderId: integer("leader_id"),
         foundedAt: integer("founded_at", { mode: "timestamp" }),

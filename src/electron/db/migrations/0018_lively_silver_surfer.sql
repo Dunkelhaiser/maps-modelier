@@ -1,0 +1,1 @@
+ALTER TABLE `political_parties` ADD `acronym` text;

@@ -7,7 +7,8 @@ const partyIdeologySchema = zod.object({
 });
 
 export const partySchema = zod.object({
-    name: nameField({ field: "party", min: 3, max: 50 }),
+    name: nameField({ field: "name", min: 3, max: 50 }),
+    acronym: nameField({ field: "acronym", min: 1, max: 10 }).optional(),
     color: zod
         .string()
         .trim()
