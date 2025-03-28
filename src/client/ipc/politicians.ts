@@ -42,7 +42,7 @@ export const useUpdatePolitician = (mapId: string, id: number) => {
 
 export const useDeletePolitician = (mapId: string, id: number) => {
     return useMutation({
-        mutationFn: async () => await window.electron.alliances.delete(mapId, id),
+        mutationFn: async () => await window.electron.politicians.delete(mapId, id),
         onSuccess: () => {
             toast.success("Politician deleted successfully");
         },
