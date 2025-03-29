@@ -18,8 +18,16 @@ export const partySchema = zod.object({
     membersCount: zod
         .number({ message: "Provide party members count" })
         .min(1, { message: "Party must have at least one member" }),
-    foundedAt: zod.coerce.date({ message: "Provide foundation date" }),
-    ideologies: zod.array(partyIdeologySchema),
+    foundedAt: zod.coerce.date({ message: "Provide foundation date" }).optional(),
+    ideologies: zod.array(partyIdeologySchema).refine(
+        (ideologies) => {
+            const primaryCount = ideologies.filter((ideology) => ideology.isPrimary).length;
+            return primaryCount === 1;
+        },
+        {
+            message: "There can be only one primary ideology",
+        }
+    ),
 });
 
 export type PartyInput = zod.infer<typeof partySchema>;
