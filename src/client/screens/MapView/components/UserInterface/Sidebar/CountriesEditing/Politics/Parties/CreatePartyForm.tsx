@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useCreateParty } from "@ipc/parties";
-import { useGetPoliticians } from "@ipc/politicians";
+import { useGetIndependent } from "@ipc/politicians";
 import { useMapStore } from "@store/store";
 import { Button } from "@ui/Button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@ui/Form";
@@ -31,7 +31,7 @@ const CreatePartyForm = () => {
     });
     const colorPickerRef = useRef<HTMLInputElement>(null);
 
-    const { data: politicians } = useGetPoliticians(activeMap, selectedCountry);
+    const { data: politicians } = useGetIndependent(activeMap, selectedCountry);
     const createParty = useCreateParty(activeMap, selectedCountry);
 
     const createPartyHandler = async (data: PartyInput) => {

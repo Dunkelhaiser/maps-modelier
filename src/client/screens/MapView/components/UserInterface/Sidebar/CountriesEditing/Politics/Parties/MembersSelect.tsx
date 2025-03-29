@@ -1,5 +1,5 @@
 import { useActiveMap } from "@hooks/useActiveMap";
-import { useGetPoliticians } from "@ipc/politicians";
+import { useGetIndependent, useGetPolitician } from "@ipc/politicians";
 import { useMapStore } from "@store/store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/Select";
 
@@ -13,7 +13,10 @@ interface Props {
 const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) => {
     const activeMap = useActiveMap();
     const selectedCountry = useMapStore((state) => state.selectedCountry)!;
-    const politicians = useGetPoliticians(activeMap, selectedCountry);
+    const politicians = useGetIndependent(activeMap, selectedCountry);
+    const { data: selectedPolitician } = useGetPolitician(activeMap, value);
+
+    const politiciansArr = selectedPolitician ? politicians.data?.concat(selectedPolitician) : politicians.data;
 
     return (
         <Select onValueChange={onChange} defaultValue={String(value)} disabled={isLeader}>
@@ -21,7 +24,7 @@ const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) =>
                 <SelectValue placeholder="Member" />
             </SelectTrigger>
             <SelectContent>
-                {politicians.data
+                {politiciansArr
                     ?.filter((politician) => politician.id === value || !selectedMembers.includes(politician.id))
                     .map((politician) => (
                         <SelectItem value={String(politician.id)} key={politician.id}>
