@@ -6,6 +6,7 @@ import Alliances from "./Alliances/Alliances";
 import AlliancesEditing from "./AlliancesEditing/AlliancesEditing";
 import Countries from "./Countries/Countries";
 import CountriesEditing from "./CountriesEditing/CountriesEditing";
+import PartyEditing from "./CountriesEditing/Politics/Parties/PartyEditing";
 import Country from "./Country/Country";
 import Party from "./Country/PoliticsTab/Party/Party";
 import Ethnicities from "./Ethnicities/Ethnicities";
@@ -36,6 +37,7 @@ const Sidebar = () => {
         if (activeSidebar === "parties") {
             if (selectedParty) {
                 if (mode === "viewing") return <Party />;
+                return <PartyEditing />;
             }
         }
 
