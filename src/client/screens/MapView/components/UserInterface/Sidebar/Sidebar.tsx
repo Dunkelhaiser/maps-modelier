@@ -7,6 +7,7 @@ import AlliancesEditing from "./AlliancesEditing/AlliancesEditing";
 import Countries from "./Countries/Countries";
 import CountriesEditing from "./CountriesEditing/CountriesEditing";
 import Country from "./Country/Country";
+import Party from "./Country/PoliticsTab/Party/Party";
 import Ethnicities from "./Ethnicities/Ethnicities";
 import Ideologies from "./Ideologies/Ideologies";
 import War from "./War/War";
@@ -19,6 +20,7 @@ const Sidebar = () => {
     const selectedCountry = useMapStore((state) => state.selectedCountry);
     const selectedAlliance = useMapStore((state) => state.selectedAlliance);
     const selectedWar = useMapStore((state) => state.selectedWar);
+    const selectedParty = useMapStore((state) => state.selectedParty);
 
     const renderSidebarContent = () => {
         if (activeSidebar === "ethnicities") return <Ethnicities />;
@@ -29,6 +31,12 @@ const Sidebar = () => {
                 return <CountriesEditing />;
             }
             return <Countries />;
+        }
+
+        if (activeSidebar === "parties") {
+            if (selectedParty) {
+                if (mode === "viewing") return <Party />;
+            }
         }
 
         if (activeSidebar === "alliances") {
