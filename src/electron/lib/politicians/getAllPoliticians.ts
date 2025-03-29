@@ -1,5 +1,5 @@
 import { and, eq, inArray } from "drizzle-orm";
-import { PoliticalParty } from "../../../shared/types.js";
+import { PoliticalPartyBase } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { politicians, partyMembers, politicalParties } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
@@ -32,7 +32,7 @@ export const getAllPoliticians = async (_: Electron.IpcMainInvokeEvent, mapId: s
         )
         .where(and(eq(partyMembers.mapId, mapId), inArray(partyMembers.politicianId, politicianIds)));
 
-    const politicianToPartyMap = new Map<number, PoliticalParty>();
+    const politicianToPartyMap = new Map<number, PoliticalPartyBase>();
     partyMemberships.forEach((membership) => {
         politicianToPartyMap.set(membership.politicianId, {
             id: membership.id,

@@ -9,6 +9,13 @@ export const useGetParties = (mapId: string, countryId: number) => {
     });
 };
 
+export const useGetParty = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "parties", id],
+        queryFn: async () => await window.electron.parties.get(mapId, id),
+    });
+};
+
 export const useCreateParty = (mapId: string, countryId: number) => {
     const queryClient = useQueryClient();
 

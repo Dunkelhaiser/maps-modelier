@@ -32,6 +32,7 @@ import { renameMap } from "./maps/renameMap.js";
 import { createParty } from "./parties/createParty.js";
 import { deleteParty } from "./parties/deleteParty.js";
 import { getAllParties } from "./parties/getAllParties.js";
+import { getParty } from "./parties/getParty.js";
 import { createPolitician } from "./politicians/createPolitician.js";
 import { deletePolitician } from "./politicians/deletePolitician.js";
 import { getAllPoliticians } from "./politicians/getAllPoliticians.js";
@@ -131,6 +132,7 @@ const handlers: HandlersType = {
         create: createParty,
         delete: deleteParty,
         getAll: getAllParties,
+        get: getParty,
     },
 };
 

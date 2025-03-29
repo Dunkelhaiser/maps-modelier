@@ -154,21 +154,26 @@ export interface Politician {
     portrait: string | null;
 }
 
-export interface PoliticalParty {
+export interface PoliticalPartyBase {
     id: number;
     name: string;
     color: string;
     acronym: string | null;
 }
 
-export interface PoliticalPartyTable extends PoliticalParty {
+export interface PoliticalPartyTable extends PoliticalPartyBase {
     membersCount: number;
     primaryIdeology: Ideology | null;
     foundedAt: Date | null;
 }
 
+export interface PoliticalParty extends PoliticalPartyTable {
+    leader: Politician | null;
+    ideologies: Ideology[];
+}
+
 export interface PoliticianWithParty extends Politician {
-    party: PoliticalParty | null;
+    party: PoliticalPartyBase | null;
 }
 
 export interface Ideology {
@@ -265,6 +270,7 @@ export interface IpcChannels {
         create: (mapId: string, countryId: number, data: PartyInput) => Promise<IdRes>;
         delete: (mapId: string, id: number) => Promise<void>;
         getAll: (mapId: string, countryId: number) => Promise<PoliticalPartyTable[]>;
+        get: (mapId: string, id: number) => Promise<PoliticalParty>;
     };
 }
 
