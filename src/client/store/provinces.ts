@@ -90,8 +90,9 @@ export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice
     deselectAlliance: () => set({ selectedAlliance: null }),
 
     selectParty: (party) => {
+        const { selectedCountry } = get();
         useSidebarStore.getState().openSidebar("parties");
-        set({ selectedParty: party });
+        set({ selectedParty: party, selectedCountry });
     },
 
     deselectParty: () => set({ selectedParty: null }),
