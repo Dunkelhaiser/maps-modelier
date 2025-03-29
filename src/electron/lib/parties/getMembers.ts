@@ -13,7 +13,7 @@ export const getMembers = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
             .from(partyMembers)
             .where(and(eq(partyMembers.mapId, mapId), eq(partyMembers.partyId, id)));
 
-        const memberIds = membersArr.map((member) => member.partyId);
+        const memberIds = membersArr.map((member) => member.politicianId);
 
         const membersData = await tx
             .select({
