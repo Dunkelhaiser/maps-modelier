@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@ui/Tabs";
 import AlliancesTab from "./AlliancesTab";
 import AttributesTab from "./AttributesTab";
 import DemographicsTab from "./DemographicsTab";
-import PoliticsTab from "./PoliticsTab";
+import PoliticsTab from "./PoliticsTab/Politicians/PoliticsTab";
 
 const Country = () => {
     const activeMap = useActiveMap();

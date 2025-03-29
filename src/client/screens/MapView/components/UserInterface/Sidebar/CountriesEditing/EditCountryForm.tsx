@@ -3,7 +3,7 @@ import { useGetCountryById } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Tabs, TabsList, TabsTrigger } from "@ui/Tabs";
 import EditAttributesForm from "./EditAttributesForm";
-import PoliticsTab from "./PoliticsTab";
+import PoliticsTab from "./Politics/PoliticsTab";
 
 const EditCountryForm = () => {
     const activeMap = useActiveMap();

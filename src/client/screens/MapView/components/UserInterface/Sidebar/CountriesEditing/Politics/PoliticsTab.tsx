@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/Tabs";
-import EditPoliticiansForm from "./EditPoliticiansForm";
+import EditPoliticiansForm from "./Politicians/EditPoliticiansForm";
 
 const PoliticsTab = () => {
     return (
