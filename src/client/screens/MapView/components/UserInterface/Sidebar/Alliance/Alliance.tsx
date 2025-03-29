@@ -1,4 +1,5 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
+import InfoBlock from "@components/InfoBlock";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAlliance, useGetMembers } from "@ipc/alliances";
 import { useSidebarStore } from "@store/sidebar";
@@ -32,36 +33,21 @@ const Alliance = () => {
 
             <CardContent className="flex h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] flex-col gap-4 overflow-auto pb-6">
                 <div className="flex flex-col gap-3">
-                    <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
-                        <div className="rounded-full bg-muted-foreground/10 p-2">
-                            <Crown size={16} className="text-amber-500" />
-                        </div>
-                        <div className="flex-1">
-                            <p className="text-xs text-muted-foreground">Leader</p>
-                            <button
-                                type="button"
-                                className="mt-1 flex items-center gap-2"
-                                onClick={() => selectCountry(alliance.leader.id)}
-                            >
-                                <img
-                                    src={alliance.leader.flag}
-                                    alt={`Flag of ${alliance.leader.name}`}
-                                    className="aspect-[3/2] h-6 rounded-md border border-border object-cover"
-                                />
-                                <p className="font-medium">{alliance.leader.name}</p>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
-                        <div className="rounded-full bg-muted-foreground/10 p-2">
-                            <Users size={16} className="text-muted-foreground" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-muted-foreground">Member Count</p>
-                            <p className="font-medium">{alliance.membersCount}</p>
-                        </div>
-                    </div>
+                    <InfoBlock Icon={Crown} label="Leader" color="text-amber-500">
+                        <button
+                            type="button"
+                            className="mt-1 flex items-center gap-2"
+                            onClick={() => selectCountry(alliance.leader.id)}
+                        >
+                            <img
+                                src={alliance.leader.flag}
+                                alt={`Flag of ${alliance.leader.name}`}
+                                className="aspect-[3/2] h-6 rounded-md border border-border object-cover"
+                            />
+                            <p className="font-medium">{alliance.leader.name}</p>
+                        </button>
+                    </InfoBlock>
+                    <InfoBlock Icon={Users} label="Member Count" value={alliance.membersCount.toLocaleString()} />
                 </div>
 
                 <div className="mt-2">

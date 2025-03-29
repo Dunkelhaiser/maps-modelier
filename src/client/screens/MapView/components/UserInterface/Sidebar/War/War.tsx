@@ -1,4 +1,5 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
+import InfoBlock from "@components/InfoBlock";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetWar, useGetParticipants } from "@ipc/wars";
 import { useSidebarStore } from "@store/sidebar";
@@ -78,27 +79,8 @@ const War = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
-                        <div className="rounded-full bg-muted-foreground/10 p-2">
-                            <Timer className="size-4 text-muted-foreground" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-muted-foreground">Duration</p>
-                            <p className="font-medium">
-                                {startDate} - {endDate}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
-                        <div className="rounded-full bg-muted-foreground/10 p-2">
-                            <Users size={16} className="size-4 text-muted-foreground" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-muted-foreground">Total Participants</p>
-                            <p className="font-medium">{participants.totalParticipants}</p>
-                        </div>
-                    </div>
+                    <InfoBlock Icon={Timer} label="Duration" value={`${startDate} - ${endDate}`} />
+                    <InfoBlock Icon={Users} label="Total Participants" value={participants.totalParticipants} />
                 </div>
 
                 <div className="mt-2">

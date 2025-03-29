@@ -1,4 +1,5 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
+import InfoBlock from "@components/InfoBlock";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetParty } from "@ipc/parties";
 import { useSidebarStore } from "@store/sidebar";
@@ -37,27 +38,8 @@ const Party = () => {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
-                            <div className="rounded-full bg-muted-foreground/10 p-2">
-                                <Users size={16} className="text-muted-foreground" />
-                            </div>
-                            <div>
-                                <p className="text-xs text-muted-foreground">Member Count</p>
-                                <p className="font-medium">{party.membersCount.toLocaleString()}</p>
-                            </div>
-                        </div>
-
-                        {date && (
-                            <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
-                                <div className="rounded-full bg-muted-foreground/10 p-2">
-                                    <Calendar size={16} className="text-muted-foreground" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-muted-foreground">Founded</p>
-                                    <p className="font-medium">{date}</p>
-                                </div>
-                            </div>
-                        )}
+                        <InfoBlock Icon={Users} label="Member Count" value={party.membersCount.toLocaleString()} />
+                        <InfoBlock Icon={Calendar} label="Founded" value={date} />
 
                         <div>
                             <h3 className="mb-2 font-medium">Ideologies</h3>
