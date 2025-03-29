@@ -3,7 +3,7 @@ import { Card, CardContent } from "@ui/Card";
 import { PoliticalPartyBase, Politician as PoliticianType } from "src/shared/types";
 
 interface Props {
-    politician: PoliticianType & { party?: PoliticalPartyBase };
+    politician: PoliticianType & { party?: PoliticalPartyBase | null };
 }
 
 const Politician = ({ politician }: Props) => {
