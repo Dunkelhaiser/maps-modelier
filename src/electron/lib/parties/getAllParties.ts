@@ -26,7 +26,7 @@ export const getAllParties = async (_event: IpcMainInvokeEvent, mapId: string, c
 
     const partiesData = await Promise.all(
         partiesArr.map(async (party) => {
-            const primaryIdeologies = await db
+            const [primaryIdeology] = await db
                 .select({
                     id: ideologies.id,
                     name: ideologies.name,
@@ -41,8 +41,6 @@ export const getAllParties = async (_event: IpcMainInvokeEvent, mapId: string, c
                         eq(partyIdeologies.isPrimary, true)
                     )
                 );
-
-            const primaryIdeology = primaryIdeologies.length > 0 ? primaryIdeologies[0] : null;
 
             return {
                 ...party,
