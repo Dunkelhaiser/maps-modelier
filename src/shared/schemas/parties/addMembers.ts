@@ -7,7 +7,7 @@ export type AddMembersInput = zod.infer<typeof addMembersSchema>;
 export const addMembersFormSchema = zod.object({
     members: zod.array(
         zod.object({
-            countryId: zod.coerce.number({ message: "Select prominent members" }),
+            politicianId: zod.coerce.number({ message: "Select prominent members" }),
         })
     ),
 });
