@@ -1,3 +1,4 @@
+import { useMapStore } from "@store/store";
 import { Card, CardContent } from "@ui/Card";
 import { PoliticianWithParty } from "src/shared/types";
 
@@ -6,6 +7,8 @@ interface Props {
 }
 
 const Politician = ({ politician }: Props) => {
+    const selectParty = useMapStore((state) => state.selectParty);
+
     return (
         <Card className="overflow-hidden">
             {politician.portrait ? (
@@ -18,9 +21,13 @@ const Politician = ({ politician }: Props) => {
             <CardContent className="space-y-2 p-2">
                 <p className="text-sm font-medium">{politician.name}</p>
                 {politician.party && (
-                    <p className="w-fit rounded-md bg-muted px-2 py-1 text-sm font-medium text-muted-foreground">
+                    <button
+                        type="button"
+                        onClick={() => politician.party && selectParty(politician.party.id)}
+                        className="w-fit rounded-md bg-muted px-2 py-1 text-sm font-medium text-muted-foreground"
+                    >
                         {politician.party.acronym ?? politician.party.name}
-                    </p>
+                    </button>
                 )}
             </CardContent>
         </Card>
