@@ -11,6 +11,7 @@ import { Save } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { PartyInput, partySchema } from "src/shared/schemas/parties/party";
+import DeletePartyDialog from "./DeletePartyDialog";
 import IdeologiesSection from "./IdeologiesSection";
 
 const EditPartyForm = () => {
@@ -175,10 +176,13 @@ const EditPartyForm = () => {
                     />
                 </div>
                 <IdeologiesSection form={form} />
-                <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2" disabled={isFormUnchanged}>
-                    <Save />
-                    Save Changes
-                </Button>
+                <div className="mt-6 flex gap-2">
+                    <Button isLoading={form.formState.isSubmitting} className="flex-1 gap-2" disabled={isFormUnchanged}>
+                        <Save />
+                        Save Changes
+                    </Button>
+                    <DeletePartyDialog mapId={activeMap} id={selectedParty} />
+                </div>
             </form>
         </Form>
     );
