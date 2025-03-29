@@ -163,12 +163,12 @@ export interface PoliticalPartyBase {
 
 export interface PoliticalPartyTable extends PoliticalPartyBase {
     membersCount: number;
-    primaryIdeology: Ideology | null;
+    primaryIdeology: Ideology;
     foundedAt: Date | null;
 }
 
 export interface PoliticalParty extends PoliticalPartyTable {
-    leader: Politician | null;
+    leader: Politician;
     ideologies: Ideology[];
 }
 
