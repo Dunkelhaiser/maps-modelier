@@ -4,6 +4,9 @@ import { useGetParty } from "@ipc/parties";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
+import { Users, Calendar } from "lucide-react";
+import Politician from "../Politicians/Politician";
+import IdeologyTag from "./IdeologyTag";
 
 const Party = () => {
     const activeMap = useActiveMap();
@@ -16,6 +19,8 @@ const Party = () => {
         return <p className="p-4 text-center">Loading party data...</p>;
     }
 
+    const date = party.foundedAt ? new Date(party.foundedAt).toLocaleDateString() : "Unknown";
+
     return (
         <>
             <CardHeaderWithClose onClick={closeSidebar}>
@@ -25,7 +30,47 @@ const Party = () => {
                     {party.acronym && <p className="text-sm font-medium text-muted-foreground">({party.name})</p>}
                 </div>
             </CardHeaderWithClose>
-            <CardContent className="h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] overflow-y-auto" />
+            <CardContent className="h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] overflow-y-auto">
+                <div className="grid grid-cols-[0.75fr_1fr] items-start gap-4">
+                    <div className="flex flex-col gap-2">
+                        <Politician politician={party.leader} />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
+                            <div className="rounded-full bg-muted-foreground/10 p-2">
+                                <Users size={16} className="text-muted-foreground" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-muted-foreground">Member Count</p>
+                                <p className="font-medium">{party.membersCount.toLocaleString()}</p>
+                            </div>
+                        </div>
+
+                        {date && (
+                            <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
+                                <div className="rounded-full bg-muted-foreground/10 p-2">
+                                    <Calendar size={16} className="text-muted-foreground" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-muted-foreground">Founded</p>
+                                    <p className="font-medium">{date}</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <div>
+                            <h3 className="mb-2 font-medium">Ideologies</h3>
+                            <div className="flex flex-wrap gap-2">
+                                <IdeologyTag ideology={party.primaryIdeology} />
+                                {party.ideologies.map((ideology) => (
+                                    <IdeologyTag key={ideology.id} ideology={ideology} />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </CardContent>
         </>
     );
 };

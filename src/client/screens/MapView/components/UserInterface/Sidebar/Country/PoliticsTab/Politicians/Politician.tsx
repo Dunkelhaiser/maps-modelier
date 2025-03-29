@@ -1,9 +1,9 @@
 import { useMapStore } from "@store/store";
 import { Card, CardContent } from "@ui/Card";
-import { PoliticianWithParty } from "src/shared/types";
+import { PoliticalPartyBase, Politician as PoliticianType } from "src/shared/types";
 
 interface Props {
-    politician: PoliticianWithParty;
+    politician: PoliticianType & { party?: PoliticalPartyBase };
 }
 
 const Politician = ({ politician }: Props) => {
