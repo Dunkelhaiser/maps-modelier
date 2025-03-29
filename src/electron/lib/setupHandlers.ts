@@ -39,6 +39,7 @@ import { updateParty } from "./parties/updateParty.js";
 import { createPolitician } from "./politicians/createPolitician.js";
 import { deletePolitician } from "./politicians/deletePolitician.js";
 import { getAllPoliticians } from "./politicians/getAllPoliticians.js";
+import { getIndependent } from "./politicians/getIndependent.js";
 import { getPolitician } from "./politicians/getPolitician.js";
 import { updatePolitician } from "./politicians/updatePolitician.js";
 import { addPopulation } from "./provinces/addPopulation.js";
@@ -124,6 +125,7 @@ const handlers: HandlersType = {
         delete: deletePolitician,
         getAll: getAllPoliticians,
         get: getPolitician,
+        getIndependent,
     },
     ideologies: {
         create: createIdeology,

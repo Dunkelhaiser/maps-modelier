@@ -99,6 +99,7 @@ const api = {
         delete: (mapId: string, id: number) => invoke("politicians", "delete", mapId, id),
         getAll: (mapId: string, countryId: number) => invoke("politicians", "getAll", mapId, countryId),
         get: (mapId: string, politicianId: number) => invoke("politicians", "get", mapId, politicianId),
+        getIndependent: (mapId: string, countryId: number) => invoke("politicians", "getIndependent", mapId, countryId),
     },
     ideologies: {
         create: (mapId: string, data: IdeologyInput) => invoke("ideologies", "create", mapId, data),

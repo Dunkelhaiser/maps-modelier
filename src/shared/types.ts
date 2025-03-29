@@ -259,6 +259,7 @@ export interface IpcChannels {
         delete: (mapId: string, id: number) => Promise<void>;
         getAll: (mapId: string, countryId: number) => Promise<PoliticianWithParty[]>;
         get: (mapId: string, politicianId: number) => Promise<PoliticianWithParty>;
+        getIndependent: (mapId: string, countryId: number) => Promise<PoliticianWithParty[]>;
     };
     ideologies: {
         create: (mapId: string, data: IdeologyInput) => Promise<Ideology>;
