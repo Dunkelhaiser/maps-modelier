@@ -16,6 +16,7 @@ export const createParty = async (
             .values({
                 mapId,
                 countryId,
+                leaderId: leader,
                 ...data,
             })
             .returning({ id: politicalParties.id });
