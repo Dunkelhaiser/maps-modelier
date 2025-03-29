@@ -3,8 +3,8 @@ import { useGetParties } from "@ipc/parties";
 import { useGetPoliticians } from "@ipc/politicians";
 import { useMapStore } from "@store/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/Tabs";
-import PartiesTab from "../Parties/PartiesTab";
-import PoliticiansTab from "./PoliticiansTab";
+import PartiesTab from "./Parties/PartiesTab";
+import PoliticiansTab from "./Politicians/PoliticiansTab";
 
 const PoliticsTab = () => {
     const activeMap = useActiveMap();
