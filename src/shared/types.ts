@@ -272,6 +272,7 @@ export interface IpcChannels {
         getAll: (mapId: string, countryId: number) => Promise<PoliticalPartyTable[]>;
         get: (mapId: string, id: number) => Promise<PoliticalParty>;
         getMembers: (mapId: string, id: number) => Promise<Politician[]>;
+        update: (mapId: string, id: number, data: PartyInput) => Promise<IdRes>;
     };
 }
 

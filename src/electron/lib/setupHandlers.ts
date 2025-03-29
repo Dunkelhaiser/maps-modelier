@@ -34,6 +34,7 @@ import { deleteParty } from "./parties/deleteParty.js";
 import { getAllParties } from "./parties/getAllParties.js";
 import { getMembers as getPartyMembers } from "./parties/getMembers.js";
 import { getParty } from "./parties/getParty.js";
+import { updateParty } from "./parties/updateParty.js";
 import { createPolitician } from "./politicians/createPolitician.js";
 import { deletePolitician } from "./politicians/deletePolitician.js";
 import { getAllPoliticians } from "./politicians/getAllPoliticians.js";
@@ -135,6 +136,7 @@ const handlers: HandlersType = {
         getAll: getAllParties,
         get: getParty,
         getMembers: getPartyMembers,
+        update: updateParty,
     },
 };
 

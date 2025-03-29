@@ -1,3 +1,4 @@
+import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { PartyInput } from "src/shared/schemas/parties/party";
@@ -40,6 +41,20 @@ export const useDeleteParty = (mapId: string, id: number) => {
         mutationFn: async () => await window.electron.parties.delete(mapId, id),
         onSuccess: () => {
             toast.success("Party deleted successfully");
+        },
+    });
+};
+
+export const useUpdateParty = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+    const country = useMapStore((state) => state.selectedCountry)!;
+
+    return useMutation({
+        mutationFn: async (data: PartyInput) => await window.electron.parties.update(mapId, id, data),
+        onSuccess: () => {
+            toast.success("Party updated successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, country, "parties"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "parties", id] });
         },
     });
 };

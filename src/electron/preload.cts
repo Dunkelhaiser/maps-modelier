@@ -113,6 +113,7 @@ const api = {
         getAll: (mapId: string, countryId: number) => invoke("parties", "getAll", mapId, countryId),
         get: (mapId: string, id: number) => invoke("parties", "get", mapId, id),
         getMembers: (mapId: string, id: number) => invoke("parties", "getMembers", mapId, id),
+        update: (mapId: string, id: number, data: PartyInput) => invoke("parties", "update", mapId, id, data),
     },
 };
 
