@@ -15,7 +15,7 @@ const PartyRow = ({ party }: Props) => {
                 <div className="mr-2 size-5 rounded-full" style={{ backgroundColor: party.color }} />
             </TableCell>
             <TableCell className="font-medium">{party.acronym ?? party.name}</TableCell>
-            <TableCell>{party.primaryIdeology?.name}</TableCell>
+            <TableCell>{party.primaryIdeology.name}</TableCell>
             <TableCell className="text-right">
                 {party.membersCount.toLocaleString()}
                 <button className="absolute inset-0" type="button" onClick={selectParty} />
