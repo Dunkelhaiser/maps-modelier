@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { useMapStore } from "./store";
 
-export type Sidebar = "countries" | "ethnicities" | "alliances" | "wars" | "ideologies" | null;
+export type Sidebar = "countries" | "ethnicities" | "alliances" | "wars" | "ideologies" | "parties" | null;
 
 export interface SidebarStore {
     activeSidebar: Sidebar;
@@ -15,6 +15,7 @@ export const useSidebarStore = create<SidebarStore>()((set) => ({
         useMapStore.getState().deselectProvinces();
         useMapStore.getState().deselectAlliance();
         useMapStore.getState().deselectWar();
+        useMapStore.getState().deselectParty();
         set({ activeSidebar: screen });
     },
     closeSidebar: () => set({ activeSidebar: null }),
