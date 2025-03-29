@@ -1,4 +1,5 @@
 import { useMapStore } from "@store/store";
+import { formatDate } from "@utils/utils";
 import { MapIcon } from "lucide-react";
 import { useState } from "react";
 import { MapType } from "src/shared/types";
@@ -30,9 +31,7 @@ const MapButton = ({ map }: Props) => {
                     >
                         {map.name}
                     </button>
-                    <span className="text-xs text-muted-foreground">
-                        Created: {new Date(map.createdAt).toLocaleDateString()}
-                    </span>
+                    <span className="text-xs text-muted-foreground">Created: {formatDate(map.createdAt)}</span>
                 </div>
                 <div className="z-10 ml-auto space-x-0.5">
                     <RenameMapDialog map={map} />

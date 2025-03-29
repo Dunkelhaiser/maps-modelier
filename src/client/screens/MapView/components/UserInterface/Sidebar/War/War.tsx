@@ -7,6 +7,7 @@ import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Separator } from "@ui/Separator";
 import { Table, TableBody, TableHead, TableHeader } from "@ui/Table";
+import { formatDate } from "@utils/utils";
 import { Flag, Timer, Users, Shield } from "lucide-react";
 import WarParticipantRow from "./WarParticipantRow";
 
@@ -24,8 +25,8 @@ const War = () => {
         return <p className="p-4 text-center">Loading war data...</p>;
     }
 
-    const startDate = new Date(war.startedAt).toLocaleDateString();
-    const endDate = war.endedAt ? new Date(war.endedAt).toLocaleDateString() : "Ongoing";
+    const startDate = formatDate(war.startedAt);
+    const endDate = war.endedAt ? formatDate(war.endedAt) : "Ongoing";
 
     return (
         <>

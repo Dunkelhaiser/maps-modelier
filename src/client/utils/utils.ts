@@ -39,3 +39,5 @@ export const formatLocalDateTime = (date: Date | null | undefined) => {
 
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
+
+export const formatDate = (date: Date | string) => new Date(date).toLocaleDateString();

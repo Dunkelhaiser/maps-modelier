@@ -5,6 +5,7 @@ import { useGetParty } from "@ipc/parties";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
+import { formatDate } from "@utils/utils";
 import { Users, Calendar } from "lucide-react";
 import Politician from "../Politicians/Politician";
 import IdeologyTag from "./IdeologyTag";
@@ -20,7 +21,7 @@ const Party = () => {
         return <p className="p-4 text-center">Loading party data...</p>;
     }
 
-    const date = party.foundedAt ? new Date(party.foundedAt).toLocaleDateString() : "Unknown";
+    const date = party.foundedAt ? formatDate(party.foundedAt) : "Unknown";
 
     return (
         <>
