@@ -64,7 +64,7 @@ const IdeologiesSection = ({ form }: Props) => {
                                                 <Label>Primary</Label>
                                                 <FormControl>
                                                     {/* @ts-expect-error incorrect type inference */}
-                                                    <Input {...field} type="checkbox" />
+                                                    <Input {...field} type="checkbox" checked={field.value} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
