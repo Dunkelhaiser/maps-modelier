@@ -16,6 +16,13 @@ export const useGetParty = (mapId: string, id: number) => {
     });
 };
 
+export const useGetMembers = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "parties", id, "members"],
+        queryFn: async () => await window.electron.parties.getMembers(mapId, id),
+    });
+};
+
 export const useCreateParty = (mapId: string, countryId: number) => {
     const queryClient = useQueryClient();
 

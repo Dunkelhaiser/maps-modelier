@@ -271,6 +271,7 @@ export interface IpcChannels {
         delete: (mapId: string, id: number) => Promise<void>;
         getAll: (mapId: string, countryId: number) => Promise<PoliticalPartyTable[]>;
         get: (mapId: string, id: number) => Promise<PoliticalParty>;
+        getMembers: (mapId: string, id: number) => Promise<Politician[]>;
     };
 }
 
