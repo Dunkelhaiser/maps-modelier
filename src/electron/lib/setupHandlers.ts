@@ -29,6 +29,7 @@ import { createMap } from "./maps/createMap.js";
 import { deleteMap } from "./maps/deleteMap.js";
 import { getMaps } from "./maps/getMaps.js";
 import { renameMap } from "./maps/renameMap.js";
+import { addMembers as addProminentMembers } from "./parties/addMembers.js";
 import { createParty } from "./parties/createParty.js";
 import { deleteParty } from "./parties/deleteParty.js";
 import { getAllParties } from "./parties/getAllParties.js";
@@ -137,6 +138,7 @@ const handlers: HandlersType = {
         get: getParty,
         getMembers: getPartyMembers,
         update: updateParty,
+        addMembers: addProminentMembers,
     },
 };
 

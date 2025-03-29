@@ -1,6 +1,7 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { AddMembersInput } from "src/shared/schemas/parties/addMembers";
 import { PartyInput } from "src/shared/schemas/parties/party";
 
 export const useGetParties = (mapId: string, countryId: number) => {
@@ -55,6 +56,18 @@ export const useUpdateParty = (mapId: string, id: number) => {
             toast.success("Party updated successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, country, "parties"] });
             queryClient.invalidateQueries({ queryKey: [mapId, "parties", id] });
+        },
+    });
+};
+
+export const useAddMembers = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: AddMembersInput) => await window.electron.parties.addMembers(mapId, id, data),
+        onSuccess: () => {
+            toast.success("Members added successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, "parties", id, "members"] });
         },
     });
 };
