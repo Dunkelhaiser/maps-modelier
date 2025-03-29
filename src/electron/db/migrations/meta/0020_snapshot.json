@@ -1,0 +1,1860 @@
+{
+    "version": "6",
+    "dialect": "sqlite",
+    "id": "ac2ba29d-7eaf-4928-8124-aa8604b23a79",
+    "prevId": "2a90ba36-36bf-4eca-8622-4d71b2b999ec",
+    "tables": {
+        "alliance_members": {
+            "name": "alliance_members",
+            "columns": {
+                "alliance_id": {
+                    "name": "alliance_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "alliance_members_map_id_maps_id_fk": {
+                    "name": "alliance_members_map_id_maps_id_fk",
+                    "tableFrom": "alliance_members",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "alliances_reference": {
+                    "name": "alliances_reference",
+                    "tableFrom": "alliance_members",
+                    "tableTo": "alliances",
+                    "columnsFrom": ["map_id", "alliance_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "countries_reference": {
+                    "name": "countries_reference",
+                    "tableFrom": "alliance_members",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "alliance_members_pk": {
+                    "columns": ["map_id", "alliance_id", "country_id"],
+                    "name": "alliance_members_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "alliances": {
+            "name": "alliances",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "leader": {
+                    "name": "leader",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "type": {
+                    "name": "type",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "alliances_map_id_maps_id_fk": {
+                    "name": "alliances_map_id_maps_id_fk",
+                    "tableFrom": "alliances",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "leader_reference": {
+                    "name": "leader_reference",
+                    "tableFrom": "alliances",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "leader"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "set null",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "alliances_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "alliances_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "countries": {
+            "name": "countries",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "color": {
+                    "name": "color",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "'#39654a'"
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "countries_map_id_maps_id_fk": {
+                    "name": "countries_map_id_maps_id_fk",
+                    "tableFrom": "countries",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "countries_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "countries_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "country_anthems": {
+            "name": "country_anthems",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "path": {
+                    "name": "path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "country_anthems_map_id_maps_id_fk": {
+                    "name": "country_anthems_map_id_maps_id_fk",
+                    "tableFrom": "country_anthems",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "country_anthems_countries_reference": {
+                    "name": "country_anthems_countries_reference",
+                    "tableFrom": "country_anthems",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {
+                "country_anthems_pk": {
+                    "columns": ["map_id", "country_id"],
+                    "name": "country_anthems_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "country_coat_of_arms": {
+            "name": "country_coat_of_arms",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "path": {
+                    "name": "path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "country_coat_of_arms_map_id_maps_id_fk": {
+                    "name": "country_coat_of_arms_map_id_maps_id_fk",
+                    "tableFrom": "country_coat_of_arms",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "country_coat_of_arms_countries_reference": {
+                    "name": "country_coat_of_arms_countries_reference",
+                    "tableFrom": "country_coat_of_arms",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {
+                "country_coat_of_arms_pk": {
+                    "columns": ["map_id", "country_id"],
+                    "name": "country_coat_of_arms_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "country_flags": {
+            "name": "country_flags",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "path": {
+                    "name": "path",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "country_flags_map_id_maps_id_fk": {
+                    "name": "country_flags_map_id_maps_id_fk",
+                    "tableFrom": "country_flags",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "country_flags_countries_reference": {
+                    "name": "country_flags_countries_reference",
+                    "tableFrom": "country_flags",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {
+                "country_flags_pk": {
+                    "columns": ["map_id", "country_id"],
+                    "name": "country_flags_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "country_names": {
+            "name": "country_names",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "common_name": {
+                    "name": "common_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "official_name": {
+                    "name": "official_name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "country_names_map_id_maps_id_fk": {
+                    "name": "country_names_map_id_maps_id_fk",
+                    "tableFrom": "country_names",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "country_names_countries_reference": {
+                    "name": "country_names_countries_reference",
+                    "tableFrom": "country_names",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {
+                "country_names_pk": {
+                    "columns": ["map_id", "country_id"],
+                    "name": "country_names_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "country_states": {
+            "name": "country_states",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "state_id": {
+                    "name": "state_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "country_states_map_id_maps_id_fk": {
+                    "name": "country_states_map_id_maps_id_fk",
+                    "tableFrom": "country_states",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "states_reference": {
+                    "name": "states_reference",
+                    "tableFrom": "country_states",
+                    "tableTo": "states",
+                    "columnsFrom": ["map_id", "state_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "countries_reference": {
+                    "name": "countries_reference",
+                    "tableFrom": "country_states",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {
+                "country_states_pk": {
+                    "columns": ["map_id", "country_id", "state_id"],
+                    "name": "country_states_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "ethnicities": {
+            "name": "ethnicities",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "color": {
+                    "name": "color",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "'#39654a'"
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "ethnicities_map_id_maps_id_fk": {
+                    "name": "ethnicities_map_id_maps_id_fk",
+                    "tableFrom": "ethnicities",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "ethnicities_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "ethnicities_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "heads_of_government": {
+            "name": "heads_of_government",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "politician_id": {
+                    "name": "politician_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "title": {
+                    "name": "title",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "start_date": {
+                    "name": "start_date",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "end_date": {
+                    "name": "end_date",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "heads_of_government_map_id_maps_id_fk": {
+                    "name": "heads_of_government_map_id_maps_id_fk",
+                    "tableFrom": "heads_of_government",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "heads_of_government_countries_reference": {
+                    "name": "heads_of_government_countries_reference",
+                    "tableFrom": "heads_of_government",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                },
+                "head_of_government_politician_reference": {
+                    "name": "head_of_government_politician_reference",
+                    "tableFrom": "heads_of_government",
+                    "tableTo": "politicians",
+                    "columnsFrom": ["map_id", "politician_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "heads_of_government_pk": {
+                    "columns": ["map_id", "country_id"],
+                    "name": "heads_of_government_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "heads_of_state": {
+            "name": "heads_of_state",
+            "columns": {
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "politician_id": {
+                    "name": "politician_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "title": {
+                    "name": "title",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "start_date": {
+                    "name": "start_date",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "end_date": {
+                    "name": "end_date",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "heads_of_state_map_id_maps_id_fk": {
+                    "name": "heads_of_state_map_id_maps_id_fk",
+                    "tableFrom": "heads_of_state",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "heads_of_state_countries_reference": {
+                    "name": "heads_of_state_countries_reference",
+                    "tableFrom": "heads_of_state",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                },
+                "head_of_state_politician_reference": {
+                    "name": "head_of_state_politician_reference",
+                    "tableFrom": "heads_of_state",
+                    "tableTo": "politicians",
+                    "columnsFrom": ["map_id", "politician_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "heads_of_state_pk": {
+                    "columns": ["map_id", "country_id"],
+                    "name": "heads_of_state_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "ideologies": {
+            "name": "ideologies",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "color": {
+                    "name": "color",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "'#808080'"
+                },
+                "parent_id": {
+                    "name": "parent_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "ideologies_map_id_maps_id_fk": {
+                    "name": "ideologies_map_id_maps_id_fk",
+                    "tableFrom": "ideologies",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "ideologies_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "ideologies_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "maps": {
+            "name": "maps",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "text",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "imgPath": {
+                    "name": "imgPath",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "party_ideologies": {
+            "name": "party_ideologies",
+            "columns": {
+                "party_id": {
+                    "name": "party_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "ideology_id": {
+                    "name": "ideology_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "is_primary": {
+                    "name": "is_primary",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "party_ideologies_map_id_maps_id_fk": {
+                    "name": "party_ideologies_map_id_maps_id_fk",
+                    "tableFrom": "party_ideologies",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "ideology_party_reference": {
+                    "name": "ideology_party_reference",
+                    "tableFrom": "party_ideologies",
+                    "tableTo": "political_parties",
+                    "columnsFrom": ["map_id", "party_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "party_ideology_reference": {
+                    "name": "party_ideology_reference",
+                    "tableFrom": "party_ideologies",
+                    "tableTo": "ideologies",
+                    "columnsFrom": ["map_id", "ideology_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "party_ideologies_pk": {
+                    "columns": ["map_id", "party_id", "ideology_id"],
+                    "name": "party_ideologies_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "party_members": {
+            "name": "party_members",
+            "columns": {
+                "party_id": {
+                    "name": "party_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "politician_id": {
+                    "name": "politician_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "party_members_map_id_maps_id_fk": {
+                    "name": "party_members_map_id_maps_id_fk",
+                    "tableFrom": "party_members",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "party_members_party_reference": {
+                    "name": "party_members_party_reference",
+                    "tableFrom": "party_members",
+                    "tableTo": "political_parties",
+                    "columnsFrom": ["map_id", "party_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "party_members_politician_reference": {
+                    "name": "party_members_politician_reference",
+                    "tableFrom": "party_members",
+                    "tableTo": "politicians",
+                    "columnsFrom": ["map_id", "politician_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "party_members_pk": {
+                    "columns": ["map_id", "party_id", "politician_id"],
+                    "name": "party_members_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "political_parties": {
+            "name": "political_parties",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "acronym": {
+                    "name": "acronym",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "color": {
+                    "name": "color",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "'#808080'"
+                },
+                "leader_id": {
+                    "name": "leader_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "members_count": {
+                    "name": "members_count",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": 1
+                },
+                "founded_at": {
+                    "name": "founded_at",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "political_parties_map_id_maps_id_fk": {
+                    "name": "political_parties_map_id_maps_id_fk",
+                    "tableFrom": "political_parties",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "party_leader_reference": {
+                    "name": "party_leader_reference",
+                    "tableFrom": "political_parties",
+                    "tableTo": "politicians",
+                    "columnsFrom": ["map_id", "leader_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "set null",
+                    "onUpdate": "no action"
+                },
+                "party_country_reference": {
+                    "name": "party_country_reference",
+                    "tableFrom": "political_parties",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "political_parties_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "political_parties_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "politicians": {
+            "name": "politicians",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "portrait": {
+                    "name": "portrait",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "politicians_map_id_maps_id_fk": {
+                    "name": "politicians_map_id_maps_id_fk",
+                    "tableFrom": "politicians",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "politician_country_reference": {
+                    "name": "politician_country_reference",
+                    "tableFrom": "politicians",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "politicians_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "politicians_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "province_populations": {
+            "name": "province_populations",
+            "columns": {
+                "province_id": {
+                    "name": "province_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "ethnicity_id": {
+                    "name": "ethnicity_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "population": {
+                    "name": "population",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": 0
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "province_populations_map_id_maps_id_fk": {
+                    "name": "province_populations_map_id_maps_id_fk",
+                    "tableFrom": "province_populations",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "provinces_reference": {
+                    "name": "provinces_reference",
+                    "tableFrom": "province_populations",
+                    "tableTo": "provinces",
+                    "columnsFrom": ["map_id", "province_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "ethnicities_reference": {
+                    "name": "ethnicities_reference",
+                    "tableFrom": "province_populations",
+                    "tableTo": "ethnicities",
+                    "columnsFrom": ["map_id", "ethnicity_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "province_populations_pk": {
+                    "columns": ["map_id", "province_id", "ethnicity_id"],
+                    "name": "province_populations_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "provinces": {
+            "name": "provinces",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "color": {
+                    "name": "color",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "type": {
+                    "name": "type",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "'land'"
+                },
+                "shape": {
+                    "name": "shape",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(json_array())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "provinces_map_id_maps_id_fk": {
+                    "name": "provinces_map_id_maps_id_fk",
+                    "tableFrom": "provinces",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "provinces_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "provinces_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "state_provinces": {
+            "name": "state_provinces",
+            "columns": {
+                "state_id": {
+                    "name": "state_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "province_id": {
+                    "name": "province_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "state_provinces_map_id_maps_id_fk": {
+                    "name": "state_provinces_map_id_maps_id_fk",
+                    "tableFrom": "state_provinces",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "provinces_reference": {
+                    "name": "provinces_reference",
+                    "tableFrom": "state_provinces",
+                    "tableTo": "provinces",
+                    "columnsFrom": ["map_id", "province_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "states_reference": {
+                    "name": "states_reference",
+                    "tableFrom": "state_provinces",
+                    "tableTo": "states",
+                    "columnsFrom": ["map_id", "state_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "state_provinces_pk": {
+                    "columns": ["state_id", "province_id", "map_id"],
+                    "name": "state_provinces_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "states": {
+            "name": "states",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "type": {
+                    "name": "type",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "states_map_id_maps_id_fk": {
+                    "name": "states_map_id_maps_id_fk",
+                    "tableFrom": "states",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "states_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "states_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "war_participants": {
+            "name": "war_participants",
+            "columns": {
+                "side_id": {
+                    "name": "side_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "war_id": {
+                    "name": "war_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "country_id": {
+                    "name": "country_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "war_participants_map_id_maps_id_fk": {
+                    "name": "war_participants_map_id_maps_id_fk",
+                    "tableFrom": "war_participants",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "war_sides_reference": {
+                    "name": "war_sides_reference",
+                    "tableFrom": "war_participants",
+                    "tableTo": "war_sides",
+                    "columnsFrom": ["map_id", "war_id", "side_id"],
+                    "columnsTo": ["map_id", "war_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "countries_reference": {
+                    "name": "countries_reference",
+                    "tableFrom": "war_participants",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "country_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "war_participants_pk": {
+                    "columns": ["map_id", "side_id", "country_id"],
+                    "name": "war_participants_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "war_sides": {
+            "name": "war_sides",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "war_id": {
+                    "name": "war_id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "side": {
+                    "name": "side",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "war_sides_map_id_maps_id_fk": {
+                    "name": "war_sides_map_id_maps_id_fk",
+                    "tableFrom": "war_sides",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "wars_reference": {
+                    "name": "wars_reference",
+                    "tableFrom": "war_sides",
+                    "tableTo": "wars",
+                    "columnsFrom": ["map_id", "war_id"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "war_sides_pk": {
+                    "columns": ["map_id", "war_id", "id"],
+                    "name": "war_sides_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        },
+        "wars": {
+            "name": "wars",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "map_id": {
+                    "name": "map_id",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "aggressor": {
+                    "name": "aggressor",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "defender": {
+                    "name": "defender",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false
+                },
+                "started_at": {
+                    "name": "started_at",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "ended_at": {
+                    "name": "ended_at",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": false,
+                    "autoincrement": false
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                },
+                "updated_at": {
+                    "name": "updated_at",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "autoincrement": false,
+                    "default": "(unixepoch())"
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "wars_map_id_maps_id_fk": {
+                    "name": "wars_map_id_maps_id_fk",
+                    "tableFrom": "wars",
+                    "tableTo": "maps",
+                    "columnsFrom": ["map_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "no action"
+                },
+                "aggressor_reference": {
+                    "name": "aggressor_reference",
+                    "tableFrom": "wars",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "aggressor"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "set null",
+                    "onUpdate": "no action"
+                },
+                "defender_reference": {
+                    "name": "defender_reference",
+                    "tableFrom": "wars",
+                    "tableTo": "countries",
+                    "columnsFrom": ["map_id", "defender"],
+                    "columnsTo": ["map_id", "id"],
+                    "onDelete": "set null",
+                    "onUpdate": "no action"
+                }
+            },
+            "compositePrimaryKeys": {
+                "wars_pk": {
+                    "columns": ["map_id", "id"],
+                    "name": "wars_pk"
+                }
+            },
+            "uniqueConstraints": {},
+            "checkConstraints": {}
+        }
+    },
+    "views": {},
+    "enums": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
+    },
+    "internal": {
+        "indexes": {}
+    }
+}

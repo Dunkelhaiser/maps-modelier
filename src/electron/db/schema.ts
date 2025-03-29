@@ -581,7 +581,7 @@ export const politicalParties = sqliteTable(
         name: text("name").notNull(),
         acronym: text("acronym"),
         color: text("color").notNull().default("#808080"),
-        leaderId: integer("leader_id"),
+        leaderId: integer("leader_id").notNull(),
         membersCount: integer("members_count").notNull().default(1),
         foundedAt: integer("founded_at", { mode: "timestamp" }),
         createdAt: integer("createdAt", { mode: "timestamp" })

@@ -141,6 +141,13 @@
             "when": 1743249038837,
             "tag": "0019_redundant_bloodstrike",
             "breakpoints": true
+        },
+        {
+            "idx": 20,
+            "version": "6",
+            "when": 1743251261006,
+            "tag": "0020_strong_nick_fury",
+            "breakpoints": true
         }
     ]
 }
