@@ -33,7 +33,7 @@ const Party = () => {
                     {party.acronym && <p className="text-sm font-medium text-muted-foreground">({party.name})</p>}
                 </div>
             </CardHeaderWithClose>
-            <CardContent className="h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] space-y-4 overflow-y-auto">
+            <CardContent className="h-[calc(100%_-_1rem_-_calc(45.6px_+_1.75rem))] space-y-4 overflow-y-auto">
                 <div className="grid grid-cols-[0.75fr_1fr] items-start gap-4">
                     <div className="flex flex-col gap-2">
                         <Politician politician={party.leader} />
