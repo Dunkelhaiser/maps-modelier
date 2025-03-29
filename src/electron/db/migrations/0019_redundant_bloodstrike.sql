@@ -1,0 +1,1 @@
+ALTER TABLE `political_parties` ADD `members_count` integer DEFAULT 1 NOT NULL;

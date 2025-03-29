@@ -1,4 +1,4 @@
-import { and, count, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { db } from "../../db/db.js";
 import { politicalParties, partyMembers, partyIdeologies, ideologies } from "../../db/schema.js";
@@ -11,7 +11,7 @@ export const getAllParties = async (_event: IpcMainInvokeEvent, mapId: string, c
             acronym: politicalParties.acronym,
             color: politicalParties.color,
             foundedAt: politicalParties.foundedAt,
-            membersCount: count(partyMembers.politicianId).as("membersCount"),
+            membersCount: politicalParties.membersCount,
         })
         .from(politicalParties)
         .leftJoin(partyMembers, and(eq(politicalParties.id, partyMembers.partyId), eq(partyMembers.mapId, mapId)))
