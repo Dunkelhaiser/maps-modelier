@@ -24,7 +24,12 @@ const StateBorders = ({ state, provinces }: Props) => {
     const isSelected = selectedState === state.id;
 
     const isInSelectedCountry = useMemo(() => {
-        if (activeSidebar !== "countries" || !selectedCountry || selectedState || selectedProvinces.length > 0) {
+        if (
+            (activeSidebar !== "countries" && activeSidebar !== "parties") ||
+            !selectedCountry ||
+            selectedState ||
+            selectedProvinces.length > 0
+        ) {
             return false;
         }
 

@@ -42,7 +42,12 @@ export const ProvincesContainer = memo(
         const isInSelectedState = useMemo(() => stateData?.provinces.includes(id) ?? false, [stateData, id]);
 
         const isInSelectedCountry = useMemo(() => {
-            if (activeSidebar !== "countries" || !selectedCountry || selectedState || selectedProvinces.length > 0) {
+            if (
+                (activeSidebar !== "countries" && activeSidebar !== "parties") ||
+                !selectedCountry ||
+                selectedState ||
+                selectedProvinces.length > 0
+            ) {
                 return false;
             }
 
