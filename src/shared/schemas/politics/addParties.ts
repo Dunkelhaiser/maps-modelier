@@ -4,6 +4,7 @@ export const partyScheme = zod
     .object({
         partyId: zod.coerce.number().int().min(1, { message: "Select party" }),
         seatsNumber: zod.coerce.number().int().min(1, { message: "Enter number of seats" }),
+        side: zod.enum(["ruling_coalition", "opposition", "neutral"], { message: "Select side" }),
     })
     .array();
 
