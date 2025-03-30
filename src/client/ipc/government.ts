@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AssignHeadInput } from "src/shared/schemas/politics/assignHead";
+import { ParliamentInput } from "src/shared/schemas/politics/parliament";
 
 export const useGetHeadOfState = (mapId: string, countryId: number) => {
     return useQuery({
@@ -38,6 +39,19 @@ export const useAssignHeadOfGovernment = (mapId: string, countryId: number) => {
         onSuccess: () => {
             toast.success("Head of government assigned successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, countryId, "head_of_government"] });
+        },
+    });
+};
+
+export const useCreateParliament = (mapId: string, countryId: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: ParliamentInput) =>
+            await window.electron.government.createParliament(mapId, countryId, data),
+        onSuccess: () => {
+            toast.success("Parliament created successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, countryId, "parliaments"] });
         },
     });
 };

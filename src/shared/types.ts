@@ -11,6 +11,7 @@ import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
 import { PartyInput } from "./schemas/parties/party.js";
 import { AssignHeadInput } from "./schemas/politics/assignHead.js";
+import { ParliamentInput } from "./schemas/politics/parliament.js";
 import { PoliticianInput } from "./schemas/politics/politician.js";
 import { ChangeTypeInput } from "./schemas/provinces/changeType.js";
 import { PopulationInput } from "./schemas/provinces/population.js";
@@ -288,6 +289,7 @@ export interface IpcChannels {
         assignHeadOfGovernment: (mapId: string, countryId: number, data: AssignHeadInput) => Promise<void>;
         getHeadOfState: (mapId: string, countryId: number) => Promise<Head | null>;
         getHeadOfGovernment: (mapId: string, countryId: number) => Promise<Head | null>;
+        createParliament: (mapId: string, countryId: number, data: ParliamentInput) => Promise<IdRes>;
     };
 }
 
