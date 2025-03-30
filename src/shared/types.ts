@@ -286,8 +286,8 @@ export interface IpcChannels {
     government: {
         assignHeadOfState: (mapId: string, countryId: number, data: AssignHeadInput) => Promise<void>;
         assignHeadOfGovernment: (mapId: string, countryId: number, data: AssignHeadInput) => Promise<void>;
-        getHeadOfState: (mapId: string, countryId: number) => Promise<Head>;
-        getHeadOfGovernment: (mapId: string, countryId: number) => Promise<Head>;
+        getHeadOfState: (mapId: string, countryId: number) => Promise<Head | null>;
+        getHeadOfGovernment: (mapId: string, countryId: number) => Promise<Head | null>;
     };
 }
 

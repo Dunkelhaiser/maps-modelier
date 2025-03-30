@@ -17,7 +17,7 @@ export const getHeadOfGovernment = async (_: Electron.IpcMainInvokeEvent, mapId:
         .from(headsOfGovernment)
         .where(and(eq(headsOfGovernment.mapId, mapId), eq(headsOfGovernment.countryId, countryId)));
 
-    if (headOfGovernmentArr.length === 0) throw new Error("Head of government not found for this country");
+    if (headOfGovernmentArr.length === 0) return null;
 
     const [headOfGovernmentData] = headOfGovernmentArr;
 
@@ -30,7 +30,7 @@ export const getHeadOfGovernment = async (_: Electron.IpcMainInvokeEvent, mapId:
         .from(politicians)
         .where(and(eq(politicians.mapId, mapId), eq(politicians.id, headOfGovernmentData.politicianId)));
 
-    if (politicianArr.length === 0) throw new Error("Politician not found");
+    if (politicianArr.length === 0) return null;
 
     const [politicianData] = politicianArr;
 
