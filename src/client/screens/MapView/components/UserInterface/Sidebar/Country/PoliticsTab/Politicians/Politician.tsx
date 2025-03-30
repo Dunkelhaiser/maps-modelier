@@ -24,9 +24,12 @@ const Politician = ({ politician }: Props) => {
                     <button
                         type="button"
                         onClick={() => politician.party && selectParty(politician.party.id)}
-                        className="w-fit rounded-md bg-muted px-2 py-1 text-sm font-medium text-muted-foreground"
+                        className="w-fit rounded-md px-2 py-1 font-medium"
+                        style={{ backgroundColor: `${politician.party.color}20` }}
                     >
-                        {politician.party.acronym ?? politician.party.name}
+                        <span className="text-sm" style={{ color: politician.party.color }}>
+                            {politician.party.acronym ?? politician.party.name}
+                        </span>
                     </button>
                 )}
             </CardContent>
