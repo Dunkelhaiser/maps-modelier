@@ -194,6 +194,17 @@ export interface Head extends PoliticianWithParty {
     endDate: Date | null;
 }
 
+export interface Parliament {
+    id: number;
+    name: string;
+    seatsNumber: number;
+    coalitionLeader: Politician | null;
+    oppositionLeader: Politician | null;
+    coalitionCount: number;
+    oppositionCount: number;
+    neutralCount: number;
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -291,6 +302,7 @@ export interface IpcChannels {
         getHeadOfGovernment: (mapId: string, countryId: number) => Promise<Head | null>;
         createParliament: (mapId: string, countryId: number, data: ParliamentInput) => Promise<IdRes>;
         updateParliament: (mapId: string, id: number, data: ParliamentInput) => Promise<void>;
+        getParliament: (mapId: string, id: number) => Promise<Parliament>;
     };
 }
 
