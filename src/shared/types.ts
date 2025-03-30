@@ -302,7 +302,7 @@ export interface IpcChannels {
         getHeadOfGovernment: (mapId: string, countryId: number) => Promise<Head | null>;
         createParliament: (mapId: string, countryId: number, data: ParliamentInput) => Promise<IdRes>;
         updateParliament: (mapId: string, id: number, data: ParliamentInput) => Promise<void>;
-        getParliament: (mapId: string, id: number) => Promise<Parliament>;
+        getParliament: (mapId: string, countryId: number) => Promise<Parliament>;
     };
 }
 

@@ -1,3 +1,4 @@
+import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AssignHeadInput } from "src/shared/schemas/politics/assignHead";
@@ -44,30 +45,34 @@ export const useAssignHeadOfGovernment = (mapId: string, countryId: number) => {
 };
 
 export const useCreateParliament = (mapId: string, countryId: number) => {
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: async (data: ParliamentInput) =>
             await window.electron.government.createParliament(mapId, countryId, data),
         onSuccess: () => {
             toast.success("Parliament created successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, countryId, "parliament"] });
         },
     });
 };
 
 export const useUpdateParliament = (mapId: string, id: number) => {
     const queryClient = useQueryClient();
+    const selectedCountry = useMapStore((state) => state.selectedCountry)!;
 
     return useMutation({
         mutationFn: async (data: ParliamentInput) => await window.electron.government.updateParliament(mapId, id, data),
         onSuccess: () => {
             toast.success("Parliament updated successfully");
-            queryClient.invalidateQueries({ queryKey: [mapId, "parliaments", id] });
+            queryClient.invalidateQueries({ queryKey: [mapId, selectedCountry, "parliament"] });
         },
     });
 };
 
-export const useGetParliament = (mapId: string, id: number) => {
+export const useGetParliament = (mapId: string, countryId: number) => {
     return useQuery({
-        queryKey: [mapId, "parliaments", id],
-        queryFn: async () => await window.electron.government.getParliament(mapId, id),
+        queryKey: [mapId, countryId, "parliament"],
+        queryFn: async () => await window.electron.government.getParliament(mapId, countryId),
     });
 };

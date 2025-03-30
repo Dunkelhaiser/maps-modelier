@@ -4,7 +4,7 @@ import { db } from "../../db/db.js";
 import { parliamentSeats, parliaments } from "../../db/schema.js";
 import { getPolitician } from "../politicians/getPolitician.js";
 
-export const getParliament = async (_: Electron.IpcMainInvokeEvent, mapId: string, parliamentId: number) => {
+export const getParliament = async (_: Electron.IpcMainInvokeEvent, mapId: string, countryId: number) => {
     const parliament = await db
         .select({
             id: parliaments.id,
@@ -14,11 +14,12 @@ export const getParliament = async (_: Electron.IpcMainInvokeEvent, mapId: strin
             oppositionLeaderId: parliaments.oppositionLeaderId,
         })
         .from(parliaments)
-        .where(and(eq(parliaments.mapId, mapId), eq(parliaments.id, parliamentId)));
+        .where(and(eq(parliaments.mapId, mapId), eq(parliaments.countryId, countryId)));
 
-    if (parliament.length === 0) throw new Error(`Parliament not found`);
+    if (parliament.length === 0) throw new Error(`Parliament not found for this country`);
 
     const [parliamentData] = parliament;
+    const parliamentId = parliamentData.id;
 
     const [coalitionCount] = await db
         .select({ count: count() })
@@ -63,7 +64,7 @@ export const getParliament = async (_: Electron.IpcMainInvokeEvent, mapId: strin
         oppositionLeader = await getPolitician(_, mapId, parliamentData.oppositionLeaderId);
 
     return {
-        id: parliamentData.id,
+        id: parliamentId,
         name: parliamentData.name,
         seatsNumber: parliamentData.seatsNumber,
         coalitionLeader,
