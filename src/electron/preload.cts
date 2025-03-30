@@ -9,6 +9,7 @@ import type { IdeologyInput } from "../shared/schemas/ideologies/ideology.js" wi
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
 import type { PartyInput } from "../shared/schemas/parties/party.js" with { "resolution-mode": "import" };
+import type { PartyInput as ParliamentPartyInput } from "../shared/schemas/politics/addParties.js" with { "resolution-mode": "import" };
 import type { AssignHeadInput } from "../shared/schemas/politics/assignHead.js" with { "resolution-mode": "import" };
 import type { ParliamentInput } from "../shared/schemas/politics/parliament.js" with { "resolution-mode": "import" };
 import type { PoliticianInput } from "../shared/schemas/politics/politician.js" with { "resolution-mode": "import" };
@@ -133,6 +134,8 @@ const api = {
         updateParliament: (mapId: string, id: number, data: ParliamentInput) =>
             invoke("government", "updateParliament", mapId, id, data),
         getParliament: (mapId: string, countryId: number) => invoke("government", "getParliament", mapId, countryId),
+        addParties: (mapId: string, id: number, data: ParliamentPartyInput) =>
+            invoke("government", "addParties", mapId, id, data),
     },
 };
 

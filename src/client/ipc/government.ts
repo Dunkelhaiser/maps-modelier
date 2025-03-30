@@ -1,6 +1,7 @@
 import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { PartyInput } from "src/shared/schemas/politics/addParties";
 import { AssignHeadInput } from "src/shared/schemas/politics/assignHead";
 import { ParliamentInput } from "src/shared/schemas/politics/parliament";
 
@@ -74,5 +75,18 @@ export const useGetParliament = (mapId: string, countryId: number) => {
     return useQuery({
         queryKey: [mapId, countryId, "parliament"],
         queryFn: async () => await window.electron.government.getParliament(mapId, countryId),
+    });
+};
+
+export const useAddParties = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+    const selectedCountry = useMapStore((state) => state.selectedCountry)!;
+
+    return useMutation({
+        mutationFn: async (data: PartyInput) => await window.electron.government.addParties(mapId, id, data),
+        onSuccess: () => {
+            toast.success("Parties added successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, selectedCountry, "parliament"] });
+        },
     });
 };
