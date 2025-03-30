@@ -729,32 +729,3 @@ export const parliamentSeats = sqliteTable(
         }).onDelete("cascade"),
     })
 );
-
-export const parliamentSpeakers = sqliteTable(
-    "parliament_speakers",
-    {
-        parliamentId: integer("parliament_id").notNull(),
-        mapId: text("map_id")
-            .notNull()
-            .references(() => maps.id, { onDelete: "cascade" }),
-        politicianId: integer("politician_id").notNull(),
-        title: text("title").notNull().default("Speaker"),
-        startDate: integer("start_date", { mode: "timestamp" })
-            .notNull()
-            .default(sql`(unixepoch())`),
-        endDate: integer("end_date", { mode: "timestamp" }),
-    },
-    (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.parliamentId], name: "parliament_speakers_pk" }),
-        parliamentReference: foreignKey({
-            columns: [table.mapId, table.parliamentId],
-            foreignColumns: [parliaments.mapId, parliaments.id],
-            name: "speaker_parliament_reference",
-        }).onDelete("cascade"),
-        politicianReference: foreignKey({
-            columns: [table.mapId, table.politicianId],
-            foreignColumns: [politicians.mapId, politicians.id],
-            name: "speaker_politician_reference",
-        }).onDelete("cascade"),
-    })
-);
