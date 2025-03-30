@@ -22,7 +22,15 @@ const IdeologiesSelect = ({ onChange, value, selectedIdeologies }: Props) => {
                     ?.filter((ideology) => ideology.id === value || !selectedIdeologies.includes(ideology.id))
                     .map((ideology) => (
                         <SelectItem value={String(ideology.id)} key={ideology.id}>
-                            {ideology.name}
+                            <div className="flex flex-row items-center gap-2">
+                                <div
+                                    className="size-3 rounded-full"
+                                    style={{
+                                        backgroundColor: ideology.color,
+                                    }}
+                                />
+                                {ideology.name}
+                            </div>
                         </SelectItem>
                     ))}
             </SelectContent>
