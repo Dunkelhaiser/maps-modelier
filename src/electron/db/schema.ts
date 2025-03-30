@@ -699,6 +699,9 @@ export const parliamentSeats = sqliteTable(
             .notNull()
             .references(() => maps.id, { onDelete: "cascade" }),
         seats: integer("seats").notNull(),
+        side: text("side", { enum: ["ruling_coalition", "opposition", "neutral"] })
+            .notNull()
+            .default("neutral"),
     },
     (table) => ({
         pk: primaryKey({ columns: [table.mapId, table.parliamentId, table.partyId], name: "parliament_seats_pk" }),
@@ -740,74 +743,6 @@ export const parliamentSpeakers = sqliteTable(
             columns: [table.mapId, table.politicianId],
             foreignColumns: [politicians.mapId, politicians.id],
             name: "speaker_politician_reference",
-        }).onDelete("cascade"),
-    })
-);
-
-export const parliamentaryGroups = sqliteTable(
-    "parliamentary_groups",
-    {
-        id: integer("id")
-            .notNull()
-            .$defaultFn(
-                () =>
-                    sql`(SELECT IFNULL(MAX(id), 0) + 1 FROM parliamentary_groups WHERE map_id = map_id AND parliament_id = parliament_id)`
-            ),
-        parliamentId: integer("parliament_id").notNull(),
-        mapId: text("map_id")
-            .notNull()
-            .references(() => maps.id, { onDelete: "cascade" }),
-        name: text("name").notNull(),
-        type: text("type", { enum: ["ruling_coalition", "opposition", "neutral"] })
-            .notNull()
-            .default("neutral"),
-        leaderId: integer("leader_id"),
-        createdAt: integer("createdAt", { mode: "timestamp" })
-            .notNull()
-            .default(sql`(unixepoch())`),
-        updatedAt: integer("updatedAt", { mode: "timestamp" })
-            .notNull()
-            .default(sql`(unixepoch())`),
-    },
-    (table) => ({
-        pk: primaryKey({ columns: [table.mapId, table.parliamentId, table.id], name: "parliamentary_groups_pk" }),
-        parliamentReference: foreignKey({
-            columns: [table.mapId, table.parliamentId],
-            foreignColumns: [parliaments.mapId, parliaments.id],
-            name: "group_parliament_reference",
-        }).onDelete("cascade"),
-        leaderReference: foreignKey({
-            columns: [table.mapId, table.leaderId],
-            foreignColumns: [politicians.mapId, politicians.id],
-            name: "group_leader_reference",
-        }).onDelete("set null"),
-    })
-);
-
-export const parliamentaryGroupMembers = sqliteTable(
-    "parliamentary_group_members",
-    {
-        groupId: integer("group_id").notNull(),
-        parliamentId: integer("parliament_id").notNull(),
-        partyId: integer("party_id").notNull(),
-        mapId: text("map_id")
-            .notNull()
-            .references(() => maps.id, { onDelete: "cascade" }),
-    },
-    (table) => ({
-        pk: primaryKey({
-            columns: [table.mapId, table.parliamentId, table.groupId, table.partyId],
-            name: "parliamentary_group_members_pk",
-        }),
-        groupReference: foreignKey({
-            columns: [table.mapId, table.parliamentId, table.groupId],
-            foreignColumns: [parliamentaryGroups.mapId, parliamentaryGroups.parliamentId, parliamentaryGroups.id],
-            name: "group_members_group_reference",
-        }).onDelete("cascade"),
-        partyReference: foreignKey({
-            columns: [table.mapId, table.partyId],
-            foreignColumns: [politicalParties.mapId, politicalParties.id],
-            name: "group_members_party_reference",
         }).onDelete("cascade"),
     })
 );
