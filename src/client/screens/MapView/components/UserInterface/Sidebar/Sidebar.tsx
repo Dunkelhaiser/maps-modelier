@@ -64,7 +64,7 @@ const Sidebar = () => {
 
     return (
         activeSidebar && (
-            <Card className="absolute bottom-3 left-3 top-[calc(45.6px_+_0.75rem)] w-[28rem]">
+            <Card className="absolute bottom-3 left-3 top-[calc(45.6px_+_0.75rem)] w-[28rem] overflow-hidden">
                 {renderSidebarContent()}
             </Card>
         )
