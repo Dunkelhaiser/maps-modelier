@@ -187,6 +187,12 @@ export interface IdRes {
     id: number;
 }
 
+export interface Head extends PoliticianWithParty {
+    title: string;
+    startDate: Date;
+    endDate: Date | null;
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -280,6 +286,7 @@ export interface IpcChannels {
     government: {
         assignHeadOfState: (mapId: string, countryId: number, data: AssignHeadInput) => Promise<void>;
         assignHeadOfGovernment: (mapId: string, countryId: number, data: AssignHeadInput) => Promise<void>;
+        getHeadOfState: (mapId: string, countryId: number) => Promise<Head>;
     };
 }
 

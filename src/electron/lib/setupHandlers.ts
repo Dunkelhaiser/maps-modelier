@@ -23,6 +23,7 @@ import { getAllEthnicities } from "./ethnicities/getAllEthnicities.js";
 import { renameEthnicity } from "./ethnicities/renameEthnicity.js";
 import { assignHeadOfGovernment } from "./government/assignHeadOfGovernment.js";
 import { assignHeadOfState } from "./government/assignHeadOfState.js";
+import { getHeadOfState } from "./government/getHeadOfState.js";
 import { createIdeology } from "./ideologies/createIdeology.js";
 import { deleteIdeology } from "./ideologies/deleteIdeology.js";
 import { getAllIdeologies } from "./ideologies/getAllIdeologies.js";
@@ -147,6 +148,7 @@ const handlers: HandlersType = {
     government: {
         assignHeadOfState,
         assignHeadOfGovernment,
+        getHeadOfState,
     },
 };
 
