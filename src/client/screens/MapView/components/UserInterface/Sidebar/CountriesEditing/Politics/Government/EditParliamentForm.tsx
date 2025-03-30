@@ -26,8 +26,8 @@ const EditParliamentForm = ({ parliament }: Props) => {
         () => ({
             name: parliament.name,
             seatsNumber: parliament.seatsNumber,
-            opositionLeader: parliament.oppositionLeader?.id,
-            coalitionLeader: parliament.coalitionLeader?.id,
+            oppositionLeaderId: parliament.oppositionLeader?.id,
+            coalitionLeaderId: parliament.coalitionLeader?.id,
         }),
         [parliament.coalitionLeader, parliament.name, parliament.oppositionLeader, parliament.seatsNumber]
     );
@@ -85,7 +85,7 @@ const EditParliamentForm = ({ parliament }: Props) => {
                     <div className="flex gap-2">
                         <FormField
                             control={form.control}
-                            name="coalitionLeader"
+                            name="coalitionLeaderId"
                             render={({ field }) => (
                                 <FormItem className="flex-1">
                                     <FormLabel>Coalition Leader</FormLabel>
@@ -122,7 +122,7 @@ const EditParliamentForm = ({ parliament }: Props) => {
                         />
                         <FormField
                             control={form.control}
-                            name="oppositionLeader"
+                            name="oppositionLeaderId"
                             render={({ field }) => (
                                 <FormItem className="flex-1">
                                     <FormLabel>Opposition Leader</FormLabel>
