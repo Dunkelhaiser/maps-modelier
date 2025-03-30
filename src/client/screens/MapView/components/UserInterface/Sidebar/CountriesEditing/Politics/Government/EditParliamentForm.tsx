@@ -12,6 +12,7 @@ import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { ParliamentInput, parliamentSchema } from "src/shared/schemas/politics/parliament";
 import { Parliament } from "src/shared/types";
+import AddPartiesForm from "./AddPartiesForm";
 
 interface Props {
     parliament: Parliament;
@@ -164,6 +165,7 @@ const EditParliamentForm = ({ parliament }: Props) => {
                     </Button>
                 </form>
             </Form>
+            <AddPartiesForm id={parliament.id} />
         </div>
     );
 };
