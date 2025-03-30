@@ -1,7 +1,8 @@
 import { and, eq } from "drizzle-orm";
 import { AssignHeadInput, assignHeadSchema } from "../../../shared/schemas/politics/assignHead.js";
 import { db } from "../../db/db.js";
-import { headsOfGovernment, countries } from "../../db/schema.js";
+import { headsOfGovernment } from "../../db/schema.js";
+import { checkCountryExistence } from "../countries/checkCountryExistance.js";
 
 export const assignHeadOfGovernment = async (
     _: Electron.IpcMainInvokeEvent,
@@ -12,12 +13,7 @@ export const assignHeadOfGovernment = async (
     const { head, ...parsedData } = await assignHeadSchema.parseAsync(data);
 
     await db.transaction(async (tx) => {
-        const country = await tx
-            .select({ id: countries.id })
-            .from(countries)
-            .where(and(eq(countries.mapId, mapId), eq(countries.id, countryId)));
-
-        if (country.length === 0) throw new Error("Country does not exist");
+        await checkCountryExistence(mapId, countryId, tx);
 
         const existingHead = await tx
             .select({ id: headsOfGovernment.politicianId })
