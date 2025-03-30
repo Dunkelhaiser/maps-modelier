@@ -125,6 +125,8 @@ const api = {
         assignHeadOfGovernment: (mapId: string, countryId: number, data: AssignHeadInput) =>
             invoke("government", "assignHeadOfGovernment", mapId, countryId, data),
         getHeadOfState: (mapId: string, countryId: number) => invoke("government", "getHeadOfState", mapId, countryId),
+        getHeadOfGovernment: (mapId: string, countryId: number) =>
+            invoke("government", "getHeadOfGovernment", mapId, countryId),
     },
 };
 
