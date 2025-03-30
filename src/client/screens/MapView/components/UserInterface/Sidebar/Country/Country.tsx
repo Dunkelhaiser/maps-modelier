@@ -1,6 +1,7 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetCountryById } from "@ipc/countries";
+import { useGetHeadOfGovernment, useGetHeadOfState } from "@ipc/government";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
@@ -16,6 +17,8 @@ const Country = () => {
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
     const { data: country } = useGetCountryById(activeMap, selectedCountry);
+    useGetHeadOfState(activeMap, selectedCountry!);
+    useGetHeadOfGovernment(activeMap, selectedCountry!);
 
     if (!country) {
         return <p className="p-4 text-center">Loading country data...</p>;
