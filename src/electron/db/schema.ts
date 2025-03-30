@@ -673,6 +673,8 @@ export const parliaments = sqliteTable(
         countryId: integer("country_id").notNull(),
         name: text("name").notNull(),
         seatsNumber: integer("total_seats").notNull(),
+        coalitionLeaderId: integer("coalition_leader_id"),
+        oppositionLeaderId: integer("opposition_leader_id"),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),
@@ -687,6 +689,16 @@ export const parliaments = sqliteTable(
             foreignColumns: [countries.mapId, countries.id],
             name: "parliament_country_reference",
         }).onDelete("cascade"),
+        coalitionLeaderReference: foreignKey({
+            columns: [table.mapId, table.coalitionLeaderId],
+            foreignColumns: [politicians.mapId, politicians.id],
+            name: "parliament_coalition_leader_reference",
+        }).onDelete("set null"),
+        oppositionLeaderReference: foreignKey({
+            columns: [table.mapId, table.oppositionLeaderId],
+            foreignColumns: [politicians.mapId, politicians.id],
+            name: "parliament_opposition_leader_reference",
+        }).onDelete("set null"),
     })
 );
 
