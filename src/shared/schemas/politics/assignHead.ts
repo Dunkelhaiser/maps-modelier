@@ -1,5 +1,5 @@
 import { z as zod } from "zod";
-import { nameField } from "../shared";
+import { nameField } from "../shared.js";
 
 export const assignHeadSchema = zod.object({
     head: zod.coerce.number().int({ message: "Select head" }),

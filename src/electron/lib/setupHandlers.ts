@@ -21,6 +21,7 @@ import { createEthnicity } from "./ethnicities/createEthnicity.js";
 import { deleteEthnicity } from "./ethnicities/deleteEthnicity.js";
 import { getAllEthnicities } from "./ethnicities/getAllEthnicities.js";
 import { renameEthnicity } from "./ethnicities/renameEthnicity.js";
+import { assignHeadOfState } from "./government/assignHeadOfState.js";
 import { createIdeology } from "./ideologies/createIdeology.js";
 import { deleteIdeology } from "./ideologies/deleteIdeology.js";
 import { getAllIdeologies } from "./ideologies/getAllIdeologies.js";
@@ -141,6 +142,9 @@ const handlers: HandlersType = {
         getMembers: getPartyMembers,
         update: updateParty,
         addMembers: addProminentMembers,
+    },
+    government: {
+        assignHeadOfState,
     },
 };
 
