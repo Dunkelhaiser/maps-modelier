@@ -90,3 +90,12 @@ export const useAddParties = (mapId: string, id: number) => {
         },
     });
 };
+
+export const useGetParties = (mapId: string, id: number) => {
+    const selectedCountry = useMapStore((state) => state.selectedCountry)!;
+
+    return useQuery({
+        queryKey: [mapId, selectedCountry, "parliament", "parties"],
+        queryFn: async () => await window.electron.government.getParties(mapId, id),
+    });
+};

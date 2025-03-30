@@ -136,6 +136,7 @@ const api = {
         getParliament: (mapId: string, countryId: number) => invoke("government", "getParliament", mapId, countryId),
         addParties: (mapId: string, id: number, data: ParliamentPartyInput) =>
             invoke("government", "addParties", mapId, id, data),
+        getParties: (mapId: string, id: number) => invoke("government", "getParties", mapId, id),
     },
 };
 

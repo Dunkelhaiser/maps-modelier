@@ -28,6 +28,7 @@ import { createParliament } from "./government/createParliament.js";
 import { getHeadOfGovernment } from "./government/getHeadOfGovernment.js";
 import { getHeadOfState } from "./government/getHeadOfState.js";
 import { getParliament } from "./government/getParliament.js";
+import { getParties } from "./government/getParties.js";
 import { updateParliament } from "./government/updateParliament.js";
 import { createIdeology } from "./ideologies/createIdeology.js";
 import { deleteIdeology } from "./ideologies/deleteIdeology.js";
@@ -159,6 +160,7 @@ const handlers: HandlersType = {
         updateParliament,
         getParliament,
         addParties,
+        getParties,
     },
 };
 

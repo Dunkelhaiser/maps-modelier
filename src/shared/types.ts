@@ -206,6 +206,11 @@ export interface Parliament {
     neutralCount: number;
 }
 
+export interface ParliamentGroup {
+    side: "ruling_coalition" | "opposition" | "neutral";
+    parties: (PoliticalPartyBase & { seats: number })[];
+}
+
 export interface IpcChannels {
     maps: {
         getAll: () => Promise<MapType[]>;
@@ -305,6 +310,7 @@ export interface IpcChannels {
         updateParliament: (mapId: string, id: number, data: ParliamentInput) => Promise<void>;
         getParliament: (mapId: string, countryId: number) => Promise<Parliament>;
         addParties: (mapId: string, id: number, data: ParliamentPartyInput) => Promise<void>;
+        getParties: (mapId: string, id: number) => Promise<ParliamentGroup[]>;
     };
 }
 
