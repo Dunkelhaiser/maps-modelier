@@ -130,6 +130,8 @@ const api = {
             invoke("government", "getHeadOfGovernment", mapId, countryId),
         createParliament: (mapId: string, countryId: number, data: ParliamentInput) =>
             invoke("government", "createParliament", mapId, countryId, data),
+        updateParliament: (mapId: string, id: number, data: ParliamentInput) =>
+            invoke("government", "updateParliament", mapId, id, data),
     },
 };
 

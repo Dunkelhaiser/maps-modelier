@@ -26,6 +26,7 @@ import { assignHeadOfState } from "./government/assignHeadOfState.js";
 import { createParliament } from "./government/createParliament.js";
 import { getHeadOfGovernment } from "./government/getHeadOfGovernment.js";
 import { getHeadOfState } from "./government/getHeadOfState.js";
+import { updateParliament } from "./government/updateParliament.js";
 import { createIdeology } from "./ideologies/createIdeology.js";
 import { deleteIdeology } from "./ideologies/deleteIdeology.js";
 import { getAllIdeologies } from "./ideologies/getAllIdeologies.js";
@@ -153,6 +154,7 @@ const handlers: HandlersType = {
         getHeadOfState,
         getHeadOfGovernment,
         createParliament,
+        updateParliament,
     },
 };
 
