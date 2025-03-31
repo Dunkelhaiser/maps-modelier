@@ -35,10 +35,11 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const [scaleMultiplier, setScaleMultiplier] = useState(1);
+    const [hasCentered, setHasCentered] = useState(false);
+
     const dragStartRef = useRef<Position>({ x: 0, y: 0 });
 
     const { width = 0, height: windowHeight = 0 } = useWindowSize();
-
     const height = windowHeight - 45.6;
 
     useEffect(() => {
@@ -105,17 +106,16 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     );
 
     useEffect(() => {
-        if (!mapDimensions) return;
+        if (!mapDimensions || hasCentered) return;
 
         const scale = getCurrentScale();
 
         const x = (width - mapDimensions.width * scale) / 2;
         const y = (height - mapDimensions.height * scale) / 2;
 
-        const constrainedPosition = constrainPosition({ x, y }, scale);
-
-        setPosition(constrainedPosition);
-    }, [width, height, mapDimensions, getCurrentScale, constrainPosition]);
+        setPosition(constrainPosition({ x, y }, scale));
+        setHasCentered(true);
+    }, [width, height, mapDimensions, getCurrentScale, constrainPosition, hasCentered]);
 
     const handleDragStart = useCallback(
         (event: FederatedPointerEvent) => {
@@ -134,8 +134,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
                 y: event.globalY - dragStartRef.current.y,
             };
 
-            const constrainedPosition = constrainPosition(newPosition, getCurrentScale());
-            setPosition(constrainedPosition);
+            setPosition(constrainPosition(newPosition, getCurrentScale()));
         },
         [constrainPosition, getCurrentScale, isDragging, mapDimensions]
     );
@@ -170,8 +169,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             };
 
             setScaleMultiplier(newScaleMultiplier);
-            const constrainedPosition = constrainPosition(newPosition, getBaseScale() * newScaleMultiplier);
-            setPosition(constrainedPosition);
+            setPosition(constrainPosition(newPosition, getBaseScale() * newScaleMultiplier));
         },
         [constrainPosition, getBaseScale, mapDimensions, position.x, position.y, scaleMultiplier]
     );
