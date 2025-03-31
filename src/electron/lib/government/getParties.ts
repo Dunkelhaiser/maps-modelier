@@ -25,7 +25,7 @@ export const getParties = async (_: Electron.IpcMainInvokeEvent, mapId: string, 
             )
             .where(and(eq(parliamentSeats.mapId, mapId), eq(parliamentSeats.parliamentId, id)));
 
-        const sides = ["ruling_coalition", "opposition", "neutral"] as const;
+        const sides = ["ruling_coalition", "neutral", "opposition"] as const;
 
         return sides.map((sideType) => ({
             side: sideType,
