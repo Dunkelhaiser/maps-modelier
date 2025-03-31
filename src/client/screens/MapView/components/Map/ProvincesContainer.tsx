@@ -14,10 +14,11 @@ import { MemoizedProvince } from "./Province";
 interface Props {
     province: ProvinceType;
     states: StateBase[];
+    scale: number;
 }
 
 export const ProvincesContainer = memo(
-    ({ province, states }: Props) => {
+    ({ province, states, scale }: Props) => {
         const { id, shape, type } = province;
         const selectedProvinces = useMapStore((state) => state.selectedProvinces);
         const selectedState = useMapStore((state) => state.selectedState);
@@ -163,6 +164,7 @@ export const ProvincesContainer = memo(
                     isSelected={isSelected}
                     isInSelectedState={isInSelectedState}
                     isInSelectedCountry={isInSelectedCountry}
+                    scale={scale}
                 />
             </Container>
         );
@@ -174,7 +176,8 @@ export const ProvincesContainer = memo(
             prevProps.province.type === nextProps.province.type &&
             prevProps.province.population === nextProps.province.population &&
             prevProps.province.ethnicities === nextProps.province.ethnicities &&
-            prevProps.states === nextProps.states
+            prevProps.states === nextProps.states &&
+            prevProps.scale === nextProps.scale
         );
     }
 );

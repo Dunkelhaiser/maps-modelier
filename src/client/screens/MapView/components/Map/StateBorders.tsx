@@ -4,16 +4,19 @@ import { Container, Graphics } from "@pixi/react";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { brightenColor, darkenColor } from "@utils/utils";
-import { Graphics as GraphicsType } from "pixi.js";
 import { memo, useCallback, useMemo } from "react";
 import { Province, StateBase } from "src/shared/types";
+import type { Graphics as GraphicsType } from "pixi.js";
 
 interface Props {
     state: StateBase;
     provinces: Province[];
+    scale: number;
 }
 
-const StateBorders = ({ state, provinces }: Props) => {
+const BORDER_THRESHOLD = 2.0;
+
+const StateBorders = ({ state, provinces, scale }: Props) => {
     const selectedState = useMapStore((store) => store.selectedState);
     const selectedCountry = useMapStore((store) => store.selectedCountry);
     const selectedProvinces = useMapStore((store) => store.selectedProvinces);
@@ -47,6 +50,8 @@ const StateBorders = ({ state, provinces }: Props) => {
             g.clear();
             const stateProvinces = provinces.filter((province) => state.provinces.includes(province.id));
 
+            const lineWidth = scale > BORDER_THRESHOLD ? 0.5 : 0;
+
             stateProvinces.forEach((province) => {
                 const shapes = Array.isArray(province.shape) ? province.shape : [province.shape];
 
@@ -63,7 +68,7 @@ const StateBorders = ({ state, provinces }: Props) => {
                 }
 
                 g.lineStyle({
-                    width: 0.5,
+                    width: lineWidth,
                     color: borderColor,
                 });
 
@@ -113,7 +118,7 @@ const StateBorders = ({ state, provinces }: Props) => {
                 });
             });
         },
-        [provinces, state.provinces, isSelected, countryColor, isInSelectedCountry]
+        [provinces, state.provinces, isSelected, isInSelectedCountry, countryColor, scale]
     );
 
     // eslint-disable-next-line no-nested-ternary
@@ -127,10 +132,14 @@ const StateBorders = ({ state, provinces }: Props) => {
 };
 
 export const MemoizedStateBorders = memo(StateBorders, (prevProps, nextProps) => {
+    const prevBorderVisible = prevProps.scale > BORDER_THRESHOLD;
+    const nextBorderVisible = nextProps.scale > BORDER_THRESHOLD;
+
     return (
         prevProps.state.id === nextProps.state.id &&
         prevProps.state.provinces.length === nextProps.state.provinces.length &&
-        prevProps.state.provinces.every((id) => nextProps.state.provinces.includes(id))
+        prevProps.state.provinces.every((id) => nextProps.state.provinces.includes(id)) &&
+        prevBorderVisible === nextBorderVisible
     );
 });
 MemoizedStateBorders.displayName = "MemoizedStateBorders";

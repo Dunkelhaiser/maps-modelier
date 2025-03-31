@@ -175,12 +175,19 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
     );
 
     const renderProvinces = useMemo(() => {
+        const currentScale = getCurrentScale();
+
         const waterProvincesContainer = (
             // ! This is a workaround before the issue is resolved
             <QueryClientProvider client={queryClient}>
                 <Container sortableChildren>
                     {waterProvinces.data?.map((province) => (
-                        <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
+                        <ProvincesContainer
+                            key={province.id}
+                            province={province}
+                            states={states.data ?? []}
+                            scale={currentScale}
+                        />
                     ))}
                 </Container>
             </QueryClientProvider>
@@ -191,7 +198,12 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <QueryClientProvider client={queryClient}>
                 <Container sortableChildren>
                     {landProvinces.data?.map((province) => (
-                        <ProvincesContainer key={province.id} province={province} states={states.data ?? []} />
+                        <ProvincesContainer
+                            key={province.id}
+                            province={province}
+                            states={states.data ?? []}
+                            scale={currentScale}
+                        />
                     ))}
                 </Container>
             </QueryClientProvider>
@@ -209,7 +221,12 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <QueryClientProvider client={queryClient}>
                 <Container sortableChildren zIndex={2}>
                     {waterStates?.map((state) => (
-                        <MemoizedStateBorders key={state.id} state={state} provinces={waterProvinces.data ?? []} />
+                        <MemoizedStateBorders
+                            key={state.id}
+                            state={state}
+                            provinces={waterProvinces.data ?? []}
+                            scale={currentScale}
+                        />
                     ))}
                 </Container>
             </QueryClientProvider>
@@ -220,7 +237,12 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             <QueryClientProvider client={queryClient}>
                 <Container sortableChildren zIndex={2}>
                     {landStates?.map((state) => (
-                        <MemoizedStateBorders key={state.id} state={state} provinces={landProvinces.data ?? []} />
+                        <MemoizedStateBorders
+                            key={state.id}
+                            state={state}
+                            provinces={landProvinces.data ?? []}
+                            scale={currentScale}
+                        />
                     ))}
                 </Container>
             </QueryClientProvider>
@@ -232,7 +254,7 @@ const MapCanvas = ({ activeMap }: MapRendererProps) => {
             waterStateBordersContainer,
             landStateBordersContainer,
         };
-    }, [waterProvinces, landProvinces, states]);
+    }, [waterProvinces, landProvinces, states, getCurrentScale]);
 
     const transformContainerProps = useMemo(
         () => ({

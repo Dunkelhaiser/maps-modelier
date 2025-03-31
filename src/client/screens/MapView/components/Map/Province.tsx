@@ -11,15 +11,29 @@ interface ProvinceProps extends Omit<ProvinceType, "color" | "population" | "eth
     isSelected: boolean;
     isInSelectedState: boolean;
     isInSelectedCountry: boolean;
+    scale: number;
 }
 
-const Province = ({ id, shape, type, color, isSelected, isInSelectedState, isInSelectedCountry }: ProvinceProps) => {
+const BORDER_THRESHOLD = 2.75;
+
+const Province = ({
+    id,
+    shape,
+    type,
+    color,
+    isSelected,
+    isInSelectedState,
+    isInSelectedCountry,
+    scale,
+}: ProvinceProps) => {
     const drawRegion = useCallback(
         (g: GraphicsType, regionShape: number[]) => {
             g.clear();
 
             const unassignedFillColor = type === "land" ? 0x39654a : 0x517478;
             const fillColor = color ? parseInt(color.replace("#", "0x"), 16) : unassignedFillColor;
+
+            const lineWidth = scale > BORDER_THRESHOLD ? 0.25 : 0;
 
             const borderColor = darkenColor(fillColor, isSelected || isInSelectedCountry ? 0.2 : 0.4);
 
@@ -37,13 +51,13 @@ const Province = ({ id, shape, type, color, isSelected, isInSelectedState, isInS
 
             g.beginFill(finalFillColor);
             g.lineStyle({
-                width: 0.25,
+                width: lineWidth,
                 color: finalBorderColor,
             });
             g.drawPolygon(regionShape);
             g.endFill();
         },
-        [type, color, isSelected, isInSelectedState, isInSelectedCountry]
+        [type, color, isSelected, isInSelectedState, isInSelectedCountry, scale]
     );
 
     const shapes = Array.isArray(shape) ? shape : [shape];
@@ -54,6 +68,9 @@ const Province = ({ id, shape, type, color, isSelected, isInSelectedState, isInS
 };
 
 export const MemoizedProvince = memo(Province, (prevProps, nextProps) => {
+    const prevBorderVisible = prevProps.scale > BORDER_THRESHOLD;
+    const nextBorderVisible = nextProps.scale > BORDER_THRESHOLD;
+
     return (
         prevProps.id === nextProps.id &&
         prevProps.type === nextProps.type &&
@@ -61,7 +78,8 @@ export const MemoizedProvince = memo(Province, (prevProps, nextProps) => {
         prevProps.color === nextProps.color &&
         prevProps.isSelected === nextProps.isSelected &&
         prevProps.isInSelectedState === nextProps.isInSelectedState &&
-        prevProps.isInSelectedCountry === nextProps.isInSelectedCountry
+        prevProps.isInSelectedCountry === nextProps.isInSelectedCountry &&
+        prevBorderVisible === nextBorderVisible
     );
 });
 MemoizedProvince.displayName = "MemoizedProvince";
