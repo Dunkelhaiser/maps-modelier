@@ -195,15 +195,20 @@ export interface Head extends PoliticianWithParty {
     endDate: Date | null;
 }
 
+interface Side {
+    count: number;
+    seats: number;
+}
+
 export interface Parliament {
     id: number;
     name: string;
     seatsNumber: number;
     coalitionLeader: Politician | null;
     oppositionLeader: Politician | null;
-    coalitionCount: number;
-    oppositionCount: number;
-    neutralCount: number;
+    coalition: Side;
+    neutral: Side;
+    opposition: Side;
 }
 
 export interface ParliamentGroup {

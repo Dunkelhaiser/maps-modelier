@@ -1,4 +1,4 @@
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, sum } from "drizzle-orm";
 import { Politician } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { parliamentSeats, parliaments } from "../../db/schema.js";
@@ -54,6 +54,39 @@ export const getParliament = async (_: Electron.IpcMainInvokeEvent, mapId: strin
             )
         );
 
+    const [coalitionSeats] = await db
+        .select({ totalSeats: sum(parliamentSeats.seats).mapWith(Number) })
+        .from(parliamentSeats)
+        .where(
+            and(
+                eq(parliamentSeats.mapId, mapId),
+                eq(parliamentSeats.parliamentId, parliamentId),
+                eq(parliamentSeats.side, "ruling_coalition")
+            )
+        );
+
+    const [oppositionSeats] = await db
+        .select({ totalSeats: sum(parliamentSeats.seats).mapWith(Number) })
+        .from(parliamentSeats)
+        .where(
+            and(
+                eq(parliamentSeats.mapId, mapId),
+                eq(parliamentSeats.parliamentId, parliamentId),
+                eq(parliamentSeats.side, "opposition")
+            )
+        );
+
+    const [neutralSeats] = await db
+        .select({ totalSeats: sum(parliamentSeats.seats).mapWith(Number) })
+        .from(parliamentSeats)
+        .where(
+            and(
+                eq(parliamentSeats.mapId, mapId),
+                eq(parliamentSeats.parliamentId, parliamentId),
+                eq(parliamentSeats.side, "neutral")
+            )
+        );
+
     let coalitionLeader: Politician | null = null,
         oppositionLeader: Politician | null = null;
 
@@ -69,8 +102,17 @@ export const getParliament = async (_: Electron.IpcMainInvokeEvent, mapId: strin
         seatsNumber: parliamentData.seatsNumber,
         coalitionLeader,
         oppositionLeader,
-        coalitionCount: coalitionCount.count,
-        oppositionCount: oppositionCount.count,
-        neutralCount: neutralCount.count,
+        coalition: {
+            count: coalitionCount.count,
+            seats: coalitionSeats.totalSeats,
+        },
+        neutral: {
+            count: neutralCount.count,
+            seats: neutralSeats.totalSeats,
+        },
+        opposition: {
+            count: oppositionCount.count,
+            seats: oppositionSeats.totalSeats,
+        },
     };
 };
