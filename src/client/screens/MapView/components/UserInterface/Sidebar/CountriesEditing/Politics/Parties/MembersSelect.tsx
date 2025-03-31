@@ -16,7 +16,10 @@ const MembersSelect = ({ onChange, value, selectedMembers, isLeader }: Props) =>
     const politicians = useGetIndependent(activeMap, selectedCountry);
     const { data: selectedPolitician } = useGetPolitician(activeMap, value);
 
-    const politiciansArr = selectedPolitician ? politicians.data?.concat(selectedPolitician) : politicians.data;
+    const politiciansArr =
+        selectedPolitician && !politicians.data?.some((p) => p.id === selectedPolitician.id)
+            ? politicians.data?.concat(selectedPolitician)
+            : politicians.data;
 
     return (
         <Select onValueChange={onChange} defaultValue={String(value)} disabled={isLeader}>
