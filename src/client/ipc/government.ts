@@ -87,6 +87,7 @@ export const useAddParties = (mapId: string, id: number) => {
         onSuccess: () => {
             toast.success("Parties added successfully");
             queryClient.invalidateQueries({ queryKey: [mapId, selectedCountry, "parliament"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, selectedCountry, "parliament", "parties"] });
         },
     });
 };
