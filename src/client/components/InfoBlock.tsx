@@ -4,12 +4,13 @@ import { LucideIcon } from "lucide-react";
 interface Props {
     Icon: LucideIcon;
     label: string;
+    suffix?: string;
     color?: string;
     value?: string | number;
     children?: React.ReactNode;
 }
 
-const InfoBlock = ({ Icon, label, color, value, children }: Props) => {
+const InfoBlock = ({ Icon, label, color, value, suffix, children }: Props) => {
     return (
         <div className="flex items-center gap-3 rounded-md bg-muted p-3 shadow-sm">
             <div className="rounded-full bg-muted-foreground/10 p-2">
@@ -17,7 +18,12 @@ const InfoBlock = ({ Icon, label, color, value, children }: Props) => {
             </div>
             <div>
                 <p className="text-xs text-muted-foreground">{label}</p>
-                {value && <p className="font-medium">{value}</p>}
+                {value && (
+                    <p className="font-medium">
+                        {value}
+                        {suffix && <span className="text-xs text-muted-foreground"> {suffix}</span>}
+                    </p>
+                )}
                 {children}
             </div>
         </div>
