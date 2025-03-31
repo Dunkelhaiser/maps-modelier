@@ -81,6 +81,7 @@ export const updateParty = async (_: Electron.IpcMainInvokeEvent, mapId: string,
             .set({
                 leaderId: leader,
                 ...data,
+                acronym: data.acronym?.length ? data.acronym : null,
             })
             .where(and(eq(politicalParties.mapId, mapId), eq(politicalParties.id, id)))
             .returning({ id: politicalParties.id });
