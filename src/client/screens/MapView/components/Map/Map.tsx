@@ -23,7 +23,7 @@ interface Position {
 
 const MIN_SCALE_MULTIPLIER = 1;
 const MAX_SCALE_MULTIPLIER = 4;
-const ZOOM_SPEED = 0.1;
+const ZOOM_SPEED = 0.3;
 
 const MapCanvas = ({ activeMap }: MapRendererProps) => {
     usePrefetchData(activeMap);
