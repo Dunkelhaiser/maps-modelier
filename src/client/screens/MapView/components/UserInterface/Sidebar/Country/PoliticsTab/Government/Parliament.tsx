@@ -4,6 +4,7 @@ import { useGetParties } from "@ipc/government";
 import { Users } from "lucide-react";
 import { Parliament as ParliamentType } from "src/shared/types";
 import Politician from "../Politicians/Politician";
+import ParliamentVisualization from "./ParliamentVisualization";
 import Parties from "./Parties";
 
 interface Props {
@@ -23,6 +24,11 @@ const Parliament = ({ parliament }: Props) => {
                 value={parliament.seatsNumber.toString()}
                 suffix={`/ ${parliament.coalition.seats + parliament.opposition.seats + parliament.neutral.seats}`}
             />
+
+            {parliamentParties && parliamentParties.length > 0 && (
+                <ParliamentVisualization groups={parliamentParties} seatsNumber={parliament.seatsNumber} />
+            )}
+
             <div className="grid grid-cols-2 gap-4">
                 {parliament.coalitionLeader && (
                     <div className="flex flex-col gap-2">
