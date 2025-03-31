@@ -11,7 +11,6 @@ import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { PartyFormInput, partyFormSchema } from "src/shared/schemas/politics/addParties";
 import PartiesSelect from "./PartiesSelect";
-import SideSelect from "./SideSelect";
 
 interface Props {
     id: number;
@@ -63,95 +62,101 @@ const AddPartiesForm = ({ id }: Props) => {
 
     const selectedParties = form.watch("party").map((p) => Number(p.partyId));
 
+    const sides = [
+        { id: "ruling_coalition", name: "Ruling Coalition" },
+        { id: "neutral", name: "Neutral" },
+        { id: "opposition", name: "Opposition" },
+    ] as const;
+
     return (
         <div>
             <Form {...form}>
                 <form className="grid gap-4 pt-4" onSubmit={form.handleSubmit(addPartiesHandler)}>
-                    <Label>Parties</Label>
+                    <Label className="text-lg font-medium">Parliament Parties</Label>
                     <ScrollArea viewportClassName="max-h-[50vh]">
-                        <div className="space-y-4 py-1 pr-4">
-                            {partyFields.map((partyField, index) => {
-                                const otherSelectedEthnicities = selectedParties.filter(
-                                    (_, i) => i !== index && selectedParties[i] !== 0
-                                );
+                        <div className="space-y-6 py-1 pr-4">
+                            {sides.map((side) => (
+                                <div key={side.id} className="space-y-3 rounded-md border p-3">
+                                    <Label className="font-medium capitalize">{side.name}</Label>
+                                    <div className="space-y-3">
+                                        {partyFields
+                                            .map((field, index) => ({ field, index }))
+                                            .filter(({ index }) => form.getValues().party[index].side === side.id)
+                                            .map(({ field, index }) => {
+                                                const otherSelectedParties = selectedParties.filter(
+                                                    (_, i) => i !== index && selectedParties[i] !== 0
+                                                );
 
-                                return (
-                                    <div className="flex gap-2" key={partyField.id}>
-                                        <FormField
-                                            control={form.control}
-                                            name={`party.${index}.partyId`}
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormControl>
-                                                        <PartiesSelect
-                                                            onChange={field.onChange}
-                                                            value={field.value}
-                                                            selectedParties={otherSelectedEthnicities}
+                                                return (
+                                                    <div className="flex gap-2" key={field.id}>
+                                                        <FormField
+                                                            control={form.control}
+                                                            name={`party.${index}.partyId`}
+                                                            render={({ field: formField }) => (
+                                                                <FormItem className="flex-1">
+                                                                    <FormControl>
+                                                                        <PartiesSelect
+                                                                            onChange={formField.onChange}
+                                                                            value={formField.value}
+                                                                            selectedParties={otherSelectedParties}
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormMessage />
+                                                                </FormItem>
+                                                            )}
                                                         />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name={`party.${index}.seatsNumber`}
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormControl>
-                                                        <Input {...field} type="number" className="h-9 min-w-9" />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name={`party.${index}.side`}
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormControl>
-                                                        <SideSelect onChange={field.onChange} value={field.value} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+                                                        <FormField
+                                                            control={form.control}
+                                                            name={`party.${index}.seatsNumber`}
+                                                            render={({ field: formField }) => (
+                                                                <FormItem>
+                                                                    <FormControl>
+                                                                        <Input
+                                                                            {...formField}
+                                                                            type="number"
+                                                                            className="h-9 w-20"
+                                                                            placeholder="Seats"
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormMessage />
+                                                                </FormItem>
+                                                            )}
+                                                        />
+                                                        <Button
+                                                            variant="ghost"
+                                                            aria-label="Remove"
+                                                            size="icon"
+                                                            type="button"
+                                                            onClick={() => remove(index)}
+                                                        >
+                                                            <X />
+                                                        </Button>
+                                                    </div>
+                                                );
+                                            })}
                                         <Button
-                                            variant="ghost"
-                                            aria-label="Remove"
-                                            size="icon"
-                                            onClick={() => remove(index)}
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() => append({ partyId: 0, seatsNumber: 0, side: side.id })}
+                                            className="w-full gap-2"
                                         >
-                                            <X />
+                                            <Plus size={16} />
+                                            Add
                                         </Button>
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
                         </div>
                     </ScrollArea>
 
-                    <div className="flex gap-2">
-                        <Button
-                            className="flex-1 gap-2"
-                            type="button"
-                            onClick={() => append({ partyId: 0, seatsNumber: 0, side: "neutral" })}
-                        >
-                            <Plus />
-                            Add Party
-                        </Button>
-                        <Button
-                            className="flex-1 gap-2"
-                            isLoading={form.formState.isSubmitting}
-                            disabled={isFormUnchanged}
-                        >
-                            <Save />
-                            Save
-                        </Button>
-                    </div>
+                    <Button className="gap-2" isLoading={form.formState.isSubmitting} disabled={isFormUnchanged}>
+                        <Save size={16} />
+                        Save Parties
+                    </Button>
                 </form>
             </Form>
         </div>
     );
 };
+
 export default AddPartiesForm;
