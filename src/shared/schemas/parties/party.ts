@@ -2,7 +2,7 @@ import { z as zod } from "zod";
 import { nameField } from "../shared.js";
 
 const partyIdeologySchema = zod.object({
-    ideologyId: zod.coerce.number({ message: "Select ideology" }),
+    ideologyId: zod.coerce.number({ message: "Select ideology" }).min(1, { message: "Select ideology" }),
     isPrimary: zod.boolean(),
 });
 
