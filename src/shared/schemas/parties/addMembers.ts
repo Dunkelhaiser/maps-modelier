@@ -1,15 +1,7 @@
 import { z as zod } from "zod";
+import { createSelectSchema } from "../shared.js";
 
-export const addMembersSchema = zod.number({ message: "Select prominent members" }).array().nonempty();
+export const [addMembersSchema, addMembersFormSchema] = createSelectSchema("members", "Select prominent member");
 
 export type AddMembersInput = zod.infer<typeof addMembersSchema>;
-
-export const addMembersFormSchema = zod.object({
-    members: zod.array(
-        zod.object({
-            politicianId: zod.coerce.number({ message: "Select prominent members" }),
-        })
-    ),
-});
-
 export type AddMembersFormInput = zod.infer<typeof addMembersFormSchema>;

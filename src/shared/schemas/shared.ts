@@ -179,3 +179,23 @@ export const nameField = ({ field = "", min = 1, max = 50 }) =>
         .trim()
         .min(min, { message: `Provide ${getArticle(field)} ${field} name` })
         .max(max, { message: `The ${field} name should be less than ${max} characters` });
+
+export const createItemsSchema = (message: string) =>
+    zod.number({ message }).int({ message }).min(1, { message }).array().nonempty();
+
+export const createSelectSchema = <T extends string>(field: T, errorMessage: string) => {
+    const selectSchema = createItemsSchema(errorMessage);
+
+    const selectFormSchema = zod.object({
+        [field]: zod.array(
+            zod.object({
+                itemId: zod.coerce
+                    .number({ message: errorMessage })
+                    .int({ message: errorMessage })
+                    .min(1, { message: errorMessage }),
+            })
+        ),
+    }) as zod.ZodObject<Record<T, zod.ZodArray<zod.ZodObject<{ itemId: zod.ZodNumber }>>>>;
+
+    return [selectSchema, selectFormSchema] as const;
+};

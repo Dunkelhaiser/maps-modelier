@@ -25,7 +25,7 @@ const AddMembersForm = ({ members, leaderId }: Props) => {
 
     const defaultValues = useMemo(
         () => ({
-            members: members?.map((member) => ({ politicianId: member.id })) ?? [],
+            members: members?.map((member) => ({ itemId: member.id })) ?? [],
         }),
         [members]
     );
@@ -51,10 +51,10 @@ const AddMembersForm = ({ members, leaderId }: Props) => {
     });
 
     const addMembersHandler = async (data: AddMembersFormInput) => {
-        await addMembers.mutateAsync(data.members.map((m) => m.politicianId) as AddMembersInput);
+        await addMembers.mutateAsync(data.members.map((m) => m.itemId) as AddMembersInput);
     };
 
-    const selectedMembers = form.watch("members").map((m) => Number(m.politicianId));
+    const selectedMembers = form.watch("members").map((m) => Number(m.itemId));
 
     return (
         <Form {...form}>
@@ -71,7 +71,7 @@ const AddMembersForm = ({ members, leaderId }: Props) => {
                                 <div className="flex gap-2" key={memberField.id}>
                                     <FormField
                                         control={form.control}
-                                        name={`members.${index}.politicianId`}
+                                        name={`members.${index}.itemId`}
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
@@ -79,14 +79,14 @@ const AddMembersForm = ({ members, leaderId }: Props) => {
                                                         onChange={field.onChange}
                                                         value={field.value}
                                                         selectedMembers={otherSelectedMembers}
-                                                        isLeader={memberField.politicianId === leaderId}
+                                                        isLeader={memberField.itemId === leaderId}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                    {memberField.politicianId !== leaderId && (
+                                    {memberField.itemId !== leaderId && (
                                         <Button
                                             variant="ghost"
                                             aria-label="Remove"
@@ -103,7 +103,7 @@ const AddMembersForm = ({ members, leaderId }: Props) => {
                 </ScrollArea>
 
                 <div className="flex gap-2">
-                    <Button type="button" onClick={() => append({ politicianId: -1 })} className="flex-1 gap-2">
+                    <Button type="button" onClick={() => append({ itemId: -1 })} className="flex-1 gap-2">
                         <Plus />
                         Add Member
                     </Button>
