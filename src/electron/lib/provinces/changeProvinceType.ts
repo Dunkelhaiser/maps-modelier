@@ -12,7 +12,7 @@ export const changeProvinceType = async (_: Electron.IpcMainInvokeEvent, mapId: 
     const stateIds = await db
         .select({ stateId: stateProvinces.stateId })
         .from(stateProvinces)
-        .where(inArray(stateProvinces.provinceId, provinceIds))
+        .where(and(inArray(stateProvinces.provinceId, provinceIds), eq(stateProvinces.mapId, mapId)))
         .groupBy(stateProvinces.stateId);
 
     const stateIdsArr = stateIds.map((state) => state.stateId);
@@ -21,7 +21,7 @@ export const changeProvinceType = async (_: Electron.IpcMainInvokeEvent, mapId: 
         const stateProvinceQuery = await db
             .select({ id: stateProvinces.provinceId })
             .from(stateProvinces)
-            .where(inArray(stateProvinces.stateId, stateIdsArr));
+            .where(and(inArray(stateProvinces.stateId, stateIdsArr), eq(stateProvinces.mapId, mapId)));
 
         provinceIds = [...new Set([...provinceIds, ...stateProvinceQuery.map((p) => p.id)])];
     }
@@ -39,7 +39,10 @@ export const changeProvinceType = async (_: Electron.IpcMainInvokeEvent, mapId: 
         .returning();
 
     if (stateIds.length > 0) {
-        await db.update(states).set({ type }).where(inArray(states.id, stateIdsArr));
+        await db
+            .update(states)
+            .set({ type })
+            .where(and(inArray(states.id, stateIdsArr), eq(states.mapId, mapId)));
     }
 
     return updatedProvinces as Omit<Province, "ethnicities" | "population">[];
