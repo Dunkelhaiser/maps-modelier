@@ -3,6 +3,7 @@ import { useGetCountryById } from "@ipc/countries";
 import { useMapStore } from "@store/store";
 import { Tabs, TabsList, TabsTrigger } from "@ui/Tabs";
 import EditAttributesForm from "./EditAttributesForm";
+import EditPopulationForm from "./EditPopulationForm";
 import PoliticsTab from "./Politics/PoliticsTab";
 
 const EditCountryForm = () => {
@@ -19,9 +20,11 @@ const EditCountryForm = () => {
         <Tabs defaultValue="attributes">
             <TabsList>
                 <TabsTrigger value="attributes">Attributes</TabsTrigger>
+                <TabsTrigger value="demographics">Demographics</TabsTrigger>
                 <TabsTrigger value="politics">Politics</TabsTrigger>
             </TabsList>
             <EditAttributesForm />
+            <EditPopulationForm />
             <PoliticsTab />
         </Tabs>
     );

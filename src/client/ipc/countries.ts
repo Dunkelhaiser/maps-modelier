@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { CreateCountryInput } from "src/shared/schemas/countries/createCountry";
 import { StatesAssignmentInput } from "src/shared/schemas/countries/states";
 import { UpdateCountryInput } from "src/shared/schemas/countries/updateCountry";
+import { PopulationInput } from "src/shared/schemas/provinces/population";
 
 export const useCreateCountry = (mapId: string) => {
     const queryClient = useQueryClient();
@@ -88,5 +89,26 @@ export const useGetCountriesTable = (mapId: string) => {
     return useQuery({
         queryKey: [mapId, "countries"],
         queryFn: async () => await window.electron.countries.getTable(mapId),
+    });
+};
+
+export const useAddOffmapPopulation = (mapId: string, id: number) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (data: PopulationInput) =>
+            await window.electron.countries.addOffmapPopulation(mapId, id, data),
+        onSuccess: () => {
+            toast.success("Population added successfully");
+            queryClient.invalidateQueries({ queryKey: [mapId, "countries"] });
+            queryClient.invalidateQueries({ queryKey: [mapId, "countries", id] });
+        },
+    });
+};
+
+export const useGetPopulation = (mapId: string, id: number) => {
+    return useQuery({
+        queryKey: [mapId, "countries", id, "population"],
+        queryFn: async () => await window.electron.countries.getPopulation(mapId, id),
     });
 };
