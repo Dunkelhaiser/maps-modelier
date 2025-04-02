@@ -22,7 +22,15 @@ const EthnicitiesSelect = ({ onChange, value, selectedEthnicities }: Props) => {
                     ?.filter((ethnicity) => ethnicity.id === value || !selectedEthnicities.includes(ethnicity.id))
                     .map((ethnicity) => (
                         <SelectItem value={String(ethnicity.id)} key={ethnicity.id}>
-                            {ethnicity.name}
+                            <div className="flex flex-row items-center gap-2">
+                                <div
+                                    className="size-3 rounded-full"
+                                    style={{
+                                        backgroundColor: ethnicity.color,
+                                    }}
+                                />
+                                {ethnicity.name}
+                            </div>
                         </SelectItem>
                     ))}
             </SelectContent>
