@@ -57,6 +57,50 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
             )
             .where(and(eq(countries.mapId, mapId), eq(countries.id, id)))
             .groupBy(countries.id, ethnicities.id, ethnicities.name, ethnicities.color)
+            .union(
+                db
+                    .select({
+                        countryId: countries.id,
+                        ethnicityId: ethnicities.id,
+                        ethnicityName: ethnicities.name,
+                        ethnicityColor: ethnicities.color,
+                        totalPopulation: sql<number>`SUM(${countryOffmapPopulations.population})`.as(
+                            "total_population"
+                        ),
+                    })
+                    .from(countries)
+                    .innerJoin(
+                        countryOffmapPopulations,
+                        and(
+                            eq(countryOffmapPopulations.countryId, countries.id),
+                            eq(countryOffmapPopulations.mapId, countries.mapId)
+                        )
+                    )
+                    .innerJoin(
+                        ethnicities,
+                        and(
+                            eq(ethnicities.id, countryOffmapPopulations.ethnicityId),
+                            eq(ethnicities.mapId, countryOffmapPopulations.mapId)
+                        )
+                    )
+                    .where(
+                        and(
+                            eq(countries.mapId, mapId),
+                            eq(countries.id, id),
+                            sql`NOT EXISTS (
+                                SELECT 1
+                                FROM ${provincePopulations}
+                                JOIN ${stateProvinces} ON ${stateProvinces.provinceId} = ${provincePopulations.provinceId}
+                                JOIN ${states} ON ${states.id} = ${stateProvinces.stateId}
+                                JOIN ${countryStates} ON ${countryStates.stateId} = ${states.id}
+                                WHERE ${countryStates.countryId} = ${countries.id}
+                                AND ${provincePopulations.ethnicityId} = ${ethnicities.id}
+                                AND ${provincePopulations.mapId} = ${countries.mapId}
+                            )`
+                        )
+                    )
+                    .groupBy(countries.id, ethnicities.id, ethnicities.name, ethnicities.color)
+            )
             .orderBy(desc(sql`total_population`))
     );
 
