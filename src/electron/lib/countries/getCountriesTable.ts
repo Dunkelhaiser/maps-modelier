@@ -8,6 +8,7 @@ import {
     provincePopulations,
     countryNames,
     countryFlags,
+    countryOffmapPopulations,
 } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 
@@ -18,15 +19,24 @@ export const getCountriesTable = async (_: Electron.IpcMainInvokeEvent, mapId: s
             name: countryNames.commonName,
             flag: countryFlags.path,
             population: sql<number>`
-                COALESCE((
-                    SELECT SUM(${provincePopulations.population})
-                    FROM ${provincePopulations}
-                    JOIN ${stateProvinces} ON ${stateProvinces.provinceId} = ${provincePopulations.provinceId}
-                    JOIN ${states} ON ${states.id} = ${stateProvinces.stateId}
-                    JOIN ${countryStates} ON ${countryStates.stateId} = ${states.id}
-                    WHERE ${countryStates.countryId} = ${countries.id}
-                    AND ${provincePopulations.mapId} = ${countries.mapId}
-                ), 0)
+                (
+                    COALESCE((
+                        SELECT SUM(${provincePopulations.population})
+                        FROM ${provincePopulations}
+                        JOIN ${stateProvinces} ON ${stateProvinces.provinceId} = ${provincePopulations.provinceId}
+                        JOIN ${states} ON ${states.id} = ${stateProvinces.stateId}
+                        JOIN ${countryStates} ON ${countryStates.stateId} = ${states.id}
+                        WHERE ${countryStates.countryId} = ${countries.id}
+                        AND ${provincePopulations.mapId} = ${countries.mapId}
+                    ), 0)
+                    +
+                    COALESCE((
+                        SELECT SUM(${countryOffmapPopulations.population})
+                        FROM ${countryOffmapPopulations}
+                        WHERE ${countryOffmapPopulations.countryId} = ${countries.id}
+                        AND ${countryOffmapPopulations.mapId} = ${countries.mapId}
+                    ), 0)
+                )
             `.mapWith(Number),
         })
         .from(countries)

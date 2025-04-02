@@ -1,4 +1,4 @@
-import { and, desc, eq, sql, sum } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { CountryAlliance, Ethnicity } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import {
@@ -14,6 +14,7 @@ import {
     countryAnthems,
     alliances,
     allianceMembers,
+    countryOffmapPopulations,
 } from "../../db/schema.js";
 import { loadFile } from "../utils/loadFile.js";
 
@@ -25,7 +26,16 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
                 ethnicityId: ethnicities.id,
                 ethnicityName: ethnicities.name,
                 ethnicityColor: ethnicities.color,
-                totalPopulation: sum(provincePopulations.population).as("total_population"),
+                totalPopulation: sql<number>`
+                    COALESCE(SUM(${provincePopulations.population}), 0)
+                    + COALESCE((
+                        SELECT SUM(${countryOffmapPopulations.population})
+                        FROM ${countryOffmapPopulations}
+                        WHERE ${countryOffmapPopulations.countryId} = ${countries.id}
+                          AND ${countryOffmapPopulations.mapId} = ${countries.mapId}
+                          AND ${countryOffmapPopulations.ethnicityId} = ${ethnicities.id}
+                    ), 0)
+                `.as("total_population"),
             })
             .from(countries)
             .leftJoin(countryStates, eq(countryStates.countryId, countries.id))
@@ -47,7 +57,7 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
             )
             .where(and(eq(countries.mapId, mapId), eq(countries.id, id)))
             .groupBy(countries.id, ethnicities.id, ethnicities.name, ethnicities.color)
-            .orderBy(desc(sum(provincePopulations.population)))
+            .orderBy(desc(sql`total_population`))
     );
 
     const countryEthnicities = db.$with("country_ethnicities").as(
@@ -55,16 +65,20 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
             .select({
                 countryId: ethnicityTotals.countryId,
                 ethnicityData: sql<string>`
-            json_group_array(
-                json_object(
-                    'id', ${ethnicityTotals.ethnicityId},
-                    'name', ${ethnicityTotals.ethnicityName},
-                    'color', ${ethnicityTotals.ethnicityColor},
-                    'population', ${ethnicityTotals.totalPopulation}
-                )
-                ORDER BY ${ethnicityTotals.totalPopulation} DESC
-            ) FILTER (WHERE ${ethnicityTotals.ethnicityId} IS NOT NULL AND ${ethnicityTotals.totalPopulation} > 0)
-        `.as("ethnicity_data"),
+                    json_group_array(
+                        json_object(
+                            'id', ${ethnicityTotals.ethnicityId},
+                            'name', ${ethnicityTotals.ethnicityName},
+                            'color', ${ethnicityTotals.ethnicityColor},
+                            'population', ${ethnicityTotals.totalPopulation}
+                        )
+                        ORDER BY ${ethnicityTotals.totalPopulation} DESC
+                    )
+                    FILTER (
+                        WHERE ${ethnicityTotals.ethnicityId} IS NOT NULL
+                        AND ${ethnicityTotals.totalPopulation} > 0
+                    )
+                `.as("ethnicity_data"),
             })
             .from(ethnicityTotals)
             .groupBy(ethnicityTotals.countryId)
@@ -75,14 +89,15 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
             .select({
                 countryId: allianceMembers.countryId,
                 allianceData: sql<string>`
-            json_group_array(
-                json_object(
-                    'id', ${alliances.id},
-                    'name', ${alliances.name},
-                    'type', ${alliances.type}
-                )
-            ) FILTER (WHERE ${alliances.id} IS NOT NULL)
-        `.as("alliance_data"),
+                    json_group_array(
+                        json_object(
+                            'id', ${alliances.id},
+                            'name', ${alliances.name},
+                            'type', ${alliances.type}
+                        )
+                    )
+                    FILTER (WHERE ${alliances.id} IS NOT NULL)
+                `.as("alliance_data"),
             })
             .from(allianceMembers)
             .leftJoin(
@@ -105,15 +120,24 @@ export const getCountryById = async (_: Electron.IpcMainInvokeEvent, mapId: stri
             anthemName: countryAnthems.name,
             anthemPath: countryAnthems.path,
             population: sql<number>`
-                COALESCE((
-                    SELECT SUM(${provincePopulations.population})
-                    FROM ${provincePopulations}
-                    JOIN ${stateProvinces} ON ${stateProvinces.provinceId} = ${provincePopulations.provinceId}
-                    JOIN ${states} ON ${states.id} = ${stateProvinces.stateId}
-                    JOIN ${countryStates} ON ${countryStates.stateId} = ${states.id}
-                    WHERE ${countryStates.countryId} = ${countries.id}
-                    AND ${provincePopulations.mapId} = ${countries.mapId}
-                ), 0)
+                (
+                    COALESCE((
+                        SELECT SUM(${provincePopulations.population})
+                        FROM ${provincePopulations}
+                        JOIN ${stateProvinces} ON ${stateProvinces.provinceId} = ${provincePopulations.provinceId}
+                        JOIN ${states} ON ${states.id} = ${stateProvinces.stateId}
+                        JOIN ${countryStates} ON ${countryStates.stateId} = ${states.id}
+                        WHERE ${countryStates.countryId} = ${countries.id}
+                          AND ${provincePopulations.mapId} = ${countries.mapId}
+                    ), 0)
+                    +
+                    COALESCE((
+                        SELECT SUM(${countryOffmapPopulations.population})
+                        FROM ${countryOffmapPopulations}
+                        WHERE ${countryOffmapPopulations.countryId} = ${countries.id}
+                          AND ${countryOffmapPopulations.mapId} = ${countries.mapId}
+                    ), 0)
+                )
             `.mapWith(Number),
             ethnicities: countryEthnicities.ethnicityData,
             alliances: countryAlliances.allianceData,

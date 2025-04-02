@@ -295,6 +295,34 @@ export const countryStates = sqliteTable(
     }
 );
 
+export const countryOffmapPopulations = sqliteTable(
+    "country_offmap_populations",
+    {
+        mapId: text("map_id")
+            .notNull()
+            .references(() => maps.id, { onDelete: "cascade" }),
+        countryId: integer("country_id").notNull(),
+        ethnicityId: integer("ethnicity_id").notNull(),
+        population: integer("population").notNull().default(0),
+    },
+    (table) => ({
+        pk: primaryKey({
+            columns: [table.mapId, table.countryId, table.ethnicityId],
+            name: "country_offmap_populations_pk",
+        }),
+        countriesReference: foreignKey({
+            columns: [table.mapId, table.countryId],
+            foreignColumns: [countries.mapId, countries.id],
+            name: "countries_reference",
+        }).onDelete("cascade"),
+        ethnicitiesReference: foreignKey({
+            columns: [table.mapId, table.ethnicityId],
+            foreignColumns: [ethnicities.mapId, ethnicities.id],
+            name: "ethnicities_reference",
+        }).onDelete("cascade"),
+    })
+);
+
 export const alliances = sqliteTable(
     "alliances",
     {
