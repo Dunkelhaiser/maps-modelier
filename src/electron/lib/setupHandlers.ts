@@ -80,8 +80,6 @@ const handlers: HandlersType = {
     },
     provinces: {
         getAll: getAllProvinces,
-        // getByColor: getProvinceByColor,
-        // getById: getProvinceById,
         changeType: changeProvinceType,
         addPopulation,
     },
@@ -91,7 +89,6 @@ const handlers: HandlersType = {
         create: createState,
         rename: renameState,
         delete: deleteState,
-        // getByProvinceId: getStateByProvinceId,
         addProvinces,
         removeProvinces,
     },

@@ -40,15 +40,12 @@ const api = {
     },
     provinces: {
         getAll: (mapId: string, type: ProvinceType) => invoke("provinces", "getAll", mapId, type),
-        // getByColor: (mapId: string, color: string) => invoke("provinces", "getByColor", mapId, color),
-        // getById: (mapId: string, id: number) => invoke("provinces", "getById", mapId, id),
         changeType: (mapId: string, data: ChangeTypeInput) => invoke("provinces", "changeType", mapId, data),
         addPopulation: (mapId: string, provinceId: number, data: PopulationInput) =>
             invoke("provinces", "addPopulation", mapId, provinceId, data),
     },
     states: {
         getAll: (mapId: string) => invoke("states", "getAll", mapId),
-        // getByProvinceId: (mapId: string, provinceId: number) => invoke("states", "getByProvinceId", mapId, provinceId),
         getById: (mapId: string, id: number) => invoke("states", "getById", mapId, id),
         create: (mapId: string, data: CreateStateInput) => invoke("states", "create", mapId, data),
         rename: (mapId: string, stateId: number, data: StateNameInput) =>

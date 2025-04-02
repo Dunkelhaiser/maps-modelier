@@ -230,14 +230,11 @@ export interface IpcChannels {
     };
     provinces: {
         getAll: (mapId: string, type: ProvinceType) => Promise<Province[]>;
-        // getByColor: (mapId: string, color: string) => Promise<Province | null>;
-        // getById: (mapId: string, id: number) => Promise<Province | null>;
         changeType: (mapId: string, data: ChangeTypeInput) => Promise<Omit<Province, "ethnicities" | "population">[]>;
         addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<PopulationInput>;
     };
     states: {
         getAll: (mapId: string) => Promise<StateBase[]>;
-        // getByProvinceId: (mapId: string, provinceId: number) => Promise<State | null>;
         getById: (mapId: string, id: number) => Promise<State>;
         create: (mapId: string, data: CreateStateInput) => Promise<State>;
         rename: (
