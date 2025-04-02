@@ -16,6 +16,7 @@ import { getCountriesBase } from "./countries/getCountriesBase.js";
 import { getCountriesStates } from "./countries/getCountriesStates.js";
 import { getCountriesTable } from "./countries/getCountriesTable.js";
 import { getCountryById } from "./countries/getCountryById.js";
+import { getPopulation } from "./countries/getPopulation.js";
 import { removeStates } from "./countries/removeStates.js";
 import { updateCountry } from "./countries/updateCountry.js";
 import { createEthnicity } from "./ethnicities/createEthnicity.js";
@@ -105,6 +106,7 @@ const handlers: HandlersType = {
         getById: getCountryById,
         getBases: getCountriesBase,
         addOffmapPopulation,
+        getPopulation,
     },
     ethnicities: {
         getAll: getAllEthnicities,

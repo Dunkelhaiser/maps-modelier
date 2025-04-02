@@ -70,6 +70,7 @@ const api = {
         getTable: (mapId: string) => invoke("countries", "getTable", mapId),
         addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) =>
             invoke("countries", "addOffmapPopulation", mapId, countryId, data),
+        getPopulation: (mapId: string, id: number) => invoke("countries", "getPopulation", mapId, id),
     },
     ethnicities: {
         getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),

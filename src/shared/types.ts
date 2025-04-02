@@ -111,6 +111,11 @@ export interface CountryTable {
     population: number;
 }
 
+export interface CountryPopulation {
+    onMapPopulation: Ethnicity[];
+    offMapPopulation: Ethnicity[];
+}
+
 export interface WarBase {
     id: number;
     name: string;
@@ -259,6 +264,7 @@ export interface IpcChannels {
         getBases: (mapId: string) => Promise<CountryBase[]>;
         getTable: (mapId: string) => Promise<CountryTable[]>;
         addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) => Promise<PopulationInput>;
+        getPopulation: (mapId: string, id: number) => Promise<CountryPopulation>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
