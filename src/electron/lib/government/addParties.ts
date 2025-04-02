@@ -1,11 +1,11 @@
 import { and, eq, inArray } from "drizzle-orm";
-import { PartyInput, partyScheme } from "../../../shared/schemas/politics/addParties.js";
+import { PartyInput, partySchema } from "../../../shared/schemas/politics/addParties.js";
 import { db } from "../../db/db.js";
 import { parliamentSeats, parliaments } from "../../db/schema.js";
 import { checkParliamentExistence } from "./checkParliamentExistence.js";
 
 export const addParties = async (_: Electron.IpcMainInvokeEvent, mapId: string, id: number, data: PartyInput) => {
-    const parties = await partyScheme.parseAsync(data);
+    const parties = await partySchema.parseAsync(data);
 
     await db.transaction(async (tx) => {
         if (parties.length === 0) return;
