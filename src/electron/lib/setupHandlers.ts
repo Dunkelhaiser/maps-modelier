@@ -8,6 +8,7 @@ import { getAllAlliances } from "./alliances/getAllAlliances.js";
 import { getAlliance } from "./alliances/getAlliance.js";
 import { getMembers } from "./alliances/getMembers.js";
 import { updateAlliance } from "./alliances/updateAlliance.js";
+import { addOffmapPopulation } from "./countries/addOffmapPopulation.js";
 import { addStates } from "./countries/addStates.js";
 import { createCountry } from "./countries/createCountry.js";
 import { deleteCountry } from "./countries/deleteCountry.js";
@@ -103,6 +104,7 @@ const handlers: HandlersType = {
         getStates: getCountriesStates,
         getById: getCountryById,
         getBases: getCountriesBase,
+        addOffmapPopulation,
     },
     ethnicities: {
         getAll: getAllEthnicities,

@@ -258,6 +258,7 @@ export interface IpcChannels {
         getById: (mapId: string, id: number) => Promise<Country>;
         getBases: (mapId: string) => Promise<CountryBase[]>;
         getTable: (mapId: string) => Promise<CountryTable[]>;
+        addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) => Promise<PopulationInput>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
