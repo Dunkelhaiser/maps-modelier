@@ -54,6 +54,7 @@ const CreateMapForm = () => {
                             <FormControl>
                                 <FileUpload
                                     {...fileRef}
+                                    className="aspect-video"
                                     accept="image/png, image/jpg, image/jpeg, image/webp, image/bmp"
                                 />
                             </FormControl>
