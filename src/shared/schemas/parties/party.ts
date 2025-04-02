@@ -1,20 +1,16 @@
 import { z as zod } from "zod";
-import { nameField } from "../shared.js";
+import { colorField, itemField, nameField } from "../shared.js";
 
 const partyIdeologySchema = zod.object({
-    ideologyId: zod.coerce.number({ message: "Select ideology" }).min(1, { message: "Select ideology" }),
+    ideologyId: itemField("Select ideology"),
     isPrimary: zod.boolean(),
 });
 
 export const partySchema = zod.object({
     name: nameField({ field: "party", min: 3, max: 50 }),
     acronym: zod.string().trim().max(10, { message: "Acronym can't be longer than 10 characters" }).optional(),
-    color: zod
-        .string()
-        .trim()
-        .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" })
-        .optional(),
-    leader: zod.coerce.number({ message: "Select party leader" }),
+    color: colorField(),
+    leader: itemField("Select party leader"),
     membersCount: zod.coerce
         .number()
         .int({ message: "Provide party members count" })

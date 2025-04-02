@@ -1,15 +1,12 @@
 import { z as zod } from "zod";
-import { audioSchema, imageSchema, nameField } from "../shared.js";
+import { audioSchema, colorField, imageSchema, nameField } from "../shared.js";
 
 export const updateCountrySchema = zod.object({
     name: zod.object({
         common: nameField({ field: "common name", min: 1, max: 50 }),
         official: nameField({ field: "official name", min: 0, max: 50 }),
     }),
-    color: zod
-        .string()
-        .trim()
-        .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" }),
+    color: colorField(),
     flag: imageSchema({ optional: true }),
     coatOfArms: imageSchema({ optional: true }),
     anthem: zod

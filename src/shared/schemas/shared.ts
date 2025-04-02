@@ -180,11 +180,10 @@ export const nameField = ({ field = "", min = 1, max = 50 }) =>
         .min(min, { message: `Provide ${getArticle(field)} ${field} name` })
         .max(max, { message: `The ${field} name should be less than ${max} characters` });
 
-export const createItemsSchema = (message: string) =>
-    zod.number({ message }).int({ message }).min(1, { message }).array().nonempty();
+export const itemField = (message: string) => zod.coerce.number({ message }).int({ message }).min(1, { message });
 
 export const createSelectSchema = <T extends string>(field: T, errorMessage: string) => {
-    const selectSchema = createItemsSchema(errorMessage);
+    const selectSchema = itemField(errorMessage).array().nonempty();
 
     const selectFormSchema = zod.object({
         [field]: zod.array(
@@ -199,3 +198,10 @@ export const createSelectSchema = <T extends string>(field: T, errorMessage: str
 
     return [selectSchema, selectFormSchema] as const;
 };
+
+export const colorField = () =>
+    zod
+        .string()
+        .trim()
+        .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" })
+        .optional();

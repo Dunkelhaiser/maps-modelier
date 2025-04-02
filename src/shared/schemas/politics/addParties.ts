@@ -1,10 +1,11 @@
 import { z as zod } from "zod";
+import { itemField } from "../shared.js";
 
 export const partiesSchema = zod
     .object({
-        partyId: zod.coerce.number().int().min(1, { message: "Select party" }),
+        partyId: itemField("Select party"),
         seatsNumber: zod.coerce.number().int().min(1, { message: "Enter number of seats" }),
-        side: zod.enum(["ruling_coalition", "opposition", "neutral"], { message: "Select side" }),
+        side: zod.enum(["ruling_coalition", "opposition", "neutral"], { message: "Select a side" }),
     })
     .array();
 

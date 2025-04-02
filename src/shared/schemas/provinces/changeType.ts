@@ -1,7 +1,8 @@
 import { z as zod } from "zod";
+import { itemField } from "../shared.js";
 
 export const changeTypeSchema = zod.object({
-    provinceIds: zod.array(zod.number()),
+    provinceIds: itemField("Select provinces").array(),
     type: zod.enum(["land", "water"]),
 });
 

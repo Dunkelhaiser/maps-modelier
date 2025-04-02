@@ -1,14 +1,15 @@
 import { z as zod } from "zod";
+import { itemField } from "../shared.js";
 
 export const provincesSchema = zod.object({
-    provinces: zod.array(zod.number()),
+    provinces: itemField("Select provinces").array(),
 });
 
 export type ProvincesInput = zod.infer<typeof provincesSchema>;
 
 export const provincesAssignmetSchema = zod
     .object({
-        stateId: zod.number(),
+        stateId: itemField("Select state"),
     })
     .merge(provincesSchema);
 

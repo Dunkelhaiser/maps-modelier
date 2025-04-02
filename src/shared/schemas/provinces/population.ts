@@ -1,8 +1,9 @@
 import { z as zod } from "zod";
+import { itemField } from "../shared.js";
 
 export const populationSchema = zod
     .object({
-        ethnicityId: zod.coerce.number().int().min(1, { message: "Select ethnicity" }),
+        ethnicityId: itemField("Select ethnicity"),
         population: zod.coerce.number().int().min(1, { message: "Enter population" }),
     })
     .array();

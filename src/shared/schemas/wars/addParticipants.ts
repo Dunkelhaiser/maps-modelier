@@ -1,9 +1,10 @@
 import { z as zod } from "zod";
+import { itemField } from "../shared.js";
 
 export const addParticipantsSchema = zod
     .object({
-        countryId: zod.coerce.number().int().min(1, { message: "Select country" }),
-        sideId: zod.coerce.number().int().min(1, { message: "Select side" }),
+        countryId: itemField("Select country"),
+        sideId: itemField("Select side"),
     })
     .array();
 
