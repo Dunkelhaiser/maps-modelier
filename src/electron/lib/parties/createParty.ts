@@ -18,6 +18,7 @@ export const createParty = async (
                 countryId,
                 leaderId: leader,
                 ...data,
+                acronym: data.acronym?.length ? data.acronym : null,
             })
             .returning({ id: politicalParties.id });
 
