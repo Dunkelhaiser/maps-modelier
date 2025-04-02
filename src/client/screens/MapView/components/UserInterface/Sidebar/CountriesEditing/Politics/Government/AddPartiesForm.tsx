@@ -9,7 +9,7 @@ import { ScrollArea } from "@ui/ScrollArea";
 import { Plus, Save, X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { PartyFormInput, partyFormSchema } from "src/shared/schemas/politics/addParties";
+import { PartiesFormInput, partiesFormSchema } from "src/shared/schemas/politics/addParties";
 import PartiesSelect from "./PartiesSelect";
 
 interface Props {
@@ -22,7 +22,7 @@ const AddPartiesForm = ({ id }: Props) => {
 
     const defaultValues = useMemo(
         () => ({
-            party:
+            parties:
                 parliamentParties?.flatMap((group) =>
                     group.parties.map((party) => ({
                         partyId: party.id,
@@ -34,8 +34,8 @@ const AddPartiesForm = ({ id }: Props) => {
         [parliamentParties]
     );
 
-    const form = useForm<PartyFormInput>({
-        resolver: zodResolver(partyFormSchema),
+    const form = useForm<PartiesFormInput>({
+        resolver: zodResolver(partiesFormSchema),
         defaultValues,
     });
 
@@ -51,16 +51,16 @@ const AddPartiesForm = ({ id }: Props) => {
         remove,
     } = useFieldArray({
         control: form.control,
-        name: "party",
+        name: "parties",
     });
 
     const addParties = useAddParties(activeMap, id);
 
-    const addPartiesHandler = async (data: PartyFormInput) => {
-        await addParties.mutateAsync(data.party);
+    const addPartiesHandler = async (data: PartiesFormInput) => {
+        await addParties.mutateAsync(data.parties);
     };
 
-    const selectedParties = form.watch("party").map((p) => Number(p.partyId));
+    const selectedParties = form.watch("parties").map((p) => Number(p.partyId));
 
     const sides = [
         { id: "ruling_coalition", name: "Ruling Coalition" },
@@ -81,7 +81,7 @@ const AddPartiesForm = ({ id }: Props) => {
                                     <div className="space-y-3">
                                         {partyFields
                                             .map((field, index) => ({ field, index }))
-                                            .filter(({ index }) => form.getValues().party[index].side === side.id)
+                                            .filter(({ index }) => form.getValues().parties[index].side === side.id)
                                             .map(({ field, index }) => {
                                                 const otherSelectedParties = selectedParties.filter(
                                                     (_, i) => i !== index && selectedParties[i] !== 0
@@ -91,7 +91,7 @@ const AddPartiesForm = ({ id }: Props) => {
                                                     <div className="flex gap-2" key={field.id}>
                                                         <FormField
                                                             control={form.control}
-                                                            name={`party.${index}.partyId`}
+                                                            name={`parties.${index}.partyId`}
                                                             render={({ field: formField }) => (
                                                                 <FormItem className="flex-1">
                                                                     <FormControl>
@@ -107,7 +107,7 @@ const AddPartiesForm = ({ id }: Props) => {
                                                         />
                                                         <FormField
                                                             control={form.control}
-                                                            name={`party.${index}.seatsNumber`}
+                                                            name={`parties.${index}.seatsNumber`}
                                                             render={({ field: formField }) => (
                                                                 <FormItem>
                                                                     <FormControl>

@@ -1,6 +1,6 @@
 import { z as zod } from "zod";
 
-export const partySchema = zod
+export const partiesSchema = zod
     .object({
         partyId: zod.coerce.number().int().min(1, { message: "Select party" }),
         seatsNumber: zod.coerce.number().int().min(1, { message: "Enter number of seats" }),
@@ -8,9 +8,9 @@ export const partySchema = zod
     })
     .array();
 
-export const partyFormSchema = zod.object({
-    party: partySchema,
+export const partiesFormSchema = zod.object({
+    parties: partiesSchema,
 });
 
-export type PartyInput = zod.infer<typeof partySchema>;
-export type PartyFormInput = zod.infer<typeof partyFormSchema>;
+export type PartiesInput = zod.infer<typeof partiesSchema>;
+export type PartiesFormInput = zod.infer<typeof partiesFormSchema>;

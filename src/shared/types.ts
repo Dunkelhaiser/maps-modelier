@@ -10,7 +10,7 @@ import { IdeologyInput } from "./schemas/ideologies/ideology.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
 import { PartyInput } from "./schemas/parties/party.js";
-import { PartyInput as ParliamentPartyInput } from "./schemas/politics/addParties.js";
+import { PartiesInput as ParliamentPartyInput } from "./schemas/politics/addParties.js";
 import { AssignHeadInput } from "./schemas/politics/assignHead.js";
 import { ParliamentInput } from "./schemas/politics/parliament.js";
 import { PoliticianInput } from "./schemas/politics/politician.js";
