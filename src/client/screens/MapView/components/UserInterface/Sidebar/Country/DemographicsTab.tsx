@@ -1,3 +1,4 @@
+import InfoBlock from "@components/InfoBlock";
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "@ui/Table";
 import { TabsContent } from "@ui/Tabs";
 import { Users } from "lucide-react";
@@ -12,15 +13,7 @@ const DemographicsTab = ({ country }: Props) => {
     return (
         <TabsContent value="demographics">
             <div className="space-y-4">
-                <div className="flex items-center gap-2 rounded-md bg-muted p-3 shadow-sm">
-                    <div className="rounded-full bg-muted-foreground/10 p-2">
-                        <Users size={16} className="text-muted-foreground" />
-                    </div>
-                    <div>
-                        <p className="text-xs text-muted-foreground">Population</p>
-                        <p className="font-medium">{country.population.toLocaleString()}</p>
-                    </div>
-                </div>
+                <InfoBlock Icon={Users} label="Population" value={country.population.toLocaleString()} />
                 <EthnicityBar ethnicities={country.ethnicities} />
             </div>
 
