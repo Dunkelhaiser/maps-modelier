@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, desc } from "drizzle-orm";
 import { db } from "../../db/db.js";
 import {
     countryOffmapPopulations,
@@ -25,7 +25,8 @@ export const getPopulation = async (_: Electron.IpcMainInvokeEvent, mapId: strin
             ethnicities,
             and(eq(ethnicities.id, provincePopulations.ethnicityId), eq(ethnicities.mapId, provincePopulations.mapId))
         )
-        .where(and(eq(provincePopulations.mapId, mapId), eq(countryStates.countryId, countryId)));
+        .where(and(eq(provincePopulations.mapId, mapId), eq(countryStates.countryId, countryId)))
+        .orderBy(desc(provincePopulations.population));
 
     const offMapPopulation = await db
         .select({
@@ -42,7 +43,8 @@ export const getPopulation = async (_: Electron.IpcMainInvokeEvent, mapId: strin
                 eq(ethnicities.mapId, countryOffmapPopulations.mapId)
             )
         )
-        .where(and(eq(countryOffmapPopulations.mapId, mapId), eq(countryOffmapPopulations.countryId, countryId)));
+        .where(and(eq(countryOffmapPopulations.mapId, mapId), eq(countryOffmapPopulations.countryId, countryId)))
+        .orderBy(desc(countryOffmapPopulations.population));
 
     return {
         onMapPopulation,
