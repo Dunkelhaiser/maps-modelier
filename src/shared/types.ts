@@ -90,10 +90,12 @@ export interface ProvinceBase {
     type: string;
 }
 
+export type AllianceType = "economic" | "political" | "military";
+
 export interface Alliance {
     id: number;
     name: string;
-    type: string;
+    type: AllianceType;
     leader: CountryBase;
     membersCount: number;
 }

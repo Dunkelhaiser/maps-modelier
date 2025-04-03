@@ -24,7 +24,7 @@ const EditAllianceForm = () => {
         () => ({
             name: alliance?.name,
             leader: alliance?.leader.id,
-            type: alliance?.type as "economic" | "political" | "military",
+            type: alliance?.type,
         }),
         [alliance?.name, alliance?.leader.id, alliance?.type]
     );
