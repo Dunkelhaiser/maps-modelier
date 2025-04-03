@@ -186,7 +186,11 @@ const ParliamentVisualization = ({ seatsNumber, groups }: Props) => {
                                 false;
 
                             return (
-                                <Tooltip key={seatInfo.party.id} delayDuration={0} open={isHovered}>
+                                <Tooltip
+                                    key={`${seatInfo.party.id}-${position.x}-${position.y}`}
+                                    delayDuration={0}
+                                    open={isHovered}
+                                >
                                     <TooltipTrigger asChild>
                                         <circle
                                             cx={position.x}
