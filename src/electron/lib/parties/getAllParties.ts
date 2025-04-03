@@ -33,9 +33,8 @@ export const getAllParties = async (
             politicalParties.foundedAt
         );
 
-    if (sortBy !== "ideology") {
+    if (sortBy !== "ideology" && sortBy !== "name") {
         const sortOptions = {
-            name: politicalParties.name,
             members: politicalParties.membersCount,
         };
 
@@ -78,6 +77,16 @@ export const getAllParties = async (
 
             if (sortOrder === "asc") return ideologyA.localeCompare(ideologyB);
             return ideologyB.localeCompare(ideologyA);
+        });
+    }
+
+    if (sortBy === "name") {
+        partiesData.sort((a, b) => {
+            const valueA = a.acronym ?? a.name;
+            const valueB = b.acronym ?? b.name;
+
+            if (sortOrder === "asc") return valueA.localeCompare(valueB);
+            return valueB.localeCompare(valueA);
         });
     }
 
