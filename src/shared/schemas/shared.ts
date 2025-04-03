@@ -205,3 +205,21 @@ export const colorField = () =>
         .trim()
         .regex(/^#[0-9a-fA-F]{6}$/i, { message: "Enter valid color" })
         .optional();
+
+export const getWithOrderSchema = <T extends string, Rest extends string[]>(firstSortBy: T, ...restSortBy: Rest) => {
+    const defaultSort = {
+        sortBy: firstSortBy,
+        sortOrder: "asc",
+    } as const;
+
+    return zod
+        .object({
+            sortBy: zod
+                .enum([firstSortBy, ...restSortBy] as const)
+                .default(firstSortBy)
+                .catch(firstSortBy),
+            sortOrder: zod.enum(["asc", "desc"]).default("asc").catch("asc"),
+        })
+        .default(defaultSort)
+        .catch(defaultSort);
+};
