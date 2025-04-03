@@ -1,8 +1,14 @@
 import { eq } from "drizzle-orm";
+import { GetIdeologiesInput, getIdeologiesSchema } from "../../../shared/schemas/ideologies/getIdeologies.js";
 import { db } from "../../db/db.js";
 import { ideologies } from "../../db/schema.js";
+import { orderBy } from "../utils/orderBy.js";
 
-export const getAllIdeologies = async (_: Electron.IpcMainInvokeEvent, mapId: string) => {
+export const getAllIdeologies = async (_: Electron.IpcMainInvokeEvent, mapId: string, query?: GetIdeologiesInput) => {
+    const { sortOrder } = await getIdeologiesSchema.parseAsync(query);
+
+    const orderQuery = orderBy(ideologies.name, sortOrder);
+
     const ideologiesArr = await db
         .select({
             id: ideologies.id,
@@ -11,7 +17,7 @@ export const getAllIdeologies = async (_: Electron.IpcMainInvokeEvent, mapId: st
         })
         .from(ideologies)
         .where(eq(ideologies.mapId, mapId))
-        .orderBy(ideologies.name);
+        .orderBy(orderQuery);
 
     return ideologiesArr;
 };

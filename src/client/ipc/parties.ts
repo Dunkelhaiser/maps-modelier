@@ -2,12 +2,13 @@ import { useMapStore } from "@store/store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AddMembersInput } from "src/shared/schemas/parties/addMembers";
+import { GetPartiesInput } from "src/shared/schemas/parties/getParties";
 import { PartyInput } from "src/shared/schemas/parties/party";
 
-export const useGetParties = (mapId: string, countryId: number) => {
+export const useGetParties = (mapId: string, countryId: number, query?: GetPartiesInput) => {
     return useQuery({
         queryKey: [mapId, countryId, "parties"],
-        queryFn: async () => await window.electron.parties.getAll(mapId, countryId),
+        queryFn: async () => await window.electron.parties.getAll(mapId, countryId, query),
     });
 };
 

@@ -1,13 +1,18 @@
 const { contextBridge, ipcRenderer } = require("electron");
 import type { AddMembersInput } from "../shared/schemas/alliances/addMembers.js" with { "resolution-mode": "import" };
 import type { AllianceInput } from "../shared/schemas/alliances/alliance.js" with { "resolution-mode": "import" };
+import type { GetAlliancesInput } from "../shared/schemas/alliances/getAlliances.js" with { "resolution-mode": "import" };
 import type { CreateCountryInput } from "../shared/schemas/countries/createCountry.js" with { "resolution-mode": "import" };
+import type { GetCountriesInput } from "../shared/schemas/countries/getCountries.js" with { "resolution-mode": "import" };
 import type { StatesAssignmentInput } from "../shared/schemas/countries/states.js" with { "resolution-mode": "import" };
 import type { UpdateCountryInput } from "../shared/schemas/countries/updateCountry.js" with { "resolution-mode": "import" };
 import type { EthnicityInput } from "../shared/schemas/ethnicities/ethnicity.js" with { "resolution-mode": "import" };
+import type { GetEthnicitiesInput } from "../shared/schemas/ethnicities/getEthnicities.js" with { "resolution-mode": "import" };
+import type { GetIdeologiesInput } from "../shared/schemas/ideologies/getIdeologies.js" with { "resolution-mode": "import" };
 import type { IdeologyInput } from "../shared/schemas/ideologies/ideology.js" with { "resolution-mode": "import" };
 import type { CreateMapInput } from "../shared/schemas/maps/createMap.js" with { "resolution-mode": "import" };
 import type { RenameMapInput } from "../shared/schemas/maps/renameMap.js" with { "resolution-mode": "import" };
+import type { GetPartiesInput } from "../shared/schemas/parties/getParties.js" with { "resolution-mode": "import" };
 import type { PartyInput } from "../shared/schemas/parties/party.js" with { "resolution-mode": "import" };
 import type { PartiesInput as ParliamentPartyInput } from "../shared/schemas/politics/addParties.js" with { "resolution-mode": "import" };
 import type { AssignHeadInput } from "../shared/schemas/politics/assignHead.js" with { "resolution-mode": "import" };
@@ -19,6 +24,7 @@ import type { CreateStateInput } from "../shared/schemas/states/createState.js" 
 import type { ProvincesAssignmentInput } from "../shared/schemas/states/provinces.js" with { "resolution-mode": "import" };
 import type { StateNameInput } from "../shared/schemas/states/state.js" with { "resolution-mode": "import" };
 import type { AddParticipantsInput } from "../shared/schemas/wars/addParticipants.js" with { "resolution-mode": "import" };
+import type { GetWarsInput } from "../shared/schemas/wars/getWars.js" with { "resolution-mode": "import" };
 import type { WarInput } from "../shared/schemas/wars/war.js" with { "resolution-mode": "import" };
 import type { IpcRequest, IpcChannels, ProvinceType } from "../shared/types.js" with { "resolution-mode": "import" };
 
@@ -64,20 +70,20 @@ const api = {
         getStates: (mapId: string) => invoke("countries", "getStates", mapId),
         getById: (mapId: string, id: number) => invoke("countries", "getById", mapId, id),
         getBases: (mapId: string) => invoke("countries", "getBases", mapId),
-        getTable: (mapId: string) => invoke("countries", "getTable", mapId),
+        getTable: (mapId: string, query: GetCountriesInput) => invoke("countries", "getTable", mapId, query),
         addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) =>
             invoke("countries", "addOffmapPopulation", mapId, countryId, data),
         getPopulation: (mapId: string, id: number) => invoke("countries", "getPopulation", mapId, id),
     },
     ethnicities: {
-        getAll: (mapId: string) => invoke("ethnicities", "getAll", mapId),
+        getAll: (mapId: string, query?: GetEthnicitiesInput) => invoke("ethnicities", "getAll", mapId, query),
         create: (mapId: string, data: EthnicityInput) => invoke("ethnicities", "create", mapId, data),
         update: (mapId: string, id: number, data: EthnicityInput) => invoke("ethnicities", "update", mapId, id, data),
         delete: (mapId: string, id: number) => invoke("ethnicities", "delete", mapId, id),
     },
     alliances: {
         create: (mapId: string, data: AllianceInput) => invoke("alliances", "create", mapId, data),
-        getAll: (mapId: string) => invoke("alliances", "getAll", mapId),
+        getAll: (mapId: string, query?: GetAlliancesInput) => invoke("alliances", "getAll", mapId, query),
         update: (mapId: string, id: number, data: AllianceInput) => invoke("alliances", "update", mapId, id, data),
         addMembers: (mapId: string, id: number, members: AddMembersInput) =>
             invoke("alliances", "addMembers", mapId, id, members),
@@ -88,7 +94,7 @@ const api = {
     wars: {
         create: (mapId: string, data: WarInput) => invoke("wars", "create", mapId, data),
         update: (mapId: string, id: number, data: WarInput) => invoke("wars", "update", mapId, id, data),
-        getAll: (mapId: string) => invoke("wars", "getAll", mapId),
+        getAll: (mapId: string, query?: GetWarsInput) => invoke("wars", "getAll", mapId, query),
         get: (mapId: string, id: number) => invoke("wars", "get", mapId, id),
         getParticipants: (mapId: string, id: number) => invoke("wars", "getParticipants", mapId, id),
         addParticipants: (mapId: string, id: number, data: AddParticipantsInput) =>
@@ -108,13 +114,14 @@ const api = {
         create: (mapId: string, data: IdeologyInput) => invoke("ideologies", "create", mapId, data),
         update: (mapId: string, id: number, data: IdeologyInput) => invoke("ideologies", "update", mapId, id, data),
         delete: (mapId: string, id: number) => invoke("ideologies", "delete", mapId, id),
-        getAll: (mapId: string) => invoke("ideologies", "getAll", mapId),
+        getAll: (mapId: string, query?: GetIdeologiesInput) => invoke("ideologies", "getAll", mapId, query),
     },
     parties: {
         create: (mapId: string, countryId: number, data: PartyInput) =>
             invoke("parties", "create", mapId, countryId, data),
         delete: (mapId: string, id: number) => invoke("parties", "delete", mapId, id),
-        getAll: (mapId: string, countryId: number) => invoke("parties", "getAll", mapId, countryId),
+        getAll: (mapId: string, countryId: number, query?: GetPartiesInput) =>
+            invoke("parties", "getAll", mapId, countryId, query),
         get: (mapId: string, id: number) => invoke("parties", "get", mapId, id),
         getMembers: (mapId: string, id: number) => invoke("parties", "getMembers", mapId, id),
         update: (mapId: string, id: number, data: PartyInput) => invoke("parties", "update", mapId, id, data),

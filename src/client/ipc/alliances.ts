@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AddMembersInput } from "src/shared/schemas/alliances/addMembers";
 import { AllianceInput } from "src/shared/schemas/alliances/alliance";
+import { GetAlliancesInput } from "src/shared/schemas/alliances/getAlliances";
 
 export const useCreateAlliance = (mapId: string) => {
     const queryClient = useQueryClient();
@@ -15,10 +16,10 @@ export const useCreateAlliance = (mapId: string) => {
     });
 };
 
-export const useGetAlliances = (mapId: string) => {
+export const useGetAlliances = (mapId: string, query?: GetAlliancesInput) => {
     return useQuery({
         queryKey: [mapId, "alliances"],
-        queryFn: async () => await window.electron.alliances.getAll(mapId),
+        queryFn: async () => await window.electron.alliances.getAll(mapId, query),
     });
 };
 

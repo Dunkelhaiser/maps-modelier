@@ -1,13 +1,25 @@
 import { eq, getTableColumns, count, and } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
+import { GetWarsInput, getWarsSchema } from "../../../shared/schemas/wars/getWars.js";
 import { db } from "../../db/db.js";
 import { wars, warSides, warParticipants } from "../../db/schema.js";
 import { getCountryBase } from "../countries/getCountryBase.js";
+import { orderBy } from "../utils/orderBy.js";
 
-export const getAllWars = async (_event: IpcMainInvokeEvent, mapId: string) => {
+export const getAllWars = async (_event: IpcMainInvokeEvent, mapId: string, query?: GetWarsInput) => {
     const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(wars);
+    const { sortBy, sortOrder } = await getWarsSchema.parseAsync(query);
 
-    const warsArr = await db.select(cols).from(wars).where(eq(wars.mapId, mapId));
+    const sortOptions = {
+        name: wars.name,
+        aggressor: wars.aggressor,
+        defender: wars.defender,
+        participants: count(warParticipants.countryId),
+    };
+
+    const orderQuery = orderBy(sortOptions[sortBy], sortOrder);
+
+    const warsArr = await db.select(cols).from(wars).where(eq(wars.mapId, mapId)).orderBy(orderQuery);
 
     const warsData = await Promise.all(
         warsArr.map(async (war) => {

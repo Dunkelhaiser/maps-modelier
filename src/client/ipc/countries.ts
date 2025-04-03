@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CreateCountryInput } from "src/shared/schemas/countries/createCountry";
+import { GetCountriesInput } from "src/shared/schemas/countries/getCountries";
 import { StatesAssignmentInput } from "src/shared/schemas/countries/states";
 import { UpdateCountryInput } from "src/shared/schemas/countries/updateCountry";
 import { PopulationInput } from "src/shared/schemas/provinces/population";
@@ -85,10 +86,10 @@ export const useGetCountriesBase = (mapId: string) => {
     });
 };
 
-export const useGetCountriesTable = (mapId: string) => {
+export const useGetCountriesTable = (mapId: string, query?: GetCountriesInput) => {
     return useQuery({
         queryKey: [mapId, "countries"],
-        queryFn: async () => await window.electron.countries.getTable(mapId),
+        queryFn: async () => await window.electron.countries.getTable(mapId, query),
     });
 };
 

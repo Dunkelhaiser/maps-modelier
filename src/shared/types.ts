@@ -2,13 +2,18 @@ import { InferSelectModel } from "drizzle-orm";
 import { maps, provinces } from "../electron/db/schema.js";
 import { AddMembersInput } from "./schemas/alliances/addMembers.js";
 import { AllianceInput } from "./schemas/alliances/alliance.js";
+import { GetAlliancesInput } from "./schemas/alliances/getAlliances.js";
 import { CreateCountryInput } from "./schemas/countries/createCountry.js";
+import { GetCountriesInput } from "./schemas/countries/getCountries.js";
 import { StatesAssignmentInput } from "./schemas/countries/states.js";
 import { UpdateCountryInput } from "./schemas/countries/updateCountry.js";
 import { EthnicityInput } from "./schemas/ethnicities/ethnicity.js";
+import { GetEthnicitiesInput } from "./schemas/ethnicities/getEthnicities.js";
+import { GetIdeologiesInput } from "./schemas/ideologies/getIdeologies.js";
 import { IdeologyInput } from "./schemas/ideologies/ideology.js";
 import { CreateMapInput } from "./schemas/maps/createMap.js";
 import { RenameMapInput } from "./schemas/maps/renameMap.js";
+import { GetPartiesInput } from "./schemas/parties/getParties.js";
 import { PartyInput } from "./schemas/parties/party.js";
 import { PartiesInput as ParliamentPartyInput } from "./schemas/politics/addParties.js";
 import { AssignHeadInput } from "./schemas/politics/assignHead.js";
@@ -20,6 +25,7 @@ import { CreateStateInput } from "./schemas/states/createState.js";
 import { ProvincesAssignmentInput } from "./schemas/states/provinces.js";
 import { StateNameInput } from "./schemas/states/state.js";
 import { AddParticipantsInput } from "./schemas/wars/addParticipants.js";
+import { GetWarsInput } from "./schemas/wars/getWars.js";
 import { WarInput } from "./schemas/wars/war.js";
 
 export type MapType = InferSelectModel<typeof maps>;
@@ -253,19 +259,19 @@ export interface IpcChannels {
         getStates: (mapId: string) => Promise<CountryStates[]>;
         getById: (mapId: string, id: number) => Promise<Country>;
         getBases: (mapId: string) => Promise<CountryBase[]>;
-        getTable: (mapId: string) => Promise<CountryTable[]>;
+        getTable: (mapId: string, query?: GetCountriesInput) => Promise<CountryTable[]>;
         addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) => Promise<void>;
         getPopulation: (mapId: string, id: number) => Promise<CountryPopulation>;
     };
     ethnicities: {
-        getAll: (mapId: string) => Promise<Ethnicity[]>;
+        getAll: (mapId: string, query?: GetEthnicitiesInput) => Promise<Ethnicity[]>;
         create: (mapId: string, data: EthnicityInput) => Promise<IdRes>;
         update: (mapId: string, id: number, data: EthnicityInput) => Promise<void>;
         delete: (mapId: string, id: number) => Promise<void>;
     };
     alliances: {
         create: (mapId: string, data: AllianceInput) => Promise<IdRes>;
-        getAll: (mapId: string) => Promise<Alliance[]>;
+        getAll: (mapId: string, query?: GetAlliancesInput) => Promise<Alliance[]>;
         update: (mapId: string, id: number, data: AllianceInput) => Promise<void>;
         addMembers: (mapId: string, id: number, members: AddMembersInput) => Promise<void>;
         get: (mapId: string, id: number) => Promise<Alliance>;
@@ -275,7 +281,7 @@ export interface IpcChannels {
     wars: {
         create: (mapId: string, data: WarInput) => Promise<IdRes>;
         update: (mapId: string, id: number, data: WarInput) => Promise<void>;
-        getAll: (mapId: string) => Promise<WarTable[]>;
+        getAll: (mapId: string, query?: GetWarsInput) => Promise<WarTable[]>;
         get: (mapId: string, id: number) => Promise<WarBase>;
         getParticipants: (mapId: string, id: number) => Promise<WarParticipants>;
         addParticipants: (mapId: string, id: number, participants: AddParticipantsInput) => Promise<void>;
@@ -293,12 +299,12 @@ export interface IpcChannels {
         create: (mapId: string, data: IdeologyInput) => Promise<IdRes>;
         update: (mapId: string, id: number, data: IdeologyInput) => Promise<void>;
         delete: (mapId: string, id: number) => Promise<void>;
-        getAll: (mapId: string) => Promise<Ideology[]>;
+        getAll: (mapId: string, query?: GetIdeologiesInput) => Promise<Ideology[]>;
     };
     parties: {
         create: (mapId: string, countryId: number, data: PartyInput) => Promise<IdRes>;
         delete: (mapId: string, id: number) => Promise<void>;
-        getAll: (mapId: string, countryId: number) => Promise<PoliticalPartyTable[]>;
+        getAll: (mapId: string, countryId: number, query?: GetPartiesInput) => Promise<PoliticalPartyTable[]>;
         get: (mapId: string, id: number) => Promise<PoliticalParty>;
         getMembers: (mapId: string, id: number) => Promise<Politician[]>;
         update: (mapId: string, id: number, data: PartyInput) => Promise<void>;

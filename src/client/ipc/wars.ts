@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AddParticipantsInput } from "src/shared/schemas/wars/addParticipants";
+import { GetWarsInput } from "src/shared/schemas/wars/getWars";
 import { WarInput } from "src/shared/schemas/wars/war";
 
-export const useGetWars = (mapId: string) => {
+export const useGetWars = (mapId: string, query?: GetWarsInput) => {
     return useQuery({
         queryKey: [mapId, "wars"],
-        queryFn: async () => await window.electron.wars.getAll(mapId),
+        queryFn: async () => await window.electron.wars.getAll(mapId, query),
     });
 };
 
