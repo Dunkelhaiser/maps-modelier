@@ -3,9 +3,12 @@ import { IpcMainInvokeEvent } from "electron";
 import { WarInput, warSchema } from "../../../shared/schemas/wars/war.js";
 import { db } from "../../db/db.js";
 import { wars, warSides, warParticipants } from "../../db/schema.js";
+import { checkWarExistence } from "./checkWarExistence.js";
 
 export const updateWar = async (_event: IpcMainInvokeEvent, mapId: string, id: number, data: WarInput) => {
     const validatedData = await warSchema.parseAsync(data);
+
+    await checkWarExistence(mapId, id);
 
     return db.transaction(async (tx) => {
         const [war] = await tx

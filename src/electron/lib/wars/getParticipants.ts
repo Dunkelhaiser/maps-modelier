@@ -2,16 +2,12 @@ import { eq, and, inArray, not } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { WarParticipantGroup } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
-import { warSides, warParticipants, wars, alliances, allianceMembers } from "../../db/schema.js";
+import { warSides, warParticipants, alliances, allianceMembers } from "../../db/schema.js";
 import { getCountryBase } from "../countries/getCountryBase.js";
+import { checkWarExistence } from "./checkWarExistence.js";
 
 export const getParticipants = async (_event: IpcMainInvokeEvent, mapId: string, id: number) => {
-    const existingWar = await db
-        .select({ id: wars.id })
-        .from(wars)
-        .where(and(eq(wars.mapId, mapId), eq(wars.id, id)));
-
-    if (existingWar.length === 0) throw new Error("War not found");
+    await checkWarExistence(mapId, id);
 
     const sides = await db
         .select()

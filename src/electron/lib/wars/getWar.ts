@@ -1,20 +1,12 @@
-import { eq, getTableColumns, count, and } from "drizzle-orm";
+import { eq, count, and } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { db } from "../../db/db.js";
-import { wars, warSides, warParticipants } from "../../db/schema.js";
+import { warSides, warParticipants } from "../../db/schema.js";
 import { getCountryBase } from "../countries/getCountryBase.js";
+import { checkWarExistence } from "./checkWarExistence.js";
 
 export const getWar = async (_event: IpcMainInvokeEvent, mapId: string, id: number) => {
-    const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(wars);
-
-    const war = await db
-        .select(cols)
-        .from(wars)
-        .where(and(eq(wars.mapId, mapId), eq(wars.id, id)));
-
-    if (war.length === 0) throw new Error("War not found");
-
-    const [warData] = war;
+    const warData = await checkWarExistence(mapId, id);
 
     const attackerData = await getCountryBase(mapId, warData.aggressor);
     const defenderData = await getCountryBase(mapId, warData.defender);

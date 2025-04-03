@@ -2,7 +2,8 @@ import { and, eq, inArray } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { AddParticipantsInput, addParticipantsSchema } from "../../../shared/schemas/wars/addParticipants.js";
 import { db } from "../../db/db.js";
-import { warParticipants, wars, warSides } from "../../db/schema.js";
+import { warParticipants, warSides } from "../../db/schema.js";
+import { checkWarExistence } from "./checkWarExistence.js";
 
 export const addParticipants = async (
     _event: IpcMainInvokeEvent,
@@ -13,18 +14,7 @@ export const addParticipants = async (
     const participants = await addParticipantsSchema.parseAsync(data);
 
     return db.transaction(async (tx) => {
-        const existingWar = await tx
-            .select({
-                id: wars.id,
-                aggressor: wars.aggressor,
-                defender: wars.defender,
-            })
-            .from(wars)
-            .where(and(eq(wars.mapId, mapId), eq(wars.id, id)));
-
-        if (existingWar.length === 0) throw new Error("War not found");
-
-        const [war] = existingWar;
+        const war = await checkWarExistence(mapId, id, tx);
 
         const sideIds = [...new Set(participants.map((p) => p.sideId))];
         if (sideIds.length > 0) {
