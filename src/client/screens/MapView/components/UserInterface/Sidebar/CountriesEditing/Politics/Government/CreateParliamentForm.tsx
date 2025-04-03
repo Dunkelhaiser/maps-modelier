@@ -17,8 +17,8 @@ const CreateParliamentForm = () => {
         defaultValues: {
             name: "",
             seatsNumber: 0,
-            oppositionLeader: undefined,
-            coalitionLeader: undefined,
+            oppositionLeaderId: undefined,
+            coalitionLeaderId: undefined,
         },
     });
 
