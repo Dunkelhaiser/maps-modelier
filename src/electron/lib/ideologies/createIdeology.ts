@@ -11,11 +11,7 @@ export const createIdeology = async (_: Electron.IpcMainInvokeEvent, mapId: stri
             mapId,
             ...parsedData,
         })
-        .returning({
-            id: ideologies.id,
-            name: ideologies.name,
-            color: ideologies.color,
-        });
+        .returning({ id: ideologies.id });
 
     return createdIdeology;
 };

@@ -11,15 +11,8 @@ export const renameState = async (
 ) => {
     const { name } = await stateNameSchema.parseAsync(data);
 
-    const [updatedState] = await db
+    await db
         .update(states)
         .set({ name })
-        .where(and(eq(states.id, stateId), eq(states.mapId, mapId)))
-        .returning({
-            id: states.id,
-            name: states.name,
-            type: states.type,
-        });
-
-    return updatedState;
+        .where(and(eq(states.id, stateId), eq(states.mapId, mapId)));
 };

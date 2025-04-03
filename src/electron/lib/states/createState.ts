@@ -37,11 +37,7 @@ export const createState = async (_: Electron.IpcMainInvokeEvent, mapId: string,
                 name,
                 type: stateType as "land" | "water",
             })
-            .returning({
-                id: states.id,
-                name: states.name,
-                type: states.type,
-            });
+            .returning({ id: states.id });
 
         if (provinces) {
             await tx.insert(stateProvinces).values(
@@ -53,11 +49,6 @@ export const createState = async (_: Electron.IpcMainInvokeEvent, mapId: string,
             );
         }
 
-        return {
-            ...createdState,
-            provinces: provinces ?? [],
-            ethnicities: [],
-            population: 0,
-        };
+        return createdState;
     });
 };

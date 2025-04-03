@@ -334,7 +334,7 @@ export const alliances = sqliteTable(
             .references(() => maps.id, { onDelete: "cascade" }),
         leader: integer("leader"),
         name: text("name").notNull(),
-        type: text("type").notNull(),
+        type: text("type", { enum: ["economic", "political", "military"] }).notNull(),
         createdAt: integer("createdAt", { mode: "timestamp" })
             .notNull()
             .default(sql`(unixepoch())`),

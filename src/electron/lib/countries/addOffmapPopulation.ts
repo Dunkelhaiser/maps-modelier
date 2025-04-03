@@ -11,7 +11,7 @@ export const addOffmapPopulation = async (
 ) => {
     const offmapPopulation = await populationSchema.parseAsync(data);
 
-    const populations = await db.transaction(async (tx) => {
+    await db.transaction(async (tx) => {
         const existingPopulations = await tx
             .select()
             .from(countryOffmapPopulations)
@@ -54,12 +54,6 @@ export const addOffmapPopulation = async (
                 set: {
                     population: sql`excluded.population`,
                 },
-            })
-            .returning({
-                ethnicityId: countryOffmapPopulations.ethnicityId,
-                population: countryOffmapPopulations.population,
             });
     });
-
-    return populations;
 };

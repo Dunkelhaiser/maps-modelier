@@ -1,25 +1,19 @@
-import { getTableColumns } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { WarInput, warSchema } from "../../../shared/schemas/wars/war.js";
 import { db } from "../../db/db.js";
 import { wars, warSides, warParticipants } from "../../db/schema.js";
-import { getCountryBase } from "../countries/getCountryBase.js";
 
 export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data: WarInput) => {
     const validatedData = await warSchema.parseAsync(data);
-    const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(wars);
 
     return db.transaction(async (tx) => {
-        const defenderData = await getCountryBase(mapId, data.defender);
-        const attackerData = await getCountryBase(mapId, data.aggressor);
-
         const [war] = await tx
             .insert(wars)
             .values({
                 mapId,
                 ...validatedData,
             })
-            .returning(cols);
+            .returning({ id: wars.id });
 
         const [attackerSide] = await tx
             .insert(warSides)
@@ -28,7 +22,7 @@ export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data:
                 side: "attacker",
                 mapId,
             })
-            .returning();
+            .returning({ id: warSides.id });
 
         const [defenderSide] = await tx
             .insert(warSides)
@@ -37,7 +31,7 @@ export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data:
                 side: "defender",
                 mapId,
             })
-            .returning();
+            .returning({ id: warSides.id });
 
         await tx.insert(warParticipants).values({
             sideId: attackerSide.id,
@@ -53,10 +47,6 @@ export const createWar = async (_event: IpcMainInvokeEvent, mapId: string, data:
             mapId,
         });
 
-        return {
-            ...war,
-            aggressor: attackerData,
-            defender: defenderData,
-        };
+        return war;
     });
 };

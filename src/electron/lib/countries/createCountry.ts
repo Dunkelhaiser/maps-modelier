@@ -1,14 +1,11 @@
-import { getTableColumns } from "drizzle-orm";
 import { CreateCountryInput, createCountrySchema } from "../../../shared/schemas/countries/createCountry.js";
 import { db } from "../../db/db.js";
 import { countries, countryFlags, countryNames } from "../../db/schema.js";
-import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 
 export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: string, input: CreateCountryInput) => {
     const attributes = await createCountrySchema.parseAsync(input);
     const { flag: flagInput, name, ...countryData } = attributes;
-    const { mapId: mapIdCol, createdAt, updatedAt, ...countryCols } = getTableColumns(countries);
 
     return await db.transaction(async (tx) => {
         const [createdCountry] = await tx
@@ -17,7 +14,7 @@ export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: strin
                 mapId,
                 ...countryData,
             })
-            .returning(countryCols);
+            .returning({ id: countries.id });
 
         const countryFolder = ["media", mapId, `${createdCountry.id}`];
         const flagPath = await saveFile(flagInput, "flag", countryFolder);
@@ -34,12 +31,6 @@ export const createCountry = async (_: Electron.IpcMainInvokeEvent, mapId: strin
             path: flagPath,
         });
 
-        const flagData = await loadFile(flagPath);
-
-        return {
-            ...createdCountry,
-            name,
-            flag: flagData,
-        };
+        return createdCountry;
     });
 };

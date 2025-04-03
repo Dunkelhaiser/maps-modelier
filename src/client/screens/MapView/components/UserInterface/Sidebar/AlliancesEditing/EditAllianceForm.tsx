@@ -15,7 +15,6 @@ import DeleteAllianceDialog from "./DeleteAllianceDialog";
 
 const EditAllianceForm = () => {
     const activeMap = useActiveMap();
-    const selectAlliance = useMapStore((state) => state.selectAlliance);
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
     const { data: alliance } = useGetAlliance(activeMap, selectedAlliance);
     const { data: members } = useGetMembers(activeMap, selectedAlliance);
@@ -43,8 +42,7 @@ const EditAllianceForm = () => {
     const updateAlliance = useUpdateAlliance(activeMap, selectedAlliance);
 
     const updateAllianceHandler = async (data: AllianceInput) => {
-        const updatedAlliance = await updateAlliance.mutateAsync(data);
-        selectAlliance(updatedAlliance.id);
+        await updateAlliance.mutateAsync(data);
     };
 
     return (

@@ -1,17 +1,9 @@
 import path from "path";
-import { and, eq, getTableColumns } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { UpdateCountryInput, updateCountrySchema } from "../../../shared/schemas/countries/updateCountry.js";
 import { db } from "../../db/db.js";
-import {
-    countries,
-    countryStates,
-    countryNames,
-    countryFlags,
-    countryCoatOfArms,
-    countryAnthems,
-} from "../../db/schema.js";
+import { countries, countryNames, countryFlags, countryCoatOfArms, countryAnthems } from "../../db/schema.js";
 import { deleteFile } from "../utils/deleteFile.js";
-import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 
 export const updateCountry = async (
@@ -20,7 +12,6 @@ export const updateCountry = async (
     id: number,
     input: UpdateCountryInput
 ) => {
-    const { mapId: mapIdCol, createdAt, updatedAt, ...countryCols } = getTableColumns(countries);
     const attributes = await updateCountrySchema.parseAsync(input);
 
     const existingCountry = await db
@@ -61,13 +52,12 @@ export const updateCountry = async (
     const { name, flag: flagInput, coatOfArms: coatOfArmsInput, anthem: anthemInput, ...countryData } = attributes;
 
     return await db.transaction(async (tx) => {
-        const [updatedCountry] = await tx
+        await tx
             .update(countries)
             .set({
                 ...countryData,
             })
-            .where(and(eq(countries.id, id), eq(countries.mapId, mapId)))
-            .returning(countryCols);
+            .where(and(eq(countries.id, id), eq(countries.mapId, mapId)));
 
         await tx
             .insert(countryNames)
@@ -156,37 +146,5 @@ export const updateCountry = async (
                     },
                 });
         }
-
-        const states = await tx
-            .select()
-            .from(countryStates)
-            .where(and(eq(countryStates.countryId, id), eq(countryStates.mapId, mapId)));
-
-        const names = await tx
-            .select({
-                commonName: countryNames.commonName,
-                officialName: countryNames.officialName,
-            })
-            .from(countryNames)
-            .where(and(eq(countryNames.countryId, id), eq(countryNames.mapId, mapId)));
-
-        const flagData = await loadFile(flagPath);
-        const coatOfArmsData = await loadFile(coatOfArmsPath);
-        const anthemData = await loadFile(anthemPath);
-
-        return {
-            ...updatedCountry,
-            name: {
-                common: names[0].commonName,
-                official: names[0].officialName,
-            },
-            states: states.map((state) => state.stateId),
-            flag: flagData,
-            coatOfArms: coatOfArmsData,
-            anthem: {
-                name: anthemInput.name,
-                url: anthemData,
-            },
-        };
     });
 };

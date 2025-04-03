@@ -11,7 +11,7 @@ export const addPopulation = async (
 ) => {
     const ethnicityPopulation = await populationSchema.parseAsync(data);
 
-    const populations = await db.transaction(async (tx) => {
+    await db.transaction(async (tx) => {
         const existingPopulations = await tx
             .select()
             .from(provincePopulations)
@@ -51,12 +51,6 @@ export const addPopulation = async (
                 set: {
                     population: sql`excluded.population`,
                 },
-            })
-            .returning({
-                ethnicityId: provincePopulations.ethnicityId,
-                population: provincePopulations.population,
             });
     });
-
-    return populations;
 };

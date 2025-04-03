@@ -1,23 +1,18 @@
-import { and, eq, getTableColumns } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { IpcMainInvokeEvent } from "electron";
 import { WarInput, warSchema } from "../../../shared/schemas/wars/war.js";
 import { db } from "../../db/db.js";
 import { wars, warSides, warParticipants } from "../../db/schema.js";
-import { getCountryBase } from "../countries/getCountryBase.js";
 
 export const updateWar = async (_event: IpcMainInvokeEvent, mapId: string, id: number, data: WarInput) => {
     const validatedData = await warSchema.parseAsync(data);
-    const { mapId: mapIdCol, createdAt, updatedAt, ...cols } = getTableColumns(wars);
 
     return db.transaction(async (tx) => {
-        const defenderData = await getCountryBase(mapId, data.defender);
-        const attackerData = await getCountryBase(mapId, data.aggressor);
-
         const [war] = await tx
             .update(wars)
             .set(validatedData)
             .where(and(eq(wars.mapId, mapId), eq(wars.id, id)))
-            .returning(cols);
+            .returning({ id: wars.id });
 
         const [attackerSide] = await tx
             .select({ id: warSides.id })
@@ -48,11 +43,5 @@ export const updateWar = async (_event: IpcMainInvokeEvent, mapId: string, id: n
                 mapId,
             })
             .onConflictDoNothing();
-
-        return {
-            ...war,
-            aggressor: attackerData,
-            defender: defenderData,
-        };
     });
 };

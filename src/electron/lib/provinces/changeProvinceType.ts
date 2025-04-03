@@ -1,6 +1,5 @@
 import { and, eq, inArray } from "drizzle-orm";
 import { ChangeTypeInput, changeTypeSchema } from "../../../shared/schemas/provinces/changeType.js";
-import { Province } from "../../../shared/types.js";
 import { db } from "../../db/db.js";
 import { countryStates, provinces, stateProvinces, states } from "../../db/schema.js";
 
@@ -32,11 +31,10 @@ export const changeProvinceType = async (_: Electron.IpcMainInvokeEvent, mapId: 
             .where(and(inArray(countryStates.stateId, stateIdsArr), eq(countryStates.mapId, mapId)));
     }
 
-    const updatedProvinces = await db
+    await db
         .update(provinces)
         .set({ type })
-        .where(and(eq(provinces.mapId, mapId), inArray(provinces.id, provinceIds)))
-        .returning();
+        .where(and(eq(provinces.mapId, mapId), inArray(provinces.id, provinceIds)));
 
     if (stateIds.length > 0) {
         await db
@@ -44,6 +42,4 @@ export const changeProvinceType = async (_: Electron.IpcMainInvokeEvent, mapId: 
             .set({ type })
             .where(and(inArray(states.id, stateIdsArr), eq(states.mapId, mapId)));
     }
-
-    return updatedProvinces as Omit<Province, "ethnicities" | "population">[];
 };

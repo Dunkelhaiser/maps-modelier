@@ -11,15 +11,8 @@ export const updateIdeology = async (
 ) => {
     const parsedData = await ideologySchema.parseAsync(data);
 
-    const [updatedIdeology] = await db
+    await db
         .update(ideologies)
         .set(parsedData)
-        .where(and(eq(ideologies.id, id), eq(ideologies.mapId, mapId)))
-        .returning({
-            id: ideologies.id,
-            name: ideologies.name,
-            color: ideologies.color,
-        });
-
-    return updatedIdeology;
+        .where(and(eq(ideologies.id, id), eq(ideologies.mapId, mapId)));
 };

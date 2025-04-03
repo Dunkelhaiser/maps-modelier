@@ -1,10 +1,9 @@
 import path from "path";
-import { and, eq, getTableColumns } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { PoliticianInput, politicianSchema } from "../../../shared/schemas/politics/politician.js";
 import { db } from "../../db/db.js";
 import { politicians } from "../../db/schema.js";
 import { deleteFile } from "../utils/deleteFile.js";
-import { loadFile } from "../utils/loadFile.js";
 import { saveFile } from "../utils/saveFile.js";
 
 export const updatePolitician = async (
@@ -13,7 +12,6 @@ export const updatePolitician = async (
     id: number,
     data: PoliticianInput
 ) => {
-    const { mapId: mapIdCol, countryId, createdAt, updatedAt, ...cols } = getTableColumns(politicians);
     const parsedData = await politicianSchema.parseAsync(data);
 
     const existingPolitician = await db
@@ -39,16 +37,8 @@ export const updatePolitician = async (
             .where(and(eq(politicians.id, id), eq(politicians.mapId, mapId)));
     }
 
-    const [updatedPolitician] = await db
+    await db
         .update(politicians)
         .set({ name: parsedData.name })
-        .where(and(eq(politicians.id, id), eq(politicians.mapId, mapId)))
-        .returning(cols);
-
-    const portraitData = await loadFile(portraitPath ?? "");
-
-    return {
-        ...updatedPolitician,
-        portrait: portraitData,
-    };
+        .where(and(eq(politicians.id, id), eq(politicians.mapId, mapId)));
 };

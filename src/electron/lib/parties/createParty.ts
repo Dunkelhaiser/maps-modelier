@@ -32,8 +32,6 @@ export const createParty = async (
             .insert(partyIdeologies)
             .values(data.ideologies.map((ideology) => ({ ...ideology, partyId: createdParty.id, mapId })));
 
-        return {
-            id: createdParty.id,
-        };
+        return createdParty;
     });
 };

@@ -76,18 +76,13 @@ export const updateParty = async (_: Electron.IpcMainInvokeEvent, mapId: string,
             );
         }
 
-        const [updatedParty] = await tx
+        await tx
             .update(politicalParties)
             .set({
                 leaderId: leader,
                 ...data,
                 acronym: data.acronym?.length ? data.acronym : null,
             })
-            .where(and(eq(politicalParties.mapId, mapId), eq(politicalParties.id, id)))
-            .returning({ id: politicalParties.id });
-
-        return {
-            id: updatedParty.id,
-        };
+            .where(and(eq(politicalParties.mapId, mapId), eq(politicalParties.id, id)));
     });
 };

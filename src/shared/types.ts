@@ -232,29 +232,21 @@ export interface IpcChannels {
     };
     provinces: {
         getAll: (mapId: string, type: ProvinceType) => Promise<Province[]>;
-        changeType: (mapId: string, data: ChangeTypeInput) => Promise<Omit<Province, "ethnicities" | "population">[]>;
-        addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<PopulationInput>;
+        changeType: (mapId: string, data: ChangeTypeInput) => Promise<void>;
+        addPopulation: (mapId: string, provinceId: number, data: PopulationInput) => Promise<void>;
     };
     states: {
         getAll: (mapId: string) => Promise<StateBase[]>;
         getById: (mapId: string, id: number) => Promise<State>;
-        create: (mapId: string, data: CreateStateInput) => Promise<State>;
-        rename: (
-            mapId: string,
-            stateId: number,
-            data: StateNameInput
-        ) => Promise<Omit<State, "provinces" | "ethnicities" | "population">>;
+        create: (mapId: string, data: CreateStateInput) => Promise<IdRes>;
+        rename: (mapId: string, stateId: number, data: StateNameInput) => Promise<void>;
         delete: (mapId: string, stateId: number) => Promise<void>;
         addProvinces: (mapId: string, data: ProvincesAssignmentInput) => Promise<void>;
         removeProvinces: (mapId: string, data: ProvincesAssignmentInput) => Promise<void>;
     };
     countries: {
-        create: (mapId: string, data: CreateCountryInput) => Promise<CountryBase & { color: string }>;
-        update: (
-            mapId: string,
-            id: number,
-            data: UpdateCountryInput
-        ) => Promise<Omit<Country, "ethnicities" | "population" | "states" | "alliances">>;
+        create: (mapId: string, data: CreateCountryInput) => Promise<IdRes>;
+        update: (mapId: string, id: number, data: UpdateCountryInput) => Promise<void>;
         delete: (mapId: string, id: number) => Promise<void>;
         addStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
         removeStates: (mapId: string, data: StatesAssignmentInput) => Promise<void>;
@@ -262,27 +254,27 @@ export interface IpcChannels {
         getById: (mapId: string, id: number) => Promise<Country>;
         getBases: (mapId: string) => Promise<CountryBase[]>;
         getTable: (mapId: string) => Promise<CountryTable[]>;
-        addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) => Promise<PopulationInput>;
+        addOffmapPopulation: (mapId: string, countryId: number, data: PopulationInput) => Promise<void>;
         getPopulation: (mapId: string, id: number) => Promise<CountryPopulation>;
     };
     ethnicities: {
         getAll: (mapId: string) => Promise<Ethnicity[]>;
-        create: (mapId: string, data: EthnicityInput) => Promise<Omit<Ethnicity, "population">>;
-        update: (mapId: string, id: number, data: EthnicityInput) => Promise<Omit<Ethnicity, "population">>;
+        create: (mapId: string, data: EthnicityInput) => Promise<IdRes>;
+        update: (mapId: string, id: number, data: EthnicityInput) => Promise<void>;
         delete: (mapId: string, id: number) => Promise<void>;
     };
     alliances: {
-        create: (mapId: string, data: AllianceInput) => Promise<Alliance>;
+        create: (mapId: string, data: AllianceInput) => Promise<IdRes>;
         getAll: (mapId: string) => Promise<Alliance[]>;
-        update: (mapId: string, id: number, data: AllianceInput) => Promise<Alliance>;
+        update: (mapId: string, id: number, data: AllianceInput) => Promise<void>;
         addMembers: (mapId: string, id: number, members: AddMembersInput) => Promise<void>;
         get: (mapId: string, id: number) => Promise<Alliance>;
         getMembers: (mapId: string, id: number) => Promise<CountryBase[]>;
         delete: (mapId: string, id: number) => Promise<void>;
     };
     wars: {
-        create: (mapId: string, data: WarInput) => Promise<WarBase>;
-        update: (mapId: string, id: number, data: WarInput) => Promise<WarBase>;
+        create: (mapId: string, data: WarInput) => Promise<IdRes>;
+        update: (mapId: string, id: number, data: WarInput) => Promise<void>;
         getAll: (mapId: string) => Promise<WarTable[]>;
         get: (mapId: string, id: number) => Promise<WarBase>;
         getParticipants: (mapId: string, id: number) => Promise<WarParticipants>;
@@ -290,16 +282,16 @@ export interface IpcChannels {
         delete: (mapId: string, id: number) => Promise<void>;
     };
     politicians: {
-        create: (mapId: string, countryId: number, input: PoliticianInput) => Promise<Politician>;
-        update: (mapId: string, id: number, data: PoliticianInput) => Promise<Politician>;
+        create: (mapId: string, countryId: number, input: PoliticianInput) => Promise<IdRes>;
+        update: (mapId: string, id: number, data: PoliticianInput) => Promise<void>;
         delete: (mapId: string, id: number) => Promise<void>;
         getAll: (mapId: string, countryId: number) => Promise<PoliticianWithParty[]>;
         get: (mapId: string, politicianId: number) => Promise<PoliticianWithParty>;
         getIndependent: (mapId: string, countryId: number) => Promise<PoliticianWithParty[]>;
     };
     ideologies: {
-        create: (mapId: string, data: IdeologyInput) => Promise<Ideology>;
-        update: (mapId: string, id: number, data: IdeologyInput) => Promise<Ideology>;
+        create: (mapId: string, data: IdeologyInput) => Promise<IdRes>;
+        update: (mapId: string, id: number, data: IdeologyInput) => Promise<void>;
         delete: (mapId: string, id: number) => Promise<void>;
         getAll: (mapId: string) => Promise<Ideology[]>;
     };
@@ -309,7 +301,7 @@ export interface IpcChannels {
         getAll: (mapId: string, countryId: number) => Promise<PoliticalPartyTable[]>;
         get: (mapId: string, id: number) => Promise<PoliticalParty>;
         getMembers: (mapId: string, id: number) => Promise<Politician[]>;
-        update: (mapId: string, id: number, data: PartyInput) => Promise<IdRes>;
+        update: (mapId: string, id: number, data: PartyInput) => Promise<void>;
         addMembers: (mapId: string, id: number, data: AddMembersInput) => Promise<void>;
     };
     government: {

@@ -11,11 +11,7 @@ export const createEthnicity = async (_: Electron.IpcMainInvokeEvent, mapId: str
             mapId,
             ...parsedData,
         })
-        .returning({
-            id: ethnicities.id,
-            name: ethnicities.name,
-            color: ethnicities.color,
-        });
+        .returning({ id: ethnicities.id });
 
     return createdEthnicity;
 };
