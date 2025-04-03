@@ -7,7 +7,7 @@ import { PartyInput } from "src/shared/schemas/parties/party";
 
 export const useGetParties = (mapId: string, countryId: number, query?: GetPartiesInput) => {
     return useQuery({
-        queryKey: [mapId, countryId, "parties"],
+        queryKey: [mapId, countryId, "parties", query],
         queryFn: async () => await window.electron.parties.getAll(mapId, countryId, query),
     });
 };

@@ -18,7 +18,7 @@ export const useCreateAlliance = (mapId: string) => {
 
 export const useGetAlliances = (mapId: string, query?: GetAlliancesInput) => {
     return useQuery({
-        queryKey: [mapId, "alliances"],
+        queryKey: [mapId, "alliances", query],
         queryFn: async () => await window.electron.alliances.getAll(mapId, query),
     });
 };

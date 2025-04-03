@@ -6,7 +6,7 @@ import { WarInput } from "src/shared/schemas/wars/war";
 
 export const useGetWars = (mapId: string, query?: GetWarsInput) => {
     return useQuery({
-        queryKey: [mapId, "wars"],
+        queryKey: [mapId, "wars", query],
         queryFn: async () => await window.electron.wars.getAll(mapId, query),
     });
 };

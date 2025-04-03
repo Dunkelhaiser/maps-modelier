@@ -4,7 +4,9 @@ import { useGetCountriesTable } from "@ipc/countries";
 import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
-import { Table, TableBody, TableHead, TableHeader } from "@ui/Table";
+import { SortableTableHead, Table, TableBody, TableHead, TableHeader } from "@ui/Table";
+import { useState } from "react";
+import { GetCountriesInput } from "src/shared/schemas/countries/getCountries";
 import CountryRow from "./CountryRow";
 import CountryRowCreate from "./CountryRowCreate";
 
@@ -12,7 +14,11 @@ const Countries = () => {
     const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
     const closeSidebar = useSidebarStore((state) => state.closeSidebar);
-    const { data } = useGetCountriesTable(activeMap);
+    const [sortConfig, setSortConfig] = useState<GetCountriesInput>({
+        sortBy: "commonName",
+        sortOrder: "asc",
+    });
+    const { data } = useGetCountriesTable(activeMap, sortConfig);
 
     return (
         <>
@@ -23,8 +29,17 @@ const Countries = () => {
                 <Table>
                     <TableHeader>
                         <TableHead>Flag</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead className="text-right">Population</TableHead>
+                        <SortableTableHead sortKey="commonName" sortConfig={sortConfig} setSortConfig={setSortConfig}>
+                            Name
+                        </SortableTableHead>
+                        <SortableTableHead
+                            alignItems="right"
+                            sortKey="population"
+                            sortConfig={sortConfig}
+                            setSortConfig={setSortConfig}
+                        >
+                            Population
+                        </SortableTableHead>
                     </TableHeader>
                     <TableBody>
                         {mode === "editing" && <CountryRowCreate />}

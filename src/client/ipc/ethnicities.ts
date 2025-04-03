@@ -6,7 +6,7 @@ import { GetEthnicitiesInput } from "src/shared/schemas/ethnicities/getEthniciti
 export const useGetAllEthnicities = (mapId: string, query?: GetEthnicitiesInput) => {
     return useQuery({
         queryFn: async () => await window.electron.ethnicities.getAll(mapId, query),
-        queryKey: [mapId, "ethnicities"],
+        queryKey: [mapId, "ethnicities", query],
     });
 };
 

@@ -6,7 +6,7 @@ import { IdeologyInput } from "src/shared/schemas/ideologies/ideology";
 export const useGetAllIdeologies = (mapId: string, query?: GetIdeologiesInput) => {
     return useQuery({
         queryFn: async () => await window.electron.ideologies.getAll(mapId, query),
-        queryKey: [mapId, "ideologies"],
+        queryKey: [mapId, "ideologies", query],
     });
 };
 

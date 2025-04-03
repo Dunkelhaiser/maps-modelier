@@ -1,4 +1,5 @@
 import { cn } from "@utils/utils";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { forwardRef } from "react";
 
 const Table = forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(({ className, ...props }, ref) => (
@@ -80,4 +81,67 @@ const TableCaption = forwardRef<HTMLTableCaptionElement, React.HTMLAttributes<HT
 );
 TableCaption.displayName = "TableCaption";
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+type SortDirection = "asc" | "desc";
+
+type SetSortConfig = React.Dispatch<
+    React.SetStateAction<{
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        sortBy: any;
+        sortOrder: SortDirection;
+    }>
+>;
+
+interface SortableTableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+    sortKey: string;
+    sortConfig: {
+        sortBy: string;
+        sortOrder: SortDirection;
+    };
+    setSortConfig: SetSortConfig;
+    alignItems?: "left" | "center" | "right";
+}
+
+const SortableTableHead = ({
+    sortKey,
+    sortConfig,
+    children,
+    alignItems,
+    className,
+    ...props
+}: SortableTableHeadProps) => {
+    const isActive = sortConfig.sortBy === sortKey;
+
+    return (
+        <TableHead className={cn(isActive && "bg-muted/30", className)} {...props}>
+            <button
+                type="button"
+                className={cn(
+                    "flex items-center gap-1",
+                    alignItems === "right" && "ml-auto",
+                    alignItems === "center" && "my-auto"
+                )}
+                onClick={() => handleSort(sortKey, props.setSortConfig)}
+            >
+                <span>{children}</span>
+                {isActive && (
+                    <span className="text-muted-foreground">
+                        {sortConfig.sortOrder === "asc" ? <ArrowUp size={16} /> : <ArrowDown size={16} />}
+                    </span>
+                )}
+            </button>
+        </TableHead>
+    );
+};
+
+const handleSort = (sortBy: string, setSortConfig: SetSortConfig) => {
+    setSortConfig((prevConfig) => {
+        if (prevConfig.sortBy === sortBy) {
+            const newDirection = prevConfig.sortOrder === "asc" ? "desc" : "asc";
+            return { sortBy, sortOrder: newDirection };
+        }
+
+        return { sortBy, sortOrder: "asc" };
+    });
+};
+
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption, SortableTableHead };

@@ -88,7 +88,7 @@ export const useGetCountriesBase = (mapId: string) => {
 
 export const useGetCountriesTable = (mapId: string, query?: GetCountriesInput) => {
     return useQuery({
-        queryKey: [mapId, "countries"],
+        queryKey: [mapId, "countries", query],
         queryFn: async () => await window.electron.countries.getTable(mapId, query),
     });
 };
