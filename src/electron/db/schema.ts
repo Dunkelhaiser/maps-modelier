@@ -7,7 +7,6 @@ export const maps = sqliteTable("maps", {
         .primaryKey()
         .$defaultFn(() => randomUUID()),
     name: text("name").notNull(),
-    imgPath: text("imgPath"),
     createdAt: integer("createdAt", { mode: "timestamp" })
         .notNull()
         .default(sql`(unixepoch())`),

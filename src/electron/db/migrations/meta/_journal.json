@@ -183,6 +183,13 @@
             "when": 1743583644717,
             "tag": "0025_yummy_dragon_lord",
             "breakpoints": true
+        },
+        {
+            "idx": 26,
+            "version": "6",
+            "when": 1743788949922,
+            "tag": "0026_cool_tenebrous",
+            "breakpoints": true
         }
     ]
 }
