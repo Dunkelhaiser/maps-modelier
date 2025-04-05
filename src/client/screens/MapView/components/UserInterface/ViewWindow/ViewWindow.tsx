@@ -61,7 +61,7 @@ const ViewWindow = () => {
                 <CardContent className="space-y-4">
                     {selectedProvinces.length === 1 && (
                         <>
-                            {country && (
+                            {country && selectedCountry && (
                                 <div className="flex flex-col items-start gap-2">
                                     <Label>Owner</Label>
                                     <button type="button" onClick={selectCountry}>
