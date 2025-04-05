@@ -1,5 +1,3 @@
-import { InferSelectModel } from "drizzle-orm";
-import { maps, provinces } from "../electron/db/schema.js";
 import { AddMembersInput } from "./schemas/alliances/addMembers.js";
 import { AllianceInput } from "./schemas/alliances/alliance.js";
 import { GetAlliancesInput } from "./schemas/alliances/getAlliances.js";
@@ -28,11 +26,20 @@ import { AddParticipantsInput } from "./schemas/wars/addParticipants.js";
 import { GetWarsInput } from "./schemas/wars/getWars.js";
 import { WarInput } from "./schemas/wars/war.js";
 
-export type MapType = InferSelectModel<typeof maps>;
+export interface MapType {
+    id: string;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
 
 export type ProvinceType = "land" | "water";
 
-export interface Province extends Omit<InferSelectModel<typeof provinces>, "mapId"> {
+export interface Province {
+    id: number;
+    shape: number[][];
+    color: string;
+    type: ProvinceType;
     population: number;
     ethnicities: Ethnicity[];
 }
