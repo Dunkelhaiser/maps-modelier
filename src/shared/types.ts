@@ -26,6 +26,10 @@ import { AddParticipantsInput } from "./schemas/wars/addParticipants.js";
 import { GetWarsInput } from "./schemas/wars/getWars.js";
 import { WarInput } from "./schemas/wars/war.js";
 
+export interface IdRes {
+    id: number;
+}
+
 export interface MapType {
     id: string;
     name: string;
@@ -203,10 +207,6 @@ export interface Ideology {
     id: number;
     name: string;
     color: string;
-}
-
-export interface IdRes {
-    id: number;
 }
 
 export interface Head extends PoliticianWithParty {
