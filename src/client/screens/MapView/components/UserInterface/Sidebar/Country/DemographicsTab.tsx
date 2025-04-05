@@ -18,7 +18,7 @@ const DemographicsTab = ({ country }: Props) => {
             </div>
 
             {country.ethnicities.length > 0 && (
-                <Table className="mt-3 max-h-40">
+                <Table className="mt-3 max-h-96">
                     <TableHeader>
                         <TableHead>Ethnicity</TableHead>
                         <TableHead className="text-right">Population</TableHead>
