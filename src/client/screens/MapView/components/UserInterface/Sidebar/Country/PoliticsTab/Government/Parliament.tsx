@@ -21,7 +21,7 @@ const Parliament = ({ parliament }: Props) => {
             <InfoBlock
                 Icon={Users}
                 label="Seats"
-                value={parliament.coalition.seats + parliament.opposition.seats + parliament.neutral.seats}
+                value={(parliament.coalition.seats + parliament.opposition.seats + parliament.neutral.seats).toString()}
                 suffix={`/ ${parliament.seatsNumber.toString()}`}
             />
 
