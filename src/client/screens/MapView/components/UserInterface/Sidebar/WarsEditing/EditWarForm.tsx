@@ -163,7 +163,7 @@ const EditWarForm = () => {
                             name="endedAt"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Ended At</FormLabel>
+                                    <FormLabel optional>Ended At</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="datetime-local"

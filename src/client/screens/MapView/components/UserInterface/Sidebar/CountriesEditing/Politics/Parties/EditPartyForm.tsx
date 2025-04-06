@@ -108,7 +108,7 @@ const EditPartyForm = () => {
                             name="acronym"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Acronym</FormLabel>
+                                    <FormLabel optional>Acronym</FormLabel>
                                     <FormControl>
                                         <Input {...field} />
                                     </FormControl>
@@ -173,7 +173,7 @@ const EditPartyForm = () => {
                             name="foundedAt"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Founded At</FormLabel>
+                                    <FormLabel optional>Founded At</FormLabel>
                                     <FormControl>
                                         <Input
                                             type="date"

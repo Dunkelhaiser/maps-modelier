@@ -80,7 +80,7 @@ const CreatePartyForm = () => {
                         name="acronym"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Acronym</FormLabel>
+                                <FormLabel optional>Acronym</FormLabel>
                                 <FormControl>
                                     <Input {...field} />
                                 </FormControl>
@@ -145,7 +145,7 @@ const CreatePartyForm = () => {
                         name="foundedAt"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Founded At</FormLabel>
+                                <FormLabel optional>Founded At</FormLabel>
                                 <FormControl>
                                     <Input
                                         type="date"

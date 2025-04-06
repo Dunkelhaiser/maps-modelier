@@ -128,7 +128,7 @@ const HeadOfStateForm = () => {
                         name="endDate"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Until</FormLabel>
+                                <FormLabel optional>Until</FormLabel>
                                 <FormControl>
                                     <Input
                                         type="date"

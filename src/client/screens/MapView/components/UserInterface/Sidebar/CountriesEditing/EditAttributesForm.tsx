@@ -113,7 +113,7 @@ const EditAttributesForm = () => {
                                 name="name.official"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Official name</FormLabel>
+                                        <FormLabel optional>Official name</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Enter official name" {...field} />
                                         </FormControl>
@@ -151,7 +151,7 @@ const EditAttributesForm = () => {
                                 name="coatOfArms"
                                 render={() => (
                                     <FormItem className="flex-1">
-                                        <FormLabel>Coat of Arms</FormLabel>
+                                        <FormLabel optional>Coat of Arms</FormLabel>
                                         <FormControl>
                                             <FileUpload
                                                 className="aspect-square h-32 w-auto"
@@ -169,7 +169,7 @@ const EditAttributesForm = () => {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <FormLabel>National Anthem</FormLabel>
+                            <FormLabel optional>National Anthem</FormLabel>
                             <div className="flex flex-row gap-2">
                                 <FormField
                                     control={form.control}
