@@ -1,5 +1,6 @@
 import { StateCreator } from "zustand";
 import { initialSelectionsSlice } from "./selections";
+import { useSidebarStore } from "./sidebar";
 import { MapStore } from "./store";
 
 export type Mode = "viewing" | "editing";
@@ -31,5 +32,7 @@ export const createMapSlice: StateCreator<MapStore, [], [], MapSlice> = (set) =>
             ...initialMapSlice,
             ...initialSelectionsSlice,
         });
+
+        useSidebarStore.getState().closeSidebar();
     },
 });
