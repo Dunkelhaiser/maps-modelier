@@ -1,4 +1,4 @@
-import FloatingWindows from "./FloatingWindows";
+import FloatingWindows from "./FloatingWindows/FloatingWindows";
 import Header from "./Header";
 import Sidebar from "./Sidebar/Sidebar";
 
