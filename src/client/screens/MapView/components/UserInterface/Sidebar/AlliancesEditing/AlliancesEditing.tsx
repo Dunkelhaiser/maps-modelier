@@ -1,5 +1,4 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import CreateAllianceForm from "./CreateAllianceForm";
@@ -7,11 +6,10 @@ import EditAllianceForm from "./EditAllianceForm";
 
 const AlliancesEditing = () => {
     const selectedAlliance = useMapStore((state) => state.selectedAlliance);
-    const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
     return (
         <>
-            <CardHeaderWithClose onClick={closeSidebar}>
+            <CardHeaderWithClose>
                 <CardTitle className="text-xl">
                     {selectedAlliance === -1 ? "Create Alliance" : "Edit Alliance"}
                 </CardTitle>

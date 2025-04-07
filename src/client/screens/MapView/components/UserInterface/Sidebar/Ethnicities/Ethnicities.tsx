@@ -1,7 +1,6 @@
 import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAllEthnicities } from "@ipc/ethnicities";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { SortableTableHead, Table, TableBody, TableHead, TableHeader } from "@ui/Table";
@@ -13,7 +12,6 @@ import EthnicityRowCreate from "./EthnicityRowCreate";
 const Ethnicities = () => {
     const activeMap = useActiveMap();
     const mode = useMapStore((state) => state.mode);
-    const closeSidebar = useSidebarStore((state) => state.closeSidebar);
     const [sortConfig, setSortConfig] = useState<GetEthnicitiesInput>({
         sortBy: "name",
         sortOrder: "asc",
@@ -22,7 +20,7 @@ const Ethnicities = () => {
 
     return (
         <>
-            <CardHeaderWithClose onClick={closeSidebar}>
+            <CardHeaderWithClose>
                 <CardTitle className="text-xl">Ethnicities</CardTitle>
             </CardHeaderWithClose>
             <CardContent className="flex h-[calc(100%_-_1rem_-_calc(45.6px_+_0.75rem))] flex-col gap-2 overflow-auto">

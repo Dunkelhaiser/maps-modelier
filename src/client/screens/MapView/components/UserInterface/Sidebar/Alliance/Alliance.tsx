@@ -2,7 +2,6 @@ import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import InfoBlock from "@components/InfoBlock";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetAlliance, useGetMembers } from "@ipc/alliances";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Table, TableBody, TableHead, TableHeader } from "@ui/Table";
@@ -12,7 +11,6 @@ import MemberRow from "./MemberRow";
 const Alliance = () => {
     const activeMap = useActiveMap();
     const selectedAlliance = useMapStore((state) => state.selectedAlliance)!;
-    const closeSidebar = useSidebarStore((state) => state.closeSidebar);
     const selectCountry = useMapStore((state) => state.selectCountry);
 
     const { data: alliance } = useGetAlliance(activeMap, selectedAlliance);
@@ -24,7 +22,7 @@ const Alliance = () => {
 
     return (
         <>
-            <CardHeaderWithClose onClick={closeSidebar}>
+            <CardHeaderWithClose>
                 <div className="flex items-center gap-2">
                     <CardTitle className="text-xl">{alliance.name}</CardTitle>
                     <p className="text-sm font-medium text-muted-foreground">({alliance.type})</p>

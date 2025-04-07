@@ -2,7 +2,6 @@ import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetCountryById } from "@ipc/countries";
 import { useGetHeadOfGovernment, useGetHeadOfState } from "@ipc/government";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Tabs, TabsList, TabsTrigger } from "@ui/Tabs";
@@ -14,7 +13,6 @@ import PoliticsTab from "./PoliticsTab/PoliticsTab";
 const Country = () => {
     const activeMap = useActiveMap();
     const selectedCountry = useMapStore((state) => state.selectedCountry);
-    const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
     const { data: country } = useGetCountryById(activeMap, selectedCountry);
     useGetHeadOfState(activeMap, selectedCountry!);
@@ -26,7 +24,7 @@ const Country = () => {
 
     return (
         <>
-            <CardHeaderWithClose onClick={closeSidebar}>
+            <CardHeaderWithClose>
                 <div className="flex items-center gap-2">
                     <div className="size-6 rounded-full" style={{ backgroundColor: country.color }} />
                     <CardTitle className="text-xl">{country.name.common}</CardTitle>

@@ -2,7 +2,6 @@ import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import InfoBlock from "@components/InfoBlock";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetWar, useGetParticipants } from "@ipc/wars";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { Separator } from "@ui/Separator";
@@ -14,7 +13,6 @@ import WarParticipantRow from "./WarParticipantRow";
 const War = () => {
     const activeMap = useActiveMap();
     const selectedWar = useMapStore((state) => state.selectedWar)!;
-    const closeSidebar = useSidebarStore((state) => state.closeSidebar);
     const selectCountry = useMapStore((state) => state.selectCountry);
     const selectAlliance = useMapStore((state) => state.selectAlliance);
 
@@ -30,7 +28,7 @@ const War = () => {
 
     return (
         <>
-            <CardHeaderWithClose onClick={closeSidebar}>
+            <CardHeaderWithClose>
                 <CardTitle className="text-xl">{war.name}</CardTitle>
             </CardHeaderWithClose>
 

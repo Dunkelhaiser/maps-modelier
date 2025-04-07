@@ -2,7 +2,6 @@ import CardHeaderWithClose from "@components/CardHeaderWithClose";
 import InfoBlock from "@components/InfoBlock";
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetParty } from "@ipc/parties";
-import { useSidebarStore } from "@store/sidebar";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
 import { formatDate } from "@utils/utils";
@@ -14,7 +13,6 @@ import PartyMembers from "./PartyMembers";
 const Party = () => {
     const activeMap = useActiveMap();
     const selectedParty = useMapStore((state) => state.selectedParty)!;
-    const closeSidebar = useSidebarStore((state) => state.closeSidebar);
 
     const { data: party } = useGetParty(activeMap, selectedParty);
 
@@ -26,7 +24,7 @@ const Party = () => {
 
     return (
         <>
-            <CardHeaderWithClose onClick={closeSidebar}>
+            <CardHeaderWithClose>
                 <div className="flex items-center gap-2">
                     <div className="size-6 rounded-full" style={{ backgroundColor: party.color }} />
                     <CardTitle className="text-xl">{party.acronym ?? party.name}</CardTitle>
