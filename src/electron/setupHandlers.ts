@@ -184,14 +184,9 @@ export const setupHandlers = () => {
             throw new Error(`Invalid command: ${String(domain)}.${String(command)}`);
         }
 
-        // eslint-disable-next-line no-useless-catch
-        try {
-            // @ts-expect-error - this is a valid call
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
-            return await handlers[domain][command](event, ...args);
-        } catch (error) {
-            throw error;
-        }
+        // @ts-expect-error - this is a valid call
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
+        return await handlers[domain][command](event, ...args);
     });
 };
 
