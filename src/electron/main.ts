@@ -2,7 +2,7 @@ import path from "path";
 import config from "dotenv";
 import { app, BrowserWindow } from "electron";
 import { executeMigrations } from "./db/db.js";
-import { setupHandlers } from "./lib/setupHandlers.js";
+import { setupHandlers } from "./setupHandlers.js";
 
 config.config();
 
