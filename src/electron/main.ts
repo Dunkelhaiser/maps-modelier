@@ -12,9 +12,7 @@ const createMainWindow = () => {
     const mainWindow = new BrowserWindow({
         show: false,
         webPreferences: {
-            nodeIntegrationInWorker: true,
             preload: path.join(app.getAppPath(), isDevelopment ? "." : "..", "/dist/electron/preload.cjs"),
-            sandbox: false,
             contextIsolation: true,
         },
     });
