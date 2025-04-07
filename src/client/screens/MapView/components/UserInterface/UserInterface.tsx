@@ -1,5 +1,5 @@
 import FloatingWindows from "./FloatingWindows/FloatingWindows";
-import Header from "./Header";
+import Header from "./Header/Header";
 import Sidebar from "./Sidebar/Sidebar";
 
 const UserInterface = () => {
