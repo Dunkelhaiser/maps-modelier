@@ -32,7 +32,7 @@ const invoke = <D extends keyof IpcChannels, C extends keyof IpcChannels[D]>(
     domain: D,
     command: C,
     ...args: Parameters<Extract<IpcChannels[D][C], (...args: any[]) => any>>
-): ReturnType<Extract<IpcChannels[D][C], (...args: any[]) => any>> => {
+) => {
     const request: IpcRequest = { domain, command, args };
     return ipcRenderer.invoke("ipc", request) as ReturnType<Extract<IpcChannels[D][C], (...args: any[]) => any>>;
 };
