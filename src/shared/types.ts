@@ -330,12 +330,6 @@ export interface IpcChannels {
     };
 }
 
-export type ElectronAPI = {
-    [K in keyof IpcChannels]: {
-        [M in keyof IpcChannels[K]]: IpcChannels[K][M];
-    };
-};
-
 export interface IpcRequest {
     domain: keyof IpcChannels;
     command: string | number | symbol;

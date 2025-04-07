@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { errorToast } from "@utils/errorToast.ts";
 import { createRoot } from "react-dom/client";
-import { ElectronAPI } from "src/shared/types.ts";
+import { IpcChannels } from "src/shared/types.ts";
 import App from "./App.tsx";
 import "./index.css";
 
 declare global {
     interface Window {
-        electron: ElectronAPI;
+        electron: IpcChannels;
     }
 }
 
