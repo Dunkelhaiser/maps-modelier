@@ -1,10 +1,10 @@
 import path from "path";
-import config from "dotenv";
+import dotenv from "dotenv";
 import { app, BrowserWindow } from "electron";
 import { executeMigrations } from "./db/db.js";
 import { setupHandlers } from "./setupHandlers.js";
 
-config.config();
+dotenv.config();
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
