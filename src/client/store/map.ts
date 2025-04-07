@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { initialProvincesSlice } from "./provinces";
+import { initialSelectionsSlice } from "./selections";
 import { MapStore } from "./store";
 
 export type Mode = "viewing" | "editing";
@@ -29,7 +29,7 @@ export const createMapSlice: StateCreator<MapStore, [], [], MapSlice> = (set) =>
     closeMap: () => {
         set({
             ...initialMapSlice,
-            ...initialProvincesSlice,
+            ...initialSelectionsSlice,
         });
     },
 });

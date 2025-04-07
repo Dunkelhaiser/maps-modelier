@@ -4,7 +4,7 @@ import { useSidebarStore } from "./sidebar";
 import { MapStore } from "./store";
 import { queryClient } from "@/main";
 
-export interface ProvincesSlice {
+export interface SelectionsSlice {
     selectedProvinces: Province[];
     selectedState: number | null;
     selectedCountry: number | null;
@@ -22,7 +22,7 @@ export interface ProvincesSlice {
     deselectParty: () => void;
 }
 
-export const initialProvincesSlice = {
+export const initialSelectionsSlice = {
     selectedProvinces: [],
     selectedState: null,
     selectedCountry: null,
@@ -31,8 +31,8 @@ export const initialProvincesSlice = {
     selectedParty: null,
 };
 
-export const createProvincesSlice: StateCreator<MapStore, [], [], ProvincesSlice> = (set, get) => ({
-    ...initialProvincesSlice,
+export const createSelectionsSlice: StateCreator<MapStore, [], [], SelectionsSlice> = (set, get) => ({
+    ...initialSelectionsSlice,
 
     selectProvince: (province: Province, isShiftKey: boolean, isRightClick: boolean) => {
         const { activeSidebar } = useSidebarStore.getState();
