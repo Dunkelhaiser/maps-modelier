@@ -8,7 +8,6 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@ui/Form";
 import { Input } from "@ui/Input";
 import { Label } from "@ui/Label";
 import { ScrollArea } from "@ui/ScrollArea";
-import { TabsContent } from "@ui/Tabs";
 import { Plus, Save, Users, X } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -93,7 +92,7 @@ const EditPopulationForm = () => {
     );
 
     return (
-        <TabsContent value="demographics">
+        <>
             <div className="space-y-4">
                 <InfoBlock Icon={Users} label="Population" value={totalPopulation.toLocaleString()} />
                 <EthnicityBar ethnicities={mergedEthnicities} />
@@ -172,7 +171,7 @@ const EditPopulationForm = () => {
                     </div>
                 </form>
             </Form>
-        </TabsContent>
+        </>
     );
 };
 export default EditPopulationForm;

@@ -1,4 +1,3 @@
-import { TabsContent } from "@ui/Tabs";
 import { Country } from "src/shared/types";
 
 interface Props {
@@ -7,7 +6,7 @@ interface Props {
 
 const AttributesTab = ({ country }: Props) => {
     return (
-        <TabsContent value="attributes" className="flex flex-col gap-3">
+        <section className="flex flex-col gap-3">
             <div className="flex gap-3">
                 <div className="flex-1">
                     <p className="mb-1 text-xs font-medium text-muted-foreground">Flag</p>
@@ -42,7 +41,7 @@ const AttributesTab = ({ country }: Props) => {
                     </audio>
                 </div>
             )}
-        </TabsContent>
+        </section>
     );
 };
 export default AttributesTab;

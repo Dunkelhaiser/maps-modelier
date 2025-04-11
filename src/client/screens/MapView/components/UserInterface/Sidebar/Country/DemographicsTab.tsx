@@ -1,6 +1,5 @@
 import InfoBlock from "@components/InfoBlock";
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "@ui/Table";
-import { TabsContent } from "@ui/Tabs";
 import { Users } from "lucide-react";
 import { Country } from "src/shared/types";
 import { EthnicityBar } from "./EthnicityBar";
@@ -11,7 +10,7 @@ interface Props {
 
 const DemographicsTab = ({ country }: Props) => {
     return (
-        <TabsContent value="demographics">
+        <>
             <div className="space-y-4">
                 <InfoBlock Icon={Users} label="Population" value={country.population.toLocaleString()} />
                 <EthnicityBar ethnicities={country.ethnicities} />
@@ -41,7 +40,7 @@ const DemographicsTab = ({ country }: Props) => {
                     </TableBody>
                 </Table>
             )}
-        </TabsContent>
+        </>
     );
 };
 export default DemographicsTab;

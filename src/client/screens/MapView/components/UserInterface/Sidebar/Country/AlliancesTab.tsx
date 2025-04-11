@@ -1,4 +1,3 @@
-import { TabsContent } from "@ui/Tabs";
 import { Country } from "src/shared/types";
 import { AllianceTag } from "./AllianceTag";
 
@@ -8,11 +7,11 @@ interface Props {
 
 const AlliancesTab = ({ country }: Props) => {
     return (
-        <TabsContent value="allliances" className="flex flex-wrap gap-2">
+        <section className="flex flex-wrap gap-2">
             {country.alliances.map((alliance) => (
                 <AllianceTag key={alliance.id} alliance={alliance} />
             ))}
-        </TabsContent>
+        </section>
     );
 };
 export default AlliancesTab;

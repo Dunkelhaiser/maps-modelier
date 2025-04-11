@@ -4,7 +4,7 @@ import { useGetCountryById } from "@ipc/countries";
 import { useGetHeadOfGovernment, useGetHeadOfState } from "@ipc/government";
 import { useMapStore } from "@store/store";
 import { CardContent, CardTitle } from "@ui/Card";
-import { Tabs, TabsList, TabsTrigger } from "@ui/Tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ui/Tabs";
 import AlliancesTab from "./AlliancesTab";
 import AttributesTab from "./AttributesTab";
 import DemographicsTab from "./DemographicsTab";
@@ -42,10 +42,20 @@ const Country = () => {
                         <TabsTrigger value="politics">Politics</TabsTrigger>
                         {country.alliances.length > 0 && <TabsTrigger value="allliances">Alliances</TabsTrigger>}
                     </TabsList>
-                    <AttributesTab country={country} />
-                    <DemographicsTab country={country} />
-                    <PoliticsTab />
-                    {country.alliances.length > 0 && <AlliancesTab country={country} />}
+                    <TabsContent value="attributes">
+                        <AttributesTab country={country} />
+                    </TabsContent>
+                    <TabsContent value="demographics">
+                        <DemographicsTab country={country} />
+                    </TabsContent>
+                    <TabsContent value="politics">
+                        <PoliticsTab />
+                    </TabsContent>
+                    {country.alliances.length > 0 && (
+                        <TabsContent value="allliances">
+                            <AlliancesTab country={country} />
+                        </TabsContent>
+                    )}
                 </Tabs>
             </CardContent>
         </>

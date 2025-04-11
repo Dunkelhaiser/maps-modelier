@@ -1,7 +1,6 @@
 import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetPoliticians } from "@ipc/politicians";
 import { useMapStore } from "@store/store";
-import { TabsContent } from "@ui/Tabs";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import CreatePoliticianForm from "./CreatePoliticianForm";
@@ -15,7 +14,7 @@ const EditPoliticiansForm = () => {
     const { data: politicians } = useGetPoliticians(activeMap, selectedCountry);
 
     return (
-        <TabsContent value="politicians" className="grid grid-cols-2 gap-4">
+        <section className="grid grid-cols-2 gap-4">
             {isCreating ? (
                 <CreatePoliticianForm stopCreating={() => setIsCreating(false)} />
             ) : (
@@ -30,8 +29,8 @@ const EditPoliticiansForm = () => {
                 </button>
             )}
 
-            {politicians?.map((politician) => <EditPoliticianForm key={politician.id} politician={politician} />)}
-        </TabsContent>
+            {politicians?.map((politician) => <EditPoliticianForm politician={politician} key={politician.id} />)}
+        </section>
     );
 };
 export default EditPoliticiansForm;

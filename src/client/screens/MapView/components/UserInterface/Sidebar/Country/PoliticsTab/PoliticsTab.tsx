@@ -5,18 +5,22 @@ import PoliticiansTab from "./Politicians/PoliticiansTab";
 
 const PoliticsTab = () => {
     return (
-        <TabsContent value="politics">
-            <Tabs defaultValue="government">
-                <TabsList>
-                    <TabsTrigger value="government">Government</TabsTrigger>
-                    <TabsTrigger value="parties">Parties</TabsTrigger>
-                    <TabsTrigger value="politicians">Politicians</TabsTrigger>
-                </TabsList>
+        <Tabs defaultValue="government">
+            <TabsList>
+                <TabsTrigger value="government">Government</TabsTrigger>
+                <TabsTrigger value="parties">Parties</TabsTrigger>
+                <TabsTrigger value="politicians">Politicians</TabsTrigger>
+            </TabsList>
+            <TabsContent value="government">
                 <GovernmentTab />
+            </TabsContent>
+            <TabsContent value="parties">
                 <PartiesTab />
+            </TabsContent>
+            <TabsContent value="politicians">
                 <PoliticiansTab />
-            </Tabs>
-        </TabsContent>
+            </TabsContent>
+        </Tabs>
     );
 };
 export default PoliticsTab;

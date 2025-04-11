@@ -12,9 +12,15 @@ const PoliticsTab = () => {
                     <TabsTrigger value="parties">Parties</TabsTrigger>
                     <TabsTrigger value="politicians">Politicians</TabsTrigger>
                 </TabsList>
-                <GovernmentTab />
-                <PartiesTab />
-                <EditPoliticiansForm />
+                <TabsContent value="government">
+                    <GovernmentTab />
+                </TabsContent>
+                <TabsContent value="parties">
+                    <PartiesTab />
+                </TabsContent>
+                <TabsContent value="politicians">
+                    <EditPoliticiansForm />
+                </TabsContent>
             </Tabs>
         </TabsContent>
     );

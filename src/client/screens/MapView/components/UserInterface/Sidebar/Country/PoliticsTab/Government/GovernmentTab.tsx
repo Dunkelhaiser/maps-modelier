@@ -2,7 +2,6 @@ import { useActiveMap } from "@hooks/useActiveMap";
 import { useGetHeadOfState, useGetHeadOfGovernment, useGetParliament } from "@ipc/government";
 import { useMapStore } from "@store/store";
 import { Separator } from "@ui/Separator";
-import { TabsContent } from "@ui/Tabs";
 import Head from "./Head";
 import Parliament from "./Parliament";
 
@@ -24,7 +23,7 @@ const GovernmentTab = () => {
     };
 
     return (
-        <TabsContent value="government" className="flex flex-col gap-6">
+        <section className="flex flex-col gap-6">
             <div className="grid grid-cols-2 gap-4">
                 {headOfState ? (
                     <Head head={headOfState} />
@@ -55,7 +54,7 @@ const GovernmentTab = () => {
             ) : (
                 <p className="text-center text-muted-foreground">No parliament established</p>
             )}
-        </TabsContent>
+        </section>
     );
 };
 
