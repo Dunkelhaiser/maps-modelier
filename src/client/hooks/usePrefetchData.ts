@@ -1,6 +1,8 @@
 import { useGetAlliances } from "@ipc/alliances";
-import { useGetCountriesStates, useGetCountriesTable } from "@ipc/countries";
+import { useGetCountriesStates, useGetCountriesTable, useGetCountriesBase } from "@ipc/countries";
 import { useGetAllEthnicities } from "@ipc/ethnicities";
+import { useGetAllIdeologies } from "@ipc/ideologies";
+import { useGetProvinces } from "@ipc/provinces";
 import { useGetStates } from "@ipc/states";
 import { useGetWars } from "@ipc/wars";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,12 +11,17 @@ import { useEffect } from "react";
 export const usePrefetchData = (mapId: string) => {
     const queryClient = useQueryClient();
 
+    useGetProvinces(mapId, "land");
+    useGetProvinces(mapId, "water");
     const { data: statesArr, isSuccess: isStatesLoaded } = useGetStates(mapId);
     const { data: countriesArr, isSuccess: isCountriesLoaded } = useGetCountriesTable(mapId);
+
     useGetCountriesStates(mapId);
     useGetAllEthnicities(mapId);
+    useGetAllIdeologies(mapId);
     useGetAlliances(mapId);
     useGetWars(mapId);
+    useGetCountriesBase(mapId);
 
     useEffect(() => {
         if (isStatesLoaded && statesArr.length > 0) {
